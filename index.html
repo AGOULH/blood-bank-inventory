@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة مخزون المحاليل الطبية</title>
+<style>
+  :root{
+    --crimson:#127a3e; --crimson-dark:#0c5e30; --crimson-soft:#e7f4ec;
+    --green-bright:#16a34a; --gold:#b8902e;
+    --sidebar:#0a2c1a; --sidebar-line:rgba(255,255,255,.08); --sidebar-active:rgba(255,255,255,.10);
+    --ink:#1f2530; --muted:#6b7280; --line:#e6e8ec; --bg:#f4f5f7;
+    --card:#ffffff; --ok:#1f7a4d; --ok-soft:#e6f4ec; --warn:#b06f00;
+    --warn-soft:#fff4e0; --yellow:#f4c430; --danger:#c0392b; --danger-soft:#fdecea;
+    --info:#1f5f9e; --info-soft:#e8f1fb; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
+    --r:14px; --r-sm:10px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:"Segoe UI","Tajawal","Noto Sans Arabic",Tahoma,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer}
+  input,select,textarea{font-family:inherit;font-size:15px}
+  a{color:var(--crimson)}
+
+  #login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(1200px 600px at 70% -10%,#b52440 0%,var(--crimson) 35%,var(--crimson-dark) 100%);padding:20px;z-index:50}
+  .login-card{background:#fff;width:100%;max-width:380px;border-radius:18px;padding:30px 26px;box-shadow:0 20px 50px rgba(0,0,0,.25);text-align:center;position:relative}
+  .lang-pill{position:absolute;top:14px;inset-inline-end:14px;border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--ink)}
+  .login-mark{width:62px;height:62px;border-radius:16px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:var(--crimson-soft);color:var(--crimson);font-size:30px}
+  .login-card h1{font-size:19px;margin:0 0 4px}
+  .login-card p{color:var(--muted);font-size:13px;margin:0 0 22px}
+  .field{text-align:start;margin-bottom:14px}
+  .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
+  .field input,.field select,.field textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--crimson);box-shadow:0 0 0 3px var(--crimson-soft)}
+  .btn{border:none;border-radius:var(--r-sm);padding:11px 16px;font-weight:700;font-size:15px;background:var(--crimson);color:#fff;transition:filter .15s,transform .02s}
+  .btn:hover{filter:brightness(1.06)} .btn:active{transform:translateY(1px)}
+  .btn.full{width:100%}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)} .btn.ghost:hover{background:#f7f8fa}
+  .btn.soft{background:var(--crimson-soft);color:var(--crimson)}
+  .btn.danger{background:var(--danger)}
+  .btn.sm{padding:7px 11px;font-size:13px;font-weight:600}
+  .login-err{color:var(--danger);font-size:13px;min-height:18px;margin-top:6px}
+
+  #app{display:none;min-height:100vh}
+  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 18px}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .brand .mk{width:40px;height:40px;border-radius:11px;background:var(--crimson);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
+  .brand .t1{font-weight:800;font-size:15px;white-space:nowrap}
+  .brand .t2{color:var(--muted);font-size:12px;white-space:nowrap}
+  .topbar .spacer{flex:1}
+  .date-chip{font-size:12px;color:var(--muted);text-align:end;line-height:1.35}
+  .date-chip b{color:var(--ink);font-weight:700}
+  .lang-btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 11px;font-size:13px;font-weight:700;color:var(--ink)}
+  .lang-btn:hover{background:#f5f6f8}
+
+  .layout{display:flex;align-items:flex-start}
+  .side{width:235px;flex:none;padding:16px 12px;position:sticky;top:61px;height:calc(100vh - 61px);overflow:auto;border-inline-end:1px solid var(--line);background:#fff}
+  .nav-group{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.04em;padding:10px 10px 6px;text-transform:uppercase}
+  .nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:start;border:none;background:none;padding:10px 11px;border-radius:10px;color:var(--ink);font-size:14px;font-weight:600;margin-bottom:2px}
+  .nav-item .ic{width:22px;text-align:center;font-size:16px;flex:none}
+  .nav-item:hover{background:#f5f6f8}
+  .nav-item.active{background:var(--crimson-soft);color:var(--crimson)}
+  .nav-item.active .ic{color:var(--crimson)}
+
+  .main{flex:1;min-width:0;padding:22px 26px}
+  .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+  .page-head h2{margin:0;font-size:21px}
+  .page-head p{margin:2px 0 0;color:var(--muted);font-size:13px}
+  .head-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+  .grid{display:grid;gap:14px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+  .kpi .lbl{color:var(--muted);font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px}
+  .kpi .val{font-size:28px;font-weight:800;margin-top:6px;letter-spacing:-.5px}
+  .kpi .sub{font-size:12px;color:var(--muted);margin-top:2px}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.danger{background:var(--danger)} .dot.info{background:var(--info)}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:16px}
+  .panel-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+  .panel-h h3{margin:0;font-size:15px}
+  .panel-h .hint{color:var(--muted);font-size:12px;font-weight:500}
+  .panel-b{padding:16px}
+  .two-col{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+  @media(max-width:1000px){.two-col{grid-template-columns:1fr}}
+
+  .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .form-grid label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
+  .form-grid input,.form-grid select,.form-grid textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;outline:none}
+  .form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{border-color:var(--crimson);box-shadow:0 0 0 3px var(--crimson-soft)}
+  .form-grid .full{grid-column:1/-1}
+  .req:after{content:" *";color:var(--danger)}
+
+  .tbl-wrap{overflow:auto;border-radius:var(--r-sm)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:10px 12px;text-align:start;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{background:#fafbfc;color:var(--muted);font-weight:700;font-size:12.5px;position:sticky;top:0}
+  tbody tr:hover{background:#fafbfc}
+  td.num,th.num{text-align:center}
+  .tag{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:700}
+  .tag.ok{background:var(--ok-soft);color:var(--ok)}
+  .tag.warn{background:var(--warn-soft);color:var(--warn)}
+  .tag.danger{background:var(--danger-soft);color:var(--danger)}
+  .tag.info{background:var(--info-soft);color:var(--info)}
+  .tag.mut{background:#eef0f3;color:var(--muted)}
+  .mono{font-family:monospace}
+  .row-actions{display:flex;gap:6px;justify-content:flex-start}
+  .icon-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 8px;font-size:13px;color:var(--ink)}
+  .icon-btn:hover{background:#f5f6f8}
+  .icon-btn.danger{color:var(--danger);border-color:#f3c9c4}
+
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .search{flex:1;min-width:200px;position:relative}
+  .search input{width:100%;padding:10px;padding-inline-start:38px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;outline:none}
+  .search .si{position:absolute;inset-inline-start:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;background:#fff}
+  .seg button{border:none;background:none;padding:9px 13px;font-size:13px;font-weight:600;color:var(--muted)}
+  .seg button.active{background:var(--crimson);color:#fff}
+
+  .empty{text-align:center;padding:42px 20px;color:var(--muted)}
+  .empty .em-ic{font-size:36px;opacity:.5}
+  .empty h4{margin:10px 0 4px;color:var(--ink)}
+
+  .alert-item{display:flex;align-items:center;gap:11px;padding:11px 12px;border:1px solid var(--line);border-radius:var(--r-sm);margin-bottom:9px}
+  .alert-item .a-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none;font-size:16px}
+  .alert-item .a-tx{flex:1;min-width:0}
+  .alert-item .a-tx b{display:block;font-size:14px}
+  .alert-item .a-tx span{font-size:12px;color:var(--muted)}
+
+  .bar-row{display:grid;grid-template-columns:130px 1fr 46px;align-items:center;gap:10px;margin-bottom:9px}
+  .bar-row .bl{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar-track{background:#eef0f3;border-radius:8px;height:22px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--crimson),#c93350);min-width:2px;transition:width .5s}
+  .bar-val{font-size:13px;font-weight:700;text-align:end}
+  .donut-wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .legend{display:flex;flex-direction:column;gap:7px;font-size:13px}
+  .legend .li{display:flex;align-items:center;gap:8px}
+
+  .label-card{border:1px dashed var(--line);border-radius:var(--r-sm);padding:18px;text-align:center;background:#fff}
+  .label-card .lc-name{font-weight:800;font-size:16px;margin-bottom:2px}
+  .label-card .lc-meta{font-size:12px;color:var(--muted);margin-bottom:10px}
+  .label-card svg{max-width:100%}
+  .label-card .lc-code{font-family:monospace;letter-spacing:2px;margin-top:6px;font-size:14px}
+
+  .modal-bg{position:fixed;inset:0;background:rgba(16,24,40,.45);display:none;align-items:center;justify-content:center;z-index:60;padding:18px}
+  .modal{background:#fff;border-radius:16px;width:100%;max-width:560px;box-shadow:0 24px 60px rgba(0,0,0,.3);max-height:92vh;overflow:auto}
+  .modal-h{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
+  .modal-h h3{margin:0;font-size:17px}
+  .modal-h .x{border:none;background:none;font-size:22px;color:var(--muted);cursor:pointer;line-height:1}
+  .modal-b{padding:18px}
+  .modal-f{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-start}
+
+  #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:90;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  #toast.ok{background:var(--ok)} #toast.err{background:var(--danger)}
+
+  .help-box{background:var(--info-soft);border:1px solid #cfe0f3;border-radius:var(--r-sm);padding:12px 14px;font-size:13px;color:#284b6e}
+  .help-box code{background:#fff;padding:1px 6px;border-radius:5px;border:1px solid #cfe0f3}
+  .muted{color:var(--muted)}
+  .stat-line{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:4px}
+  hr.sep{border:none;border-top:1px solid var(--line);margin:16px 0}
+  .menu-toggle{display:none;border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 10px;font-size:17px}
+
+  @media(max-width:760px){
+    .side{position:fixed;inset-inline-start:0;top:61px;transition:.2s;box-shadow:-6px 0 24px rgba(0,0,0,.12);z-index:40}
+    .main{padding:16px 14px}
+    .menu-toggle{display:inline-flex!important}
+    .date-chip{display:none}
+    [dir=rtl] .side{transform:translateX(110%)} [dir=rtl] .side.open{transform:translateX(0)}
+    [dir=ltr] .side{transform:translateX(-110%)} [dir=ltr] .side.open{transform:translateX(0)}
+  }
+  @media print{
+    body{background:#fff}
+    .topbar,.side,.head-actions,.no-print,.toolbar,.panel-h .btn{display:none!important}
+    .main{padding:0}
+    .panel{box-shadow:none;border:none;margin:0}
+    .label-card{border:1px solid #000;page-break-inside:avoid}
+    th{background:#eee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .tag{border:1px solid #999;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .print-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  }
+
+  /* === Ministry of Health identity === */
+  .side{background:var(--sidebar);border-inline-end:1px solid var(--sidebar-line)}
+  .nav-group{color:rgba(255,255,255,.45)}
+  .nav-item{color:rgba(255,255,255,.85)}
+  .nav-item .ic{color:rgba(255,255,255,.7)}
+  .nav-item:hover{background:rgba(255,255,255,.07)}
+  .nav-item.active{background:var(--sidebar-active);color:#fff}
+  .nav-item.active .ic{color:var(--green-bright)}
+  .bar-fill{background:linear-gradient(90deg,var(--crimson-dark),var(--green-bright))}
+  #login{background:radial-gradient(1200px 600px at 75% -10%,#1f9a55 0%,#0e7a3f 38%,#075a2e 100%)}
+  .login-logo{display:flex;justify-content:center;margin-bottom:16px}
+  .moh-lock{display:inline-flex;align-items:center;gap:11px}
+  .moh-emblem{width:46px;height:46px;flex:none} .moh-emblem svg{width:100%;height:100%}
+  .moh-words{display:flex;flex-direction:column;line-height:1.12;text-align:start}
+  .moh-words b{font-size:17px;font-weight:800;color:var(--crimson-dark)}
+  .moh-words i{font-size:10.5px;font-style:normal;color:var(--crimson);font-weight:600}
+  .login-card h1{color:var(--crimson-dark)}
+  .login-sys{color:var(--crimson);font-weight:700;font-size:14px;margin:2px 0 0}
+  .login-min{color:var(--muted);font-size:12.5px;margin:8px 0 0}
+  .brand .mk{background:var(--crimson-soft)} .brand .mk svg{width:24px;height:24px}
+  .kpi{display:flex;align-items:center;gap:14px}
+  .kpi-body{flex:1;min-width:0}
+  .kpi-ic{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:23px;color:#fff;flex:none}
+  .kpi-ic.greend{background:var(--crimson-dark)} .kpi-ic.green{background:var(--green-bright)}
+  .kpi-ic.yellow{background:var(--yellow);color:#5a4500} .kpi-ic.red{background:var(--danger)} .kpi-ic.blue{background:var(--info)}
+  .fab-guide{position:fixed;bottom:20px;left:20px;width:54px;height:54px;border-radius:50%;background:var(--crimson);color:#fff;border:none;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 24px rgba(0,0,0,.28);z-index:35}
+  .fab-guide:hover{filter:brightness(1.08)}
+  .guide-intro{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+  .gcard{border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
+  .gcard-h{display:flex;align-items:center;gap:12px;padding:13px 15px;cursor:pointer}
+  .gcard-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
+  .gcard-t{flex:1;min-width:0}.gcard-t b{display:block;font-size:14.5px}.gcard-t span{font-size:12px;color:var(--muted)}
+  .gcard-ch{color:var(--muted);transition:transform .2s;font-size:18px}
+  .gcard.open .gcard-ch{transform:rotate(-90deg)}
+  .gcard-b{display:none;padding:2px 15px 14px;background:rgba(255,255,255,.55)}
+  .gcard.open .gcard-b{display:block}
+  .gcard-b ol{margin:0;padding-inline-start:20px}.gcard-b li{margin-bottom:7px;line-height:1.6;font-size:13.5px}
+  .g-purple{background:#f1effc}.g-purple .gcard-ic{background:#e7e1fb;color:#6b4fd6}
+  .g-green{background:#e9f6ef}.g-green .gcard-ic{background:#d3edde;color:#1f8a4c}
+  .g-orange{background:#fdf1e4}.g-orange .gcard-ic{background:#f9e0c6;color:#d6831f}
+  .g-blue{background:#eaf1fc}.g-blue .gcard-ic{background:#d4e3f7;color:#2f6fd0}
+  .g-pink{background:#fcf0f5}.g-pink .gcard-ic{background:#f6d9e6;color:#c84f80}
+  .g-cyan{background:#e8f6f6}.g-cyan .gcard-ic{background:#cdebeb;color:#1f8a8a}
+  .cat-box{background:var(--crimson-soft);border:1px solid #cfe7d8;border-radius:12px;padding:14px;margin-bottom:16px}
+  .cat-h{font-weight:800;font-size:14px;color:var(--crimson-dark);margin-bottom:10px}
+  .cat-info{font-size:13px;margin-top:10px;font-weight:700;color:var(--crimson-dark);min-height:18px}
+  @media(max-width:760px){.fab-guide{bottom:16px;left:16px;width:48px;height:48px;font-size:21px}}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="login-card">
+    <button class="lang-pill" data-i18n-lang onclick="App.toggleLang()">English</button>
+    <div class="login-logo"><span class="moh-lock"><span class="moh-emblem"><svg viewBox="0 0 64 64" fill="none" stroke="var(--gold)" stroke-width="3.4" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M32 58 V31"/><path d="M32 31 C25 27 19 27 14 31"/><path d="M32 31 C39 27 45 27 50 31"/><path d="M32 31 C27 24 22 21 17 19"/><path d="M32 31 C37 24 42 21 47 19"/><path d="M32 31 C31 23 31 17 32 12"/></svg></span><span class="moh-words"><b>وزارة الصحة</b><i>Ministry of Health</i></span></span></div>
+    <h1 data-i18n="org">بنك الدم المركزي بالدمام</h1>
+    <p class="login-sys" data-i18n="sys_name">نظام إدارة مخزون المحاليل الطبية</p>
+    <p class="login-min" data-i18n="ministry_line">وزارة الصحة — المملكة العربية السعودية</p>
+    <div class="field"><label data-i18n="login_user">اسم المستخدم</label><input id="lg-user" autocomplete="username" data-i18n-ph="login_user"></div>
+    <div class="field"><label data-i18n="login_pass">كلمة المرور</label><input id="lg-pass" type="password" autocomplete="current-password" data-i18n-ph="login_pass"></div>
+    <button class="btn full" data-i18n="login_btn" onclick="App.login()">تسجيل الدخول</button>
+    <div class="login-err" id="lg-err"></div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <button class="menu-toggle" onclick="App.toggleSide()">☰</button>
+    <div class="brand"><div class="mk"><svg viewBox="0 0 64 64" fill="none" stroke="var(--gold)" stroke-width="3.6" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M32 58 V31"/><path d="M32 31 C25 27 19 27 14 31"/><path d="M32 31 C39 27 45 27 50 31"/><path d="M32 31 C27 24 22 21 17 19"/><path d="M32 31 C37 24 42 21 47 19"/><path d="M32 31 C31 23 31 17 32 12"/></svg></div>
+      <div><div class="t1" data-i18n="bank_short">بنك الدم المركزي</div>
+      <div class="t2" data-i18n="topbar_sub">الدمام — وزارة الصحة</div></div></div>
+    <div class="spacer"></div>
+    <div class="date-chip" id="dateChip"></div>
+    <button class="lang-btn" data-i18n-lang onclick="App.toggleLang()">English</button>
+    <button class="btn ghost sm" data-i18n="logout" onclick="App.logout()">خروج</button>
+  </div>
+  <div class="layout">
+    <nav class="side" id="side">
+      <div class="nav-group" data-i18n="nav_home">الرئيسية</div>
+      <button class="nav-item" data-route="dashboard"><span class="ic">📊</span> <span data-i18n="nav_dashboard">لوحة التحكم</span></button>
+      <button class="nav-item" data-route="inventory"><span class="ic">📦</span> <span data-i18n="nav_inventory">المخزون</span></button>
+      <div class="nav-group" data-i18n="nav_movement">الحركة</div>
+      <button class="nav-item" data-route="receive"><span class="ic">📥</span> <span data-i18n="nav_receive">استقبال المحاليل</span></button>
+      <button class="nav-item" data-route="dispense"><span class="ic">📤</span> <span data-i18n="nav_dispense">صرف وإخراج</span></button>
+      <button class="nav-item" data-route="barcode"><span class="ic">🏷️</span> <span data-i18n="nav_barcode">طباعة الباركود</span></button>
+      <button class="nav-item" data-route="log"><span class="ic">📜</span> <span data-i18n="nav_log">سجل الحركات</span></button>
+      <div class="nav-group" data-i18n="nav_admin">إدارة</div>
+      <button class="nav-item" data-route="reports"><span class="ic">📈</span> <span data-i18n="nav_reports">التقارير</span></button>
+      <button class="nav-item" id="nav-users" data-route="users"><span class="ic">👥</span> <span data-i18n="nav_users">إدارة المستخدمين</span></button>
+      <button class="nav-item" data-route="settings"><span class="ic">⚙️</span> <span data-i18n="nav_settings">الإعدادات</span></button>
+    </nav>
+    <main class="main" id="view"></main>
+  </div>
+  <button class="fab-guide" title="دليل المستخدم" onclick="App.openGuide()">📖</button>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<div id="toast"></div>
+
+<script>
+"use strict";
+const App = (() => {
+/* ===================== i18n ===================== */
+const I18N = {
+ar:{
+ app_title:"إدارة مخزون المحاليل الطبية", org:"بنك الدم المركزي بالدمام",
+ login_user:"اسم المستخدم", login_pass:"كلمة المرور", login_btn:"تسجيل الدخول",
+ login_err:"اسم المستخدم أو كلمة المرور غير صحيحة", logout:"خروج",
+ bank_short:"بنك الدم المركزي", topbar_sub:"الدمام — وزارة الصحة", sys_name:"نظام إدارة مخزون المحاليل الطبية",
+ ministry_line:"وزارة الصحة — المملكة العربية السعودية", guide_btn:"دليل المستخدم", guide_title:"دليل استخدام النظام",
+ guide_intro:"مرحباً بك في نظام بنك الدم المركزي بالدمام. اختر القسم الذي تريد معرفة المزيد عنه:", steps_word:"خطوات",
+ cat_title:"إضافة من القائمة المعتمدة", cat_group:"المجموعة", cat_pick_group:"— اختر المجموعة —",
+ cat_item:"الصنف", cat_pick_item:"— اختر الصنف —", cat_kits:"عدد الوحدات (كت/علبة)",
+ cat_total:"الإجمالي", cat_each_unit:"كل وحدة تُحتسب على حدة",
+ nav_users:"إدارة المستخدمين", users_title:"إدارة المستخدمين", users_sub:"إضافة الحسابات وتغيير الصلاحيات (للمدير فقط)",
+ u_username:"اسم المستخدم", u_password:"كلمة المرور", u_role:"الصلاحية", role_admin:"مدير", role_user:"مستخدم",
+ u_add:"+ إضافة مستخدم", u_th_user:"المستخدم", u_th_role:"الصلاحية", u_th_actions:"إجراءات",
+ u_make_admin:"ترقية إلى مدير", u_make_user:"تحويل إلى مستخدم", u_reset:"تغيير كلمة المرور", u_delete:"حذف",
+ u_added:"تمت إضافة المستخدم ✓", u_exists:"اسم المستخدم موجود مسبقاً", u_need:"أكمل الحقول المطلوبة",
+ u_role_changed:"تم تغيير الصلاحية ✓", u_deleted:"تم حذف المستخدم", u_pass_changed:"تم تغيير كلمة المرور ✓",
+ u_not_authorized:"هذه الصفحة للمدير فقط", u_last_admin:"يجب بقاء مدير واحد على الأقل", u_no_self_delete:"لا يمكنك حذف حسابك الحالي",
+ u_new_pass:"كلمة المرور الجديدة", u_reset_for:"تغيير كلمة مرور: {u}", u_del_q:"حذف المستخدم \"{u}\"؟",
+ acct_current:"المستخدم الحالي", acct_new_pass:"كلمة مرور جديدة (اتركها فارغة لعدم التغيير)",
+ nav_home:"الرئيسية", nav_dashboard:"لوحة التحكم", nav_inventory:"المخزون", nav_movement:"الحركة",
+ nav_receive:"استقبال المحاليل", nav_dispense:"صرف وإخراج", nav_barcode:"طباعة الباركود",
+ nav_log:"سجل الحركات", nav_admin:"إدارة", nav_reports:"التقارير", nav_settings:"الإعدادات",
+ dash_title:"لوحة التحكم", dash_sub:"نظرة عامة على حالة مخزون المحاليل الطبية",
+ btn_receive_sol:"+ استقبال محلول", btn_dispense:"صرف",
+ kpi_items:"إجمالي الأصناف", kpi_items_sub:"صنف مسجّل في النظام",
+ kpi_units:"إجمالي الكمية", kpi_units_sub:"وحدة متاحة بالمخزون",
+ kpi_near:"قرب الانتهاء", kpi_near_sub:"خلال {n} يوم",
+ kpi_expired:"منتهية الصلاحية", kpi_expired_sub:"تشغيلة تحتاج إتلاف",
+ kpi_low:"مخزون منخفض", kpi_low_sub:"أصناف دون الحد الأدنى",
+ kpi_rejected:"مرفوضة بالفحص", kpi_rejected_sub:"تشغيلة مرفوضة",
+ kpi_moves:"حركات اليوم", kpi_moves_sub:"عمليات دخول وخروج",
+ panel_most_consumed:"الأكثر استهلاكاً", hint_by_dispense:"حسب كميات الصرف", no_dispense:"لا توجد عمليات صرف بعد",
+ panel_lot_health:"حالة التشغيلات", lot_unit:"تشغيلة",
+ legend_valid:"صالحة", legend_near:"قرب الانتهاء", legend_expired:"منتهية",
+ panel_alerts:"تنبيهات تحتاج إجراء", alerts_count:"{n} تنبيه",
+ all_good_t:"كل شيء على ما يرام", all_good_s:"لا توجد تنبيهات مخزون حالياً",
+ alert_expired_s:"منتهي الصلاحية منذ {n} يوم · الكمية {q}",
+ alert_near_s:"ينتهي خلال {n} يوم ({d})",
+ alert_low_s:"المخزون {q} {u} (الحد الأدنى {m})",
+ alert_rejected_s:"مرفوضة عند الفحص · الكمية {q}", lot_label:"تشغيلة",
+ inv_title:"المخزون", inv_sub:"جميع الأصناف والتشغيلات المسجّلة",
+ btn_export_excel:"⬇ تصدير Excel", btn_print:"🖨 طباعة",
+ search_inv_ph:"ابحث بالاسم أو الكود أو الشركة...",
+ filter_all:"الكل", filter_ok:"متوفر", filter_warn:"تنبيه", filter_danger:"منتهي", filter_out:"نافد",
+ inv_empty_t:"المخزون فارغ", inv_empty_s:"ابدأ باستقبال أول محلول لإضافته إلى المخزون", btn_receive_solution:"استقبال محلول",
+ no_results_t:"لا توجد نتائج", no_results_s:"جرّب تعديل البحث أو الفلتر",
+ th_code:"الكود", th_name:"اسم المحلول", th_man:"الشركة", th_cat:"التصنيف", th_qty:"الكمية المتاحة",
+ th_unit:"الوحدة", th_lots:"التشغيلات", th_status:"الحالة", th_actions:"إجراءات",
+ tip_view_lots:"عرض/إضافة تشغيلة", tip_barcode:"باركود", tip_edit:"تعديل الصنف", tip_delete:"حذف الصنف",
+ shown_items:"عدد الأصناف الظاهرة: {n}", total_qty:"إجمالي الكمية المتاحة: {q}",
+ lots_h:"التشغيلات ({n})", btn_add_lot:"+ إضافة تشغيلة", no_lots:"لا توجد تشغيلات",
+ th_lot:"التشغيلة", th_exp:"الانتهاء", th_received:"المستلم", th_remaining:"المتبقي", th_supplier:"المورد",
+ th_lab:"المختبر", th_inspection:"الفحص", rejected_note:"منها {q} مرفوضة (لا تُحتسب)",
+ rec_title:"استقبال المحاليل", rec_sub:"تسجيل دفعة واردة بكود المنتج — تُضاف للمخزون وتُسجَّل كحركة دخول",
+ f_code:"كود المنتج", f_name:"اسم المحلول", f_man:"الشركة المصنعة", f_cat:"التصنيف", f_unit:"الوحدة",
+ f_min:"الحد الأدنى للتنبيه", f_lot:"رقم التشغيلة (Lot)", f_exp:"تاريخ الانتهاء", f_qty:"الكمية المستلمة",
+ f_supplier:"المورد", f_recdate:"تاريخ الاستلام", f_lab:"المختبر المستلِم", f_inspection:"نتيجة الفحص (Inspection)",
+ f_note:"ملاحظات", optional_ph:"اختياري",
+ btn_save_receive:"📥 حفظ الاستلام", btn_save_print:"📥 حفظ + طباعة باركود", btn_clear:"تفريغ الحقول",
+ code_exists:"✓ صنف موجود: {name} — سيُضاف للمخزون الحالي", code_new:"صنف جديد — سيُنشأ في النظام",
+ err_code:"أدخل كود المنتج", err_name:"أدخل اسم المحلول", err_lot:"أدخل رقم التشغيلة",
+ err_exp:"أدخل تاريخ الانتهاء", err_qty:"أدخل كمية صحيحة",
+ confirm_past_exp:"تاريخ الانتهاء في الماضي! هل تريد المتابعة؟",
+ ok_receive:"تم تسجيل الاستلام بنجاح ✓",
+ ok_receive_rejected:"تم التسجيل (مرفوض بالفحص) — لن يُحتسب ضمن المتاح",
+ dis_title:"صرف وإخراج المحاليل", dis_sub:"الصرف يتم تلقائياً من أقرب تشغيلة للانتهاء (FIFO)",
+ f_item:"الصنف", pick_solution:"— اختر المحلول —", avail_short:"متوفر {q}",
+ f_dis_qty:"الكمية المصروفة", f_dis_lab:"المختبر المستلِم", f_dis_date:"تاريخ الصرف",
+ f_dis_note_ph:"اختياري — اسم المستلم / رقم الطلب",
+ avail_lots_h:"التشغيلات المتاحة (الأقدم انتهاءً أولاً):", btn_confirm_dispense:"📤 تأكيد الصرف",
+ dis_empty_t:"لا يوجد مخزون متاح للصرف", dis_empty_s:"قم باستقبال محاليل أولاً",
+ err_pick_item:"اختر الصنف", err_over:"الكمية المطلوبة ({q}) أكبر من المتاح ({a})", ok_dispense:"تم الصرف بنجاح ✓",
+ bc_title:"طباعة الباركود", bc_sub:"توليد باركود (Code 39) وطباعة ملصق — يعمل دون اتصال",
+ bc_pick:"اختر الصنف", manual_entry:"— أدخل يدوياً —", bc_code:"الكود / النص", bc_name:"اسم الملصق",
+ bc_lot:"التشغيلة", bc_exp:"الانتهاء", bc_copies:"عدد النسخ للطباعة", bc_print:"🖨 طباعة الملصقات",
+ bc_hint:"Code 39 مدعوم في معظم الماسحات. الأحرف المسموحة: A‑Z و 0‑9 والرموز <code>- . $ / + %</code> والمسافة.",
+ bc_preview:"المعاينة", bc_enter_code:"أدخل الكود لعرض الباركود", bc_err_code:"أدخل الكود أولاً", bc_print_title:"طباعة باركود",
+ log_title:"سجل الحركات", log_sub:"جميع عمليات الدخول والخروج والتعديل",
+ search_log_ph:"ابحث بالكود أو المختبر أو الملاحظة...",
+ f_in:"دخول", f_out:"خروج", f_adjust:"تعديل", log_empty:"لا توجد حركات",
+ th_date:"التاريخ", th_type:"النوع", th_user:"المستخدم", th_notes:"ملاحظات", th_party:"المورد/الجهة",
+ moves_count:"عدد الحركات: {n}",
+ rep_title:"التقارير", rep_sub:"تصدير البيانات وطباعة التقارير الجاهزة", btn_print_page:"🖨 طباعة الصفحة",
+ rep_inv_t:"📦 تقرير المخزون", rep_inv_s:"قائمة كاملة بالأصناف والكميات",
+ rep_log_t:"📜 تقرير الحركات", rep_log_s:"كل عمليات الدخول والخروج",
+ rep_exp_t:"⏳ تقرير الانتهاء", rep_exp_s:"التشغيلات المنتهية والقريبة",
+ rep_cons_t:"📈 تقرير الاستهلاك", rep_cons_s:"الأصناف الأكثر صرفاً",
+ rep_lab_t:"🧪 استهلاك المختبرات", rep_lab_s:"الصرف حسب المختبر",
+ btn_export:"⬇ تصدير Excel/CSV",
+ rep_exp_panel:"التشغيلات المنتهية والقريبة من الانتهاء", lots_count:"{n} تشغيلة",
+ no_exp_lots:"لا توجد تشغيلات منتهية أو قريبة من الانتهاء ✓",
+ rep_most:"الأكثر استهلاكاً", th_total_dispensed:"إجمالي المصروف",
+ set_title:"الإعدادات", set_sub:"الحساب، المختبرات، النسخ الاحتياطي والمزامنة",
+ set_account:"الحساب وكلمة المرور", f_username:"اسم المستخدم", f_password:"كلمة المرور",
+ f_warn_days:"أيام التنبيه قبل الانتهاء", btn_save_settings:"💾 حفظ الإعدادات",
+ set_labs:"المختبرات", set_labs_hint:"تظهر في الاستقبال والصرف", labs_default:"الافتراضية", labs_custom:"مختبرات مضافة",
+ f_lab_ar:"الاسم بالعربية", f_lab_en:"الاسم بالإنجليزية", btn_add_lab:"+ إضافة مختبر", no_custom_labs:"لا توجد مختبرات مضافة",
+ set_backup:"النسخ الاحتياطي والاستعادة", set_backup_hint:"ملف JSON",
+ backup_desc:"صدّر نسخة من كل البيانات للاحتفاظ بها أو نقلها لجهاز آخر. الاستيراد يستبدل البيانات الحالية.",
+ btn_export_backup:"⬇ تصدير نسخة احتياطية", btn_import_backup:"⬆ استيراد نسخة",
+ set_sync:"المزامنة السحابية (اختياري)", set_sync_hint:"للعمل بين عدة أجهزة",
+ sync_desc:"النظام يعمل بالكامل بدون إنترنت ويحفظ على هذا الجهاز. لمزامنة بيانات الفريق بين الأجهزة يمكن ربطه لاحقاً بخدمة مجانية مثل <b>Firebase Firestore</b> أو <b>JSONBin.io</b>.",
+ sync_title2:"المزامنة بين الأجهزة", sync_status_lbl:"الحالة:",
+ sync_off:"غير مفعّلة", sync_connecting:"جارٍ الاتصال…", sync_live:"متصل ومتزامن", sync_error:"تعذّر الاتصال", sync_offline:"غير متصل — محلي فقط",
+ sync_workspace:"معرّف المساحة المشتركة (Workspace)", sync_workspace_ph:"مثال: bloodbank-dammam",
+ sync_config:"إعداد Firebase (firebaseConfig)", sync_config_ph:"الصق كائن firebaseConfig كاملاً { apiKey:..., projectId:... }",
+ sync_connect:"🔗 ربط ومزامنة", sync_disconnect:"فصل المزامنة",
+ sync_help:"للمزامنة بين عدة أجهزة: أنشئ مشروعاً مجانياً على <b>Firebase</b> ثم فعّل <b>Firestore</b>، وانسخ كائن <b>firebaseConfig</b> والصقه أعلاه، مع تحديد نفس «معرّف المساحة» على كل الأجهزة. أول جهاز يتصل يرفع بياناته، وبقية الأجهزة تتزامن معه. تبقى كل البيانات محفوظة محلياً وتعمل دون إنترنت.",
+ sync_connected:"تم تفعيل المزامنة بين الأجهزة ✓", sync_disconnected:"تم فصل المزامنة (تبقى البيانات على الجهاز)",
+ sync_bad_cfg:"إعداد Firebase غير صالح — تأكد من نسخ الكائن كاملاً", sync_need:"أدخل معرّف المساحة وإعداد Firebase",
+ set_data:"بيانات تجريبية وتفريغ النظام", btn_reseed:"🧪 إعادة تحميل بيانات العينة", btn_wipe:"🗑 تفريغ كل البيانات",
+ data_note:"عند بدء الاستخدام الفعلي، فرّغ بيانات العينة وأدخل بياناتك الحقيقية.",
+ version_line:"الإصدار 1.1 · ملف واحد بدون اعتماد خارجي · يعمل دون إنترنت",
+ confirm_title:"تأكيد", btn_confirm:"تأكيد", btn_cancel:"إلغاء", btn_save:"حفظ", btn_add:"إضافة",
+ edit_item:"تعديل الصنف", err_code_name:"الكود والاسم مطلوبان", err_code_used:"الكود مستخدم لصنف آخر", ok_edited:"تم التعديل ✓",
+ del_item_q:"حذف الصنف \"{name}\" وكل تشغيلاته وحركاته؟", btn_del_item:"حذف الصنف", ok_deleted:"تم الحذف",
+ add_lot_title:"إضافة تشغيلة — {name}", err_complete_req:"أكمل الحقول المطلوبة", ok_lot_added:"تمت إضافة التشغيلة ✓",
+ adjust_lot_title:"تعديل كمية التشغيلة", adjust_lot_info:"التشغيلة {lot} — المتبقي حالياً: {q}",
+ f_new_remaining:"الكمية المتبقية الجديدة", f_adjust_reason:"سبب التعديل", adjust_reason_ph:"مثال: جرد / تالف / تصحيح",
+ err_bad_qty:"كمية غير صحيحة", ok_qty_adjusted:"تم تعديل الكمية ✓", adj_inc:"زيادة", adj_dec:"نقص", party_count:"جرد/تعديل",
+ del_lot_q:"حذف التشغيلة \"{lot}\" (المتبقي {q})؟", btn_del_lot:"حذف التشغيلة", ok_lot_deleted:"تم حذف التشغيلة",
+ manual_lot_note:"إضافة تشغيلة يدوية", party_incoming:"وارد",
+ no_export_data:"لا توجد بيانات للتصدير", ok_exported:"تم التصدير ✓", ok_backup:"تم تصدير النسخة الاحتياطية ✓",
+ invalid_file:"ملف غير صالح", restore_q:"سيتم استبدال جميع البيانات الحالية بالنسخة المستوردة. متابعة؟",
+ btn_replace_data:"استبدال البيانات", ok_imported:"تم استيراد النسخة ✓", read_fail:"تعذّر قراءة الملف: {msg}",
+ reseed_q:"سيتم استبدال البيانات الحالية ببيانات العينة. متابعة؟", btn_load_sample:"تحميل العينة", ok_sample:"تم تحميل بيانات العينة",
+ wipe_q:"سيتم حذف كل الأصناف والتشغيلات والحركات نهائياً. هذا الإجراء لا يمكن التراجع عنه!",
+ btn_wipe_all:"حذف كل شيء", ok_wiped:"تم تفريغ النظام", save_fail:"تعذّر الحفظ — مساحة التخزين ممتلئة",
+ hijri_suffix:" هـ", insp_accepted:"مقبول", insp_rejected:"مرفوض",
+ fn_inventory:"تقرير_المخزون", fn_log:"سجل_الحركات", fn_expiry:"تقرير_الانتهاء", fn_consumption:"تقرير_الاستهلاك",
+ fn_labusage:"استهلاك_المختبرات", fn_backup:"نسخة_مخزون_المحاليل",
+ lst_empty:"منتهي الكمية", lst_no_date:"بدون تاريخ", lst_expired:"منتهي الصلاحية", lst_near:"ينتهي خلال {n} يوم",
+ lst_valid:"صالح", lst_rejected:"مرفوض بالفحص",
+ st_available:"متوفر", st_has_expired:"يحوي منتهي", st_low:"مخزون منخفض", st_near:"قرب الانتهاء", st_out:"غير متوفر",
+ col_inspection:"الفحص", col_received_date:"تاريخ الاستلام", days_left:"الأيام المتبقية",
+},
+en:{
+ app_title:"Medical Solutions Inventory", org:"Central Blood Bank — Dammam",
+ login_user:"Username", login_pass:"Password", login_btn:"Sign in",
+ login_err:"Invalid username or password", logout:"Logout",
+ bank_short:"Central Blood Bank", topbar_sub:"Dammam — Ministry of Health", sys_name:"Medical Solutions Inventory System",
+ ministry_line:"Ministry of Health — Kingdom of Saudi Arabia", guide_btn:"User guide", guide_title:"System user guide",
+ guide_intro:"Welcome to the Central Blood Bank – Dammam system. Choose a section to learn more:", steps_word:"steps",
+ cat_title:"Add from the approved list", cat_group:"Group", cat_pick_group:"— Select group —",
+ cat_item:"Item", cat_pick_item:"— Select item —", cat_kits:"Number of units (kit/box)",
+ cat_total:"Total", cat_each_unit:"Each unit counted individually",
+ nav_users:"User management", users_title:"User management", users_sub:"Add accounts and change roles (admin only)",
+ u_username:"Username", u_password:"Password", u_role:"Role", role_admin:"Admin", role_user:"User",
+ u_add:"+ Add user", u_th_user:"User", u_th_role:"Role", u_th_actions:"Actions",
+ u_make_admin:"Promote to admin", u_make_user:"Change to user", u_reset:"Change password", u_delete:"Delete",
+ u_added:"User added ✓", u_exists:"Username already exists", u_need:"Complete the required fields",
+ u_role_changed:"Role changed ✓", u_deleted:"User deleted", u_pass_changed:"Password changed ✓",
+ u_not_authorized:"This page is for admins only", u_last_admin:"At least one admin must remain", u_no_self_delete:"You can't delete your own account",
+ u_new_pass:"New password", u_reset_for:"Change password: {u}", u_del_q:"Delete user \"{u}\"?",
+ acct_current:"Current user", acct_new_pass:"New password (leave empty to keep)",
+ nav_home:"Main", nav_dashboard:"Dashboard", nav_inventory:"Inventory", nav_movement:"Movement",
+ nav_receive:"Receive solutions", nav_dispense:"Dispense", nav_barcode:"Barcode printing",
+ nav_log:"Movement log", nav_admin:"Admin", nav_reports:"Reports", nav_settings:"Settings",
+ dash_title:"Dashboard", dash_sub:"Overview of medical solutions stock status",
+ btn_receive_sol:"+ Receive solution", btn_dispense:"Dispense",
+ kpi_items:"Total items", kpi_items_sub:"items registered",
+ kpi_units:"Total quantity", kpi_units_sub:"units available in stock",
+ kpi_near:"Expiring soon", kpi_near_sub:"within {n} days",
+ kpi_expired:"Expired", kpi_expired_sub:"lots to dispose",
+ kpi_low:"Low stock", kpi_low_sub:"items below minimum",
+ kpi_rejected:"Rejected (QC)", kpi_rejected_sub:"rejected lots",
+ kpi_moves:"Today's movements", kpi_moves_sub:"in & out operations",
+ panel_most_consumed:"Most consumed", hint_by_dispense:"by dispensed quantity", no_dispense:"No dispenses yet",
+ panel_lot_health:"Lot status", lot_unit:"lots",
+ legend_valid:"Valid", legend_near:"Expiring", legend_expired:"Expired",
+ panel_alerts:"Alerts needing action", alerts_count:"{n} alerts",
+ all_good_t:"All good", all_good_s:"No stock alerts right now",
+ alert_expired_s:"Expired {n} days ago · qty {q}",
+ alert_near_s:"Expires in {n} days ({d})",
+ alert_low_s:"Stock {q} {u} (minimum {m})",
+ alert_rejected_s:"Rejected on inspection · qty {q}", lot_label:"Lot",
+ inv_title:"Inventory", inv_sub:"All registered items and lots",
+ btn_export_excel:"⬇ Export Excel", btn_print:"🖨 Print",
+ search_inv_ph:"Search by name, code, or manufacturer...",
+ filter_all:"All", filter_ok:"In stock", filter_warn:"Alert", filter_danger:"Expired", filter_out:"Out",
+ inv_empty_t:"Inventory is empty", inv_empty_s:"Receive your first solution to add it to stock", btn_receive_solution:"Receive solution",
+ no_results_t:"No results", no_results_s:"Try adjusting the search or filter",
+ th_code:"Code", th_name:"Solution", th_man:"Manufacturer", th_cat:"Category", th_qty:"Available qty",
+ th_unit:"Unit", th_lots:"Lots", th_status:"Status", th_actions:"Actions",
+ tip_view_lots:"View / add lot", tip_barcode:"Barcode", tip_edit:"Edit item", tip_delete:"Delete item",
+ shown_items:"Items shown: {n}", total_qty:"Total available: {q}",
+ lots_h:"Lots ({n})", btn_add_lot:"+ Add lot", no_lots:"No lots",
+ th_lot:"Lot", th_exp:"Expiry", th_received:"Received", th_remaining:"Remaining", th_supplier:"Supplier",
+ th_lab:"Lab", th_inspection:"QC", rejected_note:"incl. {q} rejected (not counted)",
+ rec_title:"Receive solutions", rec_sub:"Register an incoming batch by product code — added to stock and logged as an in-movement",
+ f_code:"Product code", f_name:"Solution name", f_man:"Manufacturer", f_cat:"Category", f_unit:"Unit",
+ f_min:"Min. alert level", f_lot:"Lot number", f_exp:"Expiry date", f_qty:"Received quantity",
+ f_supplier:"Supplier", f_recdate:"Receipt date", f_lab:"Receiving lab", f_inspection:"Inspection result",
+ f_note:"Notes", optional_ph:"Optional",
+ btn_save_receive:"📥 Save receipt", btn_save_print:"📥 Save + print barcode", btn_clear:"Clear fields",
+ code_exists:"✓ Existing item: {name} — will be added to current stock", code_new:"New item — will be created",
+ err_code:"Enter the product code", err_name:"Enter the solution name", err_lot:"Enter the lot number",
+ err_exp:"Enter the expiry date", err_qty:"Enter a valid quantity",
+ confirm_past_exp:"Expiry date is in the past! Continue?",
+ ok_receive:"Receipt saved ✓",
+ ok_receive_rejected:"Saved (QC rejected) — excluded from available stock",
+ dis_title:"Dispense solutions", dis_sub:"Auto-dispensed from the earliest-expiring lot (FIFO)",
+ f_item:"Item", pick_solution:"— Select solution —", avail_short:"avail {q}",
+ f_dis_qty:"Dispensed quantity", f_dis_lab:"Receiving lab", f_dis_date:"Dispense date",
+ f_dis_note_ph:"Optional — recipient / request no.",
+ avail_lots_h:"Available lots (earliest expiry first):", btn_confirm_dispense:"📤 Confirm dispense",
+ dis_empty_t:"No stock available to dispense", dis_empty_s:"Receive solutions first",
+ err_pick_item:"Select an item", err_over:"Requested ({q}) exceeds available ({a})", ok_dispense:"Dispensed ✓",
+ bc_title:"Barcode printing", bc_sub:"Generate a Code 39 barcode and print a label — works offline",
+ bc_pick:"Select item", manual_entry:"— Manual entry —", bc_code:"Code / text", bc_name:"Label name",
+ bc_lot:"Lot", bc_exp:"Expiry", bc_copies:"Copies to print", bc_print:"🖨 Print labels",
+ bc_hint:"Code 39 is supported by most scanners. Allowed: A‑Z, 0‑9 and <code>- . $ / + %</code> and space.",
+ bc_preview:"Preview", bc_enter_code:"Enter a code to render the barcode", bc_err_code:"Enter the code first", bc_print_title:"Print barcode",
+ log_title:"Movement log", log_sub:"All in, out, and adjustment operations",
+ search_log_ph:"Search by code, lab, or note...",
+ f_in:"In", f_out:"Out", f_adjust:"Adjust", log_empty:"No movements",
+ th_date:"Date", th_type:"Type", th_user:"User", th_notes:"Notes", th_party:"Supplier/Dest.",
+ moves_count:"Movements: {n}",
+ rep_title:"Reports", rep_sub:"Export data and print ready reports", btn_print_page:"🖨 Print page",
+ rep_inv_t:"📦 Inventory report", rep_inv_s:"Full list of items and quantities",
+ rep_log_t:"📜 Movement report", rep_log_s:"All in/out operations",
+ rep_exp_t:"⏳ Expiry report", rep_exp_s:"Expired and near-expiry lots",
+ rep_cons_t:"📈 Consumption report", rep_cons_s:"Most dispensed items",
+ rep_lab_t:"🧪 Lab consumption", rep_lab_s:"Dispensing by lab",
+ btn_export:"⬇ Export Excel/CSV",
+ rep_exp_panel:"Expired & near-expiry lots", lots_count:"{n} lots",
+ no_exp_lots:"No expired or near-expiry lots ✓",
+ rep_most:"Most consumed", th_total_dispensed:"Total dispensed",
+ set_title:"Settings", set_sub:"Account, labs, backup, and sync",
+ set_account:"Account & password", f_username:"Username", f_password:"Password",
+ f_warn_days:"Alert days before expiry", btn_save_settings:"💾 Save settings",
+ set_labs:"Laboratories", set_labs_hint:"Shown in receive and dispense", labs_default:"Default", labs_custom:"Custom labs",
+ f_lab_ar:"Name (Arabic)", f_lab_en:"Name (English)", btn_add_lab:"+ Add lab", no_custom_labs:"No custom labs",
+ set_backup:"Backup & restore", set_backup_hint:"JSON file",
+ backup_desc:"Export a copy of all data to keep or move to another device. Importing replaces current data.",
+ btn_export_backup:"⬇ Export backup", btn_import_backup:"⬆ Import backup",
+ set_sync:"Cloud sync (optional)", set_sync_hint:"For multi-device use",
+ sync_desc:"The system works fully offline and saves on this device. To sync team data across devices it can later be connected to a free service such as <b>Firebase Firestore</b> or <b>JSONBin.io</b>.",
+ sync_title2:"Multi-device sync", sync_status_lbl:"Status:",
+ sync_off:"Off", sync_connecting:"Connecting…", sync_live:"Connected & synced", sync_error:"Connection failed", sync_offline:"Offline — local only",
+ sync_workspace:"Shared Workspace ID", sync_workspace_ph:"e.g., bloodbank-dammam",
+ sync_config:"Firebase config (firebaseConfig)", sync_config_ph:"Paste the full firebaseConfig object { apiKey:..., projectId:... }",
+ sync_connect:"🔗 Connect & sync", sync_disconnect:"Disconnect",
+ sync_help:"To sync across devices: create a free <b>Firebase</b> project, enable <b>Firestore</b>, copy the <b>firebaseConfig</b> object and paste it above, and set the same Workspace ID on every device. The first device to connect uploads its data; the others sync to it. All data is also stored locally and works offline.",
+ sync_connected:"Multi-device sync enabled ✓", sync_disconnected:"Sync disconnected (data stays on device)",
+ sync_bad_cfg:"Invalid Firebase config — make sure you copied the full object", sync_need:"Enter the Workspace ID and Firebase config",
+ set_data:"Sample data & reset", btn_reseed:"🧪 Reload sample data", btn_wipe:"🗑 Wipe all data",
+ data_note:"Before real use, wipe the sample data and enter your real data.",
+ version_line:"Version 1.1 · single self-contained file · works offline",
+ confirm_title:"Confirm", btn_confirm:"Confirm", btn_cancel:"Cancel", btn_save:"Save", btn_add:"Add",
+ edit_item:"Edit item", err_code_name:"Code and name are required", err_code_used:"Code already used by another item", ok_edited:"Updated ✓",
+ del_item_q:"Delete item \"{name}\" with all its lots and movements?", btn_del_item:"Delete item", ok_deleted:"Deleted",
+ add_lot_title:"Add lot — {name}", err_complete_req:"Complete the required fields", ok_lot_added:"Lot added ✓",
+ adjust_lot_title:"Adjust lot quantity", adjust_lot_info:"Lot {lot} — current remaining: {q}",
+ f_new_remaining:"New remaining quantity", f_adjust_reason:"Adjustment reason", adjust_reason_ph:"e.g., count / damaged / correction",
+ err_bad_qty:"Invalid quantity", ok_qty_adjusted:"Quantity adjusted ✓", adj_inc:"Increase", adj_dec:"Decrease", party_count:"Count/Adjust",
+ del_lot_q:"Delete lot \"{lot}\" (remaining {q})?", btn_del_lot:"Delete lot", ok_lot_deleted:"Lot deleted",
+ manual_lot_note:"Manual lot entry", party_incoming:"Incoming",
+ no_export_data:"No data to export", ok_exported:"Exported ✓", ok_backup:"Backup exported ✓",
+ invalid_file:"Invalid file", restore_q:"All current data will be replaced by the imported backup. Continue?",
+ btn_replace_data:"Replace data", ok_imported:"Backup imported ✓", read_fail:"Couldn't read file: {msg}",
+ reseed_q:"Current data will be replaced with sample data. Continue?", btn_load_sample:"Load sample", ok_sample:"Sample data loaded",
+ wipe_q:"All items, lots, and movements will be permanently deleted. This cannot be undone!",
+ btn_wipe_all:"Delete everything", ok_wiped:"System wiped", save_fail:"Save failed — storage full",
+ hijri_suffix:" AH", insp_accepted:"Accepted", insp_rejected:"Rejected",
+ fn_inventory:"inventory_report", fn_log:"movement_log", fn_expiry:"expiry_report", fn_consumption:"consumption_report",
+ fn_labusage:"lab_consumption", fn_backup:"solutions_inventory_backup",
+ lst_empty:"Depleted", lst_no_date:"No date", lst_expired:"Expired", lst_near:"Expires in {n} days",
+ lst_valid:"Valid", lst_rejected:"QC rejected",
+ st_available:"In stock", st_has_expired:"Has expired", st_low:"Low stock", st_near:"Expiring soon", st_out:"Out of stock",
+ col_inspection:"Inspection", col_received_date:"Receipt date", days_left:"Days left",
+}};
+let LANG = localStorage.getItem("inv_lang") || "ar";
+function t(k,vars){ let s=(I18N[LANG]&&I18N[LANG][k]); if(s==null)s=I18N.ar[k]; if(s==null)s=k;
+  if(vars) s=s.replace(/\{(\w+)\}/g,(m,p)=> vars[p]!=null?vars[p]:m); return s; }
+
+/* ---------- enumerations (bilingual, key-based) ---------- */
+const CATS=[{k:"iv",ar:"محاليل وريدية",en:"IV Solutions"},{k:"anticoag",ar:"مضادات تخثر",en:"Anticoagulants"},
+ {k:"preservative",ar:"محاليل حافظة للدم",en:"Blood Preservatives"},{k:"wash",ar:"محاليل غسيل",en:"Wash Solutions"},
+ {k:"antiseptic",ar:"معقمات ومطهرات",en:"Antiseptics & Disinfectants"},{k:"other",ar:"أخرى",en:"Other"}];
+const UNITS=[{k:"bag",ar:"كيس",en:"Bag"},{k:"bottle",ar:"زجاجة",en:"Bottle"},{k:"box",ar:"علبة",en:"Box"},
+ {k:"ampoule",ar:"أمبولة",en:"Ampoule"},{k:"carton",ar:"كرتون",en:"Carton"},{k:"liter",ar:"لتر",en:"Liter"},
+ {k:"ml",ar:"مل",en:"mL"},{k:"piece",ar:"قطعة",en:"Piece"},
+ {k:"test",ar:"اختبار",en:"Test"},{k:"set",ar:"طقم",en:"Set"},{k:"tube",ar:"أنبوب",en:"Tube"}];
+const DEFAULT_LABS=[{k:"bloodbank",ar:"بنك الدم",en:"Blood Bank"},{k:"components",ar:"فصل المكونات",en:"Component Separation"},
+ {k:"serology",ar:"المصل (السيرولوجي)",en:"Serology"},{k:"immuno",ar:"المناعة الدموية",en:"Immunohematology"},
+ {k:"hematology",ar:"أمراض الدم",en:"Hematology"},{k:"biochem",ar:"الكيمياء الحيوية",en:"Biochemistry"},
+ {k:"micro",ar:"الأحياء الدقيقة",en:"Microbiology"},{k:"nat",ar:"الفيروسات (NAT)",en:"Virology (NAT)"},
+ {k:"store",ar:"المستودع",en:"Store"},{k:"other",ar:"أخرى",en:"Other"}];
+const INSPECT=[{k:"accepted",ar:"مقبول",en:"Accepted"},{k:"rejected",ar:"مرفوض",en:"Rejected"}];
+
+/* ===== Approved products catalog (from stock list) ===== */
+const CAT_KITS={box:{ar:"علبة",en:"Box"},kit:{ar:"كت",en:"Kit"},pack:{ar:"عبوة",en:"Pack"},vial:{ar:"قارورة",en:"Vial"}};
+const CATALOG=[
+ {g:"grifols",pfx:"GRF",ar:"Grifols",en:"Grifols",items:[
+   {n:"Cards- DG GEL ABO/RH(2D)",kit:"box",per:50,u:"test"},
+   {n:"Cards - DG GEL RH PHENO + KELL",kit:"box",per:50,u:"test"},
+   {n:"Cards- DG GEL COOMBS",kit:"box",per:133,u:"test"},
+   {n:"Cards- DG GEL CONFIRM",kit:"box",per:50,u:"test"},
+   {n:"Kit - SERIGROP DIANA A1/B",kit:"kit",per:200,u:"test"},
+   {n:"Kit - SERASCAN DIANA 3",kit:"kit",per:200,u:"test"},
+   {n:"Test, Anti-D for D weak",kit:"vial",per:100,u:"test"}]},
+ {g:"ih1000",pfx:"IH",ar:"IH 1000",en:"IH 1000",items:[
+   {n:"CARD, LISS COOMBS",kit:"pack",per:72,u:"test"},
+   {n:"CARD, ABO/D AND REVERSE GROUP",kit:"pack",per:12,u:"test"},
+   {n:"CARD, ABD-CONFIRMATION",kit:"pack",per:24,u:"test"},
+   {n:"CARD, RH-SUBGROUPS+CW+K",kit:"pack",per:12,u:"test"},
+   {n:"CARD, ANTIGEN PROFILE I",kit:"pack",per:12,u:"test"},
+   {n:"CARD, ANTIGEN PROFILE II",kit:"pack",per:12,u:"test"},
+   {n:"CARD, ANTIGEN PROFILE III",kit:"pack",per:12,u:"test"},
+   {n:"Test, Anti-D for D weak",kit:"vial",per:100,u:"test"},
+   {n:"TEST, ANTIGEN PROFILE III (SERA)",kit:"vial",per:100,u:"test"},
+   {n:"TEST, REVERSE CELLS, A1/B, 0.8%",kit:"vial",per:200,u:"test"},
+   {n:"TEST, ANTIBODY SCREENING, 3 CELLS",kit:"vial",per:200,u:"test"},
+   {n:"TEST, ANTIBODY IDENTIFICATION, PRIMARY, 11 CELLS, 0.8%",kit:"vial",per:80,u:"test"}]},
+ {g:"ortho",pfx:"ORT",ar:"Ortho",en:"Ortho",items:[
+   {n:"CARD, ABO/D AND REVERSE GROUP",kit:"pack",per:20,u:"test"},
+   {n:"CARD, ANTI-HUMAN GLOBULIN POLYSPECIFIC",kit:"pack",per:40,u:"test"},
+   {n:"CARD, RH-SUBGROUPS+CW+K",kit:"pack",per:20,u:"test"},
+   {n:"CARD, ABD-CONFIRMATION",kit:"pack",per:20,u:"test"},
+   {n:"Affirmagen 0.5%",kit:"vial",per:200,u:"test"},
+   {n:"Surgiscreen 0.8%",kit:"vial",per:200,u:"test"},
+   {n:"Test, Anti-D for D weak",kit:"vial",per:50,u:"test"}]},
+ {g:"sickle",pfx:"SCL",ar:"فحص الخلايا المنجلية",en:"Sickle cell test",items:[
+   {n:"Sickling Reagent",kit:"box",per:50,u:"test"}]},
+ {g:"nat_panther",pfx:"NPA",ar:"NAT — Panther",en:"NAT — Panther",items:[
+   {n:"Procleix Ulterio Elite Assay",kit:"kit",per:250,u:"test"}]},
+ {g:"nat_cobas",pfx:"NCO",ar:"NAT — Cobas",en:"NAT — Cobas",items:[
+   {n:"MPX (Multiplex HIV,HCV,HBV)",kit:"kit",per:480,u:"test"},
+   {n:"MGP REAGENT",kit:"kit",per:480,u:"test"}]},
+ {g:"bgg",pfx:"BGG",ar:"BGG",en:"BGG",items:[
+   {n:"ID RHD",kit:"kit",per:24,u:"test"},
+   {n:"ID CORE",kit:"kit",per:48,u:"test"},
+   {n:"ID HPA",kit:"kit",per:48,u:"test"}]},
+ {g:"donation",pfx:"DON",ar:"التبرع",en:"Donation",items:[
+   {n:"REVEOS BAG",kit:"box",per:18,u:"bag"},
+   {n:"Quadrible Bags of Leucocyte Filter for WB (Fersenius)",kit:"box",per:20,u:"bag"},
+   {n:"Hemonetics bag PLT 997",kit:"box",per:null,u:"box"},
+   {n:"TRIMA ACCEL AS-3 SOLUTION RBC (100 ML / BAG)",kit:"box",per:null,u:"box"},
+   {n:"ACD",kit:"box",per:null,u:"box"},
+   {n:"NAT TUBE",kit:"pack",per:100,u:"tube"},
+   {n:"EDTA Tube",kit:"pack",per:100,u:"tube"},
+   {n:"PLANE TUBE",kit:"pack",per:100,u:"tube"},
+   {n:"BLUE SHEET",kit:"box",per:null,u:"box"},
+   {n:"Donor balls",kit:"box",per:null,u:"box"},
+   {n:"PLASTER",kit:"box",per:null,u:"box"},
+   {n:"SMALL GAUZE",kit:"box",per:null,u:"box"},
+   {n:"BIG GAUZE",kit:"box",per:null,u:"box"},
+   {n:"ALCOHAL SWABSTICK",kit:"box",per:null,u:"box"},
+   {n:"VACUTAINER (BLOOD COLLECTION NEEDLE)",kit:"box",per:null,u:"box"},
+   {n:"LANCET",kit:"box",per:null,u:"box"},
+   {n:"IODINE",kit:"box",per:null,u:"box"},
+   {n:"CUVETTES",kit:"box",per:null,u:"box"}]},
+ {g:"virology",pfx:"VIR",ar:"الفيروسات — Alinity s",en:"Virology — Alinity s",items:[
+   {n:"HIV AG/AB COMBO",kit:"kit",per:500,u:"test"},
+   {n:"ANTI-HBC (CORE)",kit:"kit",per:500,u:"test"},
+   {n:"ANTI-HCV",kit:"kit",per:500,u:"test"},
+   {n:"HbsAg",kit:"kit",per:500,u:"test"},
+   {n:"SYPHILIS",kit:"kit",per:500,u:"test"},
+   {n:"HTLV I/II",kit:"kit",per:500,u:"test"}]},
+ {g:"malaria",pfx:"MAL",ar:"الملاريا",en:"Malaria",items:[
+   {n:"Malaria ELISA TEST KIT",kit:"kit",per:192,u:"test"}]},
+ {g:"platelet",pfx:"PLT",ar:"تجميع الصفائح",en:"Platelet pooling",items:[
+   {n:"eBDS Sample Set",kit:"box",per:40,u:"test"},
+   {n:"PLATELET POOLING SET",kit:"box",per:18,u:"set"},
+   {n:"SET, PATHOGEN REDUCTION TECHNOLOGY (PRT), PLATELET",kit:"box",per:24,u:"set"}]},
+];
+CATALOG.forEach(g=>g.items.forEach((it,i)=>{ it.code=g.pfx+"-"+(i+1); it.group=g.g; }));
+function catFind(code){ for(const g of CATALOG){ const it=g.items.find(x=>x.code===code); if(it)return it; } return null; }
+function catItemsOf(gk){ const g=CATALOG.find(x=>x.g===gk); return g?g.items:[]; }
+
+const lbl=o=> LANG==="en" ? (o.en||o.ar) : (o.ar||o.en);
+const labs=()=> DEFAULT_LABS.concat((DB.settings.customLabs||[]));
+function opts(list,sel){ return list.map(o=>`<option value="${o.k}" ${o.k===sel?"selected":""}>${esc(lbl(o))}</option>`).join(""); }
+function labelOf(list,key){ const o=list.find(x=>x.k===key); return o?lbl(o):(key||"—"); }
+
+/* ===================== Storage ===================== */
+const KEY="bbdammam_inv_v1";
+const blank=()=>({items:[],lots:[],txns:[],settings:{user:"admin",pass:"1234",warnDays:60,seeded:false,customLabs:[],users:[{u:"admin",p:"1234",role:"admin"}]}});
+function normalize(d){ const base=blank(); d=d||{}; const incoming=d.settings||{}; const hadUsers=Array.isArray(incoming.users)&&incoming.users.length>0;
+  d.settings=Object.assign(base.settings,incoming); d.items=d.items||[]; d.lots=d.lots||[]; d.txns=d.txns||[]; d.settings.customLabs=d.settings.customLabs||[];
+  if(!hadUsers){ d.settings.users=[{u:incoming.user||"admin",p:incoming.pass||"1234",role:"admin"}]; }
+  return d; }
+let DB;
+function load(){
+  try{ const raw=localStorage.getItem(KEY); if(!raw) return seedFirstRun(blank());
+    return normalize(JSON.parse(raw));
+  }catch(e){ console.error("load",e); return seedFirstRun(blank()); }
+}
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(DB)); }catch(e){ toast(t("save_fail"),"err"); } schedulePush(); }
+
+/* ===================== Utils ===================== */
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=n=>(Number(n)||0).toLocaleString("en-US");
+const todayISO=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);};
+const $=id=>document.getElementById(id);
+const locale=()=> LANG==="en"?"en-GB":"ar-EG";
+function fmtG(iso){ if(!iso)return "—"; try{return new Date(iso+"T00:00:00").toLocaleDateString(locale(),{year:"numeric",month:"short",day:"numeric"});}catch(e){return iso;} }
+function fmtH(iso){ if(!iso)return ""; try{ const l=LANG==="en"?"en-SA-u-ca-islamic-umalqura":"ar-SA-u-ca-islamic-umalqura";
+  return new Intl.DateTimeFormat(l,{year:"numeric",month:"long",day:"numeric"}).format(new Date(iso+"T00:00:00"))+t("hijri_suffix"); }catch(e){return "";} }
+const daysTo=iso=>Math.ceil((new Date(iso+"T00:00:00")-new Date(todayISO()+"T00:00:00"))/86400000);
+DB=load();
+if(!localStorage.getItem(KEY)) save();
+
+/* ===================== Derived ===================== */
+const isRej=l=>!!l.rejected;
+const availLots=code=>DB.lots.filter(l=>l.code===code&&l.qtyRemaining>0&&!isRej(l)).sort((a,b)=>(a.expiry||"9999").localeCompare(b.expiry||"9999"));
+const allLotsOf=code=>DB.lots.filter(l=>l.code===code).sort((a,b)=>(a.expiry||"9999").localeCompare(b.expiry||"9999"));
+const availQtyOf=code=>DB.lots.filter(l=>l.code===code&&!isRej(l)).reduce((s,l)=>s+(+l.qtyRemaining||0),0);
+const rejectedQtyOf=code=>DB.lots.filter(l=>l.code===code&&isRej(l)).reduce((s,l)=>s+(+l.qtyRemaining||0),0);
+function lotStatus(l){
+  if(isRej(l)) return {cls:"danger",key:"lst_rejected"};
+  if((+l.qtyRemaining||0)<=0) return {cls:"mut",key:"lst_empty"};
+  if(!l.expiry) return {cls:"info",key:"lst_no_date"};
+  const d=daysTo(l.expiry);
+  if(d<0) return {cls:"danger",key:"lst_expired"};
+  if(d<=DB.settings.warnDays) return {cls:"warn",key:"lst_near",n:d};
+  return {cls:"ok",key:"lst_valid"};
+}
+function lotStatusText(s){ return s.key==="lst_near"?t("lst_near",{n:s.n}):t(s.key); }
+function itemStatus(it){
+  const q=availQtyOf(it.code); const lots=availLots(it.code);
+  const hasExpired=lots.some(l=>l.expiry&&daysTo(l.expiry)<0);
+  const hasNear=lots.some(l=>l.expiry&&daysTo(l.expiry)>=0&&daysTo(l.expiry)<=DB.settings.warnDays);
+  if(q<=0) return {cls:"mut",key:"st_out"};
+  if(hasExpired) return {cls:"danger",key:"st_has_expired"};
+  if(q<=(+it.minQty||0)) return {cls:"warn",key:"st_low"};
+  if(hasNear) return {cls:"warn",key:"st_near"};
+  return {cls:"ok",key:"st_available"};
+}
+
+/* ===================== Auth / shell ===================== */
+let currentUser=null;
+const isAdmin=()=>!!currentUser&&currentUser.role==="admin";
+const curUser=()=>currentUser?currentUser.u:"admin";
+function init(){
+  applyStaticI18n();
+  if(getSyncCfg()) startSync();
+  const su=sessionStorage.getItem("inv_user");
+  if(su){ const f=(DB.settings.users||[]).find(x=>x.u===su); if(f){ currentUser={u:f.u,role:f.role}; openApp(); } }
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Enter"&&$("login").style.display!=="none") App.login();
+    if(e.key==="Escape") closeModal();
+  });
+  $("lg-user").focus();
+}
+function applyStaticI18n(){
+  document.documentElement.lang=LANG;
+  document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+  document.title=t("app_title")+" — "+t("org");
+  document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.getAttribute("data-i18n")));
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.setAttribute("placeholder",t(el.getAttribute("data-i18n-ph"))));
+  document.querySelectorAll("[data-i18n-lang]").forEach(el=>el.textContent= LANG==="ar"?"English":"العربية");
+}
+function toggleLang(){
+  LANG = LANG==="ar"?"en":"ar"; localStorage.setItem("inv_lang",LANG);
+  applyStaticI18n();
+  if($("app").style.display==="block"){ tickDate(); go(location.hash.replace("#","")||"dashboard"); }
+}
+function login(){
+  const u=$("lg-user").value.trim(), p=$("lg-pass").value;
+  const found=(DB.settings.users||[]).find(x=>x.u===u&&x.p===p);
+  if(found){ currentUser={u:found.u,role:found.role}; sessionStorage.setItem("inv_user",found.u); $("lg-err").textContent=""; openApp(); }
+  else{ $("lg-err").textContent=t("login_err"); $("lg-pass").value=""; }
+}
+function logout(){ sessionStorage.removeItem("inv_user"); currentUser=null; location.reload(); }
+function openApp(){
+  $("login").style.display="none"; $("app").style.display="block";
+  tickDate(); setInterval(tickDate,30000);
+  document.querySelectorAll(".nav-item").forEach(b=>b.onclick=()=>go(b.dataset.route));
+  const nu=$("nav-users"); if(nu) nu.style.display=isAdmin()?"":"none";
+  go(location.hash.replace("#","")||"dashboard");
+  if(!localStorage.getItem("inv_guide_seen")){ setTimeout(()=>{ try{ openGuide(); localStorage.setItem("inv_guide_seen","1"); }catch(e){} },500); }
+}
+function tickDate(){ const d=todayISO(); $("dateChip").innerHTML=`<b>${fmtG(d)}</b><br>${fmtH(d)}`; }
+function toggleSide(){ $("side").classList.toggle("open"); }
+
+const afterRender={};
+function go(route){
+  location.hash=route;
+  document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.route===route));
+  $("side").classList.remove("open");
+  $("view").innerHTML=(pages[route]||pages.dashboard)();
+  if(afterRender[route]) afterRender[route]();
+  window.scrollTo(0,0);
+}
+
+let toastT;
+function toast(msg,type){ const el=$("toast"); el.textContent=msg; el.className="show "+(type||"");
+  clearTimeout(toastT); toastT=setTimeout(()=>el.className=el.className.replace("show","").trim(),2600); }
+function modal(title,body,footer){
+  $("modal").innerHTML=`<div class="modal-h"><h3>${esc(title)}</h3><button class="x" onclick="App.closeModal()">×</button></div><div class="modal-b">${body}</div>`+(footer?`<div class="modal-f">${footer}</div>`:"");
+  $("modalBg").style.display="flex";
+}
+function closeModal(){ $("modalBg").style.display="none"; $("modal").innerHTML=""; }
+$("modalBg").addEventListener("click",e=>{ if(e.target.id==="modalBg") closeModal(); });
+function confirmAction(msg,onYes,yesLabel){
+  modal(t("confirm_title"),`<p style="margin:0">${esc(msg)}</p>`,
+    `<button class="btn danger" id="cf-yes">${esc(yesLabel||t("btn_confirm"))}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
+  $("cf-yes").onclick=()=>{ closeModal(); onYes(); };
+}
+const emptyMini=tx=>`<div style="text-align:center;color:var(--muted);padding:18px 0;font-size:13px">${esc(tx)}</div>`;
+
+const pages={};
+
+/* Dashboard */
+pages.dashboard=()=>{
+  const items=DB.items;
+  const totalItems=items.length;
+  const totalUnits=DB.lots.filter(l=>!isRej(l)).reduce((s,l)=>s+(+l.qtyRemaining||0),0);
+  const expired=DB.lots.filter(l=>l.qtyRemaining>0&&!isRej(l)&&l.expiry&&daysTo(l.expiry)<0);
+  const near=DB.lots.filter(l=>l.qtyRemaining>0&&!isRej(l)&&l.expiry&&daysTo(l.expiry)>=0&&daysTo(l.expiry)<=DB.settings.warnDays);
+  const low=items.filter(it=>{const q=availQtyOf(it.code);return q>0&&q<=(+it.minQty||0);});
+  const rejected=DB.lots.filter(l=>l.qtyRemaining>0&&isRej(l));
+  const todayMoves=DB.txns.filter(x=>x.date===todayISO());
+
+  const consMap={};
+  DB.txns.filter(x=>x.type==="out").forEach(x=>{const it=items.find(i=>i.code===x.code);const n=it?it.name:x.code;consMap[n]=(consMap[n]||0)+(+x.qty||0);});
+  const cons=Object.entries(consMap).sort((a,b)=>b[1]-a[1]).slice(0,7);
+  const maxC=cons.length?Math.max(...cons.map(c=>c[1])):1;
+
+  const alerts=[];
+  expired.forEach(l=>{const it=items.find(i=>i.code===l.code);alerts.push({cls:"danger",ic:"⛔",ti:`${it?it.name:l.code} — ${t("lot_label")} ${l.lot||"—"}`,s:t("alert_expired_s",{n:Math.abs(daysTo(l.expiry)),q:num(l.qtyRemaining)})});});
+  rejected.forEach(l=>{const it=items.find(i=>i.code===l.code);alerts.push({cls:"danger",ic:"🚫",ti:`${it?it.name:l.code} — ${t("lot_label")} ${l.lot||"—"}`,s:t("alert_rejected_s",{q:num(l.qtyRemaining)})});});
+  near.forEach(l=>{const it=items.find(i=>i.code===l.code);alerts.push({cls:"warn",ic:"⏳",ti:`${it?it.name:l.code} — ${t("lot_label")} ${l.lot||"—"}`,s:t("alert_near_s",{n:daysTo(l.expiry),d:fmtG(l.expiry)})});});
+  low.forEach(it=>alerts.push({cls:"warn",ic:"📉",ti:it.name,s:t("alert_low_s",{q:num(availQtyOf(it.code)),u:labelOf(UNITS,it.unit),m:num(it.minQty)})}));
+  alerts.sort((a,b)=>(a.cls==="danger"?0:1)-(b.cls==="danger"?0:1));
+
+  const okC=DB.lots.filter(l=>l.qtyRemaining>0&&!isRej(l)&&(!l.expiry||daysTo(l.expiry)>DB.settings.warnDays)).length;
+  const dona=[{c:"var(--ok)",v:okC,l:t("legend_valid")},{c:"var(--warn)",v:near.length,l:t("legend_near")},{c:"var(--danger)",v:expired.length,l:t("legend_expired")}];
+
+  return `
+  <div class="page-head"><div><h2>${t("dash_title")}</h2><p>${t("dash_sub")}</p></div>
+    <div class="head-actions"><button class="btn soft" onclick="App.go('receive')">${t("btn_receive_sol")}</button><button class="btn ghost" onclick="App.go('dispense')">${t("btn_dispense")}</button></div></div>
+
+  <div class="grid kpis" style="margin-bottom:16px">
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_items")}</div><div class="val">${num(totalItems)}</div><div class="sub">${t("kpi_items_sub")}</div></div><div class="kpi-ic greend">📦</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_units")}</div><div class="val">${num(totalUnits)}</div><div class="sub">${t("kpi_units_sub")}</div></div><div class="kpi-ic green">🧊</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_near")}</div><div class="val">${num(near.length)}</div><div class="sub">${t("kpi_near_sub",{n:DB.settings.warnDays})}</div></div><div class="kpi-ic yellow">🕐</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_expired")}</div><div class="val">${num(expired.length)}</div><div class="sub">${t("kpi_expired_sub")}</div></div><div class="kpi-ic red">⛔</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_low")}</div><div class="val">${num(low.length)}</div><div class="sub">${t("kpi_low_sub")}</div></div><div class="kpi-ic yellow">📉</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_rejected")}</div><div class="val">${num(rejected.length)}</div><div class="sub">${t("kpi_rejected_sub")}</div></div><div class="kpi-ic red">🚫</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_moves")}</div><div class="val">${num(todayMoves.length)}</div><div class="sub">${t("kpi_moves_sub")}</div></div><div class="kpi-ic blue">🔄</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="panel"><div class="panel-h"><h3>${t("panel_most_consumed")}</h3><span class="hint">${t("hint_by_dispense")}</span></div><div class="panel-b">
+      ${cons.length? cons.map(c=>`<div class="bar-row"><div class="bl" title="${esc(c[0])}">${esc(c[0])}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(4,(c[1]/maxC*100)).toFixed(1)}%"></div></div><div class="bar-val">${num(c[1])}</div></div>`).join(""):emptyMini(t("no_dispense"))}
+    </div></div>
+    <div class="panel"><div class="panel-h"><h3>${t("panel_lot_health")}</h3></div><div class="panel-b">
+      <div class="donut-wrap">${donut(dona)}<div class="legend">${dona.map(d=>`<div class="li"><span style="width:12px;height:12px;border-radius:3px;background:${d.c};display:inline-block"></span> ${d.l} <b style="margin-inline-start:4px">${num(d.v)}</b></div>`).join("")}</div></div>
+    </div></div>
+  </div>
+
+  <div class="panel"><div class="panel-h"><h3>${t("panel_alerts")}</h3><span class="hint">${t("alerts_count",{n:alerts.length})}</span></div><div class="panel-b">
+    ${alerts.length? alerts.slice(0,12).map(a=>`<div class="alert-item"><div class="a-ic" style="background:var(--${a.cls}-soft);color:var(--${a.cls})">${a.ic}</div><div class="a-tx"><b>${esc(a.ti)}</b><span>${esc(a.s)}</span></div></div>`).join("")
+    :`<div class="empty"><div class="em-ic">✅</div><h4>${t("all_good_t")}</h4><p>${t("all_good_s")}</p></div>`}
+  </div></div>`;
+};
+function donut(data){
+  const total=data.reduce((s,d)=>s+d.v,0)||1; let acc=0; const R=52,C=2*Math.PI*R; const segs=[];
+  data.forEach(d=>{const len=d.v/total*C;
+    segs.push(`<circle r="${R}" cx="70" cy="70" fill="none" stroke="${d.c}" stroke-width="20" stroke-dasharray="${len.toFixed(2)} ${(C-len).toFixed(2)}" stroke-dashoffset="${(-acc).toFixed(2)}" transform="rotate(-90 70 70)"/>`); acc+=len;});
+  const tot=data.reduce((s,d)=>s+d.v,0);
+  return `<svg width="140" height="140" viewBox="0 0 140 140"><circle r="${R}" cx="70" cy="70" fill="none" stroke="#eef0f3" stroke-width="20"/>${tot?segs.join(""):""}<text x="70" y="66" text-anchor="middle" font-size="26" font-weight="800" fill="#1f2530">${num(tot)}</text><text x="70" y="86" text-anchor="middle" font-size="12" fill="#6b7280">${t("lot_unit")}</text></svg>`;
+}
+
+/* Inventory */
+let invFilter="all", invSearch="";
+pages.inventory=()=>`
+  <div class="page-head"><div><h2>${t("inv_title")}</h2><p>${t("inv_sub")}</p></div>
+    <div class="head-actions"><button class="btn soft" onclick="App.go('receive')">${t("btn_receive_sol")}</button><button class="btn ghost" onclick="App.exportCSV('inventory')">${t("btn_export_excel")}</button><button class="btn ghost no-print" onclick="window.print()">${t("btn_print")}</button></div></div>
+  <div class="toolbar"><div class="search"><span class="si">🔎</span><input id="invSearch" placeholder="${t("search_inv_ph")}" value="${esc(invSearch)}"></div>
+    <div class="seg" id="invSeg">${["all","ok","warn","danger","out"].map(k=>`<button data-f="${k}" class="${invFilter===k?"active":""}">${t({all:"filter_all",ok:"filter_ok",warn:"filter_warn",danger:"filter_danger",out:"filter_out"}[k])}</button>`).join("")}</div></div>
+  <div class="panel"><div class="panel-b" id="invBody"></div></div>`;
+afterRender.inventory=()=>{
+  $("invSearch").addEventListener("input",e=>{invSearch=e.target.value;renderInv();});
+  $("invSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{invFilter=b.dataset.f;go("inventory");});
+  renderInv();
+};
+function matchFilter(it){
+  const st=itemStatus(it).key; const q=availQtyOf(it.code);
+  if(invFilter==="all")return true;
+  if(invFilter==="ok")return st==="st_available";
+  if(invFilter==="warn")return st==="st_low"||st==="st_near";
+  if(invFilter==="danger")return st==="st_has_expired"||availLots(it.code).some(l=>l.expiry&&daysTo(l.expiry)<0)||rejectedQtyOf(it.code)>0;
+  if(invFilter==="out")return q<=0;
+  return true;
+}
+function renderInv(){
+  const s=invSearch.trim().toLowerCase();
+  let rows=DB.items.filter(it=>{const hit=!s||[it.name,it.code,it.manufacturer,labelOf(CATS,it.category)].some(v=>String(v||"").toLowerCase().includes(s));return hit&&matchFilter(it);}).sort((a,b)=>a.name.localeCompare(b.name,"ar"));
+  if(!DB.items.length){ $("invBody").innerHTML=`<div class="empty"><div class="em-ic">📦</div><h4>${t("inv_empty_t")}</h4><p>${t("inv_empty_s")}</p><button class="btn" style="margin-top:10px" onclick="App.go('receive')">${t("btn_receive_solution")}</button></div>`; return; }
+  if(!rows.length){ $("invBody").innerHTML=`<div class="empty"><div class="em-ic">🔍</div><h4>${t("no_results_t")}</h4><p>${t("no_results_s")}</p></div>`; return; }
+  let h=`<div class="tbl-wrap"><table><thead><tr><th>${t("th_code")}</th><th>${t("th_name")}</th><th>${t("th_man")}</th><th>${t("th_cat")}</th><th class="num">${t("th_qty")}</th><th>${t("th_unit")}</th><th class="num">${t("th_lots")}</th><th>${t("th_status")}</th><th>${t("th_actions")}</th></tr></thead><tbody>`;
+  rows.forEach(it=>{const st=itemStatus(it); const active=availLots(it.code); const rej=rejectedQtyOf(it.code);
+    h+=`<tr>
+      <td><span class="tag mut mono">${esc(it.code)}</span></td>
+      <td><b>${esc(it.name)}</b>${rej>0?`<div class="muted" style="font-size:11px">${t("rejected_note",{q:num(rej)})}</div>`:""}</td>
+      <td>${esc(it.manufacturer||"—")}</td><td>${esc(labelOf(CATS,it.category))}</td>
+      <td class="num"><b>${num(availQtyOf(it.code))}</b></td><td>${esc(labelOf(UNITS,it.unit))}</td>
+      <td class="num">${num(active.length)}</td><td><span class="tag ${st.cls}">${t(st.key)}</span></td>
+      <td><div class="row-actions">
+        <button class="icon-btn" title="${t("tip_view_lots")}" onclick="App.toggleLots('${it.code}')">👁</button>
+        <button class="icon-btn" title="${t("tip_barcode")}" onclick="App.go('barcode');setTimeout(()=>App.pickBarcode('${esc(it.code)}'),60)">🏷️</button>
+        <button class="icon-btn" title="${t("tip_edit")}" onclick="App.editItem('${it.id}')">✏️</button>
+        <button class="icon-btn danger" title="${t("tip_delete")}" onclick="App.delItem('${it.id}')">🗑</button>
+      </div></td></tr>
+      <tr id="lots-${it.code}" style="display:none"><td colspan="9" style="padding:0">${lotsTable(it.code)}</td></tr>`;});
+  h+=`</tbody></table></div><div class="stat-line"><span>${t("shown_items",{n:num(rows.length)})}</span><span>${t("total_qty",{q:num(rows.reduce((s,it)=>s+availQtyOf(it.code),0))})}</span></div>`;
+  $("invBody").innerHTML=h;
+}
+function lotsTable(code){
+  const lots=allLotsOf(code);
+  let h=`<div style="padding:10px 14px;background:#fcfcfd"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="font-size:13px">${t("lots_h",{n:num(lots.length)})}</b><button class="btn sm soft" onclick="App.addLot('${esc(code)}')">${t("btn_add_lot")}</button></div>`;
+  if(!lots.length){ h+=`<div class="muted" style="font-size:13px">${t("no_lots")}</div></div>`; return h; }
+  h+=`<table style="font-size:13px"><thead><tr><th>${t("th_lot")}</th><th>${t("th_exp")}</th><th class="num">${t("th_received")}</th><th class="num">${t("th_remaining")}</th><th>${t("th_lab")}</th><th>${t("th_supplier")}</th><th>${t("th_status")}</th><th></th></tr></thead><tbody>`;
+  lots.forEach(l=>{const st=lotStatus(l);
+    h+=`<tr><td class="mono">${esc(l.lot||"—")}</td><td>${fmtG(l.expiry)}</td><td class="num">${num(l.qtyReceived)}</td><td class="num"><b>${num(l.qtyRemaining)}</b></td><td>${esc(labelOf(labs(),l.lab))}</td><td>${esc(l.supplier||"—")}</td><td><span class="tag ${st.cls}">${lotStatusText(st)}</span></td>
+      <td><div class="row-actions"><button class="icon-btn" title="⚖️" onclick="App.adjustLot('${l.id}')">⚖️</button><button class="icon-btn danger" onclick="App.delLot('${l.id}')">🗑</button></div></td></tr>`;});
+  h+=`</tbody></table></div>`; return h;
+}
+function toggleLots(code){ const r=$("lots-"+code); if(r) r.style.display=r.style.display==="none"?"":"none"; }
+
+/* Receive */
+pages.receive=()=>`
+  <div class="page-head"><div><h2>${t("rec_title")}</h2><p>${t("rec_sub")}</p></div></div>
+  <div class="panel"><div class="panel-b">
+  <div class="cat-box">
+    <div class="cat-h">📋 ${t("cat_title")}</div>
+    <div class="form-grid" style="gap:10px">
+      <div><label>${t("cat_group")}</label><select id="rc-cgroup" onchange="App.catGroup()"><option value="">${t("cat_pick_group")}</option>${CATALOG.map(g=>`<option value="${g.g}">${esc(lbl(g))}</option>`).join("")}</select></div>
+      <div><label>${t("cat_item")}</label><select id="rc-citem" onchange="App.catItem()"><option value="">${t("cat_pick_item")}</option></select></div>
+      <div><label>${t("cat_kits")}</label><input id="rc-kits" type="number" min="1" value="1" oninput="App.catKits()"></div>
+    </div>
+    <div id="rc-cinfo" class="cat-info"></div>
+  </div>
+  <div class="form-grid">
+    <div><label class="req">${t("f_code")}</label><input id="rc-code" placeholder="NS-09" list="codeList" oninput="App.onCodeType()"><datalist id="codeList">${DB.items.map(i=>`<option value="${esc(i.code)}">${esc(i.name)}</option>`).join("")}</datalist><div class="muted" id="rc-codehint" style="font-size:12px;margin-top:5px"></div></div>
+    <div><label class="req">${t("f_name")}</label><input id="rc-name"></div>
+    <div><label>${t("f_man")}</label><input id="rc-man"></div>
+    <div><label>${t("f_cat")}</label><select id="rc-cat">${opts(CATS)}</select></div>
+    <div><label>${t("f_unit")}</label><select id="rc-unit">${opts(UNITS)}</select></div>
+    <div><label>${t("f_min")}</label><input id="rc-min" type="number" min="0" value="10"></div>
+    <div><label class="req">${t("f_lot")}</label><input id="rc-lot"></div>
+    <div><label class="req">${t("f_exp")}</label><input id="rc-exp" type="date" oninput="App.expHint()"><div class="muted" id="rc-exphint" style="font-size:12px;margin-top:5px"></div></div>
+    <div><label class="req">${t("f_qty")}</label><input id="rc-qty" type="number" min="1" placeholder="0"></div>
+    <div><label>${t("f_lab")}</label><select id="rc-lab">${opts(labs())}</select></div>
+    <div><label>${t("f_supplier")}</label><input id="rc-sup"></div>
+    <div><label>${t("f_recdate")}</label><input id="rc-date" type="date" value="${todayISO()}"></div>
+    <div><label class="req">${t("f_inspection")}</label><select id="rc-insp">${opts(INSPECT,"accepted")}</select></div>
+    <div class="full"><label>${t("f_note")}</label><textarea id="rc-note" rows="2" placeholder="${t("optional_ph")}"></textarea></div>
+  </div><hr class="sep">
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn" onclick="App.doReceive(false)">${t("btn_save_receive")}</button>
+    <button class="btn soft" onclick="App.doReceive(true)">${t("btn_save_print")}</button>
+    <button class="btn ghost" onclick="App.go('receive')">${t("btn_clear")}</button>
+  </div></div></div>`;
+var catPer=null, catKit="box", catUnit="box";
+function catGroup(){
+  const gk=$("rc-cgroup").value; const sel=$("rc-citem");
+  sel.innerHTML=`<option value="">${t("cat_pick_item")}</option>`+catItemsOf(gk).map(it=>`<option value="${it.code}">${esc(it.n)}</option>`).join("");
+  $("rc-cinfo").textContent="";
+}
+function catItem(){
+  const it=catFind($("rc-citem").value); if(!it)return;
+  $("rc-code").value=it.code; $("rc-name").value=it.n; if($("rc-unit"))$("rc-unit").value=it.u;
+  catPer=it.per; catKit=it.kit; catUnit=it.u;
+  onCodeType(); catKits();
+}
+function catKits(){
+  if($("rc-citem")&&!$("rc-citem").value)return;
+  const kits=Math.max(1,+($("rc-kits").value||1)); const info=$("rc-cinfo");
+  const kitL=lbl(CAT_KITS[catKit]||{ar:"",en:""}); const unitL=labelOf(UNITS,catUnit);
+  if(catPer){ const total=kits*catPer; $("rc-qty").value=total; if(info)info.textContent=`1 ${kitL} = ${num(catPer)} ${unitL}  ·  ${t("cat_total")}: ${num(total)} ${unitL}`; }
+  else { $("rc-qty").value=kits; if(info)info.textContent=`${t("cat_each_unit")}  ·  ${t("cat_total")}: ${num(kits)} ${kitL}`; }
+}
+function onCodeType(){
+  const code=$("rc-code").value.trim(); const it=DB.items.find(i=>i.code===code); const hint=$("rc-codehint");
+  if(it){ hint.innerHTML=t("code_exists",{name:esc(it.name)});
+    $("rc-name").value=it.name; $("rc-man").value=it.manufacturer||"";
+    if(it.category)$("rc-cat").value=it.category; if(it.unit)$("rc-unit").value=it.unit; $("rc-min").value=it.minQty!=null?it.minQty:10;
+  }else if(code){ hint.textContent=t("code_new"); } else hint.textContent="";
+}
+function expHint(){ const v=$("rc-exp").value; $("rc-exphint").textContent=v?fmtH(v):""; }
+function doReceive(print){
+  const v=id=>$(id).value.trim();
+  const code=v("rc-code"),name=v("rc-name"),lot=v("rc-lot"),exp=$("rc-exp").value,qty=+$("rc-qty").value;
+  const insp=$("rc-insp").value, lab=$("rc-lab").value, rejected=(insp==="rejected");
+  if(!code)return toast(t("err_code"),"err");
+  if(!name)return toast(t("err_name"),"err");
+  if(!lot)return toast(t("err_lot"),"err");
+  if(!exp)return toast(t("err_exp"),"err");
+  if(!qty||qty<=0)return toast(t("err_qty"),"err");
+  if(daysTo(exp)<0&&!confirm(t("confirm_past_exp")))return;
+  let it=DB.items.find(i=>i.code===code);
+  if(!it){ it={id:uid(),code,name,manufacturer:v("rc-man"),category:$("rc-cat").value,unit:$("rc-unit").value,minQty:+$("rc-min").value||0,createdAt:new Date().toISOString()}; DB.items.push(it); }
+  else{ it.name=name||it.name; it.manufacturer=v("rc-man")||it.manufacturer; it.category=$("rc-cat").value; it.unit=$("rc-unit").value; it.minQty=+$("rc-min").value||0; }
+  let lotRec = !rejected && DB.lots.find(l=>l.code===code&&l.lot===lot&&l.expiry===exp&&!isRej(l));
+  if(lotRec){ lotRec.qtyReceived+=qty; lotRec.qtyRemaining+=qty; }
+  else{ DB.lots.push({id:uid(),code,lot,expiry:exp,qtyReceived:qty,qtyRemaining:qty,supplier:v("rc-sup"),lab,inspection:insp,rejected,receivedAt:($("rc-date").value||todayISO())}); }
+  DB.txns.push({id:uid(),type:"in",code,lot,qty,date:($("rc-date").value||todayISO()),party:v("rc-sup")||t("party_incoming"),lab,inspection:insp,note:v("rc-note"),user:curUser()});
+  save();
+  toast(rejected?t("ok_receive_rejected"):t("ok_receive"), rejected?"err":"ok");
+  if(print){ go("barcode"); setTimeout(()=>pickBarcode(code,lot),60); } else go("receive");
+}
+
+/* Dispense */
+pages.dispense=()=>{
+  const avail=DB.items.filter(i=>availQtyOf(i.code)>0);
+  return `
+  <div class="page-head"><div><h2>${t("dis_title")}</h2><p>${t("dis_sub")}</p></div></div>
+  <div class="panel"><div class="panel-b">
+  ${avail.length?`<div class="form-grid">
+    <div class="full"><label class="req">${t("f_item")}</label><select id="ds-code" onchange="App.dispenseInfo()"><option value="">${t("pick_solution")}</option>${avail.map(i=>`<option value="${esc(i.code)}">${esc(i.name)} (${esc(i.code)}) — ${t("avail_short",{q:num(availQtyOf(i.code))})}</option>`).join("")}</select></div>
+    <div><label class="req">${t("f_dis_qty")}</label><input id="ds-qty" type="number" min="1" placeholder="0"></div>
+    <div><label>${t("f_dis_lab")}</label><select id="ds-lab">${opts(labs())}</select></div>
+    <div><label>${t("f_dis_date")}</label><input id="ds-date" type="date" value="${todayISO()}"></div>
+    <div class="full"><label>${t("f_note")}</label><input id="ds-note" placeholder="${t("f_dis_note_ph")}"></div>
+  </div><div id="ds-info" style="margin-top:14px"></div><hr class="sep">
+  <button class="btn" onclick="App.doDispense()">${t("btn_confirm_dispense")}</button>`
+  :`<div class="empty"><div class="em-ic">📭</div><h4>${t("dis_empty_t")}</h4><p>${t("dis_empty_s")}</p><button class="btn" style="margin-top:10px" onclick="App.go('receive')">${t("btn_receive_solution")}</button></div>`}
+  </div></div>`;
+};
+function dispenseInfo(){
+  const code=$("ds-code").value; const box=$("ds-info"); if(!code){box.innerHTML="";return;}
+  const lots=availLots(code);
+  let h=`<div class="help-box"><b>${t("avail_lots_h")}</b><div style="margin-top:8px"><table style="font-size:13px;background:transparent"><thead><tr><th>${t("th_lot")}</th><th>${t("th_exp")}</th><th class="num">${t("th_remaining")}</th><th>${t("th_status")}</th></tr></thead><tbody>`;
+  lots.forEach(l=>{const st=lotStatus(l);h+=`<tr><td class="mono">${esc(l.lot||"—")}</td><td>${fmtG(l.expiry)}</td><td class="num"><b>${num(l.qtyRemaining)}</b></td><td><span class="tag ${st.cls}">${lotStatusText(st)}</span></td></tr>`;});
+  h+=`</tbody></table></div></div>`; box.innerHTML=h;
+}
+function doDispense(){
+  const code=$("ds-code").value, qty=+$("ds-qty").value;
+  if(!code)return toast(t("err_pick_item"),"err");
+  if(!qty||qty<=0)return toast(t("err_qty"),"err");
+  const avail=availQtyOf(code);
+  if(qty>avail)return toast(t("err_over",{q:num(qty),a:num(avail)}),"err");
+  let rem=qty; const used=[]; for(const l of availLots(code)){if(rem<=0)break;const take=Math.min(rem,l.qtyRemaining);l.qtyRemaining-=take;rem-=take;used.push(l.lot||"—");}
+  const lab=$("ds-lab").value;
+  DB.txns.push({id:uid(),type:"out",code,lot:used.join(", "),qty,date:$("ds-date").value||todayISO(),party:labelOf(labs(),lab),lab,note:$("ds-note").value.trim(),user:curUser()});
+  save(); toast(t("ok_dispense"),"ok"); go("dispense");
+}
+
+/* Barcode */
+pages.barcode=()=>`
+  <div class="page-head"><div><h2>${t("bc_title")}</h2><p>${t("bc_sub")}</p></div></div>
+  <div class="two-col">
+    <div class="panel"><div class="panel-b">
+      <div class="field"><label>${t("bc_pick")}</label><select id="bc-item" onchange="App.bcFromItem()"><option value="">${t("manual_entry")}</option>${DB.items.map(i=>`<option value="${esc(i.code)}">${esc(i.name)} (${esc(i.code)})</option>`).join("")}</select></div>
+      <div class="field"><label>${t("bc_code")}</label><input id="bc-code" placeholder="NS-09" oninput="App.renderBarcode()"></div>
+      <div class="field"><label>${t("bc_name")}</label><input id="bc-name" oninput="App.renderBarcode()"></div>
+      <div class="form-grid"><div><label>${t("bc_lot")}</label><input id="bc-lot" oninput="App.renderBarcode()"></div><div><label>${t("bc_exp")}</label><input id="bc-exp" type="date" oninput="App.renderBarcode()"></div></div>
+      <div class="field" style="margin-top:14px"><label>${t("bc_copies")}</label><input id="bc-copies" type="number" min="1" max="60" value="6"></div>
+      <button class="btn full" onclick="App.printBarcode()">${t("bc_print")}</button>
+      <div class="muted" style="font-size:12px;margin-top:8px">${t("bc_hint")}</div>
+    </div></div>
+    <div class="panel"><div class="panel-h"><h3>${t("bc_preview")}</h3></div><div class="panel-b"><div id="bc-preview"></div></div></div>
+  </div>`;
+afterRender.barcode=()=>renderBarcode();
+function bcFromItem(){ const code=$("bc-item").value; const it=DB.items.find(i=>i.code===code); if(it){$("bc-code").value=it.code;$("bc-name").value=it.name;} renderBarcode(); }
+function pickBarcode(code,lot){ const it=DB.items.find(i=>i.code===code);
+  if($("bc-item"))$("bc-item").value=code; if($("bc-code"))$("bc-code").value=code;
+  if(it&&$("bc-name"))$("bc-name").value=it.name; if(lot&&$("bc-lot"))$("bc-lot").value=lot; renderBarcode(); }
+function labelHTML(){
+  const code=($("bc-code").value||"").toUpperCase().trim(); const name=$("bc-name").value.trim(); const lot=$("bc-lot").value.trim(); const exp=$("bc-exp").value;
+  const svg=code?code39SVG(code):`<div class="muted" style="padding:30px 0">${t("bc_enter_code")}</div>`;
+  return `<div class="label-card"><div class="lc-name">${esc(name||"—")}</div><div class="lc-meta">${lot?(t("bc_lot")+": "+esc(lot)):""}${(lot&&exp)?" · ":""}${exp?(t("bc_exp")+": "+fmtG(exp)):""}</div>${svg}<div class="lc-code">${esc(code||"")}</div></div>`;
+}
+function renderBarcode(){ const p=$("bc-preview"); if(p)p.innerHTML=labelHTML(); }
+function printBarcode(){
+  const code=($("bc-code").value||"").trim(); if(!code)return toast(t("bc_err_code"),"err");
+  const copies=Math.min(60,Math.max(1,+$("bc-copies").value||1)); const one=labelHTML();
+  const w=window.open("","_blank"); const dir=LANG==="ar"?"rtl":"ltr";
+  w.document.write('<html dir="'+dir+'"><head><meta charset="utf-8"><title>'+t("bc_print_title")+'</title><style>body{font-family:"Segoe UI",Tahoma,sans-serif;margin:0;padding:8mm}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6mm}.label-card{border:1px solid #000;border-radius:8px;padding:8px;text-align:center}.lc-name{font-weight:800;font-size:14px}.lc-meta{font-size:11px;color:#555;margin:2px 0 6px}.lc-code{font-family:monospace;letter-spacing:2px;margin-top:4px;font-size:13px}svg{max-width:100%}</style></head><body><div class="grid">'+Array(copies).fill(one).join("")+'</div><scr'+'ipt>window.onload=function(){window.print();}</scr'+'ipt></body></html>');
+  w.document.close();
+}
+const C39={'0':'nnnwwnwnn','1':'wnnwnnnnw','2':'nnwwnnnnw','3':'wnwwnnnnn','4':'nnnwwnnnw','5':'wnnwwnnnn','6':'nnwwwnnnn','7':'nnnwnnwnw','8':'wnnwnnwnn','9':'nnwwnnwnn','A':'wnnnnwnnw','B':'nnwnnwnnw','C':'wnwnnwnnn','D':'nnnnwwnnw','E':'wnnnwwnnn','F':'nnwnwwnnn','G':'nnnnnwwnw','H':'wnnnnwwnn','I':'nnwnnwwnn','J':'nnnnwwwnn','K':'wnnnnnnww','L':'nnwnnnnww','M':'wnwnnnnwn','N':'nnnnwnnww','O':'wnnnwnnwn','P':'nnwnwnnwn','Q':'nnnnnnwww','R':'wnnnnnwwn','S':'nnwnnnwwn','T':'nnnnwnwwn','U':'wwnnnnnnw','V':'nwwnnnnnw','W':'wwwnnnnnn','X':'nwnnwnnnw','Y':'wwnnwnnnn','Z':'nwwnwnnnn','-':'nwnnnnwnw','.':'wwnnnnwnn',' ':'nwwnnnwnn','$':'nwnwnwnnn','/':'nwnwnnnwn','+':'nwnnnwnwn','%':'nnnwnwnwn','*':'nwnnwnwnn'};
+function code39SVG(text){
+  text=text.toUpperCase().replace(/[^0-9A-Z\-\.\ \$\/\+%]/g,"-"); const seq="*"+text+"*"; const NW=2,WW=6,H=64,gap=2; let x=0; const r=[];
+  for(const ch of seq){const p=C39[ch]; if(!p)continue; for(let i=0;i<p.length;i++){const w=p[i]==='w'?WW:NW; if(i%2===0)r.push(`<rect x="${x}" y="0" width="${w}" height="${H}" fill="#000"/>`); x+=w;} x+=gap;}
+  return `<svg width="${Math.min(x,460)}" viewBox="0 0 ${x} ${H}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="height:64px">${r.join("")}</svg>`;
+}
+
+/* Log */
+let logType="all", logSearch="";
+pages.log=()=>`
+  <div class="page-head"><div><h2>${t("log_title")}</h2><p>${t("log_sub")}</p></div>
+    <div class="head-actions"><button class="btn ghost" onclick="App.exportCSV('log')">${t("btn_export_excel")}</button></div></div>
+  <div class="toolbar"><div class="search"><span class="si">🔎</span><input id="logSearch" placeholder="${t("search_log_ph")}" value="${esc(logSearch)}"></div>
+    <div class="seg" id="logSeg">${["all","in","out","adjust"].map(k=>`<button data-f="${k}" class="${logType===k?"active":""}">${t({all:"filter_all",in:"f_in",out:"f_out",adjust:"f_adjust"}[k])}</button>`).join("")}</div></div>
+  <div class="panel"><div class="panel-b" id="logBody"></div></div>`;
+afterRender.log=()=>{
+  $("logSearch").addEventListener("input",e=>{logSearch=e.target.value;renderLog();});
+  $("logSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{logType=b.dataset.f;go("log");});
+  renderLog();
+};
+function renderLog(){
+  const s=logSearch.trim().toLowerCase();
+  let rows=DB.txns.filter(x=>(logType==="all"||x.type===logType)&&(!s||[x.code,x.party,x.note,x.lot,labelOf(labs(),x.lab)].some(v=>String(v||"").toLowerCase().includes(s)))).sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(b.id>a.id?1:-1));
+  if(!rows.length){ $("logBody").innerHTML=`<div class="empty"><div class="em-ic">📜</div><h4>${t("log_empty")}</h4></div>`; return; }
+  const meta={in:{cls:"ok",i:"📥"},out:{cls:"danger",i:"📤"},adjust:{cls:"info",i:"⚖️"}};
+  const tt={in:t("f_in"),out:t("f_out"),adjust:t("f_adjust")};
+  let h=`<div class="tbl-wrap"><table><thead><tr><th>${t("th_date")}</th><th>${t("th_type")}</th><th>${t("th_code")}</th><th>${t("th_name")}</th><th>${t("th_lot")}</th><th class="num">${t("th_qty")}</th><th>${t("th_lab")}</th><th>${t("th_party")}</th><th>${t("th_inspection")}</th><th>${t("th_user")}</th><th>${t("th_notes")}</th></tr></thead><tbody>`;
+  rows.forEach(x=>{const m=meta[x.type]||meta.adjust; const it=DB.items.find(i=>i.code===x.code);
+    const insp = x.type==="in"&&x.inspection ? `<span class="tag ${x.inspection==="rejected"?"danger":"ok"}">${labelOf(INSPECT,x.inspection)}</span>` : "—";
+    h+=`<tr><td>${fmtG(x.date)}</td><td><span class="tag ${m.cls}">${m.i} ${tt[x.type]||x.type}</span></td><td class="mono">${esc(x.code)}</td><td>${esc(it?it.name:"—")}</td><td class="mono">${esc(x.lot||"—")}</td><td class="num"><b>${x.type==="out"?"−":"+"}${num(x.qty)}</b></td><td>${esc(labelOf(labs(),x.lab))}</td><td>${esc(x.party||"—")}</td><td>${insp}</td><td>${esc(x.user||"—")}</td><td>${esc(x.note||"—")}</td></tr>`;});
+  h+=`</tbody></table></div><div class="stat-line"><span>${t("moves_count",{n:num(rows.length)})}</span></div>`;
+  $("logBody").innerHTML=h;
+}
+
+/* Reports */
+pages.reports=()=>{
+  const expired=DB.lots.filter(l=>l.qtyRemaining>0&&!isRej(l)&&l.expiry&&daysTo(l.expiry)<0);
+  const near=DB.lots.filter(l=>l.qtyRemaining>0&&!isRej(l)&&l.expiry&&daysTo(l.expiry)>=0&&daysTo(l.expiry)<=DB.settings.warnDays);
+  const consMap={};DB.txns.filter(x=>x.type==="out").forEach(x=>{const it=DB.items.find(i=>i.code===x.code);const n=it?it.name:x.code;consMap[n]=(consMap[n]||0)+(+x.qty||0);});
+  const cons=Object.entries(consMap).sort((a,b)=>b[1]-a[1]);
+  return `
+  <div class="page-head"><div><h2>${t("rep_title")}</h2><p>${t("rep_sub")}</p></div>
+    <div class="head-actions"><button class="btn ghost no-print" onclick="window.print()">${t("btn_print_page")}</button></div></div>
+  <div class="grid kpis" style="margin-bottom:16px">
+    <div class="kpi"><div class="lbl">${t("rep_inv_t")}</div><div class="sub" style="margin:8px 0 12px">${t("rep_inv_s")}</div><button class="btn sm soft full" onclick="App.exportCSV('inventory')">${t("btn_export")}</button></div>
+    <div class="kpi"><div class="lbl">${t("rep_log_t")}</div><div class="sub" style="margin:8px 0 12px">${t("rep_log_s")}</div><button class="btn sm soft full" onclick="App.exportCSV('log')">${t("btn_export")}</button></div>
+    <div class="kpi"><div class="lbl">${t("rep_exp_t")}</div><div class="sub" style="margin:8px 0 12px">${t("rep_exp_s")}</div><button class="btn sm soft full" onclick="App.exportCSV('expiry')">${t("btn_export")}</button></div>
+    <div class="kpi"><div class="lbl">${t("rep_cons_t")}</div><div class="sub" style="margin:8px 0 12px">${t("rep_cons_s")}</div><button class="btn sm soft full" onclick="App.exportCSV('consumption')">${t("btn_export")}</button></div>
+    <div class="kpi"><div class="lbl">${t("rep_lab_t")}</div><div class="sub" style="margin:8px 0 12px">${t("rep_lab_s")}</div><button class="btn sm soft full" onclick="App.exportCSV('labusage')">${t("btn_export")}</button></div>
+  </div>
+  <div class="print-grid">
+  <div class="panel"><div class="panel-h"><h3>${t("rep_exp_panel")}</h3><span class="hint">${t("lots_count",{n:num(expired.length+near.length)})}</span></div><div class="panel-b">
+    ${(expired.length+near.length)?`<div class="tbl-wrap"><table><thead><tr><th>${t("th_name")}</th><th>${t("th_lot")}</th><th>${t("th_exp")}</th><th class="num">${t("th_remaining")}</th><th>${t("th_status")}</th></tr></thead><tbody>${[...expired,...near].map(l=>{const it=DB.items.find(i=>i.code===l.code);const st=lotStatus(l);return `<tr><td><b>${esc(it?it.name:l.code)}</b></td><td class="mono">${esc(l.lot||"—")}</td><td>${fmtG(l.expiry)}</td><td class="num">${num(l.qtyRemaining)}</td><td><span class="tag ${st.cls}">${lotStatusText(st)}</span></td></tr>`;}).join("")}</tbody></table></div>`:emptyMini(t("no_exp_lots"))}
+  </div></div>
+  <div class="panel"><div class="panel-h"><h3>${t("rep_most")}</h3></div><div class="panel-b">
+    ${cons.length?`<div class="tbl-wrap"><table><thead><tr><th>#</th><th>${t("th_name")}</th><th class="num">${t("th_total_dispensed")}</th></tr></thead><tbody>${cons.map((c,i)=>`<tr><td>${i+1}</td><td><b>${esc(c[0])}</b></td><td class="num">${num(c[1])}</td></tr>`).join("")}</tbody></table></div>`:emptyMini(t("no_dispense"))}
+  </div></div>
+  </div>`;
+};
+
+/* Settings */
+pages.settings=()=>{
+  const custom=DB.settings.customLabs||[];
+  return `
+  <div class="page-head"><div><h2>${t("set_title")}</h2><p>${t("set_sub")}</p></div></div>
+  <div class="panel"><div class="panel-h"><h3>${t("set_account")}</h3></div><div class="panel-b">
+    <div class="form-grid">
+      <div><label>${t("acct_current")}</label><input value="${esc(curUser())} (${t(isAdmin()?"role_admin":"role_user")})" disabled></div>
+      <div><label>${t("acct_new_pass")}</label><input id="st-newpass" type="text" placeholder="${t("optional_ph")}"></div>
+      <div><label>${t("f_warn_days")}</label><input id="st-warn" type="number" min="1" value="${DB.settings.warnDays}"></div>
+    </div>
+    <hr class="sep"><button class="btn" onclick="App.saveSettings()">${t("btn_save_settings")}</button>
+  </div></div>
+
+  <div class="panel"><div class="panel-h"><h3>${t("set_labs")}</h3><span class="hint">${t("set_labs_hint")}</span></div><div class="panel-b">
+    <div class="muted" style="font-size:12px;font-weight:700;margin-bottom:6px">${t("labs_default")}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">${DEFAULT_LABS.map(l=>`<span class="tag mut">${esc(lbl(l))}</span>`).join("")}</div>
+    <div class="muted" style="font-size:12px;font-weight:700;margin-bottom:6px">${t("labs_custom")}</div>
+    <div id="customLabs" style="margin-bottom:12px">${custom.length?custom.map(l=>`<span class="tag info" style="margin:0 4px 6px 0">${esc(lbl(l))} <button class="icon-btn danger" style="padding:0 6px;margin-inline-start:4px" onclick="App.delLab('${l.k}')">×</button></span>`).join(""):`<span class="muted" style="font-size:13px">${t("no_custom_labs")}</span>`}</div>
+    <div class="form-grid"><div><label>${t("f_lab_ar")}</label><input id="lab-ar"></div><div><label>${t("f_lab_en")}</label><input id="lab-en"></div></div>
+    <div style="margin-top:10px"><button class="btn soft" onclick="App.addLab()">${t("btn_add_lab")}</button></div>
+  </div></div>
+
+  ${isAdmin()?`<div class="panel"><div class="panel-h"><h3>${t("set_backup")}</h3><span class="hint">${t("set_backup_hint")}</span></div><div class="panel-b">
+    <p class="muted" style="margin-top:0">${t("backup_desc")}</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn soft" onclick="App.backup()">${t("btn_export_backup")}</button><button class="btn ghost" onclick="document.getElementById('st-file').click()">${t("btn_import_backup")}</button><input type="file" id="st-file" accept="application/json" style="display:none" onchange="App.restore(event)"></div>
+  </div></div>`:""}
+
+  <div class="panel"><div class="panel-h"><h3>${t("sync_title2")}</h3><span class="hint">${t("set_sync_hint")}</span></div><div class="panel-b">
+    <div style="margin-bottom:12px">${t("sync_status_lbl")} <span class="tag mut" id="syncBadge">${t("sync_off")}</span></div>
+    <div class="form-grid">
+      <div class="full"><label>${t("sync_workspace")}</label><input id="sy-ws" placeholder="${t("sync_workspace_ph")}" value="${esc((getSyncCfg()||{}).workspace||"")}"></div>
+      <div class="full"><label>${t("sync_config")}</label><textarea id="sy-cfg" rows="5" placeholder="${t("sync_config_ph")}">${esc((getSyncCfg()||{}).config?JSON.stringify(getSyncCfg().config,null,2):"")}</textarea></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><button class="btn soft" onclick="App.connectSync()">${t("sync_connect")}</button><button class="btn ghost" onclick="App.disconnectSync()">${t("sync_disconnect")}</button></div>
+    <div class="help-box" style="margin-top:12px">${t("sync_help")}</div>
+  </div></div>
+
+  ${isAdmin()?`<div class="panel"><div class="panel-h"><h3>${t("set_data")}</h3></div><div class="panel-b">
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" onclick="App.reseed()">${t("btn_reseed")}</button><button class="btn danger" onclick="App.wipe()">${t("btn_wipe")}</button></div>
+    <p class="muted" style="font-size:12px;margin-bottom:0">${t("data_note")}</p>
+  </div></div>`:""}
+  <div style="text-align:center;color:var(--muted);font-size:12px;margin-top:8px">${t("version_line")}</div>`;
+};
+afterRender.settings=()=>{ setSyncStatus(syncState); };
+function saveSettings(){
+  DB.settings.warnDays=Math.max(1,+$("st-warn").value||60);
+  const np=$("st-newpass")?$("st-newpass").value:"";
+  if(np){ const me=(DB.settings.users||[]).find(x=>x.u===curUser()); if(me) me.p=np; }
+  save(); toast(t("ok_edited"),"ok"); if($("st-newpass"))$("st-newpass").value="";
+}
+function addLab(){
+  const ar=$("lab-ar").value.trim(), en=$("lab-en").value.trim();
+  if(!ar&&!en)return toast(t("err_complete_req"),"err");
+  DB.settings.customLabs.push({k:uid(),ar:ar||en,en:en||ar}); save(); go("settings");
+}
+function delLab(k){ DB.settings.customLabs=(DB.settings.customLabs||[]).filter(l=>l.k!==k); save(); go("settings"); }
+function backup(){ download(new Blob([JSON.stringify(DB,null,2)],{type:"application/json"}),`${t("fn_backup")}_${todayISO()}.json`); toast(t("ok_backup"),"ok"); }
+function restore(ev){
+  const f=ev.target.files[0]; if(!f)return; const r=new FileReader();
+  r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d.items||!d.lots||!d.txns) throw new Error(t("invalid_file"));
+    confirmAction(t("restore_q"),()=>{ const base=blank(); d.settings=Object.assign(base.settings,d.settings||{}); DB=d; save(); toast(t("ok_imported"),"ok"); go("dashboard"); },t("btn_replace_data"));
+  }catch(e){ toast(t("read_fail",{msg:e.message}),"err"); } };
+  r.readAsText(f); ev.target.value="";
+}
+function reseed(){ confirmAction(t("reseed_q"),()=>{ DB=seedFirstRun(blank(),true); save(); toast(t("ok_sample"),"ok"); go("dashboard"); },t("btn_load_sample")); }
+function wipe(){ confirmAction(t("wipe_q"),()=>{ const s=DB.settings; DB=blank(); DB.settings=s; DB.settings.seeded=true; save(); toast(t("ok_wiped"),"ok"); go("dashboard"); },t("btn_wipe_all")); }
+
+/* ===== User management (admin only) ===== */
+pages.users=()=>{
+  if(!isAdmin()) return `<div class="page-head"><div><h2>${t("users_title")}</h2></div></div><div class="panel"><div class="panel-b"><div class="empty"><div class="em-ic">🔒</div><h4>${t("u_not_authorized")}</h4></div></div></div>`;
+  const users=DB.settings.users||[];
+  return `
+  <div class="page-head"><div><h2>${t("users_title")}</h2><p>${t("users_sub")}</p></div></div>
+  <div class="panel"><div class="panel-h"><h3>${t("u_add")}</h3></div><div class="panel-b">
+    <div class="form-grid">
+      <div><label class="req">${t("u_username")}</label><input id="nu-user"></div>
+      <div><label class="req">${t("u_password")}</label><input id="nu-pass" type="text"></div>
+      <div><label>${t("u_role")}</label><select id="nu-role"><option value="user">${t("role_user")}</option><option value="admin">${t("role_admin")}</option></select></div>
+    </div>
+    <hr class="sep"><button class="btn" onclick="App.addUser()">${t("u_add")}</button>
+  </div></div>
+  <div class="panel"><div class="panel-b"><div class="tbl-wrap"><table><thead><tr><th>${t("u_th_user")}</th><th>${t("u_th_role")}</th><th>${t("u_th_actions")}</th></tr></thead><tbody>
+  ${users.map(u=>`<tr><td><b>${esc(u.u)}</b>${u.u===curUser()?` <span class="tag mut">${t("acct_current")}</span>`:""}</td>
+    <td><span class="tag ${u.role==="admin"?"ok":"info"}">${t(u.role==="admin"?"role_admin":"role_user")}</span></td>
+    <td><div class="row-actions">
+      <button class="icon-btn" title="${t(u.role==="admin"?"u_make_user":"u_make_admin")}" onclick="App.setRole('${esc(u.u)}')">${u.role==="admin"?"⬇️":"⬆️"}</button>
+      <button class="icon-btn" title="${t("u_reset")}" onclick="App.resetUserPass('${esc(u.u)}')">🔑</button>
+      <button class="icon-btn danger" title="${t("u_delete")}" onclick="App.delUser('${esc(u.u)}')">🗑</button>
+    </div></td></tr>`).join("")}
+  </tbody></table></div></div></div>`;
+};
+function addUser(){
+  if(!isAdmin())return toast(t("u_not_authorized"),"err");
+  const u=$("nu-user").value.trim(), p=$("nu-pass").value, role=$("nu-role").value;
+  if(!u||!p)return toast(t("u_need"),"err");
+  if((DB.settings.users||[]).some(x=>x.u===u))return toast(t("u_exists"),"err");
+  DB.settings.users.push({u,p,role}); save(); toast(t("u_added"),"ok"); go("users");
+}
+function setRole(u){
+  if(!isAdmin())return toast(t("u_not_authorized"),"err");
+  const usr=(DB.settings.users||[]).find(x=>x.u===u); if(!usr)return;
+  if(usr.role==="admin"){ if(DB.settings.users.filter(x=>x.role==="admin").length<=1)return toast(t("u_last_admin"),"err"); usr.role="user"; }
+  else usr.role="admin";
+  if(u===curUser()&&currentUser) currentUser.role=usr.role;
+  save(); toast(t("u_role_changed"),"ok"); go("users");
+}
+function resetUserPass(u){
+  if(!isAdmin())return toast(t("u_not_authorized"),"err");
+  const usr=(DB.settings.users||[]).find(x=>x.u===u); if(!usr)return;
+  modal(t("u_reset_for",{u:u}),`<div class="field"><label>${t("u_new_pass")}</label><input id="rp-pass" type="text"></div>`,
+    `<button class="btn" id="rp-save">${t("btn_save")}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
+  $("rp-save").onclick=()=>{ const np=$("rp-pass").value; if(!np)return toast(t("u_need"),"err"); usr.p=np; save(); closeModal(); toast(t("u_pass_changed"),"ok"); };
+}
+function delUser(u){
+  if(!isAdmin())return toast(t("u_not_authorized"),"err");
+  if(u===curUser())return toast(t("u_no_self_delete"),"err");
+  const usr=(DB.settings.users||[]).find(x=>x.u===u); if(!usr)return;
+  if(usr.role==="admin"&&DB.settings.users.filter(x=>x.role==="admin").length<=1)return toast(t("u_last_admin"),"err");
+  confirmAction(t("u_del_q",{u:u}),()=>{ DB.settings.users=DB.settings.users.filter(x=>x.u!==u); save(); toast(t("u_deleted"),"ok"); go("users"); },t("u_delete"));
+}
+
+/* item / lot modals */
+function editItem(id){
+  const it=DB.items.find(i=>i.id===id); if(!it)return;
+  modal(t("edit_item"),`<div class="form-grid">
+    <div><label>${t("th_code")}</label><input id="ei-code" value="${esc(it.code)}"></div>
+    <div><label>${t("f_name")}</label><input id="ei-name" value="${esc(it.name)}"></div>
+    <div><label>${t("f_man")}</label><input id="ei-man" value="${esc(it.manufacturer||"")}"></div>
+    <div><label>${t("f_cat")}</label><select id="ei-cat">${opts(CATS,it.category)}</select></div>
+    <div><label>${t("f_unit")}</label><select id="ei-unit">${opts(UNITS,it.unit)}</select></div>
+    <div><label>${t("f_min")}</label><input id="ei-min" type="number" min="0" value="${it.minQty||0}"></div>
+  </div>`,`<button class="btn" id="ei-save">${t("btn_save")}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
+  $("ei-save").onclick=()=>{
+    const nc=$("ei-code").value.trim();
+    if(!nc||!$("ei-name").value.trim())return toast(t("err_code_name"),"err");
+    if(nc!==it.code&&DB.items.some(x=>x.code===nc))return toast(t("err_code_used"),"err");
+    if(nc!==it.code){ DB.lots.forEach(l=>{if(l.code===it.code)l.code=nc;}); DB.txns.forEach(x=>{if(x.code===it.code)x.code=nc;}); it.code=nc; }
+    it.name=$("ei-name").value.trim(); it.manufacturer=$("ei-man").value.trim(); it.category=$("ei-cat").value; it.unit=$("ei-unit").value; it.minQty=+$("ei-min").value||0;
+    save(); closeModal(); toast(t("ok_edited"),"ok"); renderInv();
+  };
+}
+function delItem(id){ const it=DB.items.find(i=>i.id===id); if(!it)return;
+  confirmAction(t("del_item_q",{name:it.name}),()=>{ DB.items=DB.items.filter(i=>i.id!==id); DB.lots=DB.lots.filter(l=>l.code!==it.code); DB.txns=DB.txns.filter(x=>x.code!==it.code); save(); toast(t("ok_deleted"),"ok"); renderInv(); },t("btn_del_item")); }
+function addLot(code){ const it=DB.items.find(i=>i.code===code);
+  modal(t("add_lot_title",{name:it?it.name:code}),`<div class="form-grid">
+    <div><label class="req">${t("f_lot")}</label><input id="al-lot"></div>
+    <div><label class="req">${t("f_exp")}</label><input id="al-exp" type="date"></div>
+    <div><label class="req">${t("f_qty")}</label><input id="al-qty" type="number" min="1"></div>
+    <div><label>${t("f_lab")}</label><select id="al-lab">${opts(labs())}</select></div>
+    <div><label>${t("f_supplier")}</label><input id="al-sup"></div>
+    <div><label class="req">${t("f_inspection")}</label><select id="al-insp">${opts(INSPECT,"accepted")}</select></div>
+  </div>`,`<button class="btn" id="al-save">${t("btn_add")}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
+  $("al-save").onclick=()=>{
+    const lot=$("al-lot").value.trim(),exp=$("al-exp").value,qty=+$("al-qty").value,insp=$("al-insp").value,lab=$("al-lab").value,rej=(insp==="rejected");
+    if(!lot||!exp||!qty||qty<=0)return toast(t("err_complete_req"),"err");
+    DB.lots.push({id:uid(),code,lot,expiry:exp,qtyReceived:qty,qtyRemaining:qty,supplier:$("al-sup").value.trim(),lab,inspection:insp,rejected:rej,receivedAt:todayISO()});
+    DB.txns.push({id:uid(),type:"in",code,lot,qty,date:todayISO(),party:$("al-sup").value.trim()||t("party_incoming"),lab,inspection:insp,note:t("manual_lot_note"),user:curUser()});
+    save(); closeModal(); toast(t("ok_lot_added"),"ok"); renderInv();
+  };
+}
+function adjustLot(id){ const l=DB.lots.find(x=>x.id===id); if(!l)return;
+  modal(t("adjust_lot_title"),`<p class="muted" style="margin-top:0">${t("adjust_lot_info",{lot:`<b class="mono">${esc(l.lot||"—")}</b>`,q:`<b>${num(l.qtyRemaining)}</b>`})}</p>
+    <div class="field"><label>${t("f_new_remaining")}</label><input id="aj-qty" type="number" min="0" value="${l.qtyRemaining}"></div>
+    <div class="field"><label>${t("f_adjust_reason")}</label><input id="aj-note" placeholder="${t("adjust_reason_ph")}"></div>`,
+    `<button class="btn" id="aj-save">${t("btn_save")}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
+  $("aj-save").onclick=()=>{ const q=+$("aj-qty").value; if(q<0||isNaN(q))return toast(t("err_bad_qty"),"err");
+    const diff=q-l.qtyRemaining; l.qtyRemaining=q; if(l.qtyReceived<q)l.qtyReceived=q;
+    DB.txns.push({id:uid(),type:"adjust",code:l.code,lot:l.lot,qty:Math.abs(diff),date:todayISO(),party:t("party_count"),lab:l.lab,note:$("aj-note").value.trim()||(diff>=0?t("adj_inc"):t("adj_dec")),user:curUser()});
+    save(); closeModal(); toast(t("ok_qty_adjusted"),"ok"); renderInv();
+  };
+}
+function delLot(id){ const l=DB.lots.find(x=>x.id===id); if(!l)return;
+  confirmAction(t("del_lot_q",{lot:l.lot||"—",q:num(l.qtyRemaining)}),()=>{ DB.lots=DB.lots.filter(x=>x.id!==id); save(); toast(t("ok_lot_deleted"),"ok"); renderInv(); },t("btn_del_lot")); }
+
+/* CSV export (Excel-friendly, UTF-8 BOM) */
+function exportCSV(kind){
+  let rows=[], name="";
+  if(kind==="inventory"){
+    name=t("fn_inventory"); rows.push([t("th_code"),t("th_name"),t("th_man"),t("th_cat"),t("th_unit"),t("th_qty"),t("f_min"),t("th_lots"),t("th_status")]);
+    DB.items.forEach(it=>{const active=availLots(it.code);rows.push([it.code,it.name,it.manufacturer||"",labelOf(CATS,it.category),labelOf(UNITS,it.unit),availQtyOf(it.code),it.minQty||0,active.length,t(itemStatus(it).key)]);});
+  }else if(kind==="log"){
+    name=t("fn_log"); rows.push([t("th_date"),t("th_type"),t("th_code"),t("th_name"),t("th_lot"),t("th_qty"),t("th_lab"),t("th_party"),t("col_inspection"),t("th_user"),t("th_notes")]);
+    const tt={in:t("f_in"),out:t("f_out"),adjust:t("f_adjust")};
+    DB.txns.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).forEach(x=>{const it=DB.items.find(i=>i.code===x.code);rows.push([x.date,tt[x.type]||x.type,x.code,it?it.name:"",x.lot||"",(x.type==="out"?"-":"+")+x.qty,labelOf(labs(),x.lab),x.party||"",x.inspection?labelOf(INSPECT,x.inspection):"",x.user||"",x.note||""]);});
+  }else if(kind==="expiry"){
+    name=t("fn_expiry"); rows.push([t("th_name"),t("th_code"),t("th_lot"),t("th_exp"),t("th_remaining"),t("days_left"),t("th_lab"),t("col_inspection"),t("th_status")]);
+    DB.lots.filter(l=>l.qtyRemaining>0).sort((a,b)=>(a.expiry||"9999").localeCompare(b.expiry||"9999")).forEach(l=>{const it=DB.items.find(i=>i.code===l.code);const st=lotStatus(l);rows.push([it?it.name:"",l.code,l.lot||"",l.expiry||"",l.qtyRemaining,l.expiry?daysTo(l.expiry):"",labelOf(labs(),l.lab),l.inspection?labelOf(INSPECT,l.inspection):"",lotStatusText(st)]);});
+  }else if(kind==="consumption"){
+    name=t("fn_consumption"); rows.push([t("th_name"),t("th_code"),t("th_total_dispensed")]);
+    const m={};DB.txns.filter(x=>x.type==="out").forEach(x=>{m[x.code]=(m[x.code]||0)+(+x.qty||0);});
+    Object.entries(m).sort((a,b)=>b[1]-a[1]).forEach(([code,q])=>{const it=DB.items.find(i=>i.code===code);rows.push([it?it.name:code,code,q]);});
+  }else if(kind==="labusage"){
+    name=t("fn_labusage"); rows.push([t("th_lab"),t("th_total_dispensed")]);
+    const m={};DB.txns.filter(x=>x.type==="out").forEach(x=>{const key=x.lab||"—";m[key]=(m[key]||0)+(+x.qty||0);});
+    Object.entries(m).sort((a,b)=>b[1]-a[1]).forEach(([k,q])=>rows.push([labelOf(labs(),k),q]));
+  }
+  if(rows.length<=1)return toast(t("no_export_data"),"err");
+  const csv="\uFEFF"+rows.map(r=>r.map(c=>{c=String(c==null?"":c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(",")).join("\r\n");
+  download(new Blob([csv],{type:"text/csv;charset=utf-8"}),`${name}_${todayISO()}.csv`);
+  toast(t("ok_exported"),"ok");
+}
+function download(blob,filename){
+  const url=URL.createObjectURL(blob); const a=document.createElement("a");
+  a.href=url; a.download=filename; document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},500);
+}
+
+/* Seed sample data (first run) */
+function seedFirstRun(db,force){
+  if(db.settings.seeded&&!force) return db;
+  const today=new Date(); const iso=d=>d.toISOString().slice(0,10);
+  const addDays=n=>{const d=new Date(today);d.setDate(d.getDate()+n);return iso(d);};
+  const items=[
+    {code:"NS-09",name:"محلول ملحي 0.9%",manufacturer:"SPIMACO",category:"iv",unit:"bag",minQty:40},
+    {code:"D5W",name:"محلول دكستروز 5%",manufacturer:"Fresenius Kabi",category:"iv",unit:"bag",minQty:30},
+    {code:"RL",name:"رينجر لاكتات",manufacturer:"Baxter",category:"iv",unit:"bag",minQty:25},
+    {code:"CPDA-1",name:"محلول CPDA-1 حافظ للدم",manufacturer:"Macopharma",category:"preservative",unit:"bag",minQty:50},
+    {code:"SAGM",name:"محلول SAGM المضاف",manufacturer:"Terumo",category:"preservative",unit:"bag",minQty:50},
+    {code:"NACIT-32",name:"سيترات الصوديوم 3.2%",manufacturer:"Greiner",category:"anticoag",unit:"bottle",minQty:20},
+    {code:"CHX-2",name:"كلورهيكسيدين 2% مطهر",manufacturer:"BD",category:"antiseptic",unit:"bottle",minQty:15},
+  ];
+  items.forEach(it=>db.items.push(Object.assign({id:uid(),createdAt:new Date().toISOString()},it)));
+  // [code, lot, expiry, qty, lab, rejected]
+  const lots=[
+    ["NS-09","L23110",addDays(-12),60,"store",false],
+    ["NS-09","L24050",addDays(40),120,"store",false],
+    ["NS-09","L24120",addDays(420),200,"store",false],
+    ["D5W","L24033",addDays(25),35,"store",false],
+    ["D5W","LREJ01",addDays(150),40,"store",true],
+    ["D5W","L24210",addDays(500),90,"store",false],
+    ["RL","L24007",addDays(15),18,"store",false],
+    ["CPDA-1","L24A1",addDays(300),140,"bloodbank",false],
+    ["CPDA-1","L23X9",addDays(-5),20,"bloodbank",false],
+    ["SAGM","L24S2",addDays(220),130,"components",false],
+    ["NACIT-32","L24N1",addDays(95),60,"serology",false],
+    ["CHX-2","L24C1",addDays(380),22,"store",false],
+  ];
+  lots.forEach(([code,lot,exp,q,lab,rej])=>{
+    db.lots.push({id:uid(),code,lot,expiry:exp,qtyReceived:q,qtyRemaining:q,supplier:"المستودع المركزي",lab,inspection:rej?"rejected":"accepted",rejected:rej,receivedAt:addDays(-30)});
+    db.txns.push({id:uid(),type:"in",code,lot,qty:q,date:addDays(-30),party:"المستودع المركزي",lab,inspection:rej?"rejected":"accepted",note:"رصيد افتتاحي",user:"admin"});
+  });
+  // dispenses to populate consumption + lab usage
+  const outs=[["NS-09",40,"components",-9],["NS-09",30,"bloodbank",-6],["D5W",20,"hematology",-5],["RL",10,"biochem",-3],["CPDA-1",35,"bloodbank",-2],["SAGM",25,"components",-1],["NS-09",18,"serology",-1]];
+  outs.forEach(([code,q,lab,dago])=>{
+    let rem=q; const used=[]; for(const l of db.lots.filter(x=>x.code===code&&x.qtyRemaining>0&&!x.rejected).sort((a,b)=>(a.expiry||"9").localeCompare(b.expiry||"9"))){if(rem<=0)break;const tk=Math.min(rem,l.qtyRemaining);l.qtyRemaining-=tk;rem-=tk;used.push(l.lot);}
+    db.txns.push({id:uid(),type:"out",code,lot:used.join(", "),qty:q,date:addDays(dago),party:(DEFAULT_LABS.find(x=>x.k===lab)||{}).ar||lab,lab,note:"صرف",user:"admin"});
+  });
+  db.settings.seeded=true;
+  return db;
+}
+
+/* ===== Multi-device sync (Firebase Firestore — optional, offline-first) ===== */
+const SYNC_KEY="inv_sync_cfg";
+var fbApp=null, fbDoc=null, fbUnsub=null, syncState="off", applyingRemote=false, pushTimer=null;
+function getSyncCfg(){ try{return JSON.parse(localStorage.getItem(SYNC_KEY)||"null");}catch(e){return null;} }
+function setSyncStatus(s){ syncState=s; const el=$("syncBadge"); if(!el)return;
+  const cls={off:"mut",connecting:"info",live:"ok",error:"danger",offline:"warn"};
+  const key={off:"sync_off",connecting:"sync_connecting",live:"sync_live",error:"sync_error",offline:"sync_offline"};
+  el.className="tag "+(cls[s]||"mut"); el.textContent=t(key[s]||"sync_off"); }
+function loadJS(src){ return new Promise((res,rej)=>{ if([...document.scripts].some(x=>x.src===src)){res();return;}
+  const sc=document.createElement("script"); sc.src=src; sc.onload=()=>res(); sc.onerror=()=>rej(new Error("load")); document.head.appendChild(sc); }); }
+async function ensureFB(){ if(window.firebase&&window.firebase.firestore)return;
+  await loadJS("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js");
+  await loadJS("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"); }
+function parseCfg(txt){ try{return JSON.parse(txt);}catch(e){} try{return (new Function("return ("+txt+")"))();}catch(e){return null;} }
+function adoptRemote(data){ applyingRemote=true; try{ DB=normalize(data); localStorage.setItem(KEY,JSON.stringify(DB));
+  if($("app").style.display==="block") go(location.hash.replace("#","")||"dashboard"); }finally{ applyingRemote=false; } }
+function pushNow(){ if(!fbDoc)return Promise.resolve(); return fbDoc.set({data:DB,updatedAt:Date.now(),by:curUser()}); }
+function schedulePush(){ if(!fbDoc||applyingRemote)return; clearTimeout(pushTimer); pushTimer=setTimeout(()=>{ pushNow().catch(e=>console.error("push",e)); },600); }
+async function startSync(){
+  const cfg=getSyncCfg(); if(!cfg||!cfg.config||!cfg.workspace){ setSyncStatus("off"); return; }
+  setSyncStatus("connecting");
+  try{
+    await ensureFB();
+    if(!fbApp){ fbApp = (window.firebase.apps&&window.firebase.apps.length) ? window.firebase.app() : window.firebase.initializeApp(cfg.config); }
+    const fs=window.firebase.firestore();
+    fbDoc=fs.collection("inventory_sync").doc(cfg.workspace);
+    const snap=await fbDoc.get();
+    if(snap.exists && snap.data() && snap.data().data){ adoptRemote(snap.data().data); }
+    else { await pushNow(); }
+    if(fbUnsub)fbUnsub();
+    fbUnsub=fbDoc.onSnapshot(s=>{ if(s.metadata.hasPendingWrites)return; const d=s.data(); if(d&&d.data) adoptRemote(d.data); },
+      e=>{ console.error("snap",e); setSyncStatus("error"); });
+    setSyncStatus("live");
+  }catch(e){ console.error("sync",e); setSyncStatus("error"); }
+}
+function connectSync(){
+  const ws=$("sy-ws").value.trim(), cfgTxt=$("sy-cfg").value.trim();
+  if(!ws||!cfgTxt)return toast(t("sync_need"),"err");
+  const cfg=parseCfg(cfgTxt); if(!cfg||!cfg.projectId)return toast(t("sync_bad_cfg"),"err");
+  localStorage.setItem(SYNC_KEY,JSON.stringify({workspace:ws,config:cfg}));
+  toast(t("sync_connected"),"ok"); startSync();
+}
+function disconnectSync(){ if(fbUnsub){fbUnsub();fbUnsub=null;} fbDoc=null; localStorage.removeItem(SYNC_KEY); setSyncStatus("off"); toast(t("sync_disconnected"),"ok"); }
+
+/* ===== User guide ===== */
+const GUIDE=[
+ {ic:"📖",cls:"g-purple",
+  ar:{t:"نظرة عامة على النظام",s:["سجّل الدخول باسم المستخدم وكلمة المرور (افتراضياً admin / 1234، ويمكن تغييرهما من الإعدادات).","تنقّل بين الأقسام من القائمة الجانبية: لوحة التحكم، المخزون، استقبال المحاليل، الصرف، الباركود، السجل، التقارير، الإعدادات.","بدّل لغة الواجهة (عربي/إنجليزي) من زر اللغة بالأعلى — تعمل كل البيانات والتقارير باللغتين.","تُحفظ البيانات تلقائياً على الجهاز، ويمكن تفعيل المزامنة بين الأجهزة من الإعدادات."]},
+  en:{t:"System overview",s:["Sign in with your username and password (default admin / 1234, changeable in Settings).","Use the side menu to move between sections: Dashboard, Inventory, Receive, Dispense, Barcode, Log, Reports, Settings.","Switch the interface language (Arabic/English) from the top button — all data and reports work in both.","Data is saved automatically on the device; multi-device sync can be enabled in Settings."]}},
+ {ic:"📥",cls:"g-green",
+  ar:{t:"استقبال المحاليل والفحص",s:["للأصناف المعتمدة: استخدم «إضافة من القائمة المعتمدة» ← اختر المجموعة ثم الصنف، وأدخل عدد الكتات/العلب فتُحسب الكمية الكاملة وتُملأ تلقائياً.","أو أدخل كود المنتج يدوياً؛ إن كان موجوداً تُعبّأ بياناته تلقائياً.","أدخل رقم التشغيلة وتاريخ الانتهاء والكمية.","اختر «المختبر المستلِم» و«نتيجة الفحص» (مقبول/مرفوض). التشغيلة المرفوضة لا تُحتسب ضمن المتاح ولا يمكن صرفها. احفظ الاستلام (مع إمكانية طباعة الباركود)."]},
+  en:{t:"Receiving & inspection",s:["For approved items: use “Add from the approved list” ← pick the group then the item, enter the number of kits/boxes, and the full quantity is computed and filled automatically.","Or type the product code manually; existing items auto-fill.","Enter the lot number, expiry date, and quantity.","Choose the receiving lab and inspection result (Accepted/Rejected). A rejected lot is excluded from available stock and cannot be dispensed. Save the receipt (you can print the barcode)."]}},
+ {ic:"🧊",cls:"g-blue",
+  ar:{t:"المخزون والتشغيلات",s:["افتح «المخزون» لرؤية كل الأصناف وكمياتها المتاحة وحالتها.","استخدم البحث والفلاتر (متوفر/تنبيه/منتهي/نافد) لتصفية القائمة.","اضغط 👁 لعرض تشغيلات الصنف، أو ✏️ لتعديله، أو 🗑 لحذفه.","من جدول التشغيلات أضف تشغيلة، أو عدّل الكمية ⚖️ (جرد/تالف)، أو احذف تشغيلة."]},
+  en:{t:"Inventory & lots",s:["Open “Inventory” to see all items, available quantities, and status.","Use search and filters (In stock / Alert / Expired / Out) to narrow the list.","Click 👁 to view an item’s lots, ✏️ to edit it, or 🗑 to delete it.","From the lots table, add a lot, adjust ⚖️ a quantity (count/damaged), or delete a lot."]}},
+ {ic:"📤",cls:"g-cyan",
+  ar:{t:"الصرف من المخزون",s:["افتح «صرف وإخراج» واختر الصنف؛ يظهر المتاح والتشغيلات مرتّبة حسب الأقرب انتهاءً.","أدخل الكمية المطلوبة واختر المختبر المستلِم.","يتم الصرف تلقائياً من أقرب تشغيلة للانتهاء (FIFO)؛ أكّد الصرف وتُسجَّل الحركة في السجل."]},
+  en:{t:"Dispensing (FIFO)",s:["Open “Dispense” and select the item; available stock and earliest-expiring lots appear.","Enter the required quantity and choose the receiving lab.","Stock is dispensed automatically from the earliest-expiring lot (FIFO); confirm and it’s logged."]}},
+ {ic:"🏷️",cls:"g-cyan",
+  ar:{t:"طباعة الباركود",s:["افتح «طباعة الباركود» واختر صنفاً أو أدخل الكود يدوياً.","عدّل اسم الملصق والتشغيلة وتاريخ الانتهاء (نظام Code 39).","حدّد عدد النسخ واطبع — يعمل دون اتصال على معظم الطابعات والماسحات."]},
+  en:{t:"Barcode printing",s:["Open “Barcode printing” and pick an item or type the code manually.","Adjust the label name, lot, and expiry (Code 39).","Set the number of copies and print — works offline with most printers and scanners."]}},
+ {ic:"📊",cls:"g-pink",
+  ar:{t:"التقارير والتصدير",s:["افتح «التقارير» لرؤية التشغيلات المنتهية/القريبة والأكثر استهلاكاً.","صدّر أي تقرير بصيغة Excel/CSV: المخزون، الحركات، الانتهاء، الاستهلاك، استهلاك المختبرات.","استخدم «طباعة الصفحة» لطباعة تقرير جاهز."]},
+  en:{t:"Reports & export",s:["Open “Reports” to see expired/near-expiry lots and the most-consumed items.","Export any report as Excel/CSV: inventory, movements, expiry, consumption, lab consumption.","Use “Print page” to print a ready report."]}},
+ {ic:"⚙️",cls:"g-orange",
+  ar:{t:"الإعدادات والمزامنة بين الأجهزة",s:["من «الإعدادات» غيّر كلمة مرورك وأيام التنبيه قبل الانتهاء.","أضف مختبرات خاصة تظهر في الاستقبال والصرف.","لتفعيل المزامنة بين الأجهزة: أنشئ مشروع Firebase وفعّل Firestore، والصق إعداد firebaseConfig مع معرّف مساحة موحّد على كل الأجهزة — فتتشارك جميع الأجهزة نفس البيانات والحسابات.","النسخ الاحتياطي وتفريغ البيانات متاحان للمدير فقط."]},
+  en:{t:"Settings & multi-device sync",s:["In “Settings” change your password and the alert days before expiry.","Add custom labs shown in receive/dispense.","To enable multi-device sync: create a Firebase project, enable Firestore, and paste the firebaseConfig with one shared Workspace ID on every device — all devices then share the same data and accounts.","Backup and data wipe are available to admins only."]}},
+ {ic:"👥",cls:"g-pink",
+  ar:{t:"إدارة المستخدمين (للمدير)",s:["من «إدارة المستخدمين» (تظهر للمدير فقط) أضف حساباً جديداً باسم مستخدم وكلمة مرور وصلاحية.","الصلاحيات: «مستخدم» للعمل اليومي، و«مدير» لإدارة الحسابات والإعدادات والنسخ الاحتياطي.","ترقية حساب من «مستخدم» إلى «مدير» (أو العكس) تتم عبر المدير فقط بزر الترقية.","يمكن للمدير تغيير كلمة مرور أي مستخدم أو حذفه، مع بقاء مدير واحد على الأقل."]},
+  en:{t:"User management (admin)",s:["In “User management” (visible to admins only) add a new account with a username, password, and role.","Roles: “User” for daily work, “Admin” to manage accounts, settings, and backups.","Promoting an account from “User” to “Admin” (or back) is done by an admin only, via the promote button.","An admin can change any user’s password or delete them, while keeping at least one admin."]}},
+];
+function openGuide(){
+  const body=`<p class="guide-intro">${esc(t("guide_intro"))}</p>`+GUIDE.map((g,i)=>{const G=LANG==="en"?g.en:g.ar;
+    return `<div class="gcard ${g.cls}" id="gc-${i}"><div class="gcard-h" onclick="App.guideToggle(${i})"><div class="gcard-ic">${g.ic}</div><div class="gcard-t"><b>${esc(G.t)}</b><span>${G.s.length} ${t("steps_word")}</span></div><div class="gcard-ch">‹</div></div><div class="gcard-b"><ol>${G.s.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div></div>`;
+  }).join("");
+  modal(t("guide_title"),body);
+}
+function guideToggle(i){ const c=$("gc-"+i); if(c) c.classList.toggle("open"); }
+
+/* expose */
+return {init,login,logout,go,toggleSide,toggleLang,closeModal,
+  onCodeType,expHint,doReceive,catGroup,catItem,catKits,
+  dispenseInfo,doDispense,
+  renderBarcode,bcFromItem,pickBarcode,printBarcode,
+  toggleLots,editItem,delItem,addLot,adjustLot,delLot,
+  exportCSV,saveSettings,addLab,delLab,backup,restore,reseed,wipe,
+  addUser,setRole,resetUserPass,delUser,
+  connectSync,disconnectSync,openGuide,guideToggle};
+})();
+window.App = App;
+App.init();
+</script>
+</body>
+</html>
