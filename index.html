@@ -210,6 +210,7 @@
   .kpi-ic.yellow{background:var(--yellow);color:#5a4500} .kpi-ic.red{background:var(--danger)} .kpi-ic.blue{background:var(--info)}
   .fab-guide{position:fixed;bottom:20px;left:20px;width:54px;height:54px;border-radius:50%;background:var(--crimson);color:#fff;border:none;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 24px rgba(0,0,0,.28);z-index:35}
   .fab-guide:hover{filter:brightness(1.08)}
+  .fab-guide svg{width:26px;height:26px}
   .guide-intro{color:var(--muted);font-size:13.5px;margin:0 0 14px}
   .gcard{border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
   .gcard-h{display:flex;align-items:center;gap:12px;padding:13px 15px;cursor:pointer}
@@ -229,7 +230,37 @@
   .cat-box{background:var(--crimson-soft);border:1px solid #cfe7d8;border-radius:12px;padding:14px;margin-bottom:16px}
   .cat-h{font-weight:800;font-size:14px;color:var(--crimson-dark);margin-bottom:10px}
   .cat-info{font-size:13px;margin-top:10px;font-weight:700;color:var(--crimson-dark);min-height:18px}
-  @media(max-width:760px){.fab-guide{bottom:16px;left:16px;width:48px;height:48px;font-size:21px}}
+  /* === Collapsible sidebar + profile === */
+  .side{display:flex;flex-direction:column;padding:8px 8px 0;gap:0}
+  .side-top{display:flex;padding:4px 4px 6px}
+  .side-toggle{background:none;border:none;color:rgba(255,255,255,.7);padding:8px;border-radius:9px;cursor:pointer;display:flex}
+  .side-toggle svg{width:20px;height:20px}
+  .side-toggle:hover{background:rgba(255,255,255,.08)}
+  .nav-scroll{flex:1;overflow:auto;min-height:0}
+  .nav-item{margin-bottom:4px}
+  .nav-item .ic{width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex:none}
+  .nav-item .ic svg{width:20px;height:20px}
+  .side-foot{border-top:1px solid var(--sidebar-line);padding:8px 4px;margin-top:6px}
+  .side-user{display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:11px}
+  .side-user:hover{background:rgba(255,255,255,.07)}
+  .su-info{flex:1;min-width:0}
+  .su-info b{display:block;color:#fff;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .su-info span{color:rgba(255,255,255,.5);font-size:11px}
+  .avatar{width:34px;height:34px;border-radius:50%;background:var(--green-bright);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex:none}
+  .side.collapsed{width:68px}
+  .side.collapsed .lbl-t{display:none}
+  .side.collapsed .nav-item{justify-content:center;padding:11px 0}
+  .side.collapsed .su-info{display:none}
+  .side.collapsed .side-user{justify-content:center;padding:8px 0}
+  .side.collapsed .side-top{justify-content:center}
+  @media(max-width:760px){
+    .fab-guide{bottom:16px;left:16px;width:48px;height:48px;font-size:21px}
+    .side-toggle{display:none}
+    .side.collapsed{width:235px}
+    .side.collapsed .lbl-t{display:inline}
+    .side.collapsed .su-info{display:block}
+    .side.collapsed .nav-item{justify-content:flex-start;padding:10px 11px}
+  }
 </style>
 </head>
 <body>
@@ -260,23 +291,10 @@
     <button class="btn ghost sm" data-i18n="logout" onclick="App.logout()">خروج</button>
   </div>
   <div class="layout">
-    <nav class="side" id="side">
-      <div class="nav-group" data-i18n="nav_home">الرئيسية</div>
-      <button class="nav-item" data-route="dashboard"><span class="ic">📊</span> <span data-i18n="nav_dashboard">لوحة التحكم</span></button>
-      <button class="nav-item" data-route="inventory"><span class="ic">📦</span> <span data-i18n="nav_inventory">المخزون</span></button>
-      <div class="nav-group" data-i18n="nav_movement">الحركة</div>
-      <button class="nav-item" data-route="receive"><span class="ic">📥</span> <span data-i18n="nav_receive">استقبال المحاليل</span></button>
-      <button class="nav-item" data-route="dispense"><span class="ic">📤</span> <span data-i18n="nav_dispense">صرف وإخراج</span></button>
-      <button class="nav-item" data-route="barcode"><span class="ic">🏷️</span> <span data-i18n="nav_barcode">طباعة الباركود</span></button>
-      <button class="nav-item" data-route="log"><span class="ic">📜</span> <span data-i18n="nav_log">سجل الحركات</span></button>
-      <div class="nav-group" data-i18n="nav_admin">إدارة</div>
-      <button class="nav-item" data-route="reports"><span class="ic">📈</span> <span data-i18n="nav_reports">التقارير</span></button>
-      <button class="nav-item" id="nav-users" data-route="users"><span class="ic">👥</span> <span data-i18n="nav_users">إدارة المستخدمين</span></button>
-      <button class="nav-item" data-route="settings"><span class="ic">⚙️</span> <span data-i18n="nav_settings">الإعدادات</span></button>
-    </nav>
+    <nav class="side" id="side"></nav>
     <main class="main" id="view"></main>
   </div>
-  <button class="fab-guide" title="دليل المستخدم" onclick="App.openGuide()">📖</button>
+  <button class="fab-guide" title="دليل المستخدم" onclick="App.openGuide()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></button>
 </div>
 
 <div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
@@ -306,6 +324,10 @@ ar:{
  u_not_authorized:"هذه الصفحة للمدير فقط", u_last_admin:"يجب بقاء مدير واحد على الأقل", u_no_self_delete:"لا يمكنك حذف حسابك الحالي",
  u_new_pass:"كلمة المرور الجديدة", u_reset_for:"تغيير كلمة مرور: {u}", u_del_q:"حذف المستخدم \"{u}\"؟",
  acct_current:"المستخدم الحالي", acct_new_pass:"كلمة مرور جديدة (اتركها فارغة لعدم التغيير)",
+ nav_movement2:"حركة المخزون", nav_products:"إدارة المنتجات", nav_import:"استيراد من Excel", nav_activity:"سجل النشاط", side_collapse:"طي/توسيع القائمة",
+ products_sub:"تعريف الأصناف وتعديلها وحذفها", p_add:"+ إضافة منتج", p_empty:"لا توجد منتجات بعد", p_catalog:"القائمة المعتمدة", p_catalog_hint:"الأصناف المعتمدة وكمياتها لكل وحدة", p_added:"تمت الإضافة ✓",
+ th_avail:"المتاح", act_edit:"تعديل", act_delete:"حذف",
+ imp_sub:"استيراد الأصناف والتشغيلات من ملف Excel/CSV", imp_help:"صدّر بياناتك من Excel بصيغة CSV ثم ارفعها هنا. الأعمدة المطلوبة: code, name, lot, expiry, qty — والاختيارية: manufacturer, category, unit, minQty, supplier, lab, inspection. حمّل النموذج للبدء.", imp_template:"⬇ تحميل نموذج CSV", imp_pick:"⬆ اختيار ملف CSV", imp_preview_h:"معاينة ({n} صف)", imp_do:"📥 استيراد {n} صف", imp_none:"لم يتم العثور على صفوف صالحة في الملف", imp_done:"تم استيراد {n} صف بنجاح ✓", imp_bad:"تعذّر قراءة الملف", imp_cols_missing:"تأكد من وجود الأعمدة المطلوبة: code, name, lot, expiry, qty", imp_more:"+ {n} صف إضافية لم تُعرض",
  nav_home:"الرئيسية", nav_dashboard:"لوحة التحكم", nav_inventory:"المخزون", nav_movement:"الحركة",
  nav_receive:"استقبال المحاليل", nav_dispense:"صرف وإخراج", nav_barcode:"طباعة الباركود",
  nav_log:"سجل الحركات", nav_admin:"إدارة", nav_reports:"التقارير", nav_settings:"الإعدادات",
@@ -442,6 +464,10 @@ en:{
  u_not_authorized:"This page is for admins only", u_last_admin:"At least one admin must remain", u_no_self_delete:"You can't delete your own account",
  u_new_pass:"New password", u_reset_for:"Change password: {u}", u_del_q:"Delete user \"{u}\"?",
  acct_current:"Current user", acct_new_pass:"New password (leave empty to keep)",
+ nav_movement2:"Stock movement", nav_products:"Product management", nav_import:"Import from Excel", nav_activity:"Activity log", side_collapse:"Collapse / expand",
+ products_sub:"Define, edit, and delete items", p_add:"+ Add product", p_empty:"No products yet", p_catalog:"Approved list", p_catalog_hint:"Approved items and their per-unit quantities", p_added:"Added ✓",
+ th_avail:"Available", act_edit:"Edit", act_delete:"Delete",
+ imp_sub:"Import items and lots from an Excel/CSV file", imp_help:"Export your data from Excel as CSV, then upload it here. Required columns: code, name, lot, expiry, qty — optional: manufacturer, category, unit, minQty, supplier, lab, inspection. Download the template to start.", imp_template:"⬇ Download CSV template", imp_pick:"⬆ Choose CSV file", imp_preview_h:"Preview ({n} rows)", imp_do:"📥 Import {n} rows", imp_none:"No valid rows found in the file", imp_done:"Imported {n} rows successfully ✓", imp_bad:"Couldn't read the file", imp_cols_missing:"Ensure the required columns exist: code, name, lot, expiry, qty", imp_more:"+ {n} more rows not shown",
  nav_home:"Main", nav_dashboard:"Dashboard", nav_inventory:"Inventory", nav_movement:"Movement",
  nav_receive:"Receive solutions", nav_dispense:"Dispense", nav_barcode:"Barcode printing",
  nav_log:"Movement log", nav_admin:"Admin", nav_reports:"Reports", nav_settings:"Settings",
@@ -745,7 +771,7 @@ function applyStaticI18n(){
 function toggleLang(){
   LANG = LANG==="ar"?"en":"ar"; localStorage.setItem("inv_lang",LANG);
   applyStaticI18n();
-  if($("app").style.display==="block"){ tickDate(); go(location.hash.replace("#","")||"dashboard"); }
+  if($("app").style.display==="block"){ tickDate(); renderSidebar(); go(location.hash.replace("#","")||"dashboard"); }
 }
 function login(){
   const u=$("lg-user").value.trim(), p=$("lg-pass").value;
@@ -757,13 +783,52 @@ function logout(){ sessionStorage.removeItem("inv_user"); currentUser=null; loca
 function openApp(){
   $("login").style.display="none"; $("app").style.display="block";
   tickDate(); setInterval(tickDate,30000);
-  document.querySelectorAll(".nav-item").forEach(b=>b.onclick=()=>go(b.dataset.route));
-  const nu=$("nav-users"); if(nu) nu.style.display=isAdmin()?"":"none";
+  renderSidebar();
   go(location.hash.replace("#","")||"dashboard");
   if(!localStorage.getItem("inv_guide_seen")){ setTimeout(()=>{ try{ openGuide(); localStorage.setItem("inv_guide_seen","1"); }catch(e){} },500); }
 }
 function tickDate(){ const d=todayISO(); $("dateChip").innerHTML=`<b>${fmtG(d)}</b><br>${fmtH(d)}`; }
 function toggleSide(){ $("side").classList.toggle("open"); }
+
+const ICON={
+ dashboard:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>',
+ receive:'<path d="M16 16h6M19 13v6"/><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l1.5-.85"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+ inventory:'<path d="M7 6.13 12 9l5-2.87M7 17.87 12 21l5-3.13M2.97 7.7 12 13l9.03-5.3"/><path d="M7 6.13a2 2 0 0 1 1-1.73l3-1.8a2 2 0 0 1 2 0l3 1.8a2 2 0 0 1 1 1.73v3.74L12 13l-5-2.13Z"/><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-6L7 10.5Z"/><path d="M12 13v6l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5Z"/>',
+ movement:'<path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/>',
+ barcode:'<path d="M3 5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 7v10M12 7v10M16 7v10"/>',
+ products:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+ import:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/>',
+ reports:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 18v-2M12 18v-4M16 18v-6"/>',
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+ log:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+ panel:'<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/>'
+};
+const NAVS=[
+ {r:"dashboard",i:"dashboard",k:"nav_dashboard"},
+ {r:"receive",i:"receive",k:"nav_receive"},
+ {r:"inventory",i:"inventory",k:"nav_inventory"},
+ {r:"dispense",i:"movement",k:"nav_movement2"},
+ {r:"barcode",i:"barcode",k:"nav_barcode"},
+ {r:"products",i:"products",k:"nav_products"},
+ {r:"import",i:"import",k:"nav_import"},
+ {r:"reports",i:"reports",k:"nav_reports"},
+ {r:"users",i:"users",k:"nav_users",admin:true},
+ {r:"log",i:"log",k:"nav_activity"}
+];
+function renderSidebar(){
+  const svg=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+  const items=NAVS.filter(n=>!n.admin||isAdmin()).map(n=>`<button class="nav-item" data-route="${n.r}" title="${t(n.k)}"><span class="ic">${svg(ICON[n.i])}</span><span class="lbl-t">${t(n.k)}</span></button>`).join("");
+  const uname=curUser(), role=t(isAdmin()?"role_admin":"role_user"), av=(uname||"?").trim().charAt(0).toUpperCase();
+  $("side").innerHTML=`
+    <div class="side-top"><button class="side-toggle" onclick="App.toggleCollapse()" title="${t("side_collapse")}">${svg(ICON.panel)}</button></div>
+    <div class="nav-scroll">${items}</div>
+    <div class="side-foot"><div class="side-user" onclick="App.go('settings')" title="${t("nav_settings")}">
+      <div class="avatar">${esc(av)}</div><div class="su-info"><b>${esc(uname)}</b><span>${esc(role)}</span></div>
+    </div></div>`;
+  $("side").classList.toggle("collapsed", localStorage.getItem("inv_collapsed")==="1");
+  $("side").querySelectorAll(".nav-item").forEach(b=>b.onclick=()=>go(b.dataset.route));
+}
+function toggleCollapse(){ const c=localStorage.getItem("inv_collapsed")==="1"; localStorage.setItem("inv_collapsed",c?"0":"1"); $("side").classList.toggle("collapsed",!c); }
 
 const afterRender={};
 function go(route){
@@ -1246,6 +1311,107 @@ function delUser(u){
   confirmAction(t("u_del_q",{u:u}),()=>{ DB.settings.users=DB.settings.users.filter(x=>x.u!==u); save(); toast(t("u_deleted"),"ok"); go("users"); },t("u_delete"));
 }
 
+/* ===== Product management ===== */
+pages.products=()=>{
+  const items=DB.items.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name),"ar"));
+  return `
+  <div class="page-head"><div><h2>${t("nav_products")}</h2><p>${t("products_sub")}</p></div>
+    <div class="head-actions"><button class="btn soft" onclick="App.addProduct()">${t("p_add")}</button></div></div>
+  <div class="panel"><div class="panel-b">
+    ${items.length?`<div class="tbl-wrap"><table><thead><tr><th>${t("th_code")}</th><th>${t("th_name")}</th><th>${t("f_man")}</th><th>${t("f_cat")}</th><th>${t("f_unit")}</th><th class="num">${t("f_min")}</th><th class="num">${t("th_avail")}</th><th>${t("u_th_actions")}</th></tr></thead><tbody>
+    ${items.map(it=>`<tr><td><span class="tag mut mono">${esc(it.code)}</span></td><td><b>${esc(it.name)}</b></td><td>${esc(it.manufacturer||"—")}</td><td>${esc(labelOf(CATS,it.category))}</td><td>${esc(labelOf(UNITS,it.unit))}</td><td class="num">${num(it.minQty||0)}</td><td class="num">${num(availQtyOf(it.code))}</td><td><div class="row-actions"><button class="icon-btn" title="${t("act_edit")}" onclick="App.editItem('${it.id}')">✏️</button><button class="icon-btn danger" title="${t("act_delete")}" onclick="App.delItem('${it.id}')">🗑</button></div></td></tr>`).join("")}
+    </tbody></table></div>`:`<div class="empty"><div class="em-ic">📦</div><h4>${t("p_empty")}</h4><button class="btn" style="margin-top:12px" onclick="App.addProduct()">${t("p_add")}</button></div>`}
+  </div></div>
+  <div class="panel"><div class="panel-h"><h3>${t("p_catalog")}</h3><span class="hint">${t("p_catalog_hint")}</span></div><div class="panel-b">
+    ${CATALOG.map(g=>`<div style="margin-bottom:12px"><b style="font-size:13px;color:var(--crimson-dark)">${esc(lbl(g))}</b>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px">${g.items.map(it=>`<span class="tag mut" title="${it.per?("1 "+lbl(CAT_KITS[it.kit])+" = "+it.per+" "+labelOf(UNITS,it.u)):esc(labelOf(UNITS,it.u))}">${esc(it.n)}</span>`).join("")}</div></div>`).join("")}
+  </div></div>`;
+};
+function addProduct(){
+  modal(t("p_add"),`<div class="form-grid">
+    <div><label class="req">${t("th_code")}</label><input id="np-code" placeholder="VIR-1"></div>
+    <div><label class="req">${t("f_name")}</label><input id="np-name"></div>
+    <div><label>${t("f_man")}</label><input id="np-man"></div>
+    <div><label>${t("f_cat")}</label><select id="np-cat">${opts(CATS)}</select></div>
+    <div><label>${t("f_unit")}</label><select id="np-unit">${opts(UNITS)}</select></div>
+    <div><label>${t("f_min")}</label><input id="np-min" type="number" min="0" value="10"></div>
+  </div>`,`<button class="btn" id="np-save">${t("btn_add")}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
+  $("np-save").onclick=()=>{ const code=$("np-code").value.trim(), name=$("np-name").value.trim();
+    if(!code||!name)return toast(t("err_code_name"),"err");
+    if(DB.items.some(i=>i.code===code))return toast(t("err_code_used"),"err");
+    DB.items.push({id:uid(),code,name,manufacturer:$("np-man").value.trim(),category:$("np-cat").value,unit:$("np-unit").value,minQty:+$("np-min").value||0,createdAt:new Date().toISOString()});
+    save(); closeModal(); toast(t("p_added"),"ok"); go("products");
+  };
+}
+
+/* ===== Import from Excel / CSV ===== */
+let impRows=[];
+pages.import=()=>`
+  <div class="page-head"><div><h2>${t("nav_import")}</h2><p>${t("imp_sub")}</p></div></div>
+  <div class="panel"><div class="panel-b">
+    <div class="help-box">${t("imp_help")}</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px">
+      <button class="btn ghost" onclick="App.importTemplate()">${t("imp_template")}</button>
+      <button class="btn soft" onclick="document.getElementById('imp-file').click()">${t("imp_pick")}</button>
+      <input type="file" id="imp-file" accept=".csv,text/csv" style="display:none" onchange="App.importFile(event)">
+    </div>
+  </div></div>
+  <div id="imp-preview"></div>`;
+function importTemplate(){
+  const csv="\uFEFFcode,name,manufacturer,category,unit,minQty,lot,expiry,qty,supplier,lab,inspection\n"+
+    "VIR-1,HIV AG/AB COMBO,Abbott,virology,test,200,LOT2025A,2027-06-01,500,Main Supplier,serology,accepted\n";
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}), url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download="import-template.csv"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function parseCSV(text){
+  text=String(text).replace(/\r\n/g,"\n").replace(/\r/g,"\n");
+  const rows=[]; let row=[], field="", q=false;
+  for(let i=0;i<text.length;i++){ const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){field+='"';i++;} else q=false; } else field+=c; }
+    else { if(c==='"') q=true; else if(c===","){ row.push(field); field=""; } else if(c==="\n"){ row.push(field); rows.push(row); row=[]; field=""; } else field+=c; } }
+  if(field!==""||row.length){ row.push(field); rows.push(row); }
+  return rows.filter(r=>r.some(x=>String(x).trim()!==""));
+}
+function mapKey(list,val,fb){ if(val==null||val==="")return fb; const s=String(val).trim().toLowerCase(); const o=list.find(x=>String(x.k).toLowerCase()===s||String(x.ar).toLowerCase()===s||String(x.en).toLowerCase()===s); return o?o.k:fb; }
+function normDate(s){ s=String(s||"").trim(); if(/^\d{4}-\d{2}-\d{2}$/.test(s))return s; const d=new Date(s); return isNaN(d.getTime())?s:d.toISOString().slice(0,10); }
+function importFile(ev){
+  const f=ev.target.files&&ev.target.files[0]; if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{ try{
+    const rows=parseCSV(rd.result);
+    if(rows.length<2){ impRows=[]; $("imp-preview").innerHTML=`<div class="help-box">${t("imp_none")}</div>`; return; }
+    const head=rows[0].map(h=>String(h).replace(/^\uFEFF/,"").trim().toLowerCase());
+    const idx=n=>head.indexOf(n);
+    if(["code","name","lot","expiry","qty"].some(n=>idx(n)<0)){ impRows=[]; $("imp-preview").innerHTML=`<div class="help-box">${t("imp_cols_missing")}</div>`; return; }
+    impRows=[];
+    for(let r=1;r<rows.length;r++){ const c=rows[r], g=n=>{ const i=idx(n); return i>=0?String(c[i]||"").trim():""; };
+      const code=g("code"),name=g("name"),lot=g("lot"),exp=normDate(g("expiry")),qty=+g("qty");
+      if(!code||!name||!lot||!exp||!qty||qty<=0) continue;
+      impRows.push({code,name,manufacturer:g("manufacturer"),category:mapKey(CATS,g("category"),"other"),unit:mapKey(UNITS,g("unit"),"test"),minQty:+g("minqty")||0,lot,expiry:exp,qty,supplier:g("supplier"),lab:mapKey(labs(),g("lab"),"store"),inspection:mapKey(INSPECT,g("inspection"),"accepted")});
+    }
+    ev.target.value="";
+    if(!impRows.length){ $("imp-preview").innerHTML=`<div class="help-box">${t("imp_none")}</div>`; return; }
+    $("imp-preview").innerHTML=`<div class="panel" style="margin-top:6px"><div class="panel-h"><h3>${t("imp_preview_h",{n:impRows.length})}</h3><button class="btn" onclick="App.importRows()">${t("imp_do",{n:impRows.length})}</button></div><div class="panel-b"><div class="tbl-wrap"><table><thead><tr><th>${t("th_code")}</th><th>${t("th_name")}</th><th>${t("f_lot")}</th><th>${t("th_exp")}</th><th class="num">${t("th_qty")}</th><th>${t("f_lab")}</th><th>${t("f_inspection")}</th></tr></thead><tbody>${impRows.slice(0,80).map(x=>`<tr><td><span class="tag mut mono">${esc(x.code)}</span></td><td>${esc(x.name)}</td><td>${esc(x.lot)}</td><td>${esc(fmtG(x.expiry))}</td><td class="num">${num(x.qty)}</td><td>${esc(labelOf(labs(),x.lab))}</td><td>${x.inspection==="rejected"?`<span class="tag danger">${esc(labelOf(INSPECT,"rejected"))}</span>`:`<span class="tag ok">${esc(labelOf(INSPECT,"accepted"))}</span>`}</td></tr>`).join("")}</tbody></table></div>${impRows.length>80?`<p class="muted" style="font-size:12px">${t("imp_more",{n:impRows.length-80})}</p>`:""}</div></div>`;
+  }catch(e){ $("imp-preview").innerHTML=`<div class="help-box">${t("imp_bad")}</div>`; } };
+  rd.onerror=()=>{ $("imp-preview").innerHTML=`<div class="help-box">${t("imp_bad")}</div>`; };
+  rd.readAsText(f,"utf-8");
+}
+function importRows(){
+  if(!impRows.length)return;
+  let n=0;
+  impRows.forEach(x=>{ const rejected=x.inspection==="rejected";
+    let it=DB.items.find(i=>i.code===x.code);
+    if(!it){ it={id:uid(),code:x.code,name:x.name,manufacturer:x.manufacturer,category:x.category,unit:x.unit,minQty:x.minQty,createdAt:new Date().toISOString()}; DB.items.push(it); }
+    else { it.name=x.name||it.name; if(x.manufacturer)it.manufacturer=x.manufacturer; }
+    let lotRec=!rejected&&DB.lots.find(l=>l.code===x.code&&l.lot===x.lot&&l.expiry===x.expiry&&!isRej(l));
+    if(lotRec){ lotRec.qtyReceived+=x.qty; lotRec.qtyRemaining+=x.qty; }
+    else { DB.lots.push({id:uid(),code:x.code,lot:x.lot,expiry:x.expiry,qtyReceived:x.qty,qtyRemaining:x.qty,supplier:x.supplier,lab:x.lab,inspection:x.inspection,rejected,receivedAt:todayISO()}); }
+    DB.txns.push({id:uid(),type:"in",code:x.code,lot:x.lot,qty:x.qty,date:todayISO(),party:x.supplier||t("party_incoming"),lab:x.lab,inspection:x.inspection,note:"CSV",user:curUser()});
+    n++;
+  });
+  const cnt=n; impRows=[]; save(); toast(t("imp_done",{n:cnt}),"ok"); go("inventory");
+}
+
 /* item / lot modals */
 function editItem(id){
   const it=DB.items.find(i=>i.id===id); if(!it)return;
@@ -1463,6 +1629,7 @@ return {init,login,logout,go,toggleSide,toggleLang,closeModal,
   toggleLots,editItem,delItem,addLot,adjustLot,delLot,
   exportCSV,saveSettings,addLab,delLab,backup,restore,reseed,wipe,
   addUser,setRole,resetUserPass,delUser,
+  addProduct,importTemplate,importFile,importRows,toggleCollapse,
   connectSync,disconnectSync,openGuide,guideToggle};
 })();
 window.App = App;
