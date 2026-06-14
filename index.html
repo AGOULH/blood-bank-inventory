@@ -1545,7 +1545,8 @@ function seedFirstRun(db,force){
 /* ===== Multi-device sync (Firebase Firestore — optional, offline-first) ===== */
 const SYNC_KEY="inv_sync_cfg";
 var fbApp=null, fbDoc=null, fbUnsub=null, syncState="off", applyingRemote=false, pushTimer=null;
-function getSyncCfg(){ try{return JSON.parse(localStorage.getItem(SYNC_KEY)||"null");}catch(e){return null;} }
+const BUILTIN_SYNC={workspace:"bloodbank-dammam",config:{apiKey:"AIzaSyBLs1q9ryZZYI5Br9yBi7sSXk-92HVklRI",authDomain:"bloodbank-dammam.firebaseapp.com",projectId:"bloodbank-dammam",storageBucket:"bloodbank-dammam.firebasestorage.app",messagingSenderId:"165465917721",appId:"1:165465917721:web:2989e02513f51e6c101d88"}};
+function getSyncCfg(){ try{ const ls=JSON.parse(localStorage.getItem(SYNC_KEY)||"null"); if(ls&&ls.config&&ls.config.projectId&&ls.workspace) return ls; }catch(e){} return (BUILTIN_SYNC&&BUILTIN_SYNC.config&&BUILTIN_SYNC.config.projectId&&BUILTIN_SYNC.workspace)?BUILTIN_SYNC:null; }
 function setSyncStatus(s){ syncState=s; const el=$("syncBadge"); if(!el)return;
   const cls={off:"mut",connecting:"info",live:"ok",error:"danger",offline:"warn"};
   const key={off:"sync_off",connecting:"sync_connecting",live:"sync_live",error:"sync_error",offline:"sync_offline"};
