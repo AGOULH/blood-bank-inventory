@@ -328,6 +328,7 @@ ar:{
  products_sub:"تعريف الأصناف وتعديلها وحذفها", p_add:"+ إضافة منتج", p_empty:"لا توجد منتجات بعد", p_catalog:"القائمة المعتمدة", p_catalog_hint:"الأصناف المعتمدة وكمياتها لكل وحدة", p_added:"تمت الإضافة ✓",
  th_avail:"المتاح", act_edit:"تعديل", act_delete:"حذف",
  imp_sub:"استيراد الأصناف والتشغيلات من ملف Excel/CSV", imp_help:"صدّر بياناتك من Excel بصيغة CSV ثم ارفعها هنا. الأعمدة المطلوبة: code, name, lot, expiry, qty — والاختيارية: manufacturer, category, unit, minQty, supplier, lab, inspection. حمّل النموذج للبدء.", imp_template:"⬇ تحميل نموذج CSV", imp_pick:"⬆ اختيار ملف CSV", imp_preview_h:"معاينة ({n} صف)", imp_do:"📥 استيراد {n} صف", imp_none:"لم يتم العثور على صفوف صالحة في الملف", imp_done:"تم استيراد {n} صف بنجاح ✓", imp_bad:"تعذّر قراءة الملف", imp_cols_missing:"تأكد من وجود الأعمدة المطلوبة: code, name, lot, expiry, qty", imp_more:"+ {n} صف إضافية لم تُعرض",
+ sync_locked_note:"إعدادات المزامنة محمية برقم سري خاص بالقسم. السحب والمزامنة يعملان تلقائيًا دون فتحها.", sync_manage:"إدارة إعدادات المزامنة", sync_pin_title:"إعدادات المزامنة المحمية", sync_pin_lbl:"الرقم السري للقسم", sync_unlocked:"تم فتح إعدادات المزامنة ✓", sync_pin_wrong:"الرقم السري غير صحيح",
  nav_home:"الرئيسية", nav_dashboard:"لوحة التحكم", nav_inventory:"المخزون", nav_movement:"الحركة",
  nav_receive:"استقبال المحاليل", nav_dispense:"صرف وإخراج", nav_barcode:"طباعة الباركود",
  nav_log:"سجل الحركات", nav_admin:"إدارة", nav_reports:"التقارير", nav_settings:"الإعدادات",
@@ -468,6 +469,7 @@ en:{
  products_sub:"Define, edit, and delete items", p_add:"+ Add product", p_empty:"No products yet", p_catalog:"Approved list", p_catalog_hint:"Approved items and their per-unit quantities", p_added:"Added ✓",
  th_avail:"Available", act_edit:"Edit", act_delete:"Delete",
  imp_sub:"Import items and lots from an Excel/CSV file", imp_help:"Export your data from Excel as CSV, then upload it here. Required columns: code, name, lot, expiry, qty — optional: manufacturer, category, unit, minQty, supplier, lab, inspection. Download the template to start.", imp_template:"⬇ Download CSV template", imp_pick:"⬆ Choose CSV file", imp_preview_h:"Preview ({n} rows)", imp_do:"📥 Import {n} rows", imp_none:"No valid rows found in the file", imp_done:"Imported {n} rows successfully ✓", imp_bad:"Couldn't read the file", imp_cols_missing:"Ensure the required columns exist: code, name, lot, expiry, qty", imp_more:"+ {n} more rows not shown",
+ sync_locked_note:"Sync settings are protected by a department secret. Pull & sync run automatically without opening this.", sync_manage:"Manage sync settings", sync_pin_title:"Protected sync settings", sync_pin_lbl:"Department secret", sync_unlocked:"Sync settings unlocked ✓", sync_pin_wrong:"Incorrect secret",
  nav_home:"Main", nav_dashboard:"Dashboard", nav_inventory:"Inventory", nav_movement:"Movement",
  nav_receive:"Receive solutions", nav_dispense:"Dispense", nav_barcode:"Barcode printing",
  nav_log:"Movement log", nav_admin:"Admin", nav_reports:"Reports", nav_settings:"Settings",
@@ -1217,14 +1219,17 @@ pages.settings=()=>{
     <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn soft" onclick="App.backup()">${t("btn_export_backup")}</button><button class="btn ghost" onclick="document.getElementById('st-file').click()">${t("btn_import_backup")}</button><input type="file" id="st-file" accept="application/json" style="display:none" onchange="App.restore(event)"></div>
   </div></div>`:""}
 
-  <div class="panel"><div class="panel-h"><h3>${t("sync_title2")}</h3><span class="hint">${t("set_sync_hint")}</span></div><div class="panel-b">
+  <div class="panel"><div class="panel-h"><h3>${t("sync_title2")}</h3></div><div class="panel-b">
     <div style="margin-bottom:12px">${t("sync_status_lbl")} <span class="tag mut" id="syncBadge">${t("sync_off")}</span></div>
+    ${syncUnlocked?`
     <div class="form-grid">
       <div class="full"><label>${t("sync_workspace")}</label><input id="sy-ws" placeholder="${t("sync_workspace_ph")}" value="${esc((getSyncCfg()||{}).workspace||"")}"></div>
       <div class="full"><label>${t("sync_config")}</label><textarea id="sy-cfg" rows="5" placeholder="${t("sync_config_ph")}">${esc((getSyncCfg()||{}).config?JSON.stringify(getSyncCfg().config,null,2):"")}</textarea></div>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><button class="btn soft" onclick="App.connectSync()">${t("sync_connect")}</button><button class="btn ghost" onclick="App.disconnectSync()">${t("sync_disconnect")}</button></div>
-    <div class="help-box" style="margin-top:12px">${t("sync_help")}</div>
+    <div class="help-box" style="margin-top:12px">${t("sync_help")}</div>`:`
+    <div class="help-box">🔒 ${t("sync_locked_note")}</div>
+    <button class="btn ghost" style="margin-top:10px" onclick="App.unlockSync()">🔒 ${t("sync_manage")}</button>`}
   </div></div>
 
   ${isAdmin()?`<div class="panel"><div class="panel-h"><h3>${t("set_data")}</h3></div><div class="panel-b">
@@ -1545,6 +1550,8 @@ function seedFirstRun(db,force){
 /* ===== Multi-device sync (Firebase Firestore — optional, offline-first) ===== */
 const SYNC_KEY="inv_sync_cfg";
 var fbApp=null, fbDoc=null, fbUnsub=null, syncState="off", applyingRemote=false, pushTimer=null;
+const SYNC_PIN="121985";
+let syncUnlocked=false;
 const BUILTIN_SYNC={workspace:"bloodbank-dammam",config:{apiKey:"AIzaSyBLs1q9ryZZYI5Br9yBi7sSXk-92HVklRI",authDomain:"bloodbank-dammam.firebaseapp.com",projectId:"bloodbank-dammam",storageBucket:"bloodbank-dammam.firebasestorage.app",messagingSenderId:"165465917721",appId:"1:165465917721:web:2989e02513f51e6c101d88"}};
 function getSyncCfg(){ try{ const ls=JSON.parse(localStorage.getItem(SYNC_KEY)||"null"); if(ls&&ls.config&&ls.config.projectId&&ls.workspace) return ls; }catch(e){} return (BUILTIN_SYNC&&BUILTIN_SYNC.config&&BUILTIN_SYNC.config.projectId&&BUILTIN_SYNC.workspace)?BUILTIN_SYNC:null; }
 function setSyncStatus(s){ syncState=s; const el=$("syncBadge"); if(!el)return;
@@ -1586,6 +1593,12 @@ function connectSync(){
   toast(t("sync_connected"),"ok"); startSync();
 }
 function disconnectSync(){ if(fbUnsub){fbUnsub();fbUnsub=null;} fbDoc=null; localStorage.removeItem(SYNC_KEY); setSyncStatus("off"); toast(t("sync_disconnected"),"ok"); }
+function unlockSync(){
+  modal(t("sync_pin_title"),`<div class="field"><label>${t("sync_pin_lbl")}</label><input id="sync-pin" type="password" inputmode="numeric" autocomplete="off"></div>`,
+    `<button class="btn" id="sync-pin-ok">${t("btn_confirm")}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
+  setTimeout(()=>{ const i=$("sync-pin"); if(i)i.focus(); },50);
+  $("sync-pin-ok").onclick=()=>{ if(($("sync-pin").value||"")===SYNC_PIN){ syncUnlocked=true; closeModal(); toast(t("sync_unlocked"),"ok"); go("settings"); } else { toast(t("sync_pin_wrong"),"err"); } };
+}
 
 /* ===== User guide ===== */
 const GUIDE=[
@@ -1631,7 +1644,7 @@ return {init,login,logout,go,toggleSide,toggleLang,closeModal,
   exportCSV,saveSettings,addLab,delLab,backup,restore,reseed,wipe,
   addUser,setRole,resetUserPass,delUser,
   addProduct,importTemplate,importFile,importRows,toggleCollapse,
-  connectSync,disconnectSync,openGuide,guideToggle};
+  connectSync,disconnectSync,unlockSync,openGuide,guideToggle};
 })();
 window.App = App;
 App.init();
