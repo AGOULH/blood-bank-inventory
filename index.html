@@ -336,7 +336,7 @@ ar:{
  btn_receive_sol:"+ استقبال محلول", btn_dispense:"صرف",
  kpi_items:"إجمالي الأصناف", kpi_items_sub:"صنف مسجّل في النظام",
  kpi_units:"إجمالي الكمية", kpi_units_sub:"وحدة متاحة بالمخزون",
- kpi_near:"قرب الانتهاء", kpi_near_sub:"خلال {n} يوم",
+ kpi_near:"قرب الانتهاء", kpi_near_sub:"خلال {n} يومًا",
  kpi_expired:"منتهية الصلاحية", kpi_expired_sub:"تشغيلة تحتاج إتلاف",
  kpi_low:"مخزون منخفض", kpi_low_sub:"أصناف دون الحد الأدنى",
  kpi_rejected:"مرفوضة بالفحص", kpi_rejected_sub:"تشغيلة مرفوضة",
@@ -346,8 +346,8 @@ ar:{
  legend_valid:"صالحة", legend_near:"قرب الانتهاء", legend_expired:"منتهية",
  panel_alerts:"تنبيهات تحتاج إجراء", alerts_count:"{n} تنبيه",
  all_good_t:"كل شيء على ما يرام", all_good_s:"لا توجد تنبيهات مخزون حالياً",
- alert_expired_s:"منتهي الصلاحية منذ {n} يوم · الكمية {q}",
- alert_near_s:"ينتهي خلال {n} يوم ({d})",
+ alert_expired_s:"منتهي الصلاحية منذ {n} يومًا · الكمية {q}",
+ alert_near_s:"ينتهي خلال {n} يومًا ({d})",
  alert_low_s:"المخزون {q} {u} (الحد الأدنى {m})",
  alert_rejected_s:"مرفوضة عند الفحص · الكمية {q}", lot_label:"تشغيلة",
  inv_title:"المخزون", inv_sub:"جميع الأصناف والتشغيلات المسجّلة",
@@ -384,7 +384,7 @@ ar:{
  err_pick_item:"اختر الصنف", err_over:"الكمية المطلوبة ({q}) أكبر من المتاح ({a})", ok_dispense:"تم الصرف بنجاح ✓",
  bc_title:"طباعة الباركود", bc_sub:"توليد باركود (Code 39) وطباعة ملصق — يعمل دون اتصال",
  bc_pick:"اختر الصنف", manual_entry:"— أدخل يدوياً —", bc_code:"الكود / النص", bc_name:"اسم الملصق",
- bc_lot:"التشغيلة", bc_exp:"الانتهاء", bc_copies:"عدد النسخ للطباعة", bc_print:"🖨 طباعة الملصقات",
+ bc_lot:"التشغيلة", bc_exp:"الانتهاء", bc_copies:"عدد النسخ للطباعة", bc_print:"🖨 طباعة الملصقات", bc_lwidth:"عرض الملصق (مم)", bc_lheight:"ارتفاع الملصق (مم)",
  bc_hint:"Code 39 مدعوم في معظم الماسحات. الأحرف المسموحة: A‑Z و 0‑9 والرموز <code>- . $ / + %</code> والمسافة.",
  bc_preview:"المعاينة", bc_enter_code:"أدخل الكود لعرض الباركود", bc_err_code:"أدخل الكود أولاً", bc_print_title:"طباعة باركود",
  log_title:"سجل الحركات", log_sub:"جميع عمليات الدخول والخروج والتعديل",
@@ -441,7 +441,7 @@ ar:{
  hijri_suffix:" هـ", insp_accepted:"مقبول", insp_rejected:"مرفوض",
  fn_inventory:"تقرير_المخزون", fn_log:"سجل_الحركات", fn_expiry:"تقرير_الانتهاء", fn_consumption:"تقرير_الاستهلاك",
  fn_labusage:"استهلاك_المختبرات", fn_backup:"نسخة_مخزون_المحاليل",
- lst_empty:"منتهي الكمية", lst_no_date:"بدون تاريخ", lst_expired:"منتهي الصلاحية", lst_near:"ينتهي خلال {n} يوم",
+ lst_empty:"منتهي الكمية", lst_no_date:"بدون تاريخ", lst_expired:"منتهي الصلاحية", lst_near:"ينتهي خلال {n} يومًا",
  lst_valid:"صالح", lst_rejected:"مرفوض بالفحص",
  st_available:"متوفر", st_has_expired:"يحوي منتهي", st_low:"مخزون منخفض", st_near:"قرب الانتهاء", st_out:"غير متوفر",
  col_inspection:"الفحص", col_received_date:"تاريخ الاستلام", days_left:"الأيام المتبقية",
@@ -525,7 +525,7 @@ en:{
  err_pick_item:"Select an item", err_over:"Requested ({q}) exceeds available ({a})", ok_dispense:"Dispensed ✓",
  bc_title:"Barcode printing", bc_sub:"Generate a Code 39 barcode and print a label — works offline",
  bc_pick:"Select item", manual_entry:"— Manual entry —", bc_code:"Code / text", bc_name:"Label name",
- bc_lot:"Lot", bc_exp:"Expiry", bc_copies:"Copies to print", bc_print:"🖨 Print labels",
+ bc_lot:"Lot", bc_exp:"Expiry", bc_copies:"Copies to print", bc_print:"🖨 Print labels", bc_lwidth:"Label width (mm)", bc_lheight:"Label height (mm)",
  bc_hint:"Code 39 is supported by most scanners. Allowed: A‑Z, 0‑9 and <code>- . $ / + %</code> and space.",
  bc_preview:"Preview", bc_enter_code:"Enter a code to render the barcode", bc_err_code:"Enter the code first", bc_print_title:"Print barcode",
  log_title:"Movement log", log_sub:"All in, out, and adjustment operations",
@@ -1107,8 +1107,9 @@ pages.barcode=()=>`
       <div class="field"><label>${t("bc_code")}</label><input id="bc-code" placeholder="NS-09" oninput="App.renderBarcode()"></div>
       <div class="field"><label>${t("bc_name")}</label><input id="bc-name" oninput="App.renderBarcode()"></div>
       <div class="form-grid"><div><label>${t("bc_lot")}</label><input id="bc-lot" oninput="App.renderBarcode()"></div><div><label>${t("bc_exp")}</label><input id="bc-exp" type="date" oninput="App.renderBarcode()"></div></div>
-      <div class="field" style="margin-top:14px"><label>${t("bc_copies")}</label><input id="bc-copies" type="number" min="1" max="60" value="6"></div>
-      <button class="btn full" onclick="App.printBarcode()">${t("bc_print")}</button>
+      <div class="field" style="margin-top:14px"><label>${t("bc_copies")}</label><input id="bc-copies" type="number" min="1" max="200" value="6"></div>
+      <div class="form-grid"><div><label>${t("bc_lwidth")}</label><input id="bc-w" type="number" min="10" max="200" value="50"></div><div><label>${t("bc_lheight")}</label><input id="bc-h" type="number" min="10" max="200" value="30"></div></div>
+      <button class="btn full" style="margin-top:14px" onclick="App.printBarcode()">${t("bc_print")}</button>
       <div class="muted" style="font-size:12px;margin-top:8px">${t("bc_hint")}</div>
     </div></div>
     <div class="panel"><div class="panel-h"><h3>${t("bc_preview")}</h3></div><div class="panel-b"><div id="bc-preview"></div></div></div>
@@ -1126,9 +1127,22 @@ function labelHTML(){
 function renderBarcode(){ const p=$("bc-preview"); if(p)p.innerHTML=labelHTML(); }
 function printBarcode(){
   const code=($("bc-code").value||"").trim(); if(!code)return toast(t("bc_err_code"),"err");
-  const copies=Math.min(60,Math.max(1,+$("bc-copies").value||1)); const one=labelHTML();
+  const copies=Math.min(200,Math.max(1,+$("bc-copies").value||1));
+  const W=Math.max(10,+$("bc-w").value||50), H=Math.max(10,+$("bc-h").value||30); const one=labelHTML();
   const w=window.open("","_blank"); const dir=LANG==="ar"?"rtl":"ltr";
-  w.document.write('<html dir="'+dir+'"><head><meta charset="utf-8"><title>'+t("bc_print_title")+'</title><style>body{font-family:"Segoe UI",Tahoma,sans-serif;margin:0;padding:8mm}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6mm}.label-card{border:1px solid #000;border-radius:8px;padding:8px;text-align:center}.lc-name{font-weight:800;font-size:14px}.lc-meta{font-size:11px;color:#555;margin:2px 0 6px}.lc-code{font-family:monospace;letter-spacing:2px;margin-top:4px;font-size:13px}svg{max-width:100%}</style></head><body><div class="grid">'+Array(copies).fill(one).join("")+'</div><scr'+'ipt>window.onload=function(){window.print();}</scr'+'ipt></body></html>');
+  w.document.write('<html dir="'+dir+'"><head><meta charset="utf-8"><title>'+t("bc_print_title")+'</title><style>'
+    +'@page{size:'+W+'mm '+H+'mm;margin:0}'
+    +'html,body{margin:0;padding:0}'
+    +'body{font-family:"Segoe UI",Tahoma,sans-serif}'
+    +'.label-card{width:'+W+'mm;height:'+H+'mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.5mm;border:0;border-radius:0;overflow:hidden;page-break-after:always;break-after:page}'
+    +'.label-card:last-child{page-break-after:auto;break-after:auto}'
+    +'.lc-name{font-weight:800;font-size:10.5pt;line-height:1.12}'
+    +'.lc-meta{font-size:7pt;color:#333;margin:0.8mm 0}'
+    +'.lc-code{font-family:monospace;letter-spacing:1.5px;margin-top:0.8mm;font-size:8.5pt}'
+    +'.label-card svg{width:92% !important;height:auto !important;max-height:48%}'
+    +'</style></head><body>'
+    +Array(copies).fill(one).join("")
+    +'<scr'+'ipt>window.onload=function(){window.print();}</scr'+'ipt></body></html>');
   w.document.close();
 }
 const C39={'0':'nnnwwnwnn','1':'wnnwnnnnw','2':'nnwwnnnnw','3':'wnwwnnnnn','4':'nnnwwnnnw','5':'wnnwwnnnn','6':'nnwwwnnnn','7':'nnnwnnwnw','8':'wnnwnnwnn','9':'nnwwnnwnn','A':'wnnnnwnnw','B':'nnwnnwnnw','C':'wnwnnwnnn','D':'nnnnwwnnw','E':'wnnnwwnnn','F':'nnwnwwnnn','G':'nnnnnwwnw','H':'wnnnnwwnn','I':'nnwnnwwnn','J':'nnnnwwwnn','K':'wnnnnnnww','L':'nnwnnnnww','M':'wnwnnnnwn','N':'nnnnwnnww','O':'wnnnwnnwn','P':'nnwnwnnwn','Q':'nnnnnnwww','R':'wnnnnnwwn','S':'nnwnnnwwn','T':'nnnnwnwwn','U':'wwnnnnnnw','V':'nwwnnnnnw','W':'wwwnnnnnn','X':'nwnnwnnnw','Y':'wwnnwnnnn','Z':'nwwnwnnnn','-':'nwnnnnwnw','.':'wwnnnnwnn',' ':'nwwnnnwnn','$':'nwnwnwnnn','/':'nwnwnnnwn','+':'nwnnnwnwn','%':'nnnwnwnwn','*':'nwnnwnwnn'};
