@@ -403,6 +403,7 @@ ar:{
  no_exp_lots:"لا توجد تشغيلات منتهية أو قريبة من الانتهاء ✓",
  rep_most:"الأكثر استهلاكاً", th_total_dispensed:"إجمالي المصروف",
  rep_monthly_t:"📅 التقرير الشهري", rep_emp_t:"👥 تقرير حسب الموظف", rep_received:"المُستلَم", rep_dispensed:"المصروف", rep_ops:"عدد العمليات", rep_adjust_n:"تعديلات", th_employee:"الموظف", rep_total:"الإجمالي", rep_no_month_data:"لا توجد حركات في هذه الفترة", rep_month_lbl:"الشهر", fn_monthly:"التقرير_الشهري", fn_employee:"تقرير_الموظفين",
+ rep_period_t:"📅 تقرير الفترة", rep_from:"من تاريخ", rep_to:"إلى تاريخ", rep_employee:"الموظف", rep_all_emp:"كل الموظفين", rep_this_month:"هذا الشهر", rep_last_month:"الشهر الماضي", rep_this_year:"هذه السنة", rep_all_time:"كل الفترات", fn_period:"تقرير_الفترة",
  set_title:"الإعدادات", set_sub:"الحساب، المختبرات، النسخ الاحتياطي والمزامنة",
  set_account:"الحساب وكلمة المرور", f_username:"اسم المستخدم", f_password:"كلمة المرور",
  f_warn_days:"أيام التنبيه قبل الانتهاء", btn_save_settings:"💾 حفظ الإعدادات",
@@ -545,6 +546,7 @@ en:{
  no_exp_lots:"No expired or near-expiry lots ✓",
  rep_most:"Most consumed", th_total_dispensed:"Total dispensed",
  rep_monthly_t:"📅 Monthly report", rep_emp_t:"👥 Report by employee", rep_received:"Received", rep_dispensed:"Dispensed", rep_ops:"Operations", rep_adjust_n:"Adjustments", th_employee:"Employee", rep_total:"Total", rep_no_month_data:"No movements in this period", rep_month_lbl:"Month", fn_monthly:"monthly_report", fn_employee:"employee_report",
+ rep_period_t:"📅 Period report", rep_from:"From date", rep_to:"To date", rep_employee:"Employee", rep_all_emp:"All employees", rep_this_month:"This month", rep_last_month:"Last month", rep_this_year:"This year", rep_all_time:"All time", fn_period:"period_report",
  set_title:"Settings", set_sub:"Account, labs, backup, and sync",
  set_account:"Account & password", f_username:"Username", f_password:"Password",
  f_warn_days:"Alert days before expiry", btn_save_settings:"💾 Save settings",
@@ -1182,11 +1184,21 @@ function renderLog(){
 }
 
 /* Reports */
-let repMonth=todayISO().slice(0,7);
-function setRepMonth(v){ repMonth=v||todayISO().slice(0,7); go("reports"); }
-function monthTxns(){ return DB.txns.filter(x=>String(x.date||"").slice(0,7)===repMonth); }
-function monthlyData(){ const map={}; monthTxns().forEach(x=>{ const k=x.code; if(!map[k])map[k]={inq:0,outq:0}; if(x.type==="in")map[k].inq+=(+x.qty||0); else if(x.type==="out")map[k].outq+=(+x.qty||0); }); return Object.entries(map).map(([code,v])=>{const it=DB.items.find(i=>i.code===code);return {code,name:it?it.name:code,inq:v.inq,outq:v.outq};}).sort((a,b)=>b.outq-a.outq||b.inq-a.inq); }
-function employeeData(){ const map={}; monthTxns().forEach(x=>{ const u=x.user||"—"; if(!map[u])map[u]={ops:0,inq:0,outq:0,adj:0}; map[u].ops++; if(x.type==="in")map[u].inq+=(+x.qty||0); else if(x.type==="out")map[u].outq+=(+x.qty||0); else map[u].adj++; }); return Object.entries(map).map(([user,v])=>({user,...v})).sort((a,b)=>b.ops-a.ops); }
+let repFrom=repMonthStart(), repTo=todayISO(), repEmp="";
+function repMonthStart(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-01"; }
+function repYMD(y,m,day){ const d=new Date(y,m,day); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function setRepRange(f,t){ if(f)repFrom=f; if(t)repTo=t; go("reports"); }
+function setRepEmp(v){ repEmp=v||""; go("reports"); }
+function repPreset(k){ const d=new Date(),y=d.getFullYear(),m=d.getMonth();
+  if(k==="month"){ repFrom=repYMD(y,m,1); repTo=todayISO(); }
+  else if(k==="lastmonth"){ repFrom=repYMD(y,m-1,1); repTo=repYMD(y,m,0); }
+  else if(k==="year"){ repFrom=y+"-01-01"; repTo=todayISO(); }
+  else if(k==="all"){ repFrom="2000-01-01"; repTo=todayISO(); }
+  go("reports"); }
+function rangeTxns(){ return DB.txns.filter(x=>{ const dt=String(x.date||""); return dt>=repFrom&&dt<=repTo&&(!repEmp||x.user===repEmp); }); }
+function allEmployees(){ const s=new Set(); (DB.settings.users||[]).forEach(u=>s.add(u.u)); DB.txns.forEach(x=>{ if(x.user)s.add(x.user); }); return [...s].sort((a,b)=>String(a).localeCompare(String(b),"ar")); }
+function periodData(){ const map={}; rangeTxns().forEach(x=>{ const k=x.code; if(!map[k])map[k]={inq:0,outq:0}; if(x.type==="in")map[k].inq+=(+x.qty||0); else if(x.type==="out")map[k].outq+=(+x.qty||0); }); return Object.entries(map).map(([code,v])=>{const it=DB.items.find(i=>i.code===code);return {code,name:it?it.name:code,inq:v.inq,outq:v.outq};}).sort((a,b)=>b.outq-a.outq||b.inq-a.inq); }
+function employeeData(){ const map={}; rangeTxns().forEach(x=>{ const u=x.user||"—"; if(!map[u])map[u]={ops:0,inq:0,outq:0,adj:0}; map[u].ops++; if(x.type==="in")map[u].inq+=(+x.qty||0); else if(x.type==="out")map[u].outq+=(+x.qty||0); else map[u].adj++; }); return Object.entries(map).map(([user,v])=>({user,...v})).sort((a,b)=>b.ops-a.ops); }
 pages.reports=()=>{
   const expired=DB.lots.filter(l=>l.qtyRemaining>0&&!isRej(l)&&l.expiry&&daysTo(l.expiry)<0);
   const near=DB.lots.filter(l=>l.qtyRemaining>0&&!isRej(l)&&l.expiry&&daysTo(l.expiry)>=0&&daysTo(l.expiry)<=DB.settings.warnDays);
@@ -1210,11 +1222,19 @@ pages.reports=()=>{
     ${cons.length?`<div class="tbl-wrap"><table><thead><tr><th>#</th><th>${t("th_name")}</th><th class="num">${t("th_total_dispensed")}</th></tr></thead><tbody>${cons.map((c,i)=>`<tr><td>${i+1}</td><td><b>${esc(c[0])}</b></td><td class="num">${num(c[1])}</td></tr>`).join("")}</tbody></table></div>`:emptyMini(t("no_dispense"))}
   </div></div>
   </div>
-  <div class="panel"><div class="panel-h"><h3>${t("rep_monthly_t")}</h3><span class="no-print"><input type="month" id="rep-month" value="${repMonth}" onchange="App.setRepMonth(this.value)"></span></div><div class="panel-b">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px"><span class="hint">${t("rep_month_lbl")}: ${esc(repMonth)}</span><button class="btn sm soft no-print" onclick="App.exportCSV('monthly')">${t("btn_export")}</button></div>
-    ${(()=>{const d=monthlyData();if(!d.length)return emptyMini(t("rep_no_month_data"));const ti=d.reduce((s,r)=>s+r.inq,0),to=d.reduce((s,r)=>s+r.outq,0);return `<div class="tbl-wrap"><table><thead><tr><th>${t("th_name")}</th><th>${t("th_code")}</th><th class="num">${t("rep_received")}</th><th class="num">${t("rep_dispensed")}</th></tr></thead><tbody>${d.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td class="mono">${esc(r.code)}</td><td class="num">${num(r.inq)}</td><td class="num">${num(r.outq)}</td></tr>`).join("")}</tbody><tfoot><tr><th colspan="2">${t("rep_total")}</th><th class="num">${num(ti)}</th><th class="num">${num(to)}</th></tr></tfoot></table></div>`;})()}
+  <div class="panel no-print"><div class="panel-b">
+    <div class="form-grid">
+      <div><label>${t("rep_from")}</label><input type="date" id="rep-from" value="${repFrom}" onchange="App.setRepRange(this.value, document.getElementById('rep-to').value)"></div>
+      <div><label>${t("rep_to")}</label><input type="date" id="rep-to" value="${repTo}" onchange="App.setRepRange(document.getElementById('rep-from').value, this.value)"></div>
+      <div><label>${t("rep_employee")}</label><select id="rep-emp" onchange="App.setRepEmp(this.value)"><option value="">${t("rep_all_emp")}</option>${allEmployees().map(e=>`<option value="${esc(e)}" ${repEmp===e?"selected":""}>${esc(e)}</option>`).join("")}</select></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn sm ghost" onclick="App.repPreset('month')">${t("rep_this_month")}</button><button class="btn sm ghost" onclick="App.repPreset('lastmonth')">${t("rep_last_month")}</button><button class="btn sm ghost" onclick="App.repPreset('year')">${t("rep_this_year")}</button><button class="btn sm ghost" onclick="App.repPreset('all')">${t("rep_all_time")}</button></div>
   </div></div>
-  <div class="panel"><div class="panel-h"><h3>${t("rep_emp_t")}</h3><span class="hint">${esc(repMonth)}</span></div><div class="panel-b">
+  <div class="panel"><div class="panel-h"><h3>${t("rep_period_t")}</h3><span class="hint">${esc(repFrom)} → ${esc(repTo)}${repEmp?(" · "+esc(repEmp)):""}</span></div><div class="panel-b">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn sm soft no-print" onclick="App.exportCSV('period')">${t("btn_export")}</button></div>
+    ${(()=>{const d=periodData();if(!d.length)return emptyMini(t("rep_no_month_data"));const ti=d.reduce((s,r)=>s+r.inq,0),to=d.reduce((s,r)=>s+r.outq,0);return `<div class="tbl-wrap"><table><thead><tr><th>${t("th_name")}</th><th>${t("th_code")}</th><th class="num">${t("rep_received")}</th><th class="num">${t("rep_dispensed")}</th></tr></thead><tbody>${d.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td class="mono">${esc(r.code)}</td><td class="num">${num(r.inq)}</td><td class="num">${num(r.outq)}</td></tr>`).join("")}</tbody><tfoot><tr><th colspan="2">${t("rep_total")}</th><th class="num">${num(ti)}</th><th class="num">${num(to)}</th></tr></tfoot></table></div>`;})()}
+  </div></div>
+  <div class="panel"><div class="panel-h"><h3>${t("rep_emp_t")}</h3><span class="hint">${esc(repFrom)} → ${esc(repTo)}</span></div><div class="panel-b">
     <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn sm soft no-print" onclick="App.exportCSV('employee')">${t("btn_export")}</button></div>
     ${(()=>{const d=employeeData();if(!d.length)return emptyMini(t("rep_no_month_data"));return `<div class="tbl-wrap"><table><thead><tr><th>${t("th_employee")}</th><th class="num">${t("rep_ops")}</th><th class="num">${t("rep_received")}</th><th class="num">${t("rep_dispensed")}</th><th class="num">${t("rep_adjust_n")}</th></tr></thead><tbody>${d.map(r=>`<tr><td><b>${esc(r.user)}</b></td><td class="num">${num(r.ops)}</td><td class="num">${num(r.inq)}</td><td class="num">${num(r.outq)}</td><td class="num">${num(r.adj)}</td></tr>`).join("")}</tbody></table></div>`;})()}
   </div></div>
@@ -1521,11 +1541,11 @@ function exportCSV(kind){
     name=t("fn_labusage"); rows.push([t("th_lab"),t("th_total_dispensed")]);
     const m={};DB.txns.filter(x=>x.type==="out").forEach(x=>{const key=x.lab||"—";m[key]=(m[key]||0)+(+x.qty||0);});
     Object.entries(m).sort((a,b)=>b[1]-a[1]).forEach(([k,q])=>rows.push([labelOf(labs(),k),q]));
-  }else if(kind==="monthly"){
-    name=t("fn_monthly")+"_"+repMonth; rows.push([t("th_name"),t("th_code"),t("rep_received"),t("rep_dispensed")]);
-    monthlyData().forEach(r=>rows.push([r.name,r.code,r.inq,r.outq]));
+  }else if(kind==="period"){
+    name=t("fn_period")+"_"+repFrom+"_"+repTo+(repEmp?("_"+repEmp):""); rows.push([t("th_name"),t("th_code"),t("rep_received"),t("rep_dispensed")]);
+    periodData().forEach(r=>rows.push([r.name,r.code,r.inq,r.outq]));
   }else if(kind==="employee"){
-    name=t("fn_employee")+"_"+repMonth; rows.push([t("th_employee"),t("rep_ops"),t("rep_received"),t("rep_dispensed"),t("rep_adjust_n")]);
+    name=t("fn_employee")+"_"+repFrom+"_"+repTo; rows.push([t("th_employee"),t("rep_ops"),t("rep_received"),t("rep_dispensed"),t("rep_adjust_n")]);
     employeeData().forEach(r=>rows.push([r.user,r.ops,r.inq,r.outq,r.adj]));
   }
   if(rows.length<=1)return toast(t("no_export_data"),"err");
@@ -1677,7 +1697,7 @@ return {init,login,logout,go,toggleSide,toggleLang,closeModal,
   dispenseInfo,doDispense,
   renderBarcode,bcFromItem,pickBarcode,printBarcode,
   toggleLots,editItem,delItem,addLot,adjustLot,delLot,
-  exportCSV,setRepMonth,saveSettings,addLab,delLab,backup,restore,reseed,wipe,
+  exportCSV,setRepRange,setRepEmp,repPreset,saveSettings,addLab,delLab,backup,restore,reseed,wipe,
   addUser,setRole,resetUserPass,delUser,
   addProduct,importTemplate,importFile,importRows,toggleCollapse,
   connectSync,disconnectSync,unlockSync,openGuide,guideToggle};
