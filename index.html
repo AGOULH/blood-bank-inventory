@@ -385,6 +385,10 @@ ar:{
  f_dis_qty:"الكمية المصروفة", f_dis_lab:"المختبر المستلِم", f_dis_date:"تاريخ الصرف",
  f_dis_note_ph:"اختياري — اسم المستلم / رقم الطلب",
  avail_lots_h:"التشغيلات المتاحة (الأقدم انتهاءً أولاً):", btn_confirm_dispense:"📤 تأكيد الصرف",
+ dis_confirm_title:"تأكيد الصرف", dis_confirm_intro:"سيتم صرف {q} {u} من «{name}» — التوزيع التلقائي حسب الأقدم انتهاءً:", dis_th_take:"المصروف", dis_newlot_tag:"جديدة",
+ dis_alert_older:"📅 تنبيه: لهذا الصنف أكثر من تشغيلة بتواريخ مختلفة — الأقدم انتهاءً ({lot} · {d}) يُصرف أولاً. تأكد من سحب التشغيلة الصحيحة.",
+ dis_alert_expired:"⛔ تنبيه: التشغيلة الأقدم ({lot}) منتهية الصلاحية ({d}) — راجِع قبل الصرف!",
+ dis_alert_newlot:"🆕 تنبيه: سيتم فتح تشغيلة جديدة لأول مرة: {lots}",
  dis_empty_t:"لا يوجد مخزون متاح للصرف", dis_empty_s:"قم باستقبال محاليل أولاً",
  err_pick_item:"اختر الصنف", err_over:"الكمية المطلوبة ({q}) أكبر من المتاح ({a})", ok_dispense:"تم الصرف بنجاح ✓",
  bc_title:"طباعة الباركود", bc_sub:"توليد باركود (Code 39) وطباعة ملصق — يعمل دون اتصال",
@@ -531,6 +535,10 @@ en:{
  f_dis_qty:"Dispensed quantity", f_dis_lab:"Receiving lab", f_dis_date:"Dispense date",
  f_dis_note_ph:"Optional — recipient / request no.",
  avail_lots_h:"Available lots (earliest expiry first):", btn_confirm_dispense:"📤 Confirm dispense",
+ dis_confirm_title:"Confirm dispense", dis_confirm_intro:"Dispensing {q} {u} of \"{name}\" — auto-allocated by earliest expiry:", dis_th_take:"Dispensed", dis_newlot_tag:"New",
+ dis_alert_older:"📅 Note: this item has multiple lots with different dates — the earliest-expiring ({lot} · {d}) is dispensed first. Make sure you pull the correct lot.",
+ dis_alert_expired:"⛔ Warning: the oldest lot ({lot}) is expired ({d}) — review before dispensing!",
+ dis_alert_newlot:"🆕 Note: a new lot will be opened for the first time: {lots}",
  dis_empty_t:"No stock available to dispense", dis_empty_s:"Receive solutions first",
  err_pick_item:"Select an item", err_over:"Requested ({q}) exceeds available ({a})", ok_dispense:"Dispensed ✓",
  bc_title:"Barcode printing", bc_sub:"Generate a Code 39 barcode and print a label — works offline",
@@ -1144,9 +1152,32 @@ function doDispense(){
   if(!qty||qty<=0)return toast(t("err_qty"),"err");
   const avail=availQtyOf(code);
   if(qty>avail)return toast(t("err_over",{q:num(qty),a:num(avail)}),"err");
+  const lab=$("ds-lab").value, date=$("ds-date").value||todayISO(), note=$("ds-note").value.trim();
+  const it=DB.items.find(i=>i.code===code);
+  const lots=availLots(code); // oldest expiry first (FIFO)
+  // plan the FIFO allocation WITHOUT mutating
+  let rem=qty; const plan=[];
+  for(const l of lots){ if(rem<=0)break; const take=Math.min(rem,l.qtyRemaining); plan.push({l,take}); rem-=take; }
+  const oldest=plan.length?plan[0].l:null;
+  const oldestExpired=oldest&&oldest.expiry&&daysTo(oldest.expiry)<0;
+  const newLots=plan.filter(p=>p.l.qtyRemaining===p.l.qtyReceived).map(p=>p.l.lot||"—");
+  // build alerts
+  let alerts="";
+  if(oldestExpired) alerts+=`<div class="help-box" style="background:var(--danger-soft);border-color:#f3c9c4;color:var(--danger);margin-bottom:8px">${t("dis_alert_expired",{lot:esc(oldest.lot||"—"),d:fmtG(oldest.expiry)})}</div>`;
+  else if(lots.length>1) alerts+=`<div class="help-box" style="background:var(--warn-soft);border-color:#f0d9a0;color:#8a5a00;margin-bottom:8px">${t("dis_alert_older",{lot:esc(oldest?oldest.lot||"—":"—"),d:oldest?fmtG(oldest.expiry):"—"})}</div>`;
+  if(newLots.length) alerts+=`<div class="help-box" style="margin-bottom:8px">${t("dis_alert_newlot",{lots:esc(newLots.join("، "))})}</div>`;
+  const rowsH=plan.map(p=>{const st=lotStatus(p.l);const isN=p.l.qtyRemaining===p.l.qtyReceived;return `<tr><td class="mono">${esc(p.l.lot||"—")}${isN?` <span class="tag info" style="font-size:10px">${t("dis_newlot_tag")}</span>`:""}</td><td>${fmtG(p.l.expiry)}</td><td class="num"><b>${num(p.take)}</b></td><td><span class="tag ${st.cls}">${lotStatusText(st)}</span></td></tr>`;}).join("");
+  const body=`<p style="margin:0 0 10px">${t("dis_confirm_intro",{q:num(qty),u:esc(labelOf(UNITS,it?it.unit:"")),name:esc(it?it.name:code)})}</p>
+    ${alerts}
+    <div class="tbl-wrap"><table style="font-size:13px"><thead><tr><th>${t("th_lot")}</th><th>${t("th_exp")}</th><th class="num">${t("dis_th_take")}</th><th>${t("th_status")}</th></tr></thead><tbody>${rowsH}</tbody></table></div>`;
+  modal(t("dis_confirm_title"),body,`<button class="btn" id="dc-yes">${t("btn_confirm_dispense")}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
+  $("dc-yes").onclick=()=>{ closeModal(); commitDispense(code,qty,lab,date,note); };
+}
+function commitDispense(code,qty,lab,date,note){
+  const avail=availQtyOf(code);
+  if(qty>avail)return toast(t("err_over",{q:num(qty),a:num(avail)}),"err");
   let rem=qty; const used=[]; for(const l of availLots(code)){if(rem<=0)break;const take=Math.min(rem,l.qtyRemaining);l.qtyRemaining-=take;rem-=take;used.push(l.lot||"—");}
-  const lab=$("ds-lab").value;
-  DB.txns.push({id:uid(),type:"out",code,lot:used.join(", "),qty,date:$("ds-date").value||todayISO(),party:labelOf(labs(),lab),lab,note:$("ds-note").value.trim(),user:curUser()});
+  DB.txns.push({id:uid(),type:"out",code,lot:used.join(", "),qty,date,party:labelOf(labs(),lab),lab,note,user:curUser()});
   save(); toast(t("ok_dispense"),"ok"); go("dispense");
 }
 
