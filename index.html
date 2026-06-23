@@ -217,6 +217,7 @@
   .gcard-h{display:flex;align-items:center;gap:12px;padding:13px 15px;cursor:pointer}
   .gcard-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
   .gcard-t{flex:1;min-width:0}.gcard-t b{display:block;font-size:14.5px}.gcard-t span{font-size:12px;color:var(--muted)}
+  .gcard-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--crimson);color:#fff;font-size:12px;font-weight:800;margin-inline-end:8px;flex:none;vertical-align:middle}
   .gcard-ch{color:var(--muted);transition:transform .2s;font-size:18px}
   .gcard.open .gcard-ch{transform:rotate(-90deg)}
   .gcard-b{display:none;padding:2px 15px 14px;background:rgba(255,255,255,.55)}
@@ -316,6 +317,8 @@ ar:{
  cat_title:"إضافة من القائمة المعتمدة", cat_group:"المجموعة", cat_pick_group:"— اختر المجموعة —",
  cat_item:"الصنف", cat_pick_item:"— اختر الصنف —", cat_kits:"عدد الوحدات (كت/علبة)",
  cat_total:"الإجمالي", cat_each_unit:"كل وحدة تُحتسب على حدة",
+ cat_add_btn:"+ إضافة صنف", cat_add_title:"إضافة صنف للقائمة المعتمدة", cat_kit_type:"نوع العبوة", cat_per:"الكمية لكل عبوة", cat_per_ph:"اتركه فارغاً إن لم ينطبق", cat_added:"تمت إضافة الصنف للقائمة المعتمدة ✓", cat_del_q:"حذف الصنف \"{name}\" من القائمة المعتمدة؟",
+ inv_summary_t:"ملخص المخزون حسب التصنيف", inv_summary_s:"عدد الأصناف وإجمالي الكميات لكل تصنيف", inv_sum_items:"عدد الأصناف", inv_sum_qty:"إجمالي الكمية المتاحة",
  nav_users:"إدارة المستخدمين", users_title:"إدارة المستخدمين", users_sub:"إضافة الحسابات وتغيير الصلاحيات (للمدير فقط)",
  u_username:"اسم المستخدم", u_password:"كلمة المرور", u_role:"الصلاحية", role_admin:"مدير", role_user:"مستخدم",
  u_add:"+ إضافة مستخدم", u_th_user:"المستخدم", u_th_role:"الصلاحية", u_th_actions:"إجراءات",
@@ -459,6 +462,8 @@ en:{
  cat_title:"Add from the approved list", cat_group:"Group", cat_pick_group:"— Select group —",
  cat_item:"Item", cat_pick_item:"— Select item —", cat_kits:"Number of units (kit/box)",
  cat_total:"Total", cat_each_unit:"Each unit counted individually",
+ cat_add_btn:"+ Add item", cat_add_title:"Add item to the approved list", cat_kit_type:"Pack type", cat_per:"Quantity per pack", cat_per_ph:"Leave empty if N/A", cat_added:"Item added to the approved list ✓", cat_del_q:"Delete \"{name}\" from the approved list?",
+ inv_summary_t:"Inventory summary by classification", inv_summary_s:"Item count and total quantity per classification", inv_sum_items:"Items", inv_sum_qty:"Total available qty",
  nav_users:"User management", users_title:"User management", users_sub:"Add accounts and change roles (admin only)",
  u_username:"Username", u_password:"Password", u_role:"Role", role_admin:"Admin", role_user:"User",
  u_add:"+ Add user", u_th_user:"User", u_th_role:"Role", u_th_actions:"Actions",
@@ -597,19 +602,33 @@ function t(k,vars){ let s=(I18N[LANG]&&I18N[LANG][k]); if(s==null)s=I18N.ar[k]; 
   if(vars) s=s.replace(/\{(\w+)\}/g,(m,p)=> vars[p]!=null?vars[p]:m); return s; }
 
 /* ---------- enumerations (bilingual, key-based) ---------- */
-const CATS=[{k:"iv",ar:"محاليل وريدية",en:"IV Solutions"},{k:"anticoag",ar:"مضادات تخثر",en:"Anticoagulants"},
- {k:"preservative",ar:"محاليل حافظة للدم",en:"Blood Preservatives"},{k:"wash",ar:"محاليل غسيل",en:"Wash Solutions"},
- {k:"antiseptic",ar:"معقمات ومطهرات",en:"Antiseptics & Disinfectants"},{k:"other",ar:"أخرى",en:"Other"}];
-const UNITS=[{k:"bag",ar:"كيس",en:"Bag"},{k:"bottle",ar:"زجاجة",en:"Bottle"},{k:"box",ar:"علبة",en:"Box"},
- {k:"ampoule",ar:"أمبولة",en:"Ampoule"},{k:"carton",ar:"كرتون",en:"Carton"},{k:"liter",ar:"لتر",en:"Liter"},
- {k:"ml",ar:"مل",en:"mL"},{k:"piece",ar:"قطعة",en:"Piece"},
- {k:"test",ar:"اختبار",en:"Test"},{k:"set",ar:"طقم",en:"Set"},{k:"tube",ar:"أنبوب",en:"Tube"}];
-const DEFAULT_LABS=[{k:"bloodbank",ar:"بنك الدم",en:"Blood Bank"},{k:"components",ar:"فصل المكونات",en:"Component Separation"},
- {k:"serology",ar:"المصل (السيرولوجي)",en:"Serology"},{k:"immuno",ar:"المناعة الدموية",en:"Immunohematology"},
- {k:"hematology",ar:"أمراض الدم",en:"Hematology"},{k:"biochem",ar:"الكيمياء الحيوية",en:"Biochemistry"},
- {k:"micro",ar:"الأحياء الدقيقة",en:"Microbiology"},{k:"nat",ar:"الفيروسات (NAT)",en:"Virology (NAT)"},
- {k:"store",ar:"المستودع",en:"Store"},{k:"other",ar:"أخرى",en:"Other"}];
+const CATS=[{k:"reagent",ar:"محاليل",en:"Reagent"},{k:"cards",ar:"كروت",en:"Cards"},
+ {k:"qc",ar:"كنترولات",en:"QC"},{k:"bags",ar:"أكياس",en:"Bags"},
+ {k:"accessories",ar:"اكسسوارات",en:"Accessories"},{k:"donation",ar:"مستلزمات تبرع",en:"Donation supplies"},
+ {k:"collection",ar:"مستلزمات سحب",en:"Blood collection supplies"},{k:"antiseptic",ar:"معقمات ومطهرات",en:"Disinfectants & Sanitizers"},
+ {k:"other",ar:"أخرى",en:"Others"}];
+const UNITS=[{k:"carton",ar:"كرتون",en:"Box"},{k:"test",ar:"اختبار",en:"Test"},
+ {k:"bottle",ar:"زجاجة",en:"Vial"},{k:"box",ar:"علبة",en:"Pack"},
+ {k:"set",ar:"طقم",en:"Set"},{k:"tube",ar:"أنبوب",en:"Tube"},
+ {k:"piece",ar:"قطعة",en:"Piece"},{k:"bag",ar:"كيس",en:"Bag"},
+ {k:"other",ar:"أخرى",en:"Other"}];
+const DEFAULT_LABS=[{k:"donation",ar:"وحدة التبرع",en:"Donation unit"},{k:"components",ar:"وحدة فصل أكياس الدم",en:"Component unit"},
+ {k:"virology",ar:"وحدة مختبر الفيروسات",en:"Virology unit"},{k:"malaria",ar:"وحدة فحص الملاريا",en:"Malaria test unit"},
+ {k:"nat",ar:"وحدة النات",en:"NAT unit"},{k:"platelet",ar:"وحدة تجميع الصفائح",en:"Platelet pooling unit"},
+ {k:"genotype",ar:"وحدة الجينوتايب",en:"Genotype unit"},{k:"grouping",ar:"وحدة فصائل الدم وفحص الأنيميا المنجلية",en:"Blood Grouping & Sickle cell screening unit"},
+ {k:"immuno",ar:"وحدة المناعة الدموية",en:"Immunohematology unit"},{k:"store",ar:"المستودع",en:"Store"}];
 const INSPECT=[{k:"accepted",ar:"مقبول",en:"Accepted"},{k:"rejected",ar:"مرفوض",en:"Rejected"}];
+
+/* ---- key migration for data saved under the previous lists ---- */
+const MIG_CAT={iv:"reagent",anticoag:"reagent",preservative:"reagent",wash:"reagent"};
+const MIG_UNIT={ampoule:"bottle",liter:"other",ml:"other"};
+const MIG_LAB={bloodbank:"donation",serology:"virology",hematology:"store",biochem:"store",micro:"store",other:"store"};
+function migrateKeys(d){
+  (d.items||[]).forEach(it=>{ if(MIG_CAT[it.category])it.category=MIG_CAT[it.category]; if(MIG_UNIT[it.unit])it.unit=MIG_UNIT[it.unit]; });
+  (d.lots||[]).forEach(l=>{ if(MIG_LAB[l.lab])l.lab=MIG_LAB[l.lab]; });
+  (d.txns||[]).forEach(x=>{ if(MIG_LAB[x.lab])x.lab=MIG_LAB[x.lab]; });
+  return d;
+}
 
 /* ===== Approved products catalog (from stock list) ===== */
 const CAT_KITS={box:{ar:"علبة",en:"Box"},kit:{ar:"كت",en:"Kit"},pack:{ar:"عبوة",en:"Pack"},vial:{ar:"قارورة",en:"Vial"}};
@@ -688,8 +707,10 @@ const CATALOG=[
    {n:"SET, PATHOGEN REDUCTION TECHNOLOGY (PRT), PLATELET",kit:"box",per:24,u:"set"}]},
 ];
 CATALOG.forEach(g=>g.items.forEach((it,i)=>{ it.code=g.pfx+"-"+(i+1); it.group=g.g; }));
-function catFind(code){ for(const g of CATALOG){ const it=g.items.find(x=>x.code===code); if(it)return it; } return null; }
-function catItemsOf(gk){ const g=CATALOG.find(x=>x.g===gk); return g?g.items:[]; }
+const customCat=()=> (DB&&DB.settings&&DB.settings.customCatalog)||[];
+function catFind(code){ for(const g of CATALOG){ const it=g.items.find(x=>x.code===code); if(it)return it; } return customCat().find(x=>x.code===code)||null; }
+function catItemsOf(gk){ const g=CATALOG.find(x=>x.g===gk); const base=g?g.items:[]; return base.concat(customCat().filter(c=>c.group===gk)); }
+function nextCatCode(gk){ const g=CATALOG.find(x=>x.g===gk); const pfx=g?g.pfx:"CUS"; const used=new Set(); CATALOG.forEach(x=>x.items.forEach(it=>used.add(it.code))); customCat().forEach(it=>used.add(it.code)); let n=1,code; do{ code=pfx+"-C"+n; n++; }while(used.has(code)); return code; }
 
 const lbl=o=> LANG==="en" ? (o.en||o.ar) : (o.ar||o.en);
 const labs=()=> DEFAULT_LABS.concat((DB.settings.customLabs||[]));
@@ -698,11 +719,11 @@ function labelOf(list,key){ const o=list.find(x=>x.k===key); return o?lbl(o):(ke
 
 /* ===================== Storage ===================== */
 const KEY="bbdammam_inv_v1";
-const blank=()=>({items:[],lots:[],txns:[],settings:{user:"admin",pass:"1234",warnDays:60,seeded:false,customLabs:[],users:[{u:"admin",p:"1234",role:"admin"}]}});
+const blank=()=>({items:[],lots:[],txns:[],settings:{user:"admin",pass:"1234",warnDays:60,seeded:false,customLabs:[],customCatalog:[],users:[{u:"admin",p:"1234",role:"admin"}]}});
 function normalize(d){ const base=blank(); d=d||{}; const incoming=d.settings||{}; const hadUsers=Array.isArray(incoming.users)&&incoming.users.length>0;
-  d.settings=Object.assign(base.settings,incoming); d.items=d.items||[]; d.lots=d.lots||[]; d.txns=d.txns||[]; d.settings.customLabs=d.settings.customLabs||[];
+  d.settings=Object.assign(base.settings,incoming); d.items=d.items||[]; d.lots=d.lots||[]; d.txns=d.txns||[]; d.settings.customLabs=d.settings.customLabs||[]; d.settings.customCatalog=d.settings.customCatalog||[];
   if(!hadUsers){ d.settings.users=[{u:incoming.user||"admin",p:incoming.pass||"1234",role:"admin"}]; }
-  return d; }
+  return migrateKeys(d); }
 let DB;
 function load(){
   try{ const raw=localStorage.getItem(KEY); if(!raw) return seedFirstRun(blank());
@@ -929,9 +950,17 @@ function donut(data){
 
 /* Inventory */
 let invFilter="all", invSearch="";
+function invSummary(){
+  if(!DB.items.length) return "";
+  const map={}; DB.items.forEach(it=>{ const k=it.category||"other"; if(!map[k])map[k]={n:0,q:0}; map[k].n++; map[k].q+=availQtyOf(it.code); });
+  const rows=CATS.filter(c=>map[c.k]).map(c=>({lab:lbl(c),n:map[c.k].n,q:map[c.k].q}));
+  Object.keys(map).forEach(k=>{ if(!CATS.some(c=>c.k===k)) rows.push({lab:k,n:map[k].n,q:map[k].q}); });
+  return `<div class="panel"><div class="panel-h"><h3>${t("inv_summary_t")}</h3><span class="hint">${t("inv_summary_s")}</span></div><div class="panel-b"><div class="tbl-wrap"><table><thead><tr><th>${t("th_cat")}</th><th class="num">${t("inv_sum_items")}</th><th class="num">${t("inv_sum_qty")}</th></tr></thead><tbody>${rows.map(r=>`<tr><td><b>${esc(r.lab)}</b></td><td class="num">${num(r.n)}</td><td class="num">${num(r.q)}</td></tr>`).join("")}</tbody></table></div></div></div>`;
+}
 pages.inventory=()=>`
   <div class="page-head"><div><h2>${t("inv_title")}</h2><p>${t("inv_sub")}</p></div>
     <div class="head-actions"><button class="btn soft" onclick="App.go('receive')">${t("btn_receive_sol")}</button><button class="btn ghost" onclick="App.exportCSV('inventory')">${t("btn_export_excel")}</button><button class="btn ghost no-print" onclick="window.print()">${t("btn_print")}</button></div></div>
+  ${invSummary()}
   <div class="toolbar"><div class="search"><span class="si">🔎</span><input id="invSearch" placeholder="${t("search_inv_ph")}" value="${esc(invSearch)}"></div>
     <div class="seg" id="invSeg">${["all","ok","warn","danger","out"].map(k=>`<button data-f="${k}" class="${invFilter===k?"active":""}">${t({all:"filter_all",ok:"filter_ok",warn:"filter_warn",danger:"filter_danger",out:"filter_out"}[k])}</button>`).join("")}</div></div>
   <div class="panel"><div class="panel-b" id="invBody"></div></div>`;
@@ -1233,7 +1262,7 @@ pages.reports=()=>{
   </div></div>
   <div class="panel"><div class="panel-h"><h3>${t("rep_period_t")}</h3><span class="hint">${esc(repFrom)} → ${esc(repTo)}${repEmp?(" · "+esc(repEmp)):""}</span></div><div class="panel-b">
     <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn sm soft no-print" onclick="App.exportCSV('period')">${t("btn_export")}</button></div>
-    ${(()=>{const d=periodData();if(!d.length)return emptyMini(t("rep_no_month_data"));const ti=d.reduce((s,r)=>s+r.inq,0),to=d.reduce((s,r)=>s+r.outq,0);return `<div class="tbl-wrap"><table><thead><tr><th>${t("th_name")}</th><th>${t("th_code")}</th><th class="num">${t("rep_received")}</th><th class="num">${t("rep_dispensed")}</th></tr></thead><tbody>${d.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td class="mono">${esc(r.code)}</td><td class="num">${num(r.inq)}</td><td class="num">${num(r.outq)}</td></tr>`).join("")}</tbody><tfoot><tr><th colspan="2">${t("rep_total")}</th><th class="num">${num(ti)}</th><th class="num">${num(to)}</th></tr></tfoot></table></div>`;})()}
+    ${(()=>{const d=periodData();if(!d.length)return emptyMini(t("rep_no_month_data"));return `<div class="tbl-wrap"><table><thead><tr><th>${t("th_name")}</th><th>${t("th_code")}</th><th class="num">${t("rep_received")}</th><th class="num">${t("rep_dispensed")}</th></tr></thead><tbody>${d.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td class="mono">${esc(r.code)}</td><td class="num">${num(r.inq)}</td><td class="num">${num(r.outq)}</td></tr>`).join("")}</tbody></table></div>`;})()}
   </div></div>
   <div class="panel"><div class="panel-h"><h3>${t("rep_emp_t")}</h3><span class="hint">${esc(repFrom)} → ${esc(repTo)}</span></div><div class="panel-b">
     <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn sm soft no-print" onclick="App.exportCSV('employee')">${t("btn_export")}</button></div>
@@ -1378,11 +1407,29 @@ pages.products=()=>{
     ${items.map(it=>`<tr><td><span class="tag mut mono">${esc(it.code)}</span></td><td><b>${esc(it.name)}</b></td><td>${esc(it.manufacturer||"—")}</td><td>${esc(labelOf(CATS,it.category))}</td><td>${esc(labelOf(UNITS,it.unit))}</td><td class="num">${num(it.minQty||0)}</td><td class="num">${num(availQtyOf(it.code))}</td><td><div class="row-actions"><button class="icon-btn" title="${t("act_edit")}" onclick="App.editItem('${it.id}')">✏️</button><button class="icon-btn danger" title="${t("act_delete")}" onclick="App.delItem('${it.id}')">🗑</button></div></td></tr>`).join("")}
     </tbody></table></div>`:`<div class="empty"><div class="em-ic">📦</div><h4>${t("p_empty")}</h4><button class="btn" style="margin-top:12px" onclick="App.addProduct()">${t("p_add")}</button></div>`}
   </div></div>
-  <div class="panel"><div class="panel-h"><h3>${t("p_catalog")}</h3><span class="hint">${t("p_catalog_hint")}</span></div><div class="panel-b">
+  <div class="panel"><div class="panel-h"><h3>${t("p_catalog")}</h3><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="hint">${t("p_catalog_hint")}</span><button class="btn sm soft" onclick="App.addCatItem()">${t("cat_add_btn")}</button></div></div><div class="panel-b">
     ${CATALOG.map(g=>`<div style="margin-bottom:12px"><b style="font-size:13px;color:var(--crimson-dark)">${esc(lbl(g))}</b>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px">${g.items.map(it=>`<span class="tag mut" title="${it.per?("1 "+lbl(CAT_KITS[it.kit])+" = "+it.per+" "+labelOf(UNITS,it.u)):esc(labelOf(UNITS,it.u))}">${esc(it.n)}</span>`).join("")}</div></div>`).join("")}
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px">${catItemsOf(g.g).map(it=>`<span class="tag ${it.custom?"info":"mut"}" title="${it.per?("1 "+lbl(CAT_KITS[it.kit]||{ar:"",en:""})+" = "+it.per+" "+labelOf(UNITS,it.u)):esc(labelOf(UNITS,it.u))}">${esc(it.n)}${it.custom?` <button class="icon-btn danger" style="padding:0 5px;margin-inline-start:3px" onclick="App.delCatItem('${esc(it.code)}')">×</button>`:""}</span>`).join("")}</div></div>`).join("")}
   </div></div>`;
 };
+function addCatItem(){
+  modal(t("cat_add_title"),`<div class="form-grid">
+    <div class="full"><label class="req">${t("cat_group")}</label><select id="cc-group">${CATALOG.map(g=>`<option value="${g.g}">${esc(lbl(g))}</option>`).join("")}</select></div>
+    <div class="full"><label class="req">${t("f_name")}</label><input id="cc-name" placeholder="${t("optional_ph")}"></div>
+    <div><label>${t("cat_kit_type")}</label><select id="cc-kit">${Object.entries(CAT_KITS).map(([k,v])=>`<option value="${k}">${esc(lbl(v))}</option>`).join("")}</select></div>
+    <div><label>${t("f_unit")}</label><select id="cc-unit">${opts(UNITS,"test")}</select></div>
+    <div><label>${t("cat_per")}</label><input id="cc-per" type="number" min="1" placeholder="${t("cat_per_ph")}"></div>
+  </div>`,`<button class="btn" id="cc-save">${t("btn_add")}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
+  $("cc-save").onclick=()=>{ const group=$("cc-group").value, n=$("cc-name").value.trim();
+    if(!group||!n)return toast(t("err_name"),"err");
+    DB.settings.customCatalog.push({group,n,kit:$("cc-kit").value,per:+$("cc-per").value||null,u:$("cc-unit").value,code:nextCatCode(group),custom:true});
+    save(); closeModal(); toast(t("cat_added"),"ok"); go("products");
+  };
+}
+function delCatItem(code){
+  const it=customCat().find(x=>x.code===code); if(!it)return;
+  confirmAction(t("cat_del_q",{name:it.n}),()=>{ DB.settings.customCatalog=customCat().filter(x=>x.code!==code); save(); toast(t("ok_deleted"),"ok"); go("products"); },t("btn_del_item"));
+}
 function addProduct(){
   modal(t("p_add"),`<div class="form-grid">
     <div><label class="req">${t("th_code")}</label><input id="np-code" placeholder="VIR-1"></div>
@@ -1415,7 +1462,7 @@ pages.import=()=>`
   <div id="imp-preview"></div>`;
 function importTemplate(){
   const csv="\uFEFFcode,name,manufacturer,category,unit,minQty,lot,expiry,qty,supplier,lab,inspection\n"+
-    "VIR-1,HIV AG/AB COMBO,Abbott,virology,test,200,LOT2025A,2027-06-01,500,Main Supplier,serology,accepted\n";
+    "VIR-1,HIV AG/AB COMBO,Abbott,reagent,test,200,LOT2025A,2027-06-01,500,Main Supplier,virology,accepted\n";
   const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}), url=URL.createObjectURL(blob);
   const a=document.createElement("a"); a.href=url; a.download="import-template.csv"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
@@ -1666,9 +1713,15 @@ const GUIDE=[
  {ic:"📥",cls:"g-green",
   ar:{t:"استقبال المحاليل والفحص",s:["للأصناف المعتمدة: استخدم «إضافة من القائمة المعتمدة» ← اختر المجموعة ثم الصنف، وأدخل عدد الكتات/العلب فتُحسب الكمية الكاملة وتُملأ تلقائياً.","أو أدخل كود المنتج يدوياً؛ إن كان موجوداً تُعبّأ بياناته تلقائياً.","أدخل رقم التشغيلة وتاريخ الانتهاء والكمية.","اختر «المختبر المستلِم» و«نتيجة الفحص» (مقبول/مرفوض). التشغيلة المرفوضة لا تُحتسب ضمن المتاح ولا يمكن صرفها. احفظ الاستلام (مع إمكانية طباعة الباركود)."]},
   en:{t:"Receiving & inspection",s:["For approved items: use “Add from the approved list” ← pick the group then the item, enter the number of kits/boxes, and the full quantity is computed and filled automatically.","Or type the product code manually; existing items auto-fill.","Enter the lot number, expiry date, and quantity.","Choose the receiving lab and inspection result (Accepted/Rejected). A rejected lot is excluded from available stock and cannot be dispensed. Save the receipt (you can print the barcode)."]}},
+ {ic:"📋",cls:"g-orange",
+  ar:{t:"القوائم المعتمدة في الاستقبال",s:["قائمة التصنيف (٩): ١- محاليل، ٢- كروت، ٣- كنترولات، ٤- أكياس، ٥- اكسسوارات، ٦- مستلزمات تبرع، ٧- مستلزمات سحب، ٨- معقمات ومطهرات، ٩- أخرى.","قائمة الوحدة (٩): ١- كرتون، ٢- اختبار، ٣- زجاجة، ٤- علبة، ٥- طقم، ٦- أنبوب، ٧- قطعة، ٨- كيس، ٩- أخرى.","قائمة المختبر المستلِم (١٠): ١- وحدة التبرع، ٢- وحدة فصل أكياس الدم، ٣- وحدة مختبر الفيروسات، ٤- وحدة فحص الملاريا، ٥- وحدة النات، ٦- وحدة تجميع الصفائح، ٧- وحدة الجينوتايب، ٨- وحدة فصائل الدم وفحص الأنيميا المنجلية، ٩- وحدة المناعة الدموية، ١٠- المستودع.","تظهر هذه القوائم في شاشة الاستقبال (التصنيف/الوحدة/المختبر)، ويمكن للمدير إضافة مختبرات خاصة من «الإعدادات»."]},
+  en:{t:"Approved lists in Receiving",s:["Classification list (9): 1- Reagent, 2- Cards, 3- QC, 4- Bags, 5- Accessories, 6- Donation supplies, 7- Blood collection supplies, 8- Disinfectants & Sanitizers, 9- Others.","Unit list (9): 1- Box, 2- Test, 3- Vial, 4- Pack, 5- Set, 6- Tube, 7- Piece, 8- Bag, 9- Other.","Receiving lab list (10): 1- Donation unit, 2- Component unit, 3- Virology unit, 4- Malaria test unit, 5- NAT unit, 6- Platelet pooling unit, 7- Genotype unit, 8- Blood Grouping & Sickle cell screening unit, 9- Immunohematology unit, 10- Store.","These lists appear on the Receive screen (classification/unit/lab); an admin can add custom labs from Settings."]}},
  {ic:"🧊",cls:"g-blue",
-  ar:{t:"المخزون والتشغيلات",s:["افتح «المخزون» لرؤية كل الأصناف وكمياتها المتاحة وحالتها.","استخدم البحث والفلاتر (متوفر/تنبيه/منتهي/نافد) لتصفية القائمة.","اضغط 👁 لعرض تشغيلات الصنف، أو ✏️ لتعديله، أو 🗑 لحذفه.","من جدول التشغيلات أضف تشغيلة، أو عدّل الكمية ⚖️ (جرد/تالف)، أو احذف تشغيلة."]},
-  en:{t:"Inventory & lots",s:["Open “Inventory” to see all items, available quantities, and status.","Use search and filters (In stock / Alert / Expired / Out) to narrow the list.","Click 👁 to view an item’s lots, ✏️ to edit it, or 🗑 to delete it.","From the lots table, add a lot, adjust ⚖️ a quantity (count/damaged), or delete a lot."]}},
+  ar:{t:"المخزون والتشغيلات",s:["افتح «المخزون» لرؤية كل الأصناف وكمياتها المتاحة وحالتها.","في أعلى الصفحة يظهر «ملخص المخزون حسب التصنيف» — عدد الأصناف وإجمالي الكميات لكل تصنيف من القائمة المعتمدة.","استخدم البحث والفلاتر (متوفر/تنبيه/منتهي/نافد) لتصفية القائمة.","اضغط 👁 لعرض تشغيلات الصنف، أو ✏️ لتعديله، أو 🗑 لحذفه.","من جدول التشغيلات أضف تشغيلة، أو عدّل الكمية ⚖️ (جرد/تالف)، أو احذف تشغيلة."]},
+  en:{t:"Inventory & lots",s:["Open “Inventory” to see all items, available quantities, and status.","At the top you’ll find an “Inventory summary by classification” — item count and total quantity for each approved category.","Use search and filters (In stock / Alert / Expired / Out) to narrow the list.","Click 👁 to view an item’s lots, ✏️ to edit it, or 🗑 to delete it.","From the lots table, add a lot, adjust ⚖️ a quantity (count/damaged), or delete a lot."]}},
+ {ic:"📦",cls:"g-purple",
+  ar:{t:"إدارة المنتجات والقائمة المعتمدة",s:["افتح «إدارة المنتجات» لتعريف الأصناف وتعديلها وحذفها (الكود، الاسم، الشركة، التصنيف، الوحدة، الحد الأدنى).","في لوحة «القائمة المعتمدة» تظهر كل الأصناف المعتمدة مجمّعة حسب المجموعة.","لإضافة صنف جديد للقائمة المعتمدة اضغط «+ إضافة صنف» ← اختر المجموعة وأدخل الاسم ونوع العبوة والوحدة والكمية لكل عبوة.","تظهر الأصناف المُضافة بلون مميّز مع زر حذف (×)، وتصبح متاحة فوراً ضمن «إضافة من القائمة المعتمدة» في شاشة الاستقبال."]},
+  en:{t:"Products & approved list",s:["Open “Product management” to define, edit, and delete items (code, name, manufacturer, classification, unit, minimum).","The “Approved list” panel shows all approved items grouped by group.","To add a new item to the approved list, click “+ Add item” ← choose the group and enter the name, pack type, unit, and quantity per pack.","Added items appear in a distinct color with a delete (×) button and become available immediately under “Add from the approved list” on the Receive screen."]}},
  {ic:"📤",cls:"g-cyan",
   ar:{t:"الصرف من المخزون",s:["افتح «صرف وإخراج» واختر الصنف؛ يظهر المتاح والتشغيلات مرتّبة حسب الأقرب انتهاءً.","أدخل الكمية المطلوبة واختر المختبر المستلِم.","يتم الصرف تلقائياً من أقرب تشغيلة للانتهاء (FIFO)؛ أكّد الصرف وتُسجَّل الحركة في السجل."]},
   en:{t:"Dispensing (FIFO)",s:["Open “Dispense” and select the item; available stock and earliest-expiring lots appear.","Enter the required quantity and choose the receiving lab.","Stock is dispensed automatically from the earliest-expiring lot (FIFO); confirm and it’s logged."]}},
@@ -1687,7 +1740,7 @@ const GUIDE=[
 ];
 function openGuide(){
   const body=`<p class="guide-intro">${esc(t("guide_intro"))}</p>`+GUIDE.map((g,i)=>{const G=LANG==="en"?g.en:g.ar;
-    return `<div class="gcard ${g.cls}" id="gc-${i}"><div class="gcard-h" onclick="App.guideToggle(${i})"><div class="gcard-ic">${g.ic}</div><div class="gcard-t"><b>${esc(G.t)}</b><span>${G.s.length} ${t("steps_word")}</span></div><div class="gcard-ch">‹</div></div><div class="gcard-b"><ol>${G.s.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div></div>`;
+    return `<div class="gcard ${g.cls}" id="gc-${i}"><div class="gcard-h" onclick="App.guideToggle(${i})"><div class="gcard-ic">${g.ic}</div><div class="gcard-t"><b><span class="gcard-num">${i+1}</span>${esc(G.t)}</b><span>${G.s.length} ${t("steps_word")}</span></div><div class="gcard-ch">‹</div></div><div class="gcard-b"><ol>${G.s.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div></div>`;
   }).join("");
   modal(t("guide_title"),body);
 }
@@ -1701,7 +1754,7 @@ return {init,login,logout,go,toggleSide,toggleLang,closeModal,
   toggleLots,editItem,delItem,addLot,adjustLot,delLot,
   exportCSV,setRepRange,setRepEmp,repPreset,saveSettings,addLab,delLab,backup,restore,reseed,wipe,
   addUser,setRole,resetUserPass,delUser,
-  addProduct,importTemplate,importFile,importRows,toggleCollapse,
+  addProduct,addCatItem,delCatItem,importTemplate,importFile,importRows,toggleCollapse,
   connectSync,disconnectSync,unlockSync,openGuide,guideToggle};
 })();
 window.App = App;
