@@ -319,6 +319,7 @@ ar:{
  cat_total:"الإجمالي", cat_each_unit:"كل وحدة تُحتسب على حدة",
  cat_add_btn:"+ إضافة صنف", cat_add_title:"إضافة صنف للقائمة المعتمدة", cat_kit_type:"نوع العبوة", cat_per:"الكمية لكل عبوة", cat_per_ph:"اتركه فارغاً إن لم ينطبق", cat_added:"تمت إضافة الصنف للقائمة المعتمدة ✓", cat_del_q:"حذف الصنف \"{name}\" من القائمة المعتمدة؟",
  inv_summary_t:"ملخص المخزون حسب التصنيف", inv_summary_s:"عدد الأصناف وإجمالي الكميات لكل تصنيف", inv_sum_items:"عدد الأصناف", inv_sum_qty:"إجمالي الكمية المتاحة",
+ inv_bydevice_t:"المخزون حسب الجهاز / المجموعة", inv_bydevice_s:"جدول لكل جهاز في القائمة المعتمدة بأصنافه الموجودة في المخزون", inv_dev_count:"{n} صنف · {q} متاح", inv_dev_other:"غير مصنّف (إدخال يدوي)",
  nav_users:"إدارة المستخدمين", users_title:"إدارة المستخدمين", users_sub:"إضافة الحسابات وتغيير الصلاحيات (للمدير فقط)",
  u_username:"اسم المستخدم", u_password:"كلمة المرور", u_role:"الصلاحية", role_admin:"مدير", role_user:"مستخدم",
  u_add:"+ إضافة مستخدم", u_th_user:"المستخدم", u_th_role:"الصلاحية", u_th_actions:"إجراءات",
@@ -464,6 +465,7 @@ en:{
  cat_total:"Total", cat_each_unit:"Each unit counted individually",
  cat_add_btn:"+ Add item", cat_add_title:"Add item to the approved list", cat_kit_type:"Pack type", cat_per:"Quantity per pack", cat_per_ph:"Leave empty if N/A", cat_added:"Item added to the approved list ✓", cat_del_q:"Delete \"{name}\" from the approved list?",
  inv_summary_t:"Inventory summary by classification", inv_summary_s:"Item count and total quantity per classification", inv_sum_items:"Items", inv_sum_qty:"Total available qty",
+ inv_bydevice_t:"Inventory by device / group", inv_bydevice_s:"A table for each approved-list device with its items in stock", inv_dev_count:"{n} items · {q} available", inv_dev_other:"Unclassified (manual entry)",
  nav_users:"User management", users_title:"User management", users_sub:"Add accounts and change roles (admin only)",
  u_username:"Username", u_password:"Password", u_role:"Role", role_admin:"Admin", role_user:"User",
  u_add:"+ Add user", u_th_user:"User", u_th_role:"Role", u_th_actions:"Actions",
@@ -959,10 +961,24 @@ function invSummary(){
   Object.keys(map).forEach(k=>{ if(!CATS.some(c=>c.k===k)) rows.push({lab:k,n:map[k].n,q:map[k].q}); });
   return `<div class="panel"><div class="panel-h"><h3>${t("inv_summary_t")}</h3><span class="hint">${t("inv_summary_s")}</span></div><div class="panel-b"><div class="tbl-wrap"><table><thead><tr><th>${t("th_cat")}</th><th class="num">${t("inv_sum_items")}</th><th class="num">${t("inv_sum_qty")}</th></tr></thead><tbody>${rows.map(r=>`<tr><td><b>${esc(r.lab)}</b></td><td class="num">${num(r.n)}</td><td class="num">${num(r.q)}</td></tr>`).join("")}</tbody></table></div></div></div>`;
 }
+function invByDevice(){
+  if(!DB.items.length) return "";
+  const byGroup={}, unclassified=[];
+  DB.items.forEach(it=>{ const c=catFind(it.code); const gk=c?c.group:null; if(gk)(byGroup[gk]=byGroup[gk]||[]).push(it); else unclassified.push(it); });
+  const dtable=(title,items)=>{ const totQ=items.reduce((s,it)=>s+availQtyOf(it.code),0);
+    const rows=items.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name),"ar")).map(it=>{const st=itemStatus(it);return `<tr><td><span class="tag mut mono">${esc(it.code)}</span></td><td><b>${esc(it.name)}</b></td><td class="num"><b>${num(availQtyOf(it.code))}</b></td><td>${esc(labelOf(UNITS,it.unit))}</td><td><span class="tag ${st.cls}">${t(st.key)}</span></td></tr>`;}).join("");
+    return `<div style="margin-bottom:18px"><div style="font-weight:800;font-size:14px;color:var(--crimson-dark);margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">🔬 ${esc(title)} <span class="tag mut" style="font-weight:700">${t("inv_dev_count",{n:num(items.length),q:num(totQ)})}</span></div><div class="tbl-wrap"><table><thead><tr><th>${t("th_code")}</th><th>${t("th_name")}</th><th class="num">${t("th_qty")}</th><th>${t("th_unit")}</th><th>${t("th_status")}</th></tr></thead><tbody>${rows}</tbody></table></div></div>`; };
+  let sections="";
+  CATALOG.forEach(g=>{ const list=byGroup[g.g]; if(list&&list.length) sections+=dtable(lbl(g),list); });
+  if(unclassified.length) sections+=dtable(t("inv_dev_other"),unclassified);
+  if(!sections) return "";
+  return `<div class="panel"><div class="panel-h"><h3>${t("inv_bydevice_t")}</h3><span class="hint">${t("inv_bydevice_s")}</span></div><div class="panel-b">${sections}</div></div>`;
+}
 pages.inventory=()=>`
   <div class="page-head"><div><h2>${t("inv_title")}</h2><p>${t("inv_sub")}</p></div>
     <div class="head-actions"><button class="btn soft" onclick="App.go('receive')">${t("btn_receive_sol")}</button><button class="btn ghost" onclick="App.exportCSV('inventory')">${t("btn_export_excel")}</button><button class="btn ghost no-print" onclick="window.print()">${t("btn_print")}</button></div></div>
   ${invSummary()}
+  ${invByDevice()}
   <div class="toolbar"><div class="search"><span class="si">🔎</span><input id="invSearch" placeholder="${t("search_inv_ph")}" value="${esc(invSearch)}"></div>
     <div class="seg" id="invSeg">${["all","ok","warn","danger","out"].map(k=>`<button data-f="${k}" class="${invFilter===k?"active":""}">${t({all:"filter_all",ok:"filter_ok",warn:"filter_warn",danger:"filter_danger",out:"filter_out"}[k])}</button>`).join("")}</div></div>
   <div class="panel"><div class="panel-b" id="invBody"></div></div>`;
