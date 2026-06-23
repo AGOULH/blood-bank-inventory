@@ -432,6 +432,7 @@ ar:{
  sync_connected:"تم تفعيل المزامنة بين الأجهزة ✓", sync_disconnected:"تم فصل المزامنة (تبقى البيانات على الجهاز)",
  sync_bad_cfg:"إعداد Firebase غير صالح — تأكد من نسخ الكائن كاملاً", sync_need:"أدخل معرّف المساحة وإعداد Firebase",
  set_data:"بيانات تجريبية وتفريغ النظام", btn_reseed:"🧪 إعادة تحميل بيانات العينة", btn_wipe:"🗑 تفريغ كل البيانات",
+ btn_zero_stock:"🔄 تصفير المخزون (الاحتفاظ بالأصناف)", btn_zero_confirm:"تصفير المخزون", ok_zeroed:"تم تصفير المخزون — كل الكميات الآن صفر، والأصناف والقوائم محفوظة ✓", zero_q:"سيتم تصفير كل الكميات والتشغيلات والحركات، مع الاحتفاظ بقائمة الأصناف والقوائم المعتمدة. تُنزَّل نسخة احتياطية تلقائياً أولاً. متابعة؟",
  data_note:"عند بدء الاستخدام الفعلي، فرّغ بيانات العينة وأدخل بياناتك الحقيقية.",
  version_line:"الإصدار 1.1 · ملف واحد بدون اعتماد خارجي · يعمل دون إنترنت",
  confirm_title:"تأكيد", btn_confirm:"تأكيد", btn_cancel:"إلغاء", btn_save:"حفظ", btn_add:"إضافة",
@@ -582,6 +583,7 @@ en:{
  sync_connected:"Multi-device sync enabled ✓", sync_disconnected:"Sync disconnected (data stays on device)",
  sync_bad_cfg:"Invalid Firebase config — make sure you copied the full object", sync_need:"Enter the Workspace ID and Firebase config",
  set_data:"Sample data & reset", btn_reseed:"🧪 Reload sample data", btn_wipe:"🗑 Wipe all data",
+ btn_zero_stock:"🔄 Zero inventory (keep items)", btn_zero_confirm:"Zero inventory", ok_zeroed:"Inventory zeroed — all quantities are now zero; items and lists kept ✓", zero_q:"All quantities, lots, and movements will be reset to zero, while keeping the item list and approved lists. A backup will be downloaded first. Continue?",
  data_note:"Before real use, wipe the sample data and enter your real data.",
  version_line:"Version 1.1 · single self-contained file · works offline",
  confirm_title:"Confirm", btn_confirm:"Confirm", btn_cancel:"Cancel", btn_save:"Save", btn_add:"Add",
@@ -1362,7 +1364,7 @@ pages.settings=()=>{
   </div></div>
 
   ${isAdmin()?`<div class="panel"><div class="panel-h"><h3>${t("set_data")}</h3></div><div class="panel-b">
-    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" onclick="App.reseed()">${t("btn_reseed")}</button><button class="btn danger" onclick="App.wipe()">${t("btn_wipe")}</button></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn soft" onclick="App.zeroStock()">${t("btn_zero_stock")}</button><button class="btn ghost" onclick="App.reseed()">${t("btn_reseed")}</button><button class="btn danger" onclick="App.wipe()">${t("btn_wipe")}</button></div>
     <p class="muted" style="font-size:12px;margin-bottom:0">${t("data_note")}</p>
   </div></div>`:""}
   <div style="text-align:center;color:var(--muted);font-size:12px;margin-top:8px">${t("version_line")}</div>`;
@@ -1390,6 +1392,7 @@ function restore(ev){
 }
 function reseed(){ confirmAction(t("reseed_q"),()=>{ DB=seedFirstRun(blank(),true); save(); toast(t("ok_sample"),"ok"); go("dashboard"); },t("btn_load_sample")); }
 function wipe(){ confirmAction(t("wipe_q"),()=>{ const s=DB.settings; DB=blank(); DB.settings=s; DB.settings.seeded=true; save(); toast(t("ok_wiped"),"ok"); go("dashboard"); },t("btn_wipe_all")); }
+function zeroStock(){ confirmAction(t("zero_q"),()=>{ try{ backup(); }catch(e){} DB.lots=[]; DB.txns=[]; save(); toast(t("ok_zeroed"),"ok"); go("inventory"); },t("btn_zero_confirm")); }
 
 /* ===== User management (admin only) ===== */
 pages.users=()=>{
@@ -1801,7 +1804,7 @@ return {init,login,logout,go,toggleSide,toggleLang,closeModal,
   dispenseInfo,doDispense,
   renderBarcode,bcFromItem,pickBarcode,printBarcode,
   toggleLots,editItem,delItem,addLot,adjustLot,delLot,
-  exportCSV,setRepRange,setRepEmp,repPreset,saveSettings,addLab,delLab,backup,restore,reseed,wipe,
+  exportCSV,setRepRange,setRepEmp,repPreset,saveSettings,addLab,delLab,backup,restore,reseed,wipe,zeroStock,
   addUser,setRole,resetUserPass,delUser,
   addProduct,addCatItem,delCatItem,importTemplate,importFile,importRows,toggleCollapse,
   connectSync,disconnectSync,unlockSync,openGuide,guideToggle};
