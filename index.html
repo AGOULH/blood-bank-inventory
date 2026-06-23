@@ -735,6 +735,8 @@ function save(){ try{ localStorage.setItem(KEY,JSON.stringify(DB)); }catch(e){ t
 /* ===================== Utils ===================== */
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* safe to embed inside a single-quoted JS string within an HTML attribute (e.g. onclick) */
+const jsq=s=>esc(String(s==null?"":s).replace(/\\/g,"\\\\").replace(/'/g,"\\'"));
 const num=n=>(Number(n)||0).toLocaleString("en-US");
 const todayISO=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);};
 const $=id=>document.getElementById(id);
@@ -992,18 +994,18 @@ function renderInv(){
       <td class="num"><b>${num(availQtyOf(it.code))}</b></td><td>${esc(labelOf(UNITS,it.unit))}</td>
       <td class="num">${num(active.length)}</td><td><span class="tag ${st.cls}">${t(st.key)}</span></td>
       <td><div class="row-actions">
-        <button class="icon-btn" title="${t("tip_view_lots")}" onclick="App.toggleLots('${it.code}')">👁</button>
-        <button class="icon-btn" title="${t("tip_barcode")}" onclick="App.go('barcode');setTimeout(()=>App.pickBarcode('${esc(it.code)}'),60)">🏷️</button>
+        <button class="icon-btn" title="${t("tip_view_lots")}" onclick="App.toggleLots('${jsq(it.code)}')">👁</button>
+        <button class="icon-btn" title="${t("tip_barcode")}" onclick="App.go('barcode');setTimeout(()=>App.pickBarcode('${jsq(it.code)}'),60)">🏷️</button>
         <button class="icon-btn" title="${t("tip_edit")}" onclick="App.editItem('${it.id}')">✏️</button>
         <button class="icon-btn danger" title="${t("tip_delete")}" onclick="App.delItem('${it.id}')">🗑</button>
       </div></td></tr>
-      <tr id="lots-${it.code}" style="display:none"><td colspan="9" style="padding:0">${lotsTable(it.code)}</td></tr>`;});
+      <tr id="lots-${esc(it.code)}" style="display:none"><td colspan="9" style="padding:0">${lotsTable(it.code)}</td></tr>`;});
   h+=`</tbody></table></div><div class="stat-line"><span>${t("shown_items",{n:num(rows.length)})}</span><span>${t("total_qty",{q:num(rows.reduce((s,it)=>s+availQtyOf(it.code),0))})}</span></div>`;
   $("invBody").innerHTML=h;
 }
 function lotsTable(code){
   const lots=allLotsOf(code);
-  let h=`<div style="padding:10px 14px;background:#fcfcfd"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="font-size:13px">${t("lots_h",{n:num(lots.length)})}</b><button class="btn sm soft" onclick="App.addLot('${esc(code)}')">${t("btn_add_lot")}</button></div>`;
+  let h=`<div style="padding:10px 14px;background:#fcfcfd"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="font-size:13px">${t("lots_h",{n:num(lots.length)})}</b><button class="btn sm soft" onclick="App.addLot('${jsq(code)}')">${t("btn_add_lot")}</button></div>`;
   if(!lots.length){ h+=`<div class="muted" style="font-size:13px">${t("no_lots")}</div></div>`; return h; }
   h+=`<table style="font-size:13px"><thead><tr><th>${t("th_lot")}</th><th>${t("th_exp")}</th><th class="num">${t("th_received")}</th><th class="num">${t("th_remaining")}</th><th>${t("th_lab")}</th><th>${t("th_supplier")}</th><th>${t("th_status")}</th><th></th></tr></thead><tbody>`;
   lots.forEach(l=>{const st=lotStatus(l);
@@ -1360,9 +1362,9 @@ pages.users=()=>{
   ${users.map(u=>`<tr><td><b>${esc(u.u)}</b>${u.u===curUser()?` <span class="tag mut">${t("acct_current")}</span>`:""}</td>
     <td><span class="tag ${u.role==="admin"?"ok":"info"}">${t(u.role==="admin"?"role_admin":"role_user")}</span></td>
     <td><div class="row-actions">
-      <button class="icon-btn" title="${t(u.role==="admin"?"u_make_user":"u_make_admin")}" onclick="App.setRole('${esc(u.u)}')">${u.role==="admin"?"⬇️":"⬆️"}</button>
-      <button class="icon-btn" title="${t("u_reset")}" onclick="App.resetUserPass('${esc(u.u)}')">🔑</button>
-      <button class="icon-btn danger" title="${t("u_delete")}" onclick="App.delUser('${esc(u.u)}')">🗑</button>
+      <button class="icon-btn" title="${t(u.role==="admin"?"u_make_user":"u_make_admin")}" onclick="App.setRole('${jsq(u.u)}')">${u.role==="admin"?"⬇️":"⬆️"}</button>
+      <button class="icon-btn" title="${t("u_reset")}" onclick="App.resetUserPass('${jsq(u.u)}')">🔑</button>
+      <button class="icon-btn danger" title="${t("u_delete")}" onclick="App.delUser('${jsq(u.u)}')">🗑</button>
     </div></td></tr>`).join("")}
   </tbody></table></div></div></div>`;
 };
@@ -1409,7 +1411,7 @@ pages.products=()=>{
   </div></div>
   <div class="panel"><div class="panel-h"><h3>${t("p_catalog")}</h3><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="hint">${t("p_catalog_hint")}</span><button class="btn sm soft" onclick="App.addCatItem()">${t("cat_add_btn")}</button></div></div><div class="panel-b">
     ${CATALOG.map(g=>`<div style="margin-bottom:12px"><b style="font-size:13px;color:var(--crimson-dark)">${esc(lbl(g))}</b>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px">${catItemsOf(g.g).map(it=>`<span class="tag ${it.custom?"info":"mut"}" title="${it.per?("1 "+lbl(CAT_KITS[it.kit]||{ar:"",en:""})+" = "+it.per+" "+labelOf(UNITS,it.u)):esc(labelOf(UNITS,it.u))}">${esc(it.n)}${it.custom?` <button class="icon-btn danger" style="padding:0 5px;margin-inline-start:3px" onclick="App.delCatItem('${esc(it.code)}')">×</button>`:""}</span>`).join("")}</div></div>`).join("")}
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px">${catItemsOf(g.g).map(it=>`<span class="tag ${it.custom?"info":"mut"}" title="${it.per?("1 "+lbl(CAT_KITS[it.kit]||{ar:"",en:""})+" = "+it.per+" "+labelOf(UNITS,it.u)):esc(labelOf(UNITS,it.u))}">${esc(it.n)}${it.custom?` <button class="icon-btn danger" style="padding:0 5px;margin-inline-start:3px" onclick="App.delCatItem('${jsq(it.code)}')">×</button>`:""}</span>`).join("")}</div></div>`).join("")}
   </div></div>`;
 };
 function addCatItem(){
