@@ -344,6 +344,7 @@ ar:{
  kpi_near:"قرب الانتهاء", kpi_near_sub:"خلال {n} يومًا",
  kpi_expired:"منتهية الصلاحية", kpi_expired_sub:"تشغيلة تحتاج إتلاف",
  kpi_low:"مخزون منخفض", kpi_low_sub:"أصناف دون الحد الأدنى",
+ kpi_out:"نفذت الكمية", kpi_out_sub:"أصناف نافدة (صفر متاح)", alert_out_s:"نفذت الكمية بالكامل — صفر متاح (الحد الأدنى {m}) — يحتاج إعادة طلب", reorder_out:"نفذ", reorder_below:"تحت الحد الأدنى", reorder_near:"قريب من الحد",
  kpi_rejected:"مرفوضة بالفحص", kpi_rejected_sub:"تشغيلة مرفوضة",
  kpi_moves:"حركات اليوم", kpi_moves_sub:"عمليات دخول وخروج",
  panel_most_consumed:"الأكثر استهلاكاً", hint_by_dispense:"حسب كميات الصرف", no_dispense:"لا توجد عمليات صرف بعد",
@@ -391,7 +392,7 @@ ar:{
  dis_alert_newlot:"🆕 تنبيه: سيتم فتح تشغيلة جديدة لأول مرة: {lots}",
  tip_dispose:"إتلاف التشغيلة", dispose_title:"إتلاف تشغيلة", dispose_info:"إتلاف {name} — التشغيلة {lot} — الكمية الحالية {q}", dispose_reason:"سبب الإتلاف", dispose_pick_reason:"— اختر السبب —", dispose_r_expired:"منتهية الصلاحية", dispose_r_rejected:"مرفوضة بالفحص", dispose_r_damaged:"تالفة/مكسورة", dispose_r_other:"أخرى", dispose_by:"المسؤول عن الإتلاف", dispose_date:"تاريخ الإتلاف", dispose_need_reason:"اختر سبب الإتلاف", dispose_txn_note:"إتلاف ({reason})", btn_dispose_confirm:"تأكيد الإتلاف", ok_disposed:"تم تسجيل الإتلاف وإخراج الكمية من المخزون ✓", lst_disposed:"متلف", f_dispose:"إتلاف", fn_disposal:"تقرير_الإتلاف", rep_disposal_t:"🚮 تقرير الإتلاف", rep_disposal_s:"المنتهي والمرفوض المُتلَف",
  nav_reorder:"إعادة الطلب", nav_trace:"تتبع التشغيلة",
- reorder_title:"إعادة الطلب (التموين)", reorder_sub:"أصناف بلغت الحد الأدنى وتحتاج طلب شراء", reorder_none:"لا توجد أصناف تحت الحد الأدنى ✓", reorder_th_current:"المتاح", reorder_th_min:"الحد الأدنى", reorder_th_suggest:"الكمية المقترحة", reorder_th_last:"آخر مورّد", btn_export_req:"⬇ تصدير طلب الشراء", fn_requisition:"طلب_شراء", reorder_count:"{n} صنف يحتاج طلب", reorder_mark:"تحديد كمطلوب", reorder_ordered_on:"طُلب بتاريخ {d}", reorder_unmark:"إلغاء الطلب", ok_ordered:"تم تحديد الصنف كمطلوب ✓", reorder_status:"الحالة", reorder_pending:"بحاجة طلب", reorder_done:"تم الطلب",
+ reorder_title:"إعادة الطلب (التموين)", reorder_sub:"أصناف نفدت أو بلغت أو قاربت الحد الأدنى وتحتاج طلب شراء", reorder_none:"لا توجد أصناف تحت الحد الأدنى ✓", reorder_th_current:"المتاح", reorder_th_min:"الحد الأدنى", reorder_th_suggest:"الكمية المقترحة", reorder_th_last:"آخر مورّد", btn_export_req:"⬇ تصدير طلب الشراء", fn_requisition:"طلب_شراء", reorder_count:"{n} صنف يحتاج طلب", reorder_mark:"تحديد كمطلوب", reorder_ordered_on:"طُلب بتاريخ {d}", reorder_unmark:"إلغاء الطلب", ok_ordered:"تم تحديد الصنف كمطلوب ✓", reorder_status:"الحالة", reorder_pending:"بحاجة طلب", reorder_done:"تم الطلب",
  trace_title:"تتبع واستدعاء التشغيلة", trace_sub:"ابحث برقم التشغيلة (Lot) لعرض سجلها الكامل — للاستدعاء وسلامة المريض", trace_search_ph:"أدخل رقم التشغيلة (Lot)...", trace_btn:"🔎 تتبّع", trace_not_found:"لا توجد بيانات لهذه التشغيلة", trace_lots_h:"تشغيلات مطابقة", trace_moves_h:"الحركات على هذه التشغيلة", trace_sum_recv:"إجمالي المستلم", trace_sum_disp:"إجمالي المصروف", trace_sum_rem:"المتبقي الحالي", trace_sum_destroyed:"المُتلَف", trace_enter:"أدخل رقم التشغيلة للبحث",
  dis_empty_t:"لا يوجد مخزون متاح للصرف", dis_empty_s:"قم باستقبال محاليل أولاً",
  err_pick_item:"اختر الصنف", err_over:"الكمية المطلوبة ({q}) أكبر من المتاح ({a})", ok_dispense:"تم الصرف بنجاح ✓",
@@ -499,6 +500,7 @@ en:{
  kpi_near:"Expiring soon", kpi_near_sub:"within {n} days",
  kpi_expired:"Expired", kpi_expired_sub:"lots to dispose",
  kpi_low:"Low stock", kpi_low_sub:"items below minimum",
+ kpi_out:"Out of stock", kpi_out_sub:"items at zero stock", alert_out_s:"Completely out of stock — zero available (min {m}) — needs reorder", reorder_out:"Out", reorder_below:"Below minimum", reorder_near:"Approaching",
  kpi_rejected:"Rejected (QC)", kpi_rejected_sub:"rejected lots",
  kpi_moves:"Today's movements", kpi_moves_sub:"in & out operations",
  panel_most_consumed:"Most consumed", hint_by_dispense:"by dispensed quantity", no_dispense:"No dispenses yet",
@@ -546,7 +548,7 @@ en:{
  dis_alert_newlot:"🆕 Note: a new lot will be opened for the first time: {lots}",
  tip_dispose:"Dispose lot", dispose_title:"Dispose lot", dispose_info:"Dispose {name} — lot {lot} — current qty {q}", dispose_reason:"Disposal reason", dispose_pick_reason:"— Select reason —", dispose_r_expired:"Expired", dispose_r_rejected:"Rejected at inspection", dispose_r_damaged:"Damaged/broken", dispose_r_other:"Other", dispose_by:"Responsible person", dispose_date:"Disposal date", dispose_need_reason:"Select a disposal reason", dispose_txn_note:"Disposed ({reason})", btn_dispose_confirm:"Confirm disposal", ok_disposed:"Disposal recorded and stock removed ✓", lst_disposed:"Disposed", f_dispose:"Disposal", fn_disposal:"disposal_report", rep_disposal_t:"🚮 Disposal report", rep_disposal_s:"Disposed expired & rejected",
  nav_reorder:"Reorder", nav_trace:"Lot trace",
- reorder_title:"Reorder (replenishment)", reorder_sub:"Items at/below minimum that need a purchase order", reorder_none:"No items below minimum ✓", reorder_th_current:"Available", reorder_th_min:"Minimum", reorder_th_suggest:"Suggested qty", reorder_th_last:"Last supplier", btn_export_req:"⬇ Export purchase request", fn_requisition:"purchase_request", reorder_count:"{n} item(s) need ordering", reorder_mark:"Mark as ordered", reorder_ordered_on:"Ordered on {d}", reorder_unmark:"Cancel order", ok_ordered:"Item marked as ordered ✓", reorder_status:"Status", reorder_pending:"Needs order", reorder_done:"Ordered",
+ reorder_title:"Reorder (replenishment)", reorder_sub:"Items out, at, or approaching minimum that need a purchase order", reorder_none:"No items below minimum ✓", reorder_th_current:"Available", reorder_th_min:"Minimum", reorder_th_suggest:"Suggested qty", reorder_th_last:"Last supplier", btn_export_req:"⬇ Export purchase request", fn_requisition:"purchase_request", reorder_count:"{n} item(s) need ordering", reorder_mark:"Mark as ordered", reorder_ordered_on:"Ordered on {d}", reorder_unmark:"Cancel order", ok_ordered:"Item marked as ordered ✓", reorder_status:"Status", reorder_pending:"Needs order", reorder_done:"Ordered",
  trace_title:"Lot trace & recall", trace_sub:"Search by lot number to view its full record — for recalls and patient safety", trace_search_ph:"Enter lot number...", trace_btn:"🔎 Trace", trace_not_found:"No data for this lot", trace_lots_h:"Matching lots", trace_moves_h:"Movements on this lot", trace_sum_recv:"Total received", trace_sum_disp:"Total dispensed", trace_sum_rem:"Current remaining", trace_sum_destroyed:"Disposed", trace_enter:"Enter a lot number to search",
  dis_empty_t:"No stock available to dispense", dis_empty_s:"Receive solutions first",
  err_pick_item:"Select an item", err_over:"Requested ({q}) exceeds available ({a})", ok_dispense:"Dispensed ✓",
@@ -921,6 +923,7 @@ pages.dashboard=()=>{
   const expired=DB.lots.filter(l=>l.qtyRemaining>0&&!isRej(l)&&l.expiry&&daysTo(l.expiry)<0);
   const near=DB.lots.filter(l=>l.qtyRemaining>0&&!isRej(l)&&l.expiry&&daysTo(l.expiry)>=0&&daysTo(l.expiry)<=DB.settings.warnDays);
   const low=items.filter(it=>{const q=availQtyOf(it.code);return q>0&&q<=(+it.minQty||0);});
+  const outStock=items.filter(it=>availQtyOf(it.code)<=0);
   const rejected=DB.lots.filter(l=>l.qtyRemaining>0&&isRej(l));
   const todayMoves=DB.txns.filter(x=>x.date===todayISO());
 
@@ -932,6 +935,7 @@ pages.dashboard=()=>{
   const alerts=[];
   expired.forEach(l=>{const it=items.find(i=>i.code===l.code);alerts.push({cls:"danger",ic:"⛔",ti:`${it?it.name:l.code} — ${t("lot_label")} ${l.lot||"—"}`,s:t("alert_expired_s",{n:Math.abs(daysTo(l.expiry)),q:num(l.qtyRemaining)})});});
   rejected.forEach(l=>{const it=items.find(i=>i.code===l.code);alerts.push({cls:"danger",ic:"🚫",ti:`${it?it.name:l.code} — ${t("lot_label")} ${l.lot||"—"}`,s:t("alert_rejected_s",{q:num(l.qtyRemaining)})});});
+  outStock.forEach(it=>alerts.push({cls:"danger",ic:"📦",ti:it.name,s:t("alert_out_s",{m:num(it.minQty||0)})}));
   near.forEach(l=>{const it=items.find(i=>i.code===l.code);alerts.push({cls:"warn",ic:"⏳",ti:`${it?it.name:l.code} — ${t("lot_label")} ${l.lot||"—"}`,s:t("alert_near_s",{n:daysTo(l.expiry),d:fmtG(l.expiry)})});});
   low.forEach(it=>alerts.push({cls:"warn",ic:"📉",ti:it.name,s:t("alert_low_s",{q:num(availQtyOf(it.code)),u:labelOf(UNITS,it.unit),m:num(it.minQty)})}));
   alerts.sort((a,b)=>(a.cls==="danger"?0:1)-(b.cls==="danger"?0:1));
@@ -949,6 +953,7 @@ pages.dashboard=()=>{
     <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_near")}</div><div class="val">${num(near.length)}</div><div class="sub">${t("kpi_near_sub",{n:DB.settings.warnDays})}</div></div><div class="kpi-ic yellow">🕐</div></div>
     <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_expired")}</div><div class="val">${num(expired.length)}</div><div class="sub">${t("kpi_expired_sub")}</div></div><div class="kpi-ic red">⛔</div></div>
     <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_low")}</div><div class="val">${num(low.length)}</div><div class="sub">${t("kpi_low_sub")}</div></div><div class="kpi-ic yellow">📉</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_out")}</div><div class="val">${num(outStock.length)}</div><div class="sub">${t("kpi_out_sub")}</div></div><div class="kpi-ic red">📦</div></div>
     <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_rejected")}</div><div class="val">${num(rejected.length)}</div><div class="sub">${t("kpi_rejected_sub")}</div></div><div class="kpi-ic red">🚫</div></div>
     <div class="kpi"><div class="kpi-body"><div class="lbl">${t("kpi_moves")}</div><div class="val">${num(todayMoves.length)}</div><div class="sub">${t("kpi_moves_sub")}</div></div><div class="kpi-ic blue">🔄</div></div>
   </div>
@@ -1338,13 +1343,13 @@ pages.reports=()=>{
 
 /* Settings */
 /* ===== Reorder / replenishment ===== */
-function reorderList(){ return DB.items.filter(it=>{const q=availQtyOf(it.code),m=+it.minQty||0;return m>0&&q<=m;}).map(it=>{const q=availQtyOf(it.code),m=+it.minQty||0,suggest=Math.max(1,(m*2)-q);const ls=DB.lots.filter(l=>l.code===it.code&&l.supplier).sort((a,b)=>(b.receivedAt||"").localeCompare(a.receivedAt||""));return {it,q,m,suggest,supplier:ls.length?ls[0].supplier:"",ord:(DB.settings.orders||{})[it.code]};}).sort((a,b)=>(a.q-a.m)-(b.q-b.m)); }
+function reorderList(){ return DB.items.map(it=>{const q=availQtyOf(it.code),m=+it.minQty||0;if(m<=0)return null;const threshold=Math.ceil(m*1.5);if(q>threshold)return null;const tier=q<=0?"out":(q<=m?"below":"near");const suggest=Math.max(1,(m*2)-q);const ls=DB.lots.filter(l=>l.code===it.code&&l.supplier).sort((a,b)=>(b.receivedAt||"").localeCompare(a.receivedAt||""));return {it,q,m,tier,suggest,supplier:ls.length?ls[0].supplier:"",ord:(DB.settings.orders||{})[it.code]};}).filter(Boolean).sort((a,b)=>{const o={out:0,below:1,near:2};return (o[a.tier]-o[b.tier])||((a.q-a.m)-(b.q-b.m));}); }
 pages.reorder=()=>{ const low=reorderList(); return `
   <div class="page-head"><div><h2>${t("reorder_title")}</h2><p>${t("reorder_sub")}</p></div>
     <div class="head-actions">${low.length?`<button class="btn soft" onclick="App.exportCSV('requisition')">${t("btn_export_req")}</button><button class="btn ghost no-print" onclick="window.print()">${t("btn_print")}</button>`:""}</div></div>
   <div class="panel"><div class="panel-h"><h3>${t("reorder_title")}</h3><span class="hint">${low.length?t("reorder_count",{n:num(low.length)}):""}</span></div><div class="panel-b">
   ${low.length?`<div class="tbl-wrap"><table><thead><tr><th>${t("th_code")}</th><th>${t("th_name")}</th><th class="num">${t("reorder_th_current")}</th><th class="num">${t("reorder_th_min")}</th><th class="num">${t("reorder_th_suggest")}</th><th>${t("reorder_th_last")}</th><th>${t("reorder_status")}</th><th class="no-print"></th></tr></thead><tbody>
-  ${low.map(r=>`<tr><td><span class="tag mut mono">${esc(r.it.code)}</span></td><td><b>${esc(r.it.name)}</b></td><td class="num"><b style="color:var(--danger)">${num(r.q)}</b></td><td class="num">${num(r.m)}</td><td class="num"><b>${num(r.suggest)}</b> ${esc(labelOf(UNITS,r.it.unit))}</td><td>${esc(r.supplier||"—")}</td><td>${r.ord?`<span class="tag info">${t("reorder_ordered_on",{d:fmtG(r.ord.date)})}</span>`:`<span class="tag warn">${t("reorder_pending")}</span>`}</td><td class="no-print"><button class="btn sm ${r.ord?"ghost":"soft"}" onclick="App.toggleOrder('${jsq(r.it.code)}')">${r.ord?t("reorder_unmark"):t("reorder_mark")}</button></td></tr>`).join("")}
+  ${low.map(r=>`<tr><td><span class="tag mut mono">${esc(r.it.code)}</span></td><td><b>${esc(r.it.name)}</b></td><td class="num"><b style="color:var(--danger)">${num(r.q)}</b></td><td class="num">${num(r.m)}</td><td class="num"><b>${num(r.suggest)}</b> ${esc(labelOf(UNITS,r.it.unit))}</td><td>${esc(r.supplier||"—")}</td><td>${r.ord?`<span class="tag mut">${t("reorder_ordered_on",{d:fmtG(r.ord.date)})}</span>`:`<span class="tag ${({out:"danger",below:"warn",near:"info"})[r.tier]}">${t(({out:"reorder_out",below:"reorder_below",near:"reorder_near"})[r.tier])}</span>`}</td><td class="no-print"><button class="btn sm ${r.ord?"ghost":"soft"}" onclick="App.toggleOrder('${jsq(r.it.code)}')">${r.ord?t("reorder_unmark"):t("reorder_mark")}</button></td></tr>`).join("")}
   </tbody></table></div>`:`<div class="empty"><div class="em-ic">✅</div><h4>${t("reorder_none")}</h4></div>`}
   </div></div>`; };
 function toggleOrder(code){ const o=DB.settings.orders||(DB.settings.orders={}); if(o[code]) delete o[code]; else o[code]={date:todayISO(),by:curUser()}; save(); toast(o[code]?t("ok_ordered"):t("ok_edited"),"ok"); go("reorder"); }
