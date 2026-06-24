@@ -389,6 +389,10 @@ ar:{
  dis_alert_older:"📅 تنبيه: لهذا الصنف أكثر من تشغيلة بتواريخ مختلفة — الأقدم انتهاءً ({lot} · {d}) يُصرف أولاً. تأكد من سحب التشغيلة الصحيحة.",
  dis_alert_expired:"⛔ تنبيه: التشغيلة الأقدم ({lot}) منتهية الصلاحية ({d}) — راجِع قبل الصرف!",
  dis_alert_newlot:"🆕 تنبيه: سيتم فتح تشغيلة جديدة لأول مرة: {lots}",
+ tip_dispose:"إتلاف التشغيلة", dispose_title:"إتلاف تشغيلة", dispose_info:"إتلاف {name} — التشغيلة {lot} — الكمية الحالية {q}", dispose_reason:"سبب الإتلاف", dispose_pick_reason:"— اختر السبب —", dispose_r_expired:"منتهية الصلاحية", dispose_r_rejected:"مرفوضة بالفحص", dispose_r_damaged:"تالفة/مكسورة", dispose_r_other:"أخرى", dispose_by:"المسؤول عن الإتلاف", dispose_date:"تاريخ الإتلاف", dispose_need_reason:"اختر سبب الإتلاف", dispose_txn_note:"إتلاف ({reason})", btn_dispose_confirm:"تأكيد الإتلاف", ok_disposed:"تم تسجيل الإتلاف وإخراج الكمية من المخزون ✓", lst_disposed:"متلف", f_dispose:"إتلاف", fn_disposal:"تقرير_الإتلاف", rep_disposal_t:"🚮 تقرير الإتلاف", rep_disposal_s:"المنتهي والمرفوض المُتلَف",
+ nav_reorder:"إعادة الطلب", nav_trace:"تتبع التشغيلة",
+ reorder_title:"إعادة الطلب (التموين)", reorder_sub:"أصناف بلغت الحد الأدنى وتحتاج طلب شراء", reorder_none:"لا توجد أصناف تحت الحد الأدنى ✓", reorder_th_current:"المتاح", reorder_th_min:"الحد الأدنى", reorder_th_suggest:"الكمية المقترحة", reorder_th_last:"آخر مورّد", btn_export_req:"⬇ تصدير طلب الشراء", fn_requisition:"طلب_شراء", reorder_count:"{n} صنف يحتاج طلب", reorder_mark:"تحديد كمطلوب", reorder_ordered_on:"طُلب بتاريخ {d}", reorder_unmark:"إلغاء الطلب", ok_ordered:"تم تحديد الصنف كمطلوب ✓", reorder_status:"الحالة", reorder_pending:"بحاجة طلب", reorder_done:"تم الطلب",
+ trace_title:"تتبع واستدعاء التشغيلة", trace_sub:"ابحث برقم التشغيلة (Lot) لعرض سجلها الكامل — للاستدعاء وسلامة المريض", trace_search_ph:"أدخل رقم التشغيلة (Lot)...", trace_btn:"🔎 تتبّع", trace_not_found:"لا توجد بيانات لهذه التشغيلة", trace_lots_h:"تشغيلات مطابقة", trace_moves_h:"الحركات على هذه التشغيلة", trace_sum_recv:"إجمالي المستلم", trace_sum_disp:"إجمالي المصروف", trace_sum_rem:"المتبقي الحالي", trace_sum_destroyed:"المُتلَف", trace_enter:"أدخل رقم التشغيلة للبحث",
  dis_empty_t:"لا يوجد مخزون متاح للصرف", dis_empty_s:"قم باستقبال محاليل أولاً",
  err_pick_item:"اختر الصنف", err_over:"الكمية المطلوبة ({q}) أكبر من المتاح ({a})", ok_dispense:"تم الصرف بنجاح ✓",
  bc_title:"طباعة الباركود", bc_sub:"توليد باركود (Code 39) وطباعة ملصق — يعمل دون اتصال",
@@ -540,6 +544,10 @@ en:{
  dis_alert_older:"📅 Note: this item has multiple lots with different dates — the earliest-expiring ({lot} · {d}) is dispensed first. Make sure you pull the correct lot.",
  dis_alert_expired:"⛔ Warning: the oldest lot ({lot}) is expired ({d}) — review before dispensing!",
  dis_alert_newlot:"🆕 Note: a new lot will be opened for the first time: {lots}",
+ tip_dispose:"Dispose lot", dispose_title:"Dispose lot", dispose_info:"Dispose {name} — lot {lot} — current qty {q}", dispose_reason:"Disposal reason", dispose_pick_reason:"— Select reason —", dispose_r_expired:"Expired", dispose_r_rejected:"Rejected at inspection", dispose_r_damaged:"Damaged/broken", dispose_r_other:"Other", dispose_by:"Responsible person", dispose_date:"Disposal date", dispose_need_reason:"Select a disposal reason", dispose_txn_note:"Disposed ({reason})", btn_dispose_confirm:"Confirm disposal", ok_disposed:"Disposal recorded and stock removed ✓", lst_disposed:"Disposed", f_dispose:"Disposal", fn_disposal:"disposal_report", rep_disposal_t:"🚮 Disposal report", rep_disposal_s:"Disposed expired & rejected",
+ nav_reorder:"Reorder", nav_trace:"Lot trace",
+ reorder_title:"Reorder (replenishment)", reorder_sub:"Items at/below minimum that need a purchase order", reorder_none:"No items below minimum ✓", reorder_th_current:"Available", reorder_th_min:"Minimum", reorder_th_suggest:"Suggested qty", reorder_th_last:"Last supplier", btn_export_req:"⬇ Export purchase request", fn_requisition:"purchase_request", reorder_count:"{n} item(s) need ordering", reorder_mark:"Mark as ordered", reorder_ordered_on:"Ordered on {d}", reorder_unmark:"Cancel order", ok_ordered:"Item marked as ordered ✓", reorder_status:"Status", reorder_pending:"Needs order", reorder_done:"Ordered",
+ trace_title:"Lot trace & recall", trace_sub:"Search by lot number to view its full record — for recalls and patient safety", trace_search_ph:"Enter lot number...", trace_btn:"🔎 Trace", trace_not_found:"No data for this lot", trace_lots_h:"Matching lots", trace_moves_h:"Movements on this lot", trace_sum_recv:"Total received", trace_sum_disp:"Total dispensed", trace_sum_rem:"Current remaining", trace_sum_destroyed:"Disposed", trace_enter:"Enter a lot number to search",
  dis_empty_t:"No stock available to dispense", dis_empty_s:"Receive solutions first",
  err_pick_item:"Select an item", err_over:"Requested ({q}) exceeds available ({a})", ok_dispense:"Dispensed ✓",
  bc_title:"Barcode printing", bc_sub:"Generate a Code 39 barcode and print a label — works offline",
@@ -731,9 +739,9 @@ function labelOf(list,key){ const o=list.find(x=>x.k===key); return o?lbl(o):(ke
 
 /* ===================== Storage ===================== */
 const KEY="bbdammam_inv_v1";
-const blank=()=>({items:[],lots:[],txns:[],settings:{user:"admin",pass:"1234",warnDays:60,seeded:false,customLabs:[],customCatalog:[],users:[{u:"admin",p:"1234",role:"admin"}]}});
+const blank=()=>({items:[],lots:[],txns:[],disposals:[],settings:{user:"admin",pass:"1234",warnDays:60,seeded:false,customLabs:[],customCatalog:[],orders:{},users:[{u:"admin",p:"1234",role:"admin"}]}});
 function normalize(d){ const base=blank(); d=d||{}; const incoming=d.settings||{}; const hadUsers=Array.isArray(incoming.users)&&incoming.users.length>0;
-  d.settings=Object.assign(base.settings,incoming); d.items=d.items||[]; d.lots=d.lots||[]; d.txns=d.txns||[]; d.settings.customLabs=d.settings.customLabs||[]; d.settings.customCatalog=d.settings.customCatalog||[];
+  d.settings=Object.assign(base.settings,incoming); d.items=d.items||[]; d.lots=d.lots||[]; d.txns=d.txns||[]; d.disposals=d.disposals||[]; d.settings.customLabs=d.settings.customLabs||[]; d.settings.customCatalog=d.settings.customCatalog||[]; d.settings.orders=d.settings.orders||{};
   if(!hadUsers){ d.settings.users=[{u:incoming.user||"admin",p:incoming.pass||"1234",role:"admin"}]; }
   return migrateKeys(d); }
 let DB;
@@ -767,6 +775,7 @@ const allLotsOf=code=>DB.lots.filter(l=>l.code===code).sort((a,b)=>(a.expiry||"9
 const availQtyOf=code=>DB.lots.filter(l=>l.code===code&&!isRej(l)).reduce((s,l)=>s+(+l.qtyRemaining||0),0);
 const rejectedQtyOf=code=>DB.lots.filter(l=>l.code===code&&isRej(l)).reduce((s,l)=>s+(+l.qtyRemaining||0),0);
 function lotStatus(l){
+  if(l.disposed) return {cls:"mut",key:"lst_disposed"};
   if(isRej(l)) return {cls:"danger",key:"lst_rejected"};
   if((+l.qtyRemaining||0)<=0) return {cls:"mut",key:"lst_empty"};
   if(!l.expiry) return {cls:"info",key:"lst_no_date"};
@@ -843,17 +852,21 @@ const ICON={
  reports:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 18v-2M12 18v-4M16 18v-6"/>',
  users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
  log:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
- panel:'<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/>'
+ panel:'<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/>',
+ reorder:'<path d="M3 2v6h6"/><path d="M21 12A9 9 0 0 0 6 5.3L3 8"/><path d="M21 22v-6h-6"/><path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"/>',
+ trace:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/><path d="M11 8v3l2 1"/>'
 };
 const NAVS=[
  {r:"dashboard",i:"dashboard",k:"nav_dashboard"},
  {r:"receive",i:"receive",k:"nav_receive"},
  {r:"inventory",i:"inventory",k:"nav_inventory"},
  {r:"dispense",i:"movement",k:"nav_movement2"},
+ {r:"reorder",i:"reorder",k:"nav_reorder"},
  {r:"barcode",i:"barcode",k:"nav_barcode"},
  {r:"products",i:"products",k:"nav_products"},
  {r:"import",i:"import",k:"nav_import"},
  {r:"reports",i:"reports",k:"nav_reports"},
+ {r:"trace",i:"trace",k:"nav_trace"},
  {r:"users",i:"users",k:"nav_users",admin:true},
  {r:"log",i:"log",k:"nav_activity"}
 ];
@@ -1036,7 +1049,7 @@ function lotsTable(code){
   h+=`<table style="font-size:13px"><thead><tr><th>${t("th_lot")}</th><th>${t("th_exp")}</th><th class="num">${t("th_received")}</th><th class="num">${t("th_remaining")}</th><th>${t("th_lab")}</th><th>${t("th_supplier")}</th><th>${t("th_status")}</th><th></th></tr></thead><tbody>`;
   lots.forEach(l=>{const st=lotStatus(l);
     h+=`<tr><td class="mono">${esc(l.lot||"—")}</td><td>${fmtG(l.expiry)}</td><td class="num">${num(l.qtyReceived)}</td><td class="num"><b>${num(l.qtyRemaining)}</b></td><td>${esc(labelOf(labs(),l.lab))}</td><td>${esc(l.supplier||"—")}</td><td><span class="tag ${st.cls}">${lotStatusText(st)}</span></td>
-      <td><div class="row-actions"><button class="icon-btn" title="⚖️" onclick="App.adjustLot('${l.id}')">⚖️</button><button class="icon-btn danger" onclick="App.delLot('${l.id}')">🗑</button></div></td></tr>`;});
+      <td><div class="row-actions"><button class="icon-btn" title="⚖️" onclick="App.adjustLot('${l.id}')">⚖️</button>${(l.qtyRemaining>0&&!l.disposed)?`<button class="icon-btn danger" title="${t("tip_dispose")}" onclick="App.disposeLot('${l.id}')">🚮</button>`:""}<button class="icon-btn danger" title="${t("act_delete")}" onclick="App.delLot('${l.id}')">🗑</button></div></td></tr>`;});
   h+=`</tbody></table></div>`; return h;
 }
 function toggleLots(code){ const r=$("lots-"+code); if(r) r.style.display=r.style.display==="none"?"":"none"; }
@@ -1243,7 +1256,7 @@ pages.log=()=>`
   <div class="page-head"><div><h2>${t("log_title")}</h2><p>${t("log_sub")}</p></div>
     <div class="head-actions"><button class="btn ghost" onclick="App.exportCSV('log')">${t("btn_export_excel")}</button></div></div>
   <div class="toolbar"><div class="search"><span class="si">🔎</span><input id="logSearch" placeholder="${t("search_log_ph")}" value="${esc(logSearch)}"></div>
-    <div class="seg" id="logSeg">${["all","in","out","adjust"].map(k=>`<button data-f="${k}" class="${logType===k?"active":""}">${t({all:"filter_all",in:"f_in",out:"f_out",adjust:"f_adjust"}[k])}</button>`).join("")}</div></div>
+    <div class="seg" id="logSeg">${["all","in","out","adjust","dispose"].map(k=>`<button data-f="${k}" class="${logType===k?"active":""}">${t({all:"filter_all",in:"f_in",out:"f_out",adjust:"f_adjust",dispose:"f_dispose"}[k])}</button>`).join("")}</div></div>
   <div class="panel"><div class="panel-b" id="logBody"></div></div>`;
 afterRender.log=()=>{
   $("logSearch").addEventListener("input",e=>{logSearch=e.target.value;renderLog();});
@@ -1254,12 +1267,12 @@ function renderLog(){
   const s=logSearch.trim().toLowerCase();
   let rows=DB.txns.filter(x=>(logType==="all"||x.type===logType)&&(!s||[x.code,x.party,x.note,x.lot,labelOf(labs(),x.lab)].some(v=>String(v||"").toLowerCase().includes(s)))).sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(b.id>a.id?1:-1));
   if(!rows.length){ $("logBody").innerHTML=`<div class="empty"><div class="em-ic">📜</div><h4>${t("log_empty")}</h4></div>`; return; }
-  const meta={in:{cls:"ok",i:"📥"},out:{cls:"danger",i:"📤"},adjust:{cls:"info",i:"⚖️"}};
-  const tt={in:t("f_in"),out:t("f_out"),adjust:t("f_adjust")};
+  const meta={in:{cls:"ok",i:"📥"},out:{cls:"danger",i:"📤"},adjust:{cls:"info",i:"⚖️"},dispose:{cls:"danger",i:"🚮"}};
+  const tt={in:t("f_in"),out:t("f_out"),adjust:t("f_adjust"),dispose:t("f_dispose")};
   let h=`<div class="tbl-wrap"><table><thead><tr><th>${t("th_date")}</th><th>${t("th_type")}</th><th>${t("th_code")}</th><th>${t("th_name")}</th><th>${t("th_lot")}</th><th class="num">${t("th_qty")}</th><th>${t("th_lab")}</th><th>${t("th_party")}</th><th>${t("th_inspection")}</th><th>${t("th_user")}</th><th>${t("th_notes")}</th></tr></thead><tbody>`;
   rows.forEach(x=>{const m=meta[x.type]||meta.adjust; const it=DB.items.find(i=>i.code===x.code);
     const insp = x.type==="in"&&x.inspection ? `<span class="tag ${x.inspection==="rejected"?"danger":"ok"}">${labelOf(INSPECT,x.inspection)}</span>` : "—";
-    h+=`<tr><td>${fmtG(x.date)}</td><td><span class="tag ${m.cls}">${m.i} ${tt[x.type]||x.type}</span></td><td class="mono">${esc(x.code)}</td><td>${esc(it?it.name:"—")}</td><td class="mono">${esc(x.lot||"—")}</td><td class="num"><b>${x.type==="out"?"−":"+"}${num(x.qty)}</b></td><td>${esc(labelOf(labs(),x.lab))}</td><td>${esc(x.party||"—")}</td><td>${insp}</td><td>${esc(x.user||"—")}</td><td>${esc(x.note||"—")}</td></tr>`;});
+    h+=`<tr><td>${fmtG(x.date)}</td><td><span class="tag ${m.cls}">${m.i} ${tt[x.type]||x.type}</span></td><td class="mono">${esc(x.code)}</td><td>${esc(it?it.name:"—")}</td><td class="mono">${esc(x.lot||"—")}</td><td class="num"><b>${(x.type==="out"||x.type==="dispose")?"−":"+"}${num(x.qty)}</b></td><td>${esc(labelOf(labs(),x.lab))}</td><td>${esc(x.party||"—")}</td><td>${insp}</td><td>${esc(x.user||"—")}</td><td>${esc(x.note||"—")}</td></tr>`;});
   h+=`</tbody></table></div><div class="stat-line"><span>${t("moves_count",{n:num(rows.length)})}</span></div>`;
   $("logBody").innerHTML=h;
 }
@@ -1294,6 +1307,7 @@ pages.reports=()=>{
     <div class="kpi"><div class="lbl">${t("rep_exp_t")}</div><div class="sub" style="margin:8px 0 12px">${t("rep_exp_s")}</div><button class="btn sm soft full" onclick="App.exportCSV('expiry')">${t("btn_export")}</button></div>
     <div class="kpi"><div class="lbl">${t("rep_cons_t")}</div><div class="sub" style="margin:8px 0 12px">${t("rep_cons_s")}</div><button class="btn sm soft full" onclick="App.exportCSV('consumption')">${t("btn_export")}</button></div>
     <div class="kpi"><div class="lbl">${t("rep_lab_t")}</div><div class="sub" style="margin:8px 0 12px">${t("rep_lab_s")}</div><button class="btn sm soft full" onclick="App.exportCSV('labusage')">${t("btn_export")}</button></div>
+    <div class="kpi"><div class="lbl">${t("rep_disposal_t")}</div><div class="sub" style="margin:8px 0 12px">${t("rep_disposal_s")}</div><button class="btn sm soft full" onclick="App.exportCSV('disposal')">${t("btn_export")}</button></div>
   </div>
   <div class="print-grid">
   <div class="panel"><div class="panel-h"><h3>${t("rep_exp_panel")}</h3><span class="hint">${t("lots_count",{n:num(expired.length+near.length)})}</span></div><div class="panel-b">
@@ -1323,6 +1337,50 @@ pages.reports=()=>{
 };
 
 /* Settings */
+/* ===== Reorder / replenishment ===== */
+function reorderList(){ return DB.items.filter(it=>{const q=availQtyOf(it.code),m=+it.minQty||0;return m>0&&q<=m;}).map(it=>{const q=availQtyOf(it.code),m=+it.minQty||0,suggest=Math.max(1,(m*2)-q);const ls=DB.lots.filter(l=>l.code===it.code&&l.supplier).sort((a,b)=>(b.receivedAt||"").localeCompare(a.receivedAt||""));return {it,q,m,suggest,supplier:ls.length?ls[0].supplier:"",ord:(DB.settings.orders||{})[it.code]};}).sort((a,b)=>(a.q-a.m)-(b.q-b.m)); }
+pages.reorder=()=>{ const low=reorderList(); return `
+  <div class="page-head"><div><h2>${t("reorder_title")}</h2><p>${t("reorder_sub")}</p></div>
+    <div class="head-actions">${low.length?`<button class="btn soft" onclick="App.exportCSV('requisition')">${t("btn_export_req")}</button><button class="btn ghost no-print" onclick="window.print()">${t("btn_print")}</button>`:""}</div></div>
+  <div class="panel"><div class="panel-h"><h3>${t("reorder_title")}</h3><span class="hint">${low.length?t("reorder_count",{n:num(low.length)}):""}</span></div><div class="panel-b">
+  ${low.length?`<div class="tbl-wrap"><table><thead><tr><th>${t("th_code")}</th><th>${t("th_name")}</th><th class="num">${t("reorder_th_current")}</th><th class="num">${t("reorder_th_min")}</th><th class="num">${t("reorder_th_suggest")}</th><th>${t("reorder_th_last")}</th><th>${t("reorder_status")}</th><th class="no-print"></th></tr></thead><tbody>
+  ${low.map(r=>`<tr><td><span class="tag mut mono">${esc(r.it.code)}</span></td><td><b>${esc(r.it.name)}</b></td><td class="num"><b style="color:var(--danger)">${num(r.q)}</b></td><td class="num">${num(r.m)}</td><td class="num"><b>${num(r.suggest)}</b> ${esc(labelOf(UNITS,r.it.unit))}</td><td>${esc(r.supplier||"—")}</td><td>${r.ord?`<span class="tag info">${t("reorder_ordered_on",{d:fmtG(r.ord.date)})}</span>`:`<span class="tag warn">${t("reorder_pending")}</span>`}</td><td class="no-print"><button class="btn sm ${r.ord?"ghost":"soft"}" onclick="App.toggleOrder('${jsq(r.it.code)}')">${r.ord?t("reorder_unmark"):t("reorder_mark")}</button></td></tr>`).join("")}
+  </tbody></table></div>`:`<div class="empty"><div class="em-ic">✅</div><h4>${t("reorder_none")}</h4></div>`}
+  </div></div>`; };
+function toggleOrder(code){ const o=DB.settings.orders||(DB.settings.orders={}); if(o[code]) delete o[code]; else o[code]={date:todayISO(),by:curUser()}; save(); toast(o[code]?t("ok_ordered"):t("ok_edited"),"ok"); go("reorder"); }
+
+/* ===== Lot trace / recall ===== */
+let traceQ="";
+pages.trace=()=>`
+  <div class="page-head"><div><h2>${t("trace_title")}</h2><p>${t("trace_sub")}</p></div></div>
+  <div class="panel"><div class="panel-b">
+    <div class="toolbar"><div class="search"><span class="si">🔎</span><input id="trace-input" placeholder="${t("trace_search_ph")}" value="${esc(traceQ)}" list="lotList"><datalist id="lotList">${[...new Set(DB.lots.map(l=>l.lot).filter(Boolean))].map(l=>`<option value="${esc(l)}"></option>`).join("")}</datalist></div>
+    <button class="btn" onclick="App.doTrace()">${t("trace_btn")}</button></div>
+    <div id="traceResult"></div>
+  </div></div>`;
+afterRender.trace=()=>{ const inp=$("trace-input"); if(inp) inp.addEventListener("keydown",e=>{ if(e.key==="Enter") doTrace(); }); renderTrace(); };
+function doTrace(){ const inp=$("trace-input"); traceQ=inp?inp.value.trim():""; renderTrace(); }
+function renderTrace(){
+  const box=$("traceResult"); if(!box)return; const q=traceQ.trim();
+  if(!q){ box.innerHTML=`<div class="empty"><div class="em-ic">🔎</div><h4>${t("trace_enter")}</h4></div>`; return; }
+  const ql=q.toLowerCase();
+  const lots=DB.lots.filter(l=>String(l.lot||"").toLowerCase()===ql);
+  const moves=DB.txns.filter(x=>String(x.lot||"").toLowerCase().split(/,\s*/).map(s=>s.trim()).includes(ql));
+  if(!lots.length&&!moves.length){ box.innerHTML=`<div class="empty"><div class="em-ic">🚫</div><h4>${t("trace_not_found")}</h4></div>`; return; }
+  const recv=lots.reduce((s,l)=>s+(+l.qtyReceived||0),0), rem=lots.reduce((s,l)=>s+(+l.qtyRemaining||0),0);
+  const disp=moves.filter(x=>x.type==="out").reduce((s,x)=>s+(+x.qty||0),0), destroyed=moves.filter(x=>x.type==="dispose").reduce((s,x)=>s+(+x.qty||0),0);
+  const meta={in:{cls:"ok",i:"📥"},out:{cls:"danger",i:"📤"},adjust:{cls:"info",i:"⚖️"},dispose:{cls:"danger",i:"🚮"}};
+  const tt={in:t("f_in"),out:t("f_out"),adjust:t("f_adjust"),dispose:t("f_dispose")};
+  let h=`<div class="grid kpis" style="margin:6px 0 14px">
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("trace_sum_recv")}</div><div class="val">${num(recv)}</div></div><div class="kpi-ic green">📥</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("trace_sum_disp")}</div><div class="val">${num(disp)}</div></div><div class="kpi-ic blue">📤</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("trace_sum_destroyed")}</div><div class="val">${num(destroyed)}</div></div><div class="kpi-ic red">🚮</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("trace_sum_rem")}</div><div class="val">${num(rem)}</div></div><div class="kpi-ic greend">🧊</div></div></div>`;
+  h+=`<div class="panel"><div class="panel-h"><h3>${t("trace_lots_h")}</h3></div><div class="panel-b"><div class="tbl-wrap"><table><thead><tr><th>${t("th_name")}</th><th>${t("th_code")}</th><th>${t("th_exp")}</th><th class="num">${t("th_received")}</th><th class="num">${t("th_remaining")}</th><th>${t("th_lab")}</th><th>${t("th_supplier")}</th><th>${t("th_status")}</th></tr></thead><tbody>${lots.length?lots.map(l=>{const it=DB.items.find(i=>i.code===l.code);const st=lotStatus(l);return `<tr><td><b>${esc(it?it.name:l.code)}</b></td><td class="mono">${esc(l.code)}</td><td>${fmtG(l.expiry)}</td><td class="num">${num(l.qtyReceived)}</td><td class="num"><b>${num(l.qtyRemaining)}</b></td><td>${esc(labelOf(labs(),l.lab))}</td><td>${esc(l.supplier||"—")}</td><td><span class="tag ${st.cls}">${lotStatusText(st)}</span></td></tr>`;}).join(""):`<tr><td colspan="8" class="muted" style="text-align:center">—</td></tr>`}</tbody></table></div></div></div>`;
+  h+=`<div class="panel"><div class="panel-h"><h3>${t("trace_moves_h")}</h3><span class="hint">${t("moves_count",{n:num(moves.length)})}</span></div><div class="panel-b"><div class="tbl-wrap"><table><thead><tr><th>${t("th_date")}</th><th>${t("th_type")}</th><th class="num">${t("th_qty")}</th><th>${t("th_lab")}</th><th>${t("th_party")}</th><th>${t("th_user")}</th><th>${t("th_notes")}</th></tr></thead><tbody>${moves.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(x=>{const m=meta[x.type]||meta.adjust;return `<tr><td>${fmtG(x.date)}</td><td><span class="tag ${m.cls}">${m.i} ${tt[x.type]||x.type}</span></td><td class="num"><b>${(x.type==="out"||x.type==="dispose")?"−":"+"}${num(x.qty)}</b></td><td>${esc(labelOf(labs(),x.lab))}</td><td>${esc(x.party||"—")}</td><td>${esc(x.user||"—")}</td><td>${esc(x.note||"—")}</td></tr>`;}).join("")}</tbody></table></div></div></div>`;
+  box.innerHTML=h;
+}
+
 pages.settings=()=>{
   const custom=DB.settings.customLabs||[];
   return `
@@ -1619,6 +1677,24 @@ function adjustLot(id){ const l=DB.lots.find(x=>x.id===id); if(!l)return;
 }
 function delLot(id){ const l=DB.lots.find(x=>x.id===id); if(!l)return;
   confirmAction(t("del_lot_q",{lot:l.lot||"—",q:num(l.qtyRemaining)}),()=>{ DB.lots=DB.lots.filter(x=>x.id!==id); save(); toast(t("ok_lot_deleted"),"ok"); renderInv(); },t("btn_del_lot")); }
+function disposeLot(id){ const l=DB.lots.find(x=>x.id===id); if(!l)return; const it=DB.items.find(i=>i.code===l.code);
+  modal(t("dispose_title"),`<p class="muted" style="margin-top:0">${t("dispose_info",{name:`<b>${esc(it?it.name:l.code)}</b>`,lot:`<b class="mono">${esc(l.lot||"—")}</b>`,q:`<b>${num(l.qtyRemaining)}</b>`})}</p>
+    <div class="form-grid">
+      <div class="full"><label class="req">${t("dispose_reason")}</label><select id="dp-reason"><option value="">${t("dispose_pick_reason")}</option><option>${t("dispose_r_expired")}</option><option>${t("dispose_r_rejected")}</option><option>${t("dispose_r_damaged")}</option><option>${t("dispose_r_other")}</option></select></div>
+      <div><label class="req">${t("dispose_by")}</label><input id="dp-by" value="${esc(curUser())}"></div>
+      <div><label>${t("dispose_date")}</label><input id="dp-date" type="date" value="${todayISO()}"></div>
+      <div class="full"><label>${t("f_note")}</label><input id="dp-note" placeholder="${t("optional_ph")}"></div>
+    </div>`,
+    `<button class="btn danger" id="dp-save">${t("btn_dispose_confirm")}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
+  $("dp-save").onclick=()=>{ const reason=$("dp-reason").value.trim(), by=$("dp-by").value.trim()||curUser(), date=$("dp-date").value||todayISO(), note=$("dp-note").value.trim();
+    if(!reason)return toast(t("dispose_need_reason"),"err");
+    const qty=l.qtyRemaining;
+    DB.disposals.push({id:uid(),code:l.code,name:it?it.name:l.code,lot:l.lot||"",expiry:l.expiry||"",qty,reason,by,date,lab:l.lab||"",note});
+    DB.txns.push({id:uid(),type:"dispose",code:l.code,lot:l.lot,qty,date,party:reason,lab:l.lab,note:t("dispose_txn_note",{reason})+(note?(" — "+note):""),user:curUser()});
+    l.qtyRemaining=0; l.disposed=true; l.disposeReason=reason; l.disposeBy=by; l.disposeDate=date;
+    save(); closeModal(); toast(t("ok_disposed"),"ok"); renderInv();
+  };
+}
 
 /* CSV export (Excel-friendly, UTF-8 BOM) */
 function exportCSV(kind){
@@ -1628,8 +1704,8 @@ function exportCSV(kind){
     DB.items.forEach(it=>{const active=availLots(it.code);rows.push([it.code,it.name,it.manufacturer||"",labelOf(CATS,it.category),labelOf(UNITS,it.unit),availQtyOf(it.code),it.minQty||0,active.length,t(itemStatus(it).key)]);});
   }else if(kind==="log"){
     name=t("fn_log"); rows.push([t("th_date"),t("th_type"),t("th_code"),t("th_name"),t("th_lot"),t("th_qty"),t("th_lab"),t("th_party"),t("col_inspection"),t("th_user"),t("th_notes")]);
-    const tt={in:t("f_in"),out:t("f_out"),adjust:t("f_adjust")};
-    DB.txns.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).forEach(x=>{const it=DB.items.find(i=>i.code===x.code);rows.push([x.date,tt[x.type]||x.type,x.code,it?it.name:"",x.lot||"",(x.type==="out"?"-":"+")+x.qty,labelOf(labs(),x.lab),x.party||"",x.inspection?labelOf(INSPECT,x.inspection):"",x.user||"",x.note||""]);});
+    const tt={in:t("f_in"),out:t("f_out"),adjust:t("f_adjust"),dispose:t("f_dispose")};
+    DB.txns.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).forEach(x=>{const it=DB.items.find(i=>i.code===x.code);rows.push([x.date,tt[x.type]||x.type,x.code,it?it.name:"",x.lot||"",((x.type==="out"||x.type==="dispose")?"-":"+")+x.qty,labelOf(labs(),x.lab),x.party||"",x.inspection?labelOf(INSPECT,x.inspection):"",x.user||"",x.note||""]);});
   }else if(kind==="expiry"){
     name=t("fn_expiry"); rows.push([t("th_name"),t("th_code"),t("th_lot"),t("th_exp"),t("th_remaining"),t("days_left"),t("th_lab"),t("col_inspection"),t("th_status")]);
     DB.lots.filter(l=>l.qtyRemaining>0).sort((a,b)=>(a.expiry||"9999").localeCompare(b.expiry||"9999")).forEach(l=>{const it=DB.items.find(i=>i.code===l.code);const st=lotStatus(l);rows.push([it?it.name:"",l.code,l.lot||"",l.expiry||"",l.qtyRemaining,l.expiry?daysTo(l.expiry):"",labelOf(labs(),l.lab),l.inspection?labelOf(INSPECT,l.inspection):"",lotStatusText(st)]);});
@@ -1647,6 +1723,12 @@ function exportCSV(kind){
   }else if(kind==="employee"){
     name=t("fn_employee")+"_"+repFrom+"_"+repTo; rows.push([t("th_employee"),t("rep_ops"),t("rep_received"),t("rep_dispensed"),t("rep_adjust_n")]);
     employeeData().forEach(r=>rows.push([r.user,r.ops,r.inq,r.outq,r.adj]));
+  }else if(kind==="disposal"){
+    name=t("fn_disposal"); rows.push([t("th_date"),t("th_name"),t("th_code"),t("th_lot"),t("th_exp"),t("th_qty"),t("dispose_reason"),t("dispose_by"),t("th_lab"),t("th_notes")]);
+    DB.disposals.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).forEach(d=>rows.push([d.date,d.name||d.code,d.code,d.lot||"",d.expiry||"",d.qty,d.reason||"",d.by||"",labelOf(labs(),d.lab),d.note||""]));
+  }else if(kind==="requisition"){
+    name=t("fn_requisition"); rows.push([t("th_code"),t("th_name"),t("reorder_th_current"),t("reorder_th_min"),t("reorder_th_suggest"),t("th_unit"),t("reorder_th_last")]);
+    reorderList().forEach(r=>rows.push([r.it.code,r.it.name,r.q,r.m,r.suggest,labelOf(UNITS,r.it.unit),r.supplier||""]));
   }
   if(rows.length<=1)return toast(t("no_export_data"),"err");
   const csv="\uFEFF"+rows.map(r=>r.map(c=>{c=String(c==null?"":c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(",")).join("\r\n");
@@ -1803,8 +1885,8 @@ return {init,login,logout,go,toggleSide,toggleLang,closeModal,
   onCodeType,expHint,doReceive,catGroup,catItem,catKits,
   dispenseInfo,doDispense,
   renderBarcode,bcFromItem,pickBarcode,printBarcode,
-  toggleLots,editItem,delItem,addLot,adjustLot,delLot,
-  exportCSV,setRepRange,setRepEmp,repPreset,saveSettings,addLab,delLab,backup,restore,reseed,wipe,zeroStock,
+  toggleLots,editItem,delItem,addLot,adjustLot,delLot,disposeLot,
+  exportCSV,setRepRange,setRepEmp,repPreset,saveSettings,addLab,delLab,backup,restore,reseed,wipe,zeroStock,toggleOrder,doTrace,
   addUser,setRole,resetUserPass,delUser,
   addProduct,addCatItem,delCatItem,importTemplate,importFile,importRows,toggleCollapse,
   connectSync,disconnectSync,unlockSync,openGuide,guideToggle};
