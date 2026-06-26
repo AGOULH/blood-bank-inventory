@@ -289,6 +289,7 @@
       <div class="t2" data-i18n="topbar_sub">وزارة الصحة</div></div></div>
     <div class="spacer"></div>
     <div class="date-chip" id="dateChip"></div>
+    <button class="btn soft sm" onclick="App.scan()" data-i18n="scan_btn" title="مسح">📷 مسح</button>
     <button class="lang-btn" data-i18n-lang onclick="App.toggleLang()">English</button>
     <button class="btn ghost sm" data-i18n="logout" onclick="App.logout()">خروج</button>
   </div>
@@ -391,6 +392,7 @@ ar:{
  dis_alert_expired:"⛔ تنبيه: التشغيلة الأقدم ({lot}) منتهية الصلاحية ({d}) — راجِع قبل الصرف!",
  dis_alert_newlot:"🆕 تنبيه: سيتم فتح تشغيلة جديدة لأول مرة: {lots}",
  tip_dispose:"إتلاف التشغيلة", dispose_title:"إتلاف تشغيلة", dispose_info:"إتلاف {name} — التشغيلة {lot} — الكمية الحالية {q}", dispose_reason:"سبب الإتلاف", dispose_pick_reason:"— اختر السبب —", dispose_r_expired:"منتهية الصلاحية", dispose_r_rejected:"مرفوضة بالفحص", dispose_r_damaged:"تالفة/مكسورة", dispose_r_other:"أخرى", dispose_by:"المسؤول عن الإتلاف", dispose_date:"تاريخ الإتلاف", dispose_need_reason:"اختر سبب الإتلاف", dispose_txn_note:"إتلاف ({reason})", btn_dispose_confirm:"تأكيد الإتلاف", ok_disposed:"تم تسجيل الإتلاف وإخراج الكمية من المخزون ✓", lst_disposed:"متلف", f_dispose:"إتلاف", fn_disposal:"تقرير_الإتلاف", rep_disposal_t:"🚮 تقرير الإتلاف", rep_disposal_s:"المنتهي والمرفوض المُتلَف",
+ scan_btn:"📷 مسح", scan_title:"مسح الباركود", scan_hint:"امسح الكود بالماسح أو الكاميرا، أو أدخله يدوياً ثم اضغط Enter", scan_ph:"امسح أو أدخل الكود…", scan_camera:"تشغيل الكاميرا", scan_view:"عرض في المخزون", scan_not_found:"الكود «{code}» غير مسجّل في النظام", scan_receive_new:"استقبال جديد بهذا الكود", scan_cam_err:"تعذّر تشغيل الكاميرا", btn_close:"إغلاق",
  qc_required_lbl:"فحص الجودة (QC)", qc_required_hint:"يتطلب اعتماد QC قبل الصرف", qc_quarantined_note:"محجوزة بانتظار اعتماد QC", ok_receive_qc:"تم الاستلام — التشغيلة محجوزة بانتظار اعتماد QC", tip_qc_release:"اعتماد QC", qc_release_title:"اعتماد فحص الجودة (QC)", qc_result:"نتيجة الفحص", qc_pass:"مقبولة — إطلاق للاستخدام", qc_fail:"فاشلة — حجب", qc_by:"نفّذ الفحص", qc_date:"تاريخ الفحص", qc_note:"ملاحظة (مقارنة التشغيلات)", qc_note_ph:"مثال: مطابقة مع التشغيلة السابقة", qc_party:"فحص QC", qc_released_note:"اعتماد QC — أُطلقت للاستخدام", qc_failed_note:"فشل QC — محجوبة", ok_qc_released:"تم اعتماد التشغيلة — متاحة للصرف ✓", ok_qc_failed:"سُجّل فشل QC — التشغيلة محجوبة", lst_quarantine:"تحت الفحص (QC)", lst_qc_failed:"فشل QC",
  lst_recalled:"مستدعاة", tip_recall:"استدعاء التشغيلة", recall_title:"استدعاء تشغيلة", recall_info:"استدعاء {name} — التشغيلة {lot} — المتبقي {q}", recall_impact:"أثر الاستدعاء: صُرفت سابقاً في {n} عملية بإجمالي {q}", recall_reason:"سبب الاستدعاء", recall_reason_ph:"مثال: سحب الشركة المصنّعة / عيب", recall_ref:"المرجع (NCMDR)", recall_by:"المسؤول", recall_need_reason:"أدخل سبب الاستدعاء", recall_party:"استدعاء", recall_txn_note:"استدعاء: {reason}", btn_recall_confirm:"تأكيد الاستدعاء وحجر المتبقي", ok_recalled:"تم الاستدعاء — حُجز المتبقي ✓", rep_recall_t:"🚩 تقرير الاستدعاء", rep_recall_s:"التشغيلات المستدعاة وأثرها", fn_recall:"تقرير_الاستدعاء",
  nav_temp:"سجل الحرارة", temp_title:"سجل درجات الحرارة (سلسلة التبريد)", temp_sub:"تسجيل يومي لحرارة الثلاجات/الفريزرات مع تنبيه التجاوز", temp_units_h:"وحدات التخزين", temp_unit_name:"اسم الوحدة (ثلاجة/فريزر)", temp_min:"أدنى (°م)", temp_max:"أعلى (°م)", temp_add_unit:"+ إضافة وحدة", temp_no_units:"لا توجد وحدات — أضف ثلاجة/فريزر أولاً", temp_log_h:"تسجيل قراءة", temp_unit:"الوحدة", temp_reading:"القراءة (°م)", temp_date:"التاريخ", temp_by:"بواسطة", btn_temp_log:"💾 تسجيل القراءة", temp_history_h:"السجل", temp_th_range:"المدى المسموح", temp_in_range:"ضمن المدى", temp_excursion:"تجاوز!", temp_no_logs:"لا توجد قراءات بعد", temp_need:"اختر الوحدة وأدخل القراءة", ok_temp_logged:"تم تسجيل القراءة ✓", ok_temp_excursion:"⚠️ تنبيه: القراءة خارج المدى المسموح!", temp_del_unit_q:"حذف الوحدة «{n}»؟ (تبقى القراءات السابقة)", fn_temp:"سجل_الحرارة", temp_unit_need:"أدخل اسم الوحدة والمدى الصحيح",
@@ -551,6 +553,7 @@ en:{
  dis_alert_expired:"⛔ Warning: the oldest lot ({lot}) is expired ({d}) — review before dispensing!",
  dis_alert_newlot:"🆕 Note: a new lot will be opened for the first time: {lots}",
  tip_dispose:"Dispose lot", dispose_title:"Dispose lot", dispose_info:"Dispose {name} — lot {lot} — current qty {q}", dispose_reason:"Disposal reason", dispose_pick_reason:"— Select reason —", dispose_r_expired:"Expired", dispose_r_rejected:"Rejected at inspection", dispose_r_damaged:"Damaged/broken", dispose_r_other:"Other", dispose_by:"Responsible person", dispose_date:"Disposal date", dispose_need_reason:"Select a disposal reason", dispose_txn_note:"Disposed ({reason})", btn_dispose_confirm:"Confirm disposal", ok_disposed:"Disposal recorded and stock removed ✓", lst_disposed:"Disposed", f_dispose:"Disposal", fn_disposal:"disposal_report", rep_disposal_t:"🚮 Disposal report", rep_disposal_s:"Disposed expired & rejected",
+ scan_btn:"📷 Scan", scan_title:"Scan barcode", scan_hint:"Scan with a reader or camera, or type the code and press Enter", scan_ph:"Scan or enter the code…", scan_camera:"Use camera", scan_view:"View in inventory", scan_not_found:"Code \"{code}\" is not registered", scan_receive_new:"Receive new with this code", scan_cam_err:"Couldn't start the camera", btn_close:"Close",
  qc_required_lbl:"QC check", qc_required_hint:"Requires QC release before dispensing", qc_quarantined_note:"Quarantined pending QC release", ok_receive_qc:"Received — lot quarantined pending QC release", tip_qc_release:"QC release", qc_release_title:"QC release", qc_result:"QC result", qc_pass:"Pass — release for use", qc_fail:"Fail — block", qc_by:"Performed by", qc_date:"QC date", qc_note:"Note (lot-to-lot)", qc_note_ph:"e.g., matches previous lot", qc_party:"QC", qc_released_note:"QC released for use", qc_failed_note:"QC failed — blocked", ok_qc_released:"Lot released — available for dispensing ✓", ok_qc_failed:"QC failed recorded — lot blocked", lst_quarantine:"Quarantine (QC)", lst_qc_failed:"QC failed",
  lst_recalled:"Recalled", tip_recall:"Recall lot", recall_title:"Recall lot", recall_info:"Recall {name} — lot {lot} — remaining {q}", recall_impact:"Recall impact: previously dispensed in {n} ops, total {q}", recall_reason:"Recall reason", recall_reason_ph:"e.g., manufacturer recall / defect", recall_ref:"Reference (NCMDR)", recall_by:"By", recall_need_reason:"Enter the recall reason", recall_party:"Recall", recall_txn_note:"Recall: {reason}", btn_recall_confirm:"Confirm recall & quarantine", ok_recalled:"Recalled — remaining quarantined ✓", rep_recall_t:"🚩 Recall report", rep_recall_s:"Recalled lots & impact", fn_recall:"recall_report",
  nav_temp:"Temperature log", temp_title:"Temperature log (cold chain)", temp_sub:"Daily fridge/freezer temperatures with excursion alerts", temp_units_h:"Storage units", temp_unit_name:"Unit name (fridge/freezer)", temp_min:"Min (°C)", temp_max:"Max (°C)", temp_add_unit:"+ Add unit", temp_no_units:"No units — add a fridge/freezer first", temp_log_h:"Log a reading", temp_unit:"Unit", temp_reading:"Reading (°C)", temp_date:"Date", temp_by:"By", btn_temp_log:"💾 Log reading", temp_history_h:"History", temp_th_range:"Allowed range", temp_in_range:"In range", temp_excursion:"Excursion!", temp_no_logs:"No readings yet", temp_need:"Select a unit and enter a reading", ok_temp_logged:"Reading logged ✓", ok_temp_excursion:"⚠️ Alert: reading out of allowed range!", temp_del_unit_q:"Delete unit \"{n}\"? (past readings kept)", fn_temp:"temperature_log", temp_unit_need:"Enter unit name and a valid range",
@@ -919,7 +922,7 @@ function modal(title,body,footer){
   $("modal").innerHTML=`<div class="modal-h"><h3>${esc(title)}</h3><button class="x" onclick="App.closeModal()">×</button></div><div class="modal-b">${body}</div>`+(footer?`<div class="modal-f">${footer}</div>`:"");
   $("modalBg").style.display="flex";
 }
-function closeModal(){ $("modalBg").style.display="none"; $("modal").innerHTML=""; }
+function closeModal(){ try{stopScanCam();}catch(e){} $("modalBg").style.display="none"; $("modal").innerHTML=""; }
 $("modalBg").addEventListener("click",e=>{ if(e.target.id==="modalBg") closeModal(); });
 function confirmAction(msg,onYes,yesLabel){
   modal(t("confirm_title"),`<p style="margin:0">${esc(msg)}</p>`,
@@ -1271,6 +1274,55 @@ function code39SVG(text){
   for(const ch of seq){const p=C39[ch]; if(!p)continue; for(let i=0;i<p.length;i++){const w=p[i]==='w'?WW:NW; if(i%2===0)r.push(`<rect x="${x}" y="0" width="${w}" height="${H}" fill="#000"/>`); x+=w;} x+=gap;}
   return `<svg width="${Math.min(x,460)}" viewBox="0 0 ${x} ${H}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="height:64px">${r.join("")}</svg>`;
 }
+
+/* ===== Quick scan (hardware scanner / camera) ===== */
+let scanStream=null, scanRAF=null, scanDetector=null;
+function scan(){
+  const camSupported=("BarcodeDetector" in window);
+  modal(t("scan_title"),`<p class="muted" style="margin-top:0">${t("scan_hint")}</p>
+    <div class="field"><input id="scan-input" placeholder="${t("scan_ph")}" autocomplete="off" autocapitalize="characters" style="font-size:18px;font-family:monospace;text-align:center;letter-spacing:1px"></div>
+    <div id="scan-cam-wrap" style="display:none;margin-bottom:10px"><video id="scan-video" style="width:100%;max-height:240px;border-radius:10px;background:#000" muted playsinline></video></div>
+    <div id="scan-result"></div>`,
+    `${camSupported?`<button class="btn soft" id="scan-cam-btn">📷 ${t("scan_camera")}</button>`:""}<button class="btn ghost" onclick="App.closeModal()">${t("btn_close")}</button>`);
+  const inp=$("scan-input"); if(inp){ inp.focus(); inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); resolveScan(inp.value); } }); }
+  if(camSupported){ const cb=$("scan-cam-btn"); if(cb)cb.onclick=()=>{ scanStream?stopScanCam():startScanCam(); }; }
+}
+function resolveScan(code){
+  code=String(code||"").trim(); const box=$("scan-result"); if(!box||!code)return;
+  const it=DB.items.find(i=>String(i.code).toLowerCase()===code.toLowerCase());
+  if(it){
+    const q=availQtyOf(it.code), st=itemStatus(it), held=heldQtyOf(it.code);
+    box.innerHTML=`<div class="panel" style="margin:0"><div class="panel-b">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><b style="font-size:15px">${esc(it.name)}</b><div class="muted" style="font-size:12px">${esc(it.code)} · ${esc(labelOf(CATS,it.category))}</div></div><span class="tag ${st.cls}">${t(st.key)}</span></div>
+      <div class="stat-line"><span>${t("th_qty")}: <b>${num(q)} ${esc(labelOf(UNITS,it.unit))}</b></span><span>${t("th_lots")}: ${num(availLots(it.code).length)}</span>${held>0?`<span class="tag warn">${t("lst_quarantine")}: ${num(held)}</span>`:""}</div>
+      <hr class="sep"><div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sm soft" onclick="App.scanGo('view','${jsq(it.code)}')">👁 ${t("scan_view")}</button>
+        <button class="btn sm soft" onclick="App.scanGo('receive','${jsq(it.code)}')">📥 ${t("nav_receive")}</button>
+        <button class="btn sm soft" onclick="App.scanGo('dispense','${jsq(it.code)}')">📤 ${t("btn_dispense")}</button>
+      </div></div></div>`;
+  } else {
+    const cat=catFind(code);
+    box.innerHTML=`<div class="help-box" style="background:var(--warn-soft);border-color:#f0d9a0;color:#8a5a00">${t("scan_not_found",{code:esc(code)})}${cat?(" — "+esc(cat.n)):""}<div style="margin-top:8px"><button class="btn sm soft" onclick="App.scanGo('receive','${jsq(code)}')">📥 ${t("scan_receive_new")}</button></div></div>`;
+  }
+}
+function scanGo(action,code){ stopScanCam(); closeModal();
+  if(action==="view"){ invSearch=code; invFilter="all"; go("inventory"); setTimeout(()=>toggleLots(code),90); }
+  else if(action==="receive"){ go("receive"); setTimeout(()=>{const e=$("rc-code"); if(e){e.value=code; onCodeType();}},90); }
+  else if(action==="dispense"){ go("dispense"); setTimeout(()=>{const e=$("ds-code"); if(e){e.value=code; if([...e.options].some(o=>o.value===code)){dispenseInfo();}else{toast(t("dis_empty_t"),"err");}}},90); }
+}
+async function startScanCam(){
+  try{ if(!("BarcodeDetector" in window))return;
+    scanDetector=scanDetector||new window.BarcodeDetector({formats:["code_39","code_128","code_93","ean_13","ean_8","upc_a","upc_e","codabar","itf","qr_code"]});
+    scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});
+    const v=$("scan-video"); if(!v){stopScanCam();return;}
+    $("scan-cam-wrap").style.display="block"; v.srcObject=scanStream; await v.play();
+    const tick=async()=>{ if(!scanStream)return;
+      try{ const codes=await scanDetector.detect(v); if(codes&&codes.length){ const val=codes[0].rawValue; stopScanCam(); const inp=$("scan-input"); if(inp)inp.value=val; resolveScan(val); return; } }catch(e){}
+      scanRAF=requestAnimationFrame(tick); };
+    scanRAF=requestAnimationFrame(tick);
+  }catch(e){ toast(t("scan_cam_err"),"err"); stopScanCam(); }
+}
+function stopScanCam(){ if(scanRAF){cancelAnimationFrame(scanRAF);scanRAF=null;} if(scanStream){scanStream.getTracks().forEach(tr=>tr.stop());scanStream=null;} const w=$("scan-cam-wrap"); if(w)w.style.display="none"; }
 
 /* Log */
 let logType="all", logSearch="";
@@ -1987,8 +2039,8 @@ const GUIDE=[
   ar:{t:"سجل درجات الحرارة (سلسلة التبريد)",s:["افتح «سجل الحرارة» وعرّف وحدات التخزين (ثلاجة/فريزر) مع المدى المسموح (أدنى/أعلى °م).","سجّل القراءة اليومية لكل وحدة؛ يُكتشف أي تجاوز للمدى تلقائياً ويظهر تنبيه «تجاوز!».","يبقى السجل كاملاً للمراجعة ويمكن تصديره Excel — متطلب التوزيع الجيد (GDP) والاعتماد."]},
   en:{t:"Temperature log (cold chain)",s:["Open “Temperature log” and define storage units (fridge/freezer) with the allowed range (min/max °C).","Log the daily reading per unit; any out-of-range value is auto-flagged with an “Excursion!” alert.","The full log is kept for review and can be exported to Excel — a GDP / accreditation requirement."]}},
  {ic:"🏷️",cls:"g-cyan",
-  ar:{t:"طباعة الباركود",s:["افتح «طباعة الباركود» واختر صنفاً أو أدخل الكود يدوياً.","عدّل اسم الملصق والتشغيلة وتاريخ الانتهاء (نظام Code 39).","حدّد عدد النسخ واطبع — يعمل دون اتصال على معظم الطابعات والماسحات."]},
-  en:{t:"Barcode printing",s:["Open “Barcode printing” and pick an item or type the code manually.","Adjust the label name, lot, and expiry (Code 39).","Set the number of copies and print — works offline with most printers and scanners."]}},
+  ar:{t:"الباركود: طباعة ومسح",s:["اطبع الملصقات: «طباعة الباركود» ← اختر صنفاً أو أدخل الكود، عدّل الاسم/التشغيلة/الانتهاء (Code 39) وعدد النسخ. يعمل دون اتصال.","للمسح السريع: اضغط زر «📷 مسح» بالأعلى — امسح بماسح USB/بلوتوث أو بالكاميرا (حيث تُدعم) أو أدخل الكود يدوياً ثم Enter.","بعد المسح ينتقل مباشرة للصنف مع أزرار سريعة: عرض في المخزون، استقبال، أو صرف."]},
+  en:{t:"Barcode: print & scan",s:["Print labels: “Barcode printing” ← pick an item or enter the code, adjust name/lot/expiry (Code 39) and copies. Works offline.","Quick scan: press the “📷 Scan” button at the top — scan with a USB/Bluetooth reader or the camera (where supported), or type the code and press Enter.","After scanning it jumps straight to the item with quick actions: view in inventory, receive, or dispense."]}},
  {ic:"📊",cls:"g-pink",
   ar:{t:"التقارير والتصدير",s:["افتح «التقارير» لرؤية التشغيلات المنتهية/القريبة والأكثر استهلاكاً، وتقرير الفترة وتقرير الموظفين.","صدّر أي تقرير بصيغة Excel/CSV: المخزون، الحركات، الانتهاء، الاستهلاك، استهلاك المختبرات، الإتلاف، الاستدعاء، الفترة، الموظفين.","استخدم «طباعة الصفحة» لطباعة تقرير جاهز."]},
   en:{t:"Reports & export",s:["Open “Reports” to see expired/near-expiry lots, most-consumed items, plus the period and employee reports.","Export any report as Excel/CSV: inventory, movements, expiry, consumption, lab usage, disposal, recall, period, employees.","Use “Print page” to print a ready report."]}},
@@ -2011,7 +2063,7 @@ function guideToggle(i){ const c=$("gc-"+i); if(c) c.classList.toggle("open"); }
 return {init,login,logout,go,toggleSide,toggleLang,closeModal,
   onCodeType,expHint,doReceive,catGroup,catItem,catKits,
   dispenseInfo,doDispense,
-  renderBarcode,bcFromItem,pickBarcode,printBarcode,
+  renderBarcode,bcFromItem,pickBarcode,printBarcode,scan,scanGo,
   toggleLots,editItem,delItem,addLot,adjustLot,delLot,disposeLot,releaseQC,recallLot,
   exportCSV,setRepRange,setRepEmp,repPreset,saveSettings,addLab,delLab,backup,restore,reseed,wipe,zeroStock,toggleOrder,doTrace,
   addTempUnit,delTempUnit,logTemp,addSupplier,delSupplier,
