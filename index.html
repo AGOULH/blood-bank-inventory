@@ -1283,7 +1283,7 @@ function printL2LForm(it,usedDetail,qty,lab,date,prevLot){
     @media print{
       .rs{display:none!important}.pv{display:inline!important}
       .pbtn,.no-print{display:none!important}
-      textarea{border-bottom:1px solid #aaa}
+      textarea,input{border:none!important;border-bottom:1px solid #aaa!important;background:transparent!important}
       body{padding:8mm}@page{size:A4;margin:8mm}
     }
   </style></head><body>
@@ -1318,8 +1318,8 @@ function printL2LForm(it,usedDetail,qty,lab,date,prevLot){
         <tr><td>Percent of correct results</td><td style="text-align:center;font-weight:bold" id="st-p"></td></tr>
       </table>
       <table>
-        <tr><td class="k" style="width:50%">Old LOT Number</td><td style="font-weight:bold">${prevH}</td></tr>
-        <tr><td class="k">New LOT Number</td><td style="font-weight:bold">${newH}</td></tr>
+        <tr><td class="k" style="width:50%">Old LOT Number</td><td><input id="f-old-lot" value="${prevH}" style="width:100%;border:none;border-bottom:1px solid #999;font-weight:bold;font-size:12px;padding:2px 4px;outline:none;background:transparent"></td></tr>
+        <tr><td class="k">New LOT Number</td><td><input id="f-new-lot" value="${newH}" style="width:100%;border:none;border-bottom:1px solid #999;font-weight:bold;font-size:12px;padding:2px 4px;outline:none;background:transparent"></td></tr>
       </table>
       <table>
         <tr><th colspan="2">Conclusion</th></tr>
