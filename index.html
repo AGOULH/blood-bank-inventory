@@ -1607,14 +1607,14 @@ pages.temp=()=>{
     <div class="panel"><div class="panel-h"><h3>${t("temp_log_h")}</h3></div><div class="panel-b">
       ${units.length?`<div class="form-grid">
         <div><label class="req">${t("temp_unit")}</label><select id="tp-unit">${units.map(u=>`<option value="${esc(u.id)}">${esc(u.name)} (${num(u.min)}–${num(u.max)}°)</option>`).join("")}</select></div>
-        <div><label class="req">${t("temp_reading")}</label><input id="tp-val" type="number" step="0.1"></div>
+        <div><label class="req">${t("temp_reading")}</label><input id="tp-val" type="number" step="0.1" min="-200" max="200"></div>
         <div><label>${t("temp_date")}</label><input id="tp-date" type="date" value="${todayISO()}"></div>
       </div><div style="margin-top:12px"><button class="btn" onclick="App.logTemp()">${t("btn_temp_log")}</button></div>`
       :`<div class="empty"><div class="em-ic">🌡️</div><h4>${t("temp_no_units")}</h4></div>`}
     </div></div>
     <div class="panel"><div class="panel-h"><h3>${t("temp_units_h")}</h3></div><div class="panel-b">
       <div style="margin-bottom:10px">${units.length?units.map(u=>`<span class="tag mut" style="margin:0 4px 6px 0">${esc(u.name)} (${num(u.min)}–${num(u.max)}°) <button class="icon-btn danger" style="padding:0 6px;margin-inline-start:4px" onclick="App.delTempUnit('${jsq(u.id)}')">×</button></span>`).join(""):`<span class="muted" style="font-size:13px">${t("temp_no_units")}</span>`}</div>
-      <div class="form-grid"><div><label>${t("temp_unit_name")}</label><input id="tu-name"></div><div><label>${t("temp_min")}</label><input id="tu-min" type="number" step="0.1" value="2"></div><div><label>${t("temp_max")}</label><input id="tu-max" type="number" step="0.1" value="8"></div></div>
+      <div class="form-grid"><div><label>${t("temp_unit_name")}</label><input id="tu-name"></div><div><label>${t("temp_min")}</label><input id="tu-min" type="number" step="0.1" min="-200" max="200" value="2"></div><div><label>${t("temp_max")}</label><input id="tu-max" type="number" step="0.1" min="-200" max="200" value="8"></div></div>
       <div style="margin-top:10px"><button class="btn soft" onclick="App.addTempUnit()">${t("temp_add_unit")}</button></div>
     </div></div>
   </div>
