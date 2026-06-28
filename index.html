@@ -1227,22 +1227,23 @@ function doDispense(){
     ${alerts}
     <div class="tbl-wrap"><table style="font-size:13px"><thead><tr><th>${t("th_lot")}</th><th>${t("th_exp")}</th><th class="num">${t("dis_th_take")}</th><th>${t("th_status")}</th></tr></thead><tbody>${rowsH}</tbody></table></div>${prevLotHtml}`;
   modal(t("dis_confirm_title"),body,`<button class="btn" id="dc-yes">${t("btn_confirm_dispense")}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
-  $("dc-yes").onclick=()=>{ const prevLot=($("l2l-prevlot")||{}).value||""; closeModal(); commitDispense(code,qty,lab,date,note,prevLot); };
+  const planNewLot=plan.map(p=>p.l.lot||"—").join(", ");
+  $("dc-yes").onclick=()=>{ const prevLot=($("l2l-prevlot")||{}).value||""; closeModal(); commitDispense(code,qty,lab,date,note,prevLot,planNewLot); };
 }
-function commitDispense(code,qty,lab,date,note,prevLot){
+function commitDispense(code,qty,lab,date,note,prevLot,knownNewLot){
   const avail=availQtyOf(code);
   if(qty>avail)return toast(t("err_over",{q:num(qty),a:num(avail)}),"err");
   let rem=qty; const used=[], usedDetail=[]; for(const l of availLots(code)){if(rem<=0)break;const take=Math.min(rem,l.qtyRemaining);l.qtyRemaining-=take;rem-=take;used.push(l.lot||"—");usedDetail.push({lot:l.lot||"—",expiry:l.expiry||"",take});}
   DB.txns.push({id:uid(),type:"out",code,lot:used.join(", "),qty,date,party:labelOf(labs(),lab),lab,note,user:curUser()});
   save(); toast(t("ok_dispense"),"ok");
-  if(needsL2L(code)){ const it=DB.items.find(i=>i.code===code); printL2LForm(it||{code,name:code,unit:""},usedDetail,qty,lab,date,prevLot||""); }
+  if(needsL2L(code)){ const it=DB.items.find(i=>i.code===code); printL2LForm(it||{code,name:code,unit:""},usedDetail,qty,lab,date,prevLot||"",knownNewLot||used.join(", ")); }
   // reset form in place without full page re-render
   if($("ds-code")){ $("ds-code").value=""; $("ds-qty").value=""; if($("ds-note")) $("ds-note").value=""; if($("ds-info")) $("ds-info").innerHTML=""; if($("ds-date")) $("ds-date").value=todayISO(); window.scrollTo(0,0); }
   else { go("dispense"); }
 }
-function printL2LForm(it,usedDetail,qty,lab,date,prevLot){
+function printL2LForm(it,usedDetail,qty,lab,date,prevLot,knownNewLot){
   const c=catFind(it.code), grp=c?(()=>{const g=CATALOG.find(x=>x.g===c.group);return g?lbl(g):c.group;})():"—";
-  const newLot=usedDetail.map(d=>d.lot).join(", ");
+  const newLot=knownNewLot||usedDetail.map(d=>d.lot).join(", ")||"—";
   const doneBy=curUser(), dept=labelOf(labs(),lab);
   const dateStr=esc(fmtG(date))+' / '+esc(fmtH(date));
   const orgH=esc(t("org")), minH=esc(t("ministry_line")), footH=esc(t("l2l_footer"));
