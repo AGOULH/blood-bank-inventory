@@ -1219,7 +1219,9 @@ function doDispense(){
   let prevLotHtml="";
   if(needsL2L(code)){
     const prevLots=DB.lots.filter(l=>l.code===code&&!newLotIds.has(l.id)).sort((a,b)=>(b.expiry||"").localeCompare(a.expiry||""));
-    if(prevLots.length) prevLotHtml=`<div style="margin-top:12px"><label style="font-size:13px;font-weight:600;color:var(--muted)">${t("l2l_prevlot")}</label><select id="l2l-prevlot" style="width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:var(--r-sm);margin-top:5px;font-size:14px"><option value="">${t("l2l_prevlot_pick")}</option>${prevLots.map(l=>`<option value="${esc(l.lot||"—")}">${esc(l.lot||"—")} — ${fmtG(l.expiry)}</option>`).join("")}</select></div>`;
+    // auto-detect old lot from most recent out-transaction for this item
+    const lastOutLot=(DB.txns.filter(x=>x.type==="out"&&x.code===code).sort((a,b)=>(b.id>a.id?1:-1))[0]||{}).lot||"";
+    if(prevLots.length) prevLotHtml=`<div style="margin-top:12px"><label style="font-size:13px;font-weight:600;color:var(--muted)">${t("l2l_prevlot")}</label><select id="l2l-prevlot" style="width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:var(--r-sm);margin-top:5px;font-size:14px"><option value="">${t("l2l_prevlot_pick")}</option>${prevLots.map(l=>`<option value="${esc(l.lot||"—")}"${lastOutLot&&(l.lot||"—")===lastOutLot?" selected":""}>${esc(l.lot||"—")} — ${fmtG(l.expiry)}</option>`).join("")}</select></div>`;
   }
   const body=`<p style="margin:0 0 10px">${t("dis_confirm_intro",{q:num(qty),u:esc(labelOf(UNITS,it?it.unit:"")),name:esc(it?it.name:code)})}</p>
     ${alerts}
