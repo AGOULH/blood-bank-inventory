@@ -145,7 +145,7 @@
   .label-card svg{max-width:100%}
   .label-card .lc-code{font-family:monospace;letter-spacing:2px;margin-top:6px;font-size:14px}
 
-  .modal-bg{position:fixed;inset:0;background:rgba(16,24,40,.45);display:none;align-items:center;justify-content:center;z-index:60;padding:18px}
+  .modal-bg{position:fixed;inset:0;background:rgba(16,24,40,.45);display:none;align-items:center;justify-content:center;z-index:200;padding:18px;overflow-y:auto}
   .modal{background:#fff;border-radius:16px;width:100%;max-width:560px;box-shadow:0 24px 60px rgba(0,0,0,.3);max-height:92vh;overflow:auto}
   .modal-h{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
   .modal-h h3{margin:0;font-size:17px}
@@ -153,7 +153,7 @@
   .modal-b{padding:18px}
   .modal-f{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-start}
 
-  #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:90;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:300;box-shadow:0 10px 30px rgba(0,0,0,.25)}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   #toast.ok{background:var(--ok)} #toast.err{background:var(--danger)}
 
@@ -911,14 +911,15 @@ function renderSidebar(){
 function toggleCollapse(){ const c=localStorage.getItem("inv_collapsed")==="1"; localStorage.setItem("inv_collapsed",c?"0":"1"); $("side").classList.toggle("collapsed",!c); }
 
 const afterRender={};
-function go(route){
-  location.hash=route;
+function go(route,pushHistory){
+  if(pushHistory!==false) location.hash=route;
   document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.route===route));
   $("side").classList.remove("open");
   $("view").innerHTML=(pages[route]||pages.dashboard)();
   if(afterRender[route]) afterRender[route]();
   window.scrollTo(0,0);
 }
+window.addEventListener("hashchange",()=>{ go(location.hash.replace("#","")||"dashboard",false); });
 
 let toastT;
 function toast(msg,type){ const el=$("toast"); el.textContent=msg; el.className="show "+(type||"");
@@ -926,8 +927,9 @@ function toast(msg,type){ const el=$("toast"); el.textContent=msg; el.className=
 function modal(title,body,footer){
   $("modal").innerHTML=`<div class="modal-h"><h3>${esc(title)}</h3><button class="x" onclick="App.closeModal()">×</button></div><div class="modal-b">${body}</div>`+(footer?`<div class="modal-f">${footer}</div>`:"");
   $("modalBg").style.display="flex";
+  document.body.style.overflow="hidden";
 }
-function closeModal(){ try{stopScanCam();}catch(e){} $("modalBg").style.display="none"; $("modal").innerHTML=""; }
+function closeModal(){ try{stopScanCam();}catch(e){} $("modalBg").style.display="none"; $("modal").innerHTML=""; document.body.style.overflow=""; }
 $("modalBg").addEventListener("click",e=>{ if(e.target.id==="modalBg") closeModal(); });
 function confirmAction(msg,onYes,yesLabel){
   modal(t("confirm_title"),`<p style="margin:0">${esc(msg)}</p>`,
@@ -1232,7 +1234,9 @@ function commitDispense(code,qty,lab,date,note,prevLot){
   DB.txns.push({id:uid(),type:"out",code,lot:used.join(", "),qty,date,party:labelOf(labs(),lab),lab,note,user:curUser()});
   save(); toast(t("ok_dispense"),"ok");
   if(needsL2L(code)){ const it=DB.items.find(i=>i.code===code); printL2LForm(it||{code,name:code,unit:""},usedDetail,qty,lab,date,prevLot||""); }
-  go("dispense");
+  // reset form in place without full page re-render
+  if($("ds-code")){ $("ds-code").value=""; $("ds-qty").value=""; if($("ds-note")) $("ds-note").value=""; if($("ds-info")) $("ds-info").innerHTML=""; if($("ds-date")) $("ds-date").value=todayISO(); window.scrollTo(0,0); }
+  else { go("dispense"); }
 }
 function printL2LForm(it,usedDetail,qty,lab,date,prevLot){
   const c=catFind(it.code), grp=c?(()=>{const g=CATALOG.find(x=>x.g===c.group);return g?lbl(g):c.group;})():"—";
@@ -1624,8 +1628,9 @@ pages.temp=()=>{
   </tbody></table></div>`:`<div class="empty"><div class="em-ic">📋</div><h4>${t("temp_no_logs")}</h4></div>`}
   </div></div>`;
 };
-function addTempUnit(){ const name=$("tu-name").value.trim(), mn=+$("tu-min").value, mx=+$("tu-max").value;
-  if(!name||isNaN(mn)||isNaN(mx)||mx<=mn)return toast(t("temp_unit_need"),"err");
+function addTempUnit(){ const name=$("tu-name").value.trim(); let mn=+$("tu-min").value, mx=+$("tu-max").value;
+  if(!name||isNaN(mn)||isNaN(mx)||mn===mx)return toast(t("temp_unit_need"),"err");
+  if(mn>mx){const tmp=mn;mn=mx;mx=tmp;}
   DB.settings.tempUnits=DB.settings.tempUnits||[]; DB.settings.tempUnits.push({id:uid(),name,min:mn,max:mx}); save(); go("temp"); }
 function delTempUnit(id){ DB.settings.tempUnits=(DB.settings.tempUnits||[]).filter(u=>u.id!==id); save(); go("temp"); }
 function logTemp(){ const unitId=$("tp-unit").value, valStr=$("tp-val").value, val=+valStr, date=$("tp-date").value||todayISO();
