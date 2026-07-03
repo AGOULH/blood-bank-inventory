@@ -1300,10 +1300,19 @@ function printL2LForm(it,usedDetail,qty,lab,date,prevLot,knownNewLot){
     .pbtn{display:block;margin:0 auto 12px;padding:9px 34px;background:#127a3e;color:#fff;border:none;border-radius:7px;font-size:14px;font-weight:bold;cursor:pointer}
     .footer{font-size:10px;color:#666;text-align:center;margin-top:8px;border-top:1px solid #ccc;padding-top:5px}
     @media print{
+      *{font-size:10px!important}
       .rs{display:none!important}.pv{display:inline!important}
       .pbtn,.no-print{display:none!important}
       textarea,input{border:none!important;border-bottom:1px solid #aaa!important;background:transparent!important}
-      body{padding:8mm}@page{size:A4;margin:8mm}
+      body{padding:0;margin:0}@page{size:A4;margin:6mm}
+      td,th{padding:2px 5px!important}
+      .sec{margin-bottom:3px!important}
+      .hd{padding-bottom:3px!important;margin-bottom:4px!important}
+      .conc td{padding:3px!important}
+      .cmnt td{height:26px!important;padding:2px!important}
+      textarea{height:20px!important}
+      .sig-tbl .sh{height:18px!important}
+      table{page-break-inside:avoid}
     }
   </style></head><body>
   <button class="pbtn no-print" onclick="doPrint()">🖨 Print Form</button>
