@@ -1388,7 +1388,12 @@ function printL2LForm(it,usedDetail,qty,lab,date,prevLot,knownNewLot){
     else{rr.textContent=pass?'PASS':'FAIL';rl.textContent=pass?'ACCEPTED':'REJECTED';
       rr.style.color=rl.style.color=pass?'#127a3e':'#c0392b';}
   }
-  function doPrint(){window.print();}
+  function syncInputs(){
+    document.querySelectorAll('input').forEach(function(el){el.setAttribute('value', el.value);});
+    document.querySelectorAll('textarea').forEach(function(el){el.textContent = el.value;});
+  }
+  function doPrint(){syncInputs();window.print();}
+  window.onbeforeprint=syncInputs;
   u();
   `+'<\/script></body></html>';
   w.document.write(html);
