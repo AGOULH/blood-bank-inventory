@@ -1010,7 +1010,7 @@ function donut(data){
 }
 
 /* Inventory */
-let invFilter="all", invSearch="";
+let invFilter="all", invSearch="", invGroup="all";
 function invSummary(){
   if(!DB.items.length) return "";
   const map={}; DB.items.forEach(it=>{ const k=it.category||"other"; if(!map[k])map[k]={n:0,q:0}; map[k].n++; map[k].q+=availQtyOf(it.code); });
@@ -1037,10 +1037,13 @@ pages.inventory=()=>`
   ${invSummary()}
   ${invByDevice()}
   <div class="toolbar"><div class="search"><span class="si">🔎</span><input id="invSearch" placeholder="${t("search_inv_ph")}" value="${esc(invSearch)}"></div>
+    <select id="invGroupSel" style="width:auto"><option value="all">${t("filter_all")} — ${t("cat_group")}</option>${CATALOG.map(g=>`<option value="${g.g}" ${invGroup===g.g?"selected":""}>${esc(lbl(g))}</option>`).join("")}</select>
     <div class="seg" id="invSeg">${["all","ok","warn","danger","out"].map(k=>`<button data-f="${k}" class="${invFilter===k?"active":""}">${t({all:"filter_all",ok:"filter_ok",warn:"filter_warn",danger:"filter_danger",out:"filter_out"}[k])}</button>`).join("")}</div></div>
   <div class="panel"><div class="panel-b" id="invBody"></div></div>`;
 afterRender.inventory=()=>{
   $("invSearch").addEventListener("input",e=>{invSearch=e.target.value;renderInv();});
+  $("invGroupSel").value=invGroup;
+  $("invGroupSel").addEventListener("change",e=>{invGroup=e.target.value;renderInv();});
   $("invSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{invFilter=b.dataset.f;go("inventory");});
   renderInv();
 };
@@ -1053,9 +1056,14 @@ function matchFilter(it){
   if(invFilter==="out")return q<=0;
   return true;
 }
+function matchGroup(it){
+  if(invGroup==="all")return true;
+  const c=catFind(it.code);
+  return !!(c&&c.group===invGroup);
+}
 function renderInv(){
   const s=invSearch.trim().toLowerCase();
-  let rows=DB.items.filter(it=>{const hit=!s||[it.name,it.code,it.manufacturer,labelOf(CATS,it.category)].some(v=>String(v||"").toLowerCase().includes(s));return hit&&matchFilter(it);}).sort((a,b)=>a.name.localeCompare(b.name,"ar"));
+  let rows=DB.items.filter(it=>{const hit=!s||[it.name,it.code,it.manufacturer,labelOf(CATS,it.category)].some(v=>String(v||"").toLowerCase().includes(s));return hit&&matchFilter(it)&&matchGroup(it);}).sort((a,b)=>a.name.localeCompare(b.name,"ar"));
   if(!DB.items.length){ $("invBody").innerHTML=`<div class="empty"><div class="em-ic">📦</div><h4>${t("inv_empty_t")}</h4><p>${t("inv_empty_s")}</p><button class="btn" style="margin-top:10px" onclick="App.go('receive')">${t("btn_receive_solution")}</button></div>`; return; }
   if(!rows.length){ $("invBody").innerHTML=`<div class="empty"><div class="em-ic">🔍</div><h4>${t("no_results_t")}</h4><p>${t("no_results_s")}</p></div>`; return; }
   let h=`<div class="tbl-wrap"><table><thead><tr><th>${t("th_code")}</th><th>${t("th_name")}</th><th>${t("th_man")}</th><th>${t("th_cat")}</th><th class="num">${t("th_qty")}</th><th>${t("th_unit")}</th><th class="num">${t("th_lots")}</th><th>${t("th_status")}</th><th>${t("th_actions")}</th></tr></thead><tbody>`;
