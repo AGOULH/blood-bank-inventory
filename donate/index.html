@@ -107,8 +107,8 @@
   .thanks-num{font-size:15px;color:var(--muted)}
   .thanks-num b{color:var(--blood);font-size:22px}
 
-  /* ===== display screen ===== */
-  .screen{min-height:100vh;background:radial-gradient(1400px 800px at 70% -10%,#b52440 0%,var(--crimson) 40%,var(--crimson-dark) 100%);color:#fff;display:flex;flex-direction:column;padding:2.2vh 3vw;overflow:hidden;position:relative}
+  /* ===== display screen (ألوان تناسب كيس الدم) ===== */
+  .screen{min-height:100vh;background:radial-gradient(1400px 800px at 70% -10%,#d90429 0%,#800f2f 45%,#3d0814 100%);color:#fff;display:flex;flex-direction:column;padding:2.2vh 3vw;overflow:hidden;position:relative}
   .scr-head{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
   .scr-logo{height:9vh;max-height:90px;min-height:52px;object-fit:contain;background:#fff;border-radius:14px;padding:6px}
   .scr-title h1{margin:0;font-size:clamp(22px,3.6vw,44px);font-weight:800;line-height:1.25}
@@ -116,16 +116,16 @@
   .scr-days{display:flex;gap:8px;margin-inline-start:auto;flex-wrap:wrap}
   .day-chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:6px 13px;text-align:center;font-size:clamp(11px,1.2vw,14px)}
   .day-chip b{display:block;font-size:clamp(15px,1.7vw,21px)}
-  .day-chip.now{background:#fff;color:var(--crimson-dark)}
+  .day-chip.now{background:#fff;color:#800f2f}
   .scr-body{flex:1;display:flex;align-items:center;gap:3vw;margin-top:2vh;min-height:0}
-  .ring-wrap{flex:none;position:relative;width:min(38vh,32vw);aspect-ratio:1}
-  .ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
-  .ring-bg{fill:none;stroke:rgba(255,255,255,.15);stroke-width:16}
-  .ring-fg{fill:none;stroke:#fff;stroke-width:16;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.22,1,.36,1)}
-  .ring-mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .ring-mid .pct{font-size:clamp(34px,6.5vw,80px);font-weight:800;line-height:1}
-  .ring-mid .of{font-size:clamp(13px,1.6vw,20px);opacity:.85;margin-top:6px}
-  .ring-mid .of b{font-size:clamp(18px,2.4vw,30px)}
+  .bag-area{flex:none;display:flex;align-items:center;gap:2.4vw}
+  .bag-svg{height:min(52vh,460px);width:auto;filter:drop-shadow(0 12px 30px rgba(0,0,0,.4))}
+  #blood-g{transition:transform 1.5s cubic-bezier(.22,1,.36,1)}
+  .bag-side .pct{font-size:clamp(40px,7vw,96px);font-weight:800;line-height:1;text-shadow:0 4px 18px rgba(0,0,0,.35)}
+  .bag-side .of{font-size:clamp(14px,1.8vw,22px);opacity:.9;margin-top:8px}
+  .bag-side .of b{font-size:clamp(20px,2.6vw,34px)}
+  .drop-fall{animation:dropFall 1.15s cubic-bezier(.45,0,.9,.55) forwards}
+  @keyframes dropFall{0%{transform:translateY(0) scale(.85);opacity:0}12%{opacity:1}80%{opacity:1}100%{transform:translateY(235px) scale(1.02);opacity:0}}
   .scr-types{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;min-width:0}
   .type-tile{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:1.6vh 8px;text-align:center;backdrop-filter:blur(4px)}
   .type-tile .tl{font-size:clamp(17px,2.2vw,30px);font-weight:800;direction:ltr}
@@ -138,13 +138,13 @@
   .scr-qr .cap{font-size:11px;font-weight:700;margin-top:4px}
   .pulse{animation:pulse .9s ease}
   @keyframes pulse{0%{transform:scale(1)}35%{transform:scale(1.06)}100%{transform:scale(1)}}
-  .float-drop{position:absolute;font-size:34px;animation:floatUp 2.6s ease-out forwards;pointer-events:none;z-index:5}
-  @keyframes floatUp{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-45vh) rotate(20deg);opacity:0}}
-  .scr-ended{position:absolute;inset:0;background:rgba(12,94,48,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;text-align:center;padding:20px}
+  .scr-ended{position:absolute;inset:0;background:rgba(61,8,20,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;text-align:center;padding:20px}
   .scr-ended h2{font-size:clamp(26px,4vw,52px);margin:0 0 8px}
+  .scr-credit{text-align:center;font-size:clamp(11px,1.1vw,14px);opacity:.75;margin-top:1.2vh}
+  .credit{text-align:center;color:var(--muted);font-size:12.5px;padding:18px 0 4px}
   @media(max-width:760px){
     .scr-body{flex-direction:column;gap:2vh}
-    .ring-wrap{width:min(34vh,64vw)}
+    .bag-svg{height:32vh}
     .scr-types{grid-template-columns:repeat(4,1fr);width:100%}
     .scr-foot{flex-direction:column}
     .scr-qr{display:none}
@@ -260,7 +260,7 @@ function shell(inner,active){
       <button class="top-tab ${active==="stats"?"active":""}" onclick="location.hash='#/stats'">الأرشيف والإحصائيات</button>
     </div>
     <div class="sync-dot" id="sync-dot" title="حالة الاتصال"></div>
-  </div><div class="main">${inner}</div>`;
+  </div><div class="main">${inner}<div class="credit">فكرة وإعداد: حسن العاقول</div></div>`;
 }
 
 /* ================= صفحة الإدارة ================= */
@@ -276,9 +276,10 @@ async function renderAdmin(){
       <div class="panel-b"><div class="form-grid">
         <div><label class="req">اسم الحملة</label><input id="f-name" list="dl-names" placeholder="مثال: حملة عطاء"><datalist id="dl-names"></datalist></div>
         <div><label class="req">المدينة</label><input id="f-city" list="dl-cities" placeholder="الدمام"><datalist id="dl-cities"></datalist></div>
-        <div><label class="req">تاريخ البداية</label><input id="f-start" type="date"></div>
+        <div><label class="req">تاريخ البداية</label><input id="f-start" type="date" onclick="try{this.showPicker()}catch(e){}"></div>
         <div><label class="req">مدة الحملة (أيام)</label><input id="f-days" type="number" min="1" max="14" value="1"></div>
-        <div><label class="req">الأوقات</label><input id="f-times" placeholder="مثال: 4 عصراً – 11 مساءً"></div>
+        <div><label class="req">وقت البداية</label><select id="f-time-from"></select></div>
+        <div><label class="req">وقت النهاية</label><select id="f-time-to"></select></div>
         <div><label class="req">العدد المتوقع (الهدف)</label><input id="f-goal" type="number" min="1" placeholder="200"></div>
         <div><label>الجهة المنظمة (التمبلت)</label><input id="f-org" placeholder="اسم الجهة يظهر للمتبرع"></div>
         <div><label>شعار الجهة</label><input id="f-logo" type="file" accept="image/*"><img class="logo-prev" id="f-logo-prev" style="margin-top:8px"></div>
@@ -289,6 +290,7 @@ async function renderAdmin(){
       <div class="panel-b"><div class="tbl-wrap" id="list-box"><div class="empty">جارِ التحميل…</div></div></div>
     </div>`,"admin");
   $("#f-start").value=new Date().toISOString().slice(0,10);
+  timeOptions($("#f-time-from"),16);timeOptions($("#f-time-to"),22);
   $("#f-logo").addEventListener("change",onLogoPick);
   try{
     await ensureFB();
@@ -301,6 +303,15 @@ async function renderAdmin(){
       renderList(sortRows(rows));
     },err=>{$("#list-box").innerHTML=`<div class="empty">تعذر الاتصال بقاعدة البيانات (${esc(err.code||"")})</div>`;});
   }catch(e){$("#list-box").innerHTML=`<div class="empty">لا يوجد اتصال بالإنترنت — أعد المحاولة</div>`;}
+}
+function timeOptions(sel,defH){
+  const out=[];
+  for(let h=0;h<24;h++)for(const m of [0,30]){
+    const h12=((h+11)%12)+1,per=h<12?"صباحاً":(h===12?"ظهراً":"مساءً");
+    const lbl=h12+":"+(m?"30":"00")+" "+per;
+    out.push(`<option value="${lbl}" ${h===defH&&m===0?"selected":""}>${lbl}</option>`);
+  }
+  sel.innerHTML=out.join("");
 }
 let logoData=null;
 function onLogoPick(ev){
@@ -321,22 +332,23 @@ function onLogoPick(ev){
 }
 async function createCampaign(){
   const name=$("#f-name").value.trim(),city=$("#f-city").value.trim(),start=$("#f-start").value,
-        days=parseInt($("#f-days").value||"0"),times=$("#f-times").value.trim(),
+        days=parseInt($("#f-days").value||"0"),tFrom=$("#f-time-from").value,tTo=$("#f-time-to").value,
+        times="من "+tFrom+" إلى "+tTo,
         goal=parseInt($("#f-goal").value||"0"),org=$("#f-org").value.trim();
-  if(!name||!city||!start||!days||days<1||!times||!goal||goal<1)return toast("أكمل كل الحقول المطلوبة","err");
+  if(!name||!city||!start||!days||days<1||!goal||goal<1)return toast("أكمل كل الحقول المطلوبة","err");
   $("#f-save").disabled=true;
   try{
     await ensureFB();
     const counts={};BT.forEach(b=>counts[b.k]=0);
     const id=newId();
     await cDoc(id).set({
-      name,city,startDate:start,days,times,goal,org:org||null,logo:logoData||null,
+      name,city,startDate:start,days,times,timeFrom:tFrom,timeTo:tTo,goal,org:org||null,logo:logoData||null,
       status:"active",total:0,counts,daily:{},
       createdAt:firebase.firestore.FieldValue.serverTimestamp()
     });
     db.doc(META_DOC).set({names:firebase.firestore.FieldValue.arrayUnion(name),
                           cities:firebase.firestore.FieldValue.arrayUnion(city)},{merge:true}).catch(()=>{});
-    ["f-name","f-city","f-times","f-goal","f-org"].forEach(i=>$( "#"+i).value="");
+    ["f-name","f-city","f-goal","f-org"].forEach(i=>$( "#"+i).value="");
     logoData=null;$("#f-logo").value="";$("#f-logo-prev").style.display="none";
     toast("تم إنشاء الحملة ✓");
     showLinks(id,name);
@@ -385,6 +397,7 @@ async function deleteCampaign(id){
 }
 async function showLinks(id,name){
   const dURL=baseURL()+"#/d/"+id, sURL=baseURL()+"#/s/"+id;
+  $("#modal-box").style.maxWidth="440px";
   $("#modal-box").innerHTML=`<h3>${esc(name)}</h3>
     <p style="color:var(--muted);font-size:13px;margin:0">اطبع الباركود وضعه في موقع الحملة — المتبرع يمسحه ويسجل تبرعه</p>
     <div class="qr-box"><div id="qr-modal"></div></div>
@@ -417,7 +430,8 @@ function drawDonorForm(id,c){
   if(c.status!=="active"){
     $("#d-card").innerHTML=`<div class="mark">🩸</div><h1>${esc(c.name)}</h1>
       <p class="sub">${esc(c.city)}</p>
-      <div class="thanks-phrase">انتهت هذه الحملة — شكراً لكل من شارك! بلغ عدد المتبرعين <b>${c.total||0}</b></div>`;
+      <div class="thanks-phrase">انتهت هذه الحملة — شكراً لكل من شارك! بلغ عدد المتبرعين <b>${c.total||0}</b></div>
+      <div class="credit">فكرة وإعداد: حسن العاقول</div>`;
     return;
   }
   selBT=null;
@@ -429,7 +443,8 @@ function drawDonorForm(id,c){
     <div style="font-weight:700;font-size:15px;margin-bottom:4px">اختر فصيلة دمك:</div>
     <div class="bt-grid">${BT.map(b=>`<button class="bt-btn" id="bt-${b.k}" onclick="pickBT('${b.k}')">${b.l}</button>`).join("")}</div>
     <button class="donate-btn" id="d-go" disabled onclick="registerDonation('${id}')">🩸 تبرعت بالدم</button>
-    <div class="thanks-num" style="margin-top:14px">عدد المتبرعين حتى الآن: <b id="d-live">${c.total||0}</b></div>`;
+    <div class="thanks-num" style="margin-top:14px">عدد المتبرعين حتى الآن: <b id="d-live">${c.total||0}</b></div>
+    <div class="credit">فكرة وإعداد: حسن العاقول</div>`;
 }
 function pickBT(k){selBT=k;BT.forEach(b=>$("#bt-"+b.k).classList.toggle("sel",b.k===k));$("#d-go").disabled=false;}
 async function registerDonation(id){
@@ -449,7 +464,8 @@ async function registerDonation(id){
       <p class="sub">تم تسجيل تبرعك بفصيلة <b style="direction:ltr">${lbl}</b></p>
       <div class="thanks-phrase">${esc(currentPhrase())}</div>
       <div class="thanks-num">أنت ضمن <b id="d-live">${(curCamp&&curCamp.total)||1}</b> متبرعاً في هذه الحملة</div>
-      <button class="btn soft" style="margin-top:16px;width:100%" onclick="location.reload()">تسجيل متبرع آخر</button>`;
+      <button class="btn soft" style="margin-top:16px;width:100%" onclick="location.reload()">تسجيل متبرع آخر</button>
+      <div class="credit">فكرة وإعداد: حسن العاقول</div>`;
   }catch(e){toast("تعذر التسجيل: "+(e.code||e.message),"err");btn.disabled=false;btn.textContent="🩸 تبرعت بالدم";}
 }
 
@@ -481,8 +497,43 @@ async function renderScreen(id){
     if(el.dataset.p!==p){el.classList.add("fade");setTimeout(()=>{el.textContent=p;el.dataset.p=p;el.classList.remove("fade");},800);}
   },20000));
 }
+/* كيس دم واقعي يمتلئ حسب نسبة تحقيق الهدف — مساحة الدم داخل الكيس من y=86 إلى y=364 (ارتفاع 278) */
+const BAG_H=278;
+function bagSVG(){return `
+  <svg class="bag-svg" id="bag-svg" viewBox="0 0 300 430" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bloodGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#e5383b"/><stop offset=".5" stop-color="#ba181b"/><stop offset="1" stop-color="#660708"/>
+      </linearGradient>
+      <radialGradient id="dropGrad" cx=".35" cy=".3" r=".95">
+        <stop offset="0" stop-color="#ff8080"/><stop offset=".5" stop-color="#d00000"/><stop offset="1" stop-color="#7a0c0c"/>
+      </radialGradient>
+      <clipPath id="bagClip"><path d="M62,86 H238 Q250,86 250,98 V330 Q250,364 216,364 H84 Q50,364 50,330 V98 Q50,86 62,86 Z"/></clipPath>
+    </defs>
+    <path d="M150,6 C150,28 136,38 136,58" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="8" stroke-linecap="round"/>
+    <path d="M150,6 C150,28 136,38 136,58" fill="none" stroke="#d00000" stroke-width="3.5" stroke-linecap="round"/>
+    <rect x="126" y="56" width="20" height="32" rx="4" fill="rgba(255,255,255,.85)"/>
+    <rect x="168" y="62" width="16" height="26" rx="4" fill="rgba(255,255,255,.55)"/>
+    <path d="M62,86 H238 Q250,86 250,98 V330 Q250,364 216,364 H84 Q50,364 50,330 V98 Q50,86 62,86 Z"
+          fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.8)" stroke-width="4"/>
+    <g clip-path="url(#bagClip)">
+      <g id="blood-g" style="transform:translateY(${BAG_H}px)">
+        <rect x="46" y="86" width="208" height="440" fill="url(#bloodGrad)"/>
+        <ellipse cx="150" cy="88" rx="106" ry="9" fill="#f25c54" opacity=".85"/>
+      </g>
+      <g id="drops"></g>
+      <rect x="62" y="98" width="24" height="244" rx="12" fill="rgba(255,255,255,.13)"/>
+    </g>
+    <g>
+      <rect x="80" y="150" width="140" height="88" rx="10" fill="rgba(255,255,255,.93)"/>
+      <text x="150" y="184" text-anchor="middle" font-size="17" font-weight="800" fill="#ba181b">🩸 كيس التبرع</text>
+      <text x="150" y="216" text-anchor="middle" font-size="15" font-weight="700" fill="#333" id="bag-count">0 متبرعاً</text>
+    </g>
+    <g stroke="rgba(255,255,255,.7)" stroke-width="2.5">
+      <line x1="236" y1="155" x2="250" y2="155"/><line x1="236" y1="225" x2="250" y2="225"/><line x1="236" y1="295" x2="250" y2="295"/>
+    </g>
+  </svg>`;}
 function drawScreen(id,c){
-  const R=150,circ=2*Math.PI*R;
   $("#scr").innerHTML=`
     <div class="scr-head">
       ${c.logo?`<img class="scr-logo" src="${c.logo}" alt="">`:""}
@@ -490,24 +541,26 @@ function drawScreen(id,c){
       <div class="scr-days" id="scr-days"></div>
     </div>
     <div class="scr-body">
-      <div class="ring-wrap" id="ring-wrap">
-        <svg viewBox="0 0 340 340"><circle class="ring-bg" cx="170" cy="170" r="${R}"/>
-          <circle class="ring-fg" id="ring" cx="170" cy="170" r="${R}" stroke-dasharray="${circ}" stroke-dashoffset="${circ}"/></svg>
-        <div class="ring-mid"><div class="pct" id="pct">0%</div><div class="of"><b id="tot">0</b> من <b>${c.goal}</b> متبرعاً</div></div>
+      <div class="bag-area" id="bag-area">
+        ${bagSVG()}
+        <div class="bag-side"><div class="pct" id="pct">0%</div><div class="of"><b id="tot">0</b> من <b>${c.goal}</b> متبرعاً</div></div>
       </div>
       <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">متبرعاً</div></div>`).join("")}</div>
     </div>
     <div class="scr-foot">
       <div class="phrase-box" id="phrase" data-p="">${esc(currentPhrase())}</div>
       <div class="scr-qr"><div id="scr-qr-box"></div><div class="cap">امسح وسجّل تبرعك</div></div>
-    </div>`;
+    </div>
+    <div class="scr-credit">فكرة وإعداد: حسن العاقول</div>`;
   $("#phrase").dataset.p=currentPhrase();
   drawQR($("#scr-qr-box"),baseURL()+"#/d/"+id,110);
+  if(c.status==="active")timers.push(setInterval(()=>spawnDrops(1),8000));
 }
 function updateScreen(c,prevTotal){
   const total=c.total||0,pct=Math.min(100,c.goal?Math.round(total/c.goal*100):0);
-  const R=150,circ=2*Math.PI*R;
-  $("#ring").style.strokeDashoffset=circ*(1-Math.min(1,c.goal?total/c.goal:0));
+  const ratio=Math.min(1,c.goal?total/c.goal:0);
+  const bg=$("#blood-g");if(bg)bg.style.transform="translateY("+(BAG_H*(1-ratio)).toFixed(1)+"px)";
+  const bc=$("#bag-count");if(bc)bc.textContent=total+" متبرعاً";
   animNum($("#pct"),parseInt($("#pct").textContent)||0,pct,"%");
   animNum($("#tot"),prevTotal||0,total,"");
   BT.forEach(b=>{const el=$("#tc-"+b.k);if(el)el.textContent=(c.counts||{})[b.k]||0;});
@@ -521,7 +574,8 @@ function updateScreen(c,prevTotal){
   if(c.status!=="active"){
     $("#scr").insertAdjacentHTML("beforeend",`<div class="scr-ended" id="ended-ovl">
       <div style="font-size:64px">🏆</div><h2>انتهت الحملة — شكراً لأبطال العطاء!</h2>
-      <p style="font-size:clamp(16px,2.2vw,26px)">${total} متبرعاً من أصل ${c.goal} (${pct}%)</p></div>`);
+      <p style="font-size:clamp(16px,2.2vw,26px)">${total} متبرعاً من أصل ${c.goal} (${pct}%)</p>
+      <div class="scr-credit">فكرة وإعداد: حسن العاقول</div></div>`);
   }
 }
 function animNum(el,from,to,suf){
@@ -529,15 +583,25 @@ function animNum(el,from,to,suf){
   const step=t=>{const k=Math.min(1,(t-t0)/dur);el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-k,3)))+suf;if(k<1)requestAnimationFrame(step);};
   requestAnimationFrame(step);
 }
-function celebrate(n){
-  const w=$("#ring-wrap");if(w){w.classList.remove("pulse");void w.offsetWidth;w.classList.add("pulse");}
-  const scr=$("#scr");if(!scr)return;
-  for(let i=0;i<Math.min(n*4,16);i++){
-    const d=document.createElement("div");d.className="float-drop";d.textContent=Math.random()<.5?"🩸":"❤️";
-    d.style.left=(10+Math.random()*80)+"%";d.style.bottom=(5+Math.random()*20)+"%";
-    d.style.animationDelay=(Math.random()*.8)+"s";
-    scr.appendChild(d);setTimeout(()=>d.remove(),3600);
+/* قطرات دم واقعية تسقط من أنبوب الكيس إلى داخله */
+function spawnDrops(n){
+  const box=$("#drops");if(!box)return;
+  const NS="http://www.w3.org/2000/svg";
+  for(let i=0;i<n;i++){
+    const g=document.createElementNS(NS,"g");
+    g.setAttribute("transform","translate("+(130+Math.random()*14).toFixed(1)+",100)");
+    const p=document.createElementNS(NS,"path");
+    p.setAttribute("d","M0,-13 C5,-5 8,0 8,5 A8,8 0 1,1 -8,5 C-8,0 -5,-5 0,-13 Z");
+    p.setAttribute("fill","url(#dropGrad)");
+    p.setAttribute("class","drop-fall");
+    p.style.animationDelay=(i*0.35+Math.random()*.2).toFixed(2)+"s";
+    g.appendChild(p);box.appendChild(g);
+    setTimeout(()=>g.remove(),2200+i*350);
   }
+}
+function celebrate(n){
+  const w=$("#bag-area");if(w){w.classList.remove("pulse");void w.offsetWidth;w.classList.add("pulse");}
+  spawnDrops(Math.min(n*3,12));
 }
 
 /* ================= الأرشيف والإحصائيات ================= */
@@ -575,15 +639,42 @@ function drawStats(){
           ${BT.map(b=>`<span class="tag info" style="direction:ltr">${b.l}: ${tc[b.k]}</span>`).join("")}
         </div>
         <div class="tbl-wrap"><table>
-          <thead><tr><th>الحملة</th><th>المدينة</th><th>البداية</th><th>الأيام</th><th style="text-align:center">الهدف</th><th style="text-align:center">المتبرعون</th><th style="text-align:center">التحقيق</th><th>الحالة</th></tr></thead>
+          <thead><tr><th>الحملة</th><th>المدينة</th><th>البداية</th><th>الأيام</th><th style="text-align:center">الهدف</th><th style="text-align:center">المتبرعون</th><th style="text-align:center">التحقيق</th><th>الحالة</th><th></th></tr></thead>
           <tbody>${list.map(r=>{const p=r.goal?Math.round((r.total||0)/r.goal*100):0;
             return `<tr><td><b>${esc(r.name)}</b></td><td>${esc(r.city)}</td><td>${fmtDate(r.startDate)}</td><td>${r.days}</td>
             <td style="text-align:center">${r.goal}</td><td style="text-align:center"><b>${r.total||0}</b></td>
             <td style="text-align:center"><span class="tag ${p>=100?"ok":p>=50?"info":"warn"}">${p}%</span></td>
-            <td>${r.status==="active"?`<span class="tag ok">نشطة</span>`:`<span class="tag mut">مؤرشفة</span>`}</td></tr>`;}).join("")}
+            <td>${r.status==="active"?`<span class="tag ok">نشطة</span>`:`<span class="tag mut">مؤرشفة</span>`}</td>
+            <td><button class="btn sm soft" onclick="showDays('${r.id}')">📅 إحصائية الأيام</button></td></tr>`;}).join("")}
           </tbody></table></div>
       </div></div>`;
   }).join("");
+}
+
+/* إحصائية كل يوم مستقلة ثم مجموع كل الأيام */
+function showDays(id){
+  const r=(window._srows||[]).find(x=>x.id===id);if(!r)return;
+  const sum={total:0};BT.forEach(b=>sum[b.k]=0);
+  let rowsH="";
+  for(let i=1;i<=r.days;i++){
+    const dk=dkeyOf(r.startDate,i-1),dd=(r.daily||{})[dk]||{};
+    sum.total+=dd.total||0;BT.forEach(b=>sum[b.k]+=dd[b.k]||0);
+    const dt=new Date(r.startDate+"T00:00:00");dt.setDate(dt.getDate()+i-1);
+    rowsH+=`<tr><td>${dayOrd(i)}<div style="font-size:11px;color:var(--muted)">${dt.toLocaleDateString("ar-SA-u-nu-latn",{day:"numeric",month:"short"})}</div></td>`
+      +BT.map(b=>`<td style="text-align:center">${dd[b.k]||0}</td>`).join("")
+      +`<td style="text-align:center"><b>${dd.total||0}</b></td></tr>`;
+  }
+  rowsH+=`<tr style="background:var(--crimson-soft)"><td><b>مجموع كل الأيام</b></td>`
+    +BT.map(b=>`<td style="text-align:center"><b>${sum[b.k]}</b></td>`).join("")
+    +`<td style="text-align:center"><b style="color:var(--crimson)">${sum.total}</b></td></tr>`;
+  const box=$("#modal-box");box.style.maxWidth="780px";
+  box.innerHTML=`<h3>${esc(r.name)} — إحصائية الأيام</h3>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 10px">كل يوم مستقل بفصائله ثم المجموع الكلي</p>
+    <div class="tbl-wrap" style="max-height:60vh;overflow:auto"><table style="font-size:13px">
+      <thead><tr><th>اليوم</th>${BT.map(b=>`<th style="text-align:center;direction:ltr">${b.l}</th>`).join("")}<th style="text-align:center">المجموع</th></tr></thead>
+      <tbody>${rowsH}</tbody></table></div>
+    <div style="margin-top:12px"><button class="btn sm ghost" onclick="closeModal()">إغلاق</button></div>`;
+  $("#modal-bg").classList.add("open");
 }
 
 route();
