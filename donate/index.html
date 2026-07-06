@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حملات التبرع بالدم — بنك الدم دمام</title>
+<style>
+  :root{
+    --crimson:#127a3e; --crimson-dark:#0c5e30; --crimson-soft:#e7f4ec;
+    --green-bright:#16a34a; --gold:#b8902e; --blood:#b52440;
+    --ink:#1f2530; --muted:#6b7280; --line:#e6e8ec; --bg:#f4f5f7;
+    --card:#ffffff; --ok:#1f7a4d; --ok-soft:#e6f4ec; --warn:#b06f00;
+    --warn-soft:#fff4e0; --danger:#c0392b; --danger-soft:#fdecea;
+    --info:#1f5f9e; --info-soft:#e8f1fb; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
+    --r:14px; --r-sm:10px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:"Segoe UI","Tajawal","Noto Sans Arabic",Tahoma,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer}
+  input,select,textarea{font-family:inherit;font-size:15px}
+  a{color:var(--crimson)}
+
+  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 18px}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .brand .mk{width:40px;height:40px;border-radius:11px;background:var(--crimson);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
+  .brand .t1{font-weight:800;font-size:15px;white-space:nowrap}
+  .brand .t2{color:var(--muted);font-size:12px;white-space:nowrap}
+  .topbar .spacer{flex:1}
+  .top-tabs{display:flex;gap:6px}
+  .top-tab{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 13px;font-size:13px;font-weight:700;color:var(--ink)}
+  .top-tab:hover{background:#f5f6f8}
+  .top-tab.active{background:var(--crimson-soft);color:var(--crimson);border-color:transparent}
+  .sync-dot{width:9px;height:9px;border-radius:50%;background:#c8ccd2;flex:none}
+  .sync-dot.on{background:var(--ok)}
+
+  .main{max-width:1080px;margin:0 auto;padding:22px 20px 60px}
+  .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+  .page-head h2{margin:0;font-size:21px}
+  .page-head p{margin:2px 0 0;color:var(--muted);font-size:13px}
+
+  .grid{display:grid;gap:14px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:16px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+  .kpi .lbl{color:var(--muted);font-size:13px;font-weight:600}
+  .kpi .val{font-size:28px;font-weight:800;margin-top:6px;letter-spacing:-.5px}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:16px}
+  .panel-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+  .panel-h h3{margin:0;font-size:15px}
+  .panel-h .hint{color:var(--muted);font-size:12px;font-weight:500}
+  .panel-b{padding:16px}
+
+  .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .form-grid label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
+  .form-grid input,.form-grid select,.form-grid textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;outline:none}
+  .form-grid input:focus,.form-grid select:focus{border-color:var(--crimson);box-shadow:0 0 0 3px var(--crimson-soft)}
+  .form-grid .full{grid-column:1/-1}
+  .req:after{content:" *";color:var(--danger)}
+
+  .btn{border:none;border-radius:var(--r-sm);padding:11px 16px;font-weight:700;font-size:15px;background:var(--crimson);color:#fff;transition:filter .15s,transform .02s}
+  .btn:hover{filter:brightness(1.06)} .btn:active{transform:translateY(1px)}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)} .btn.ghost:hover{background:#f7f8fa}
+  .btn.soft{background:var(--crimson-soft);color:var(--crimson)}
+  .btn.danger{background:var(--danger)}
+  .btn.sm{padding:7px 11px;font-size:13px;font-weight:600}
+  .btn:disabled{opacity:.55;cursor:not-allowed}
+
+  .tbl-wrap{overflow:auto;border-radius:var(--r-sm)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:10px 12px;text-align:start;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{background:#fafbfc;color:var(--muted);font-weight:700;font-size:12.5px}
+  tbody tr:hover{background:#fafbfc}
+  .tag{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:700}
+  .tag.ok{background:var(--ok-soft);color:var(--ok)}
+  .tag.warn{background:var(--warn-soft);color:var(--warn)}
+  .tag.danger{background:var(--danger-soft);color:var(--danger)}
+  .tag.info{background:var(--info-soft);color:var(--info)}
+  .tag.mut{background:#eef0f3;color:var(--muted)}
+  .row-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+  .logo-prev{width:64px;height:64px;border-radius:12px;border:1px solid var(--line);object-fit:contain;background:#fff;display:none}
+
+  /* ===== modal ===== */
+  .modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:60;padding:16px}
+  .modal-bg.open{display:flex}
+  .modal{background:#fff;border-radius:16px;max-width:440px;width:100%;padding:24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .modal h3{margin:0 0 10px}
+  .modal .qr-box{display:flex;justify-content:center;margin:14px 0}
+  .modal .lnk{font-size:12px;direction:ltr;word-break:break-all;background:#f4f5f7;border-radius:8px;padding:8px;margin:8px 0;font-family:monospace}
+
+  /* ===== donor page ===== */
+  .donor-wrap{min-height:100vh;background:radial-gradient(1200px 600px at 70% -10%,#b52440 0%,var(--crimson) 35%,var(--crimson-dark) 100%);display:flex;align-items:center;justify-content:center;padding:20px}
+  .donor-card{background:#fff;width:100%;max-width:430px;border-radius:20px;padding:28px 24px;box-shadow:0 20px 50px rgba(0,0,0,.25);text-align:center}
+  .donor-card .org-logo{max-width:110px;max-height:110px;object-fit:contain;margin:0 auto 6px;display:block}
+  .donor-card .mark{width:64px;height:64px;border-radius:16px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:var(--crimson-soft);font-size:32px}
+  .donor-card h1{font-size:20px;margin:0 0 2px}
+  .donor-card .sub{color:var(--muted);font-size:13px;margin:0 0 18px}
+  .bt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 0 18px}
+  .bt-btn{border:2px solid var(--line);background:#fff;border-radius:14px;padding:13px 4px;font-size:19px;font-weight:800;color:var(--ink);direction:ltr}
+  .bt-btn.sel{border-color:var(--blood);background:#fdecef;color:var(--blood)}
+  .donate-btn{width:100%;border:none;border-radius:14px;padding:15px;font-size:18px;font-weight:800;background:var(--blood);color:#fff}
+  .donate-btn:disabled{opacity:.5}
+  .thanks-emoji{font-size:56px;margin:6px 0}
+  .thanks-phrase{background:var(--crimson-soft);color:var(--crimson);border-radius:12px;padding:14px;font-weight:700;margin:14px 0;font-size:15px}
+  .thanks-num{font-size:15px;color:var(--muted)}
+  .thanks-num b{color:var(--blood);font-size:22px}
+
+  /* ===== display screen ===== */
+  .screen{min-height:100vh;background:radial-gradient(1400px 800px at 70% -10%,#b52440 0%,var(--crimson) 40%,var(--crimson-dark) 100%);color:#fff;display:flex;flex-direction:column;padding:2.2vh 3vw;overflow:hidden;position:relative}
+  .scr-head{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .scr-logo{height:9vh;max-height:90px;min-height:52px;object-fit:contain;background:#fff;border-radius:14px;padding:6px}
+  .scr-title h1{margin:0;font-size:clamp(22px,3.6vw,44px);font-weight:800;line-height:1.25}
+  .scr-title p{margin:2px 0 0;font-size:clamp(13px,1.5vw,19px);opacity:.85}
+  .scr-days{display:flex;gap:8px;margin-inline-start:auto;flex-wrap:wrap}
+  .day-chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:6px 13px;text-align:center;font-size:clamp(11px,1.2vw,14px)}
+  .day-chip b{display:block;font-size:clamp(15px,1.7vw,21px)}
+  .day-chip.now{background:#fff;color:var(--crimson-dark)}
+  .scr-body{flex:1;display:flex;align-items:center;gap:3vw;margin-top:2vh;min-height:0}
+  .ring-wrap{flex:none;position:relative;width:min(38vh,32vw);aspect-ratio:1}
+  .ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .ring-bg{fill:none;stroke:rgba(255,255,255,.15);stroke-width:16}
+  .ring-fg{fill:none;stroke:#fff;stroke-width:16;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.22,1,.36,1)}
+  .ring-mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring-mid .pct{font-size:clamp(34px,6.5vw,80px);font-weight:800;line-height:1}
+  .ring-mid .of{font-size:clamp(13px,1.6vw,20px);opacity:.85;margin-top:6px}
+  .ring-mid .of b{font-size:clamp(18px,2.4vw,30px)}
+  .scr-types{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;min-width:0}
+  .type-tile{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:1.6vh 8px;text-align:center;backdrop-filter:blur(4px)}
+  .type-tile .tl{font-size:clamp(17px,2.2vw,30px);font-weight:800;direction:ltr}
+  .type-tile .tc{font-size:clamp(22px,3.4vw,48px);font-weight:800;line-height:1.15}
+  .type-tile .ts{font-size:clamp(10px,1vw,13px);opacity:.75}
+  .scr-foot{display:flex;align-items:center;gap:2vw;margin-top:2vh}
+  .phrase-box{flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:2vh 2vw;font-size:clamp(16px,2.3vw,30px);font-weight:700;text-align:center;transition:opacity .8s}
+  .phrase-box.fade{opacity:0}
+  .scr-qr{flex:none;background:#fff;border-radius:14px;padding:10px;text-align:center;color:var(--ink)}
+  .scr-qr .cap{font-size:11px;font-weight:700;margin-top:4px}
+  .pulse{animation:pulse .9s ease}
+  @keyframes pulse{0%{transform:scale(1)}35%{transform:scale(1.06)}100%{transform:scale(1)}}
+  .float-drop{position:absolute;font-size:34px;animation:floatUp 2.6s ease-out forwards;pointer-events:none;z-index:5}
+  @keyframes floatUp{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-45vh) rotate(20deg);opacity:0}}
+  .scr-ended{position:absolute;inset:0;background:rgba(12,94,48,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;text-align:center;padding:20px}
+  .scr-ended h2{font-size:clamp(26px,4vw,52px);margin:0 0 8px}
+  @media(max-width:760px){
+    .scr-body{flex-direction:column;gap:2vh}
+    .ring-wrap{width:min(34vh,64vw)}
+    .scr-types{grid-template-columns:repeat(4,1fr);width:100%}
+    .scr-foot{flex-direction:column}
+    .scr-qr{display:none}
+  }
+
+  .toast{position:fixed;bottom:18px;inset-inline-start:50%;transform:translateX(50%);background:var(--ink);color:#fff;border-radius:12px;padding:10px 18px;font-size:14px;font-weight:600;z-index:80;display:none}
+  .toast.err{background:var(--danger)}
+  .empty{color:var(--muted);text-align:center;padding:26px;font-size:14px}
+  .center-load{min-height:100vh;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="view"><div class="center-load">جارِ التحميل…</div></div>
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal" id="modal-box"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ================= إعدادات عامة ================= */
+const FB_CFG={apiKey:"AIzaSyBLs1q9ryZZYI5Br9yBi7sSXk-92HVklRI",authDomain:"bloodbank-dammam.firebaseapp.com",projectId:"bloodbank-dammam",storageBucket:"bloodbank-dammam.firebasestorage.app",messagingSenderId:"165465917721",appId:"1:165465917721:web:2989e02513f51e6c101d88"};
+/* البيانات تُخزّن داخل مجموعة inventory_sync المسموح بها في قواعد المشروع، بمعرّفات تبدأ بـ dc_c_ */
+const SYNC_COL="inventory_sync", PFX="dc_c_", META_DOC="inventory_sync/dc_meta";
+const BT=[{k:"Opos",l:"O+"},{k:"Oneg",l:"O−"},{k:"Apos",l:"A+"},{k:"Aneg",l:"A−"},
+          {k:"Bpos",l:"B+"},{k:"Bneg",l:"B−"},{k:"ABpos",l:"AB+"},{k:"ABneg",l:"AB−"}];
+const ORD=["الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر","الحادي عشر","الثاني عشر","الثالث عشر","الرابع عشر"];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(m,cls){const t=$("#toast");t.textContent=m;t.className="toast"+(cls?" "+cls:"");t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",3200);}
+function dayOrd(n){return "اليوم "+(ORD[n-1]||("رقم "+n));}
+function dkey(d){return "d"+d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");}
+function dkeyOf(startISO,i){const d=new Date(startISO+"T00:00:00");d.setDate(d.getDate()+i);return dkey(d);}
+function todayIdx(c){const s=new Date(c.startDate+"T00:00:00"),t=new Date();t.setHours(0,0,0,0);return Math.floor((t-s)/86400000)+1;}
+function fmtDate(iso){const d=new Date(iso+"T00:00:00");return d.toLocaleDateString("ar-SA-u-nu-latn",{day:"numeric",month:"long",year:"numeric"});}
+
+/* ================= Firebase ================= */
+let db=null,fbReady=null;
+function loadJS(u){return new Promise((ok,er)=>{const s=document.createElement("script");s.src=u;s.onload=ok;s.onerror=er;document.head.appendChild(s);});}
+function ensureFB(){
+  if(fbReady)return fbReady;
+  fbReady=(async()=>{
+    await loadJS("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js");
+    await loadJS("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js");
+    const app=(firebase.apps&&firebase.apps.length)?firebase.app():firebase.initializeApp(FB_CFG);
+    db=app.firestore();
+    try{await db.enablePersistence({synchronizeTabs:true});}catch(e){}
+    const dot=$("#sync-dot"); if(dot)dot.classList.add("on");
+    return db;
+  })();
+  return fbReady;
+}
+const inc=n=>firebase.firestore.FieldValue.increment(n);
+const cDoc=id=>db.collection(SYNC_COL).doc(id);
+function cQuery(){const FP=firebase.firestore.FieldPath.documentId();return db.collection(SYNC_COL).where(FP,">=",PFX).where(FP,"<",PFX+"");}
+function newId(){return PFX+Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+function sortRows(rows){return rows.sort((a,b)=>((b.createdAt&&b.createdAt.seconds)||0)-((a.createdAt&&a.createdAt.seconds)||0));}
+
+/* ================= العبارات التحفيزية (1790+) ================= */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+let PHRASES=null;
+function phrases(){
+  if(PHRASES)return PHRASES;
+  const A=["تبرعك اليوم","قطرة دمك","عطاؤك","بادرتك النبيلة","دقائق من وقتك","كيس دم واحد منك","قرارك بالتبرع","وقفتك اليوم","سخاؤك","مبادرتك الكريمة","حضورك للحملة","لفتتك الإنسانية","جودك","إقدامك","همّتك العالية","يدك الممدودة بالخير","نبض قلبك","عطاؤك الصادق"];
+  const B=["قد ينقذ حياة إنسان","يعيد الأمل لعائلة كاملة","قد ينير حياة مريض","يصنع فرقاً حقيقياً","قد يهب طفلاً غداً جديداً","يزرع البسمة في وجه محتاج","قد يكون سبباً في شفاء مريض","يمنح مصاباً فرصة ثانية","قد يكتب بداية جديدة لمريض","يخفف ألم عائلة تنتظر","قد يستجيب لدعاء أم لطفلها","يحيي قلباً كاد أن يتوقف"];
+  const C=["فكن أنت الأمل","شكراً لعطائك","أنت البطل الحقيقي","دمت نبضاً للخير","فخورون بك","الخير فيك باقٍ","جزاك الله خيراً","استمر في العطاء"];
+  const S=[
+   "تبرع بالدم… فأنت لا تعرف متى تحتاجه أنت","المتبرع بالدم بطل بلا رداء","دمك سرّ حياة غيرك","في عروقك أمل ينتظر أن يُمنح","التبرع بالدم صدقة جارية في جسد إنسان","كن سبباً في نبض قلب جديد","أعطِ دماً… تُعطَ أجراً وحياة تُنقذ","قطرة دم تساوي عمراً كاملاً",
+   "المتبرعون بالدم يكتبون قصص نجاة لا تُنسى","ثلاث أرواح قد تنقذها بتبرع واحد","دقيقة سخاء تساوي عمراً من الامتنان","الدم لا يُصنع في المصانع… يُوهب من القلوب","أجمل ما تهديه لإنسان لا تعرفه: الحياة","كن أنت الخبر السعيد في غرفة عمليات",
+   "من أحياها فكأنما أحيا الناس جميعاً","عطاؤك اليوم طمأنينة لعائلة الليلة","التبرع بالدم عادة الأبطال","صحتك تسمح؟ إذاً غيرك ينتظرك","وراء كل كيس دم قصة نجاة","المستشفيات تحتاج أبطالاً مثلك كل يوم",
+   "تبرعك يختصر مسافة بين الخوف والأمل","بدمك تكتمل فرحة أسرة","الشجاعة الحقيقية أن تمد ذراعك للخير","أنت مصنع الحياة المتنقل","كل فصيلة مهمة… وكل متبرع بطل","الأمل يجري في عروقك… شاركه",
+   "لحظة وخز بسيطة مقابل عمر كامل","سجّل اسمك في قائمة صنّاع الحياة","تبرعك اليوم بصمة لا تُمحى","العطاء الحقيقي لا ينتظر مقابلاً","دمك أغلى هدية لا تكلفك شيئاً","حيث يعجز الدواء… ينجح المتبرع",
+   "خلف كل عملية ناجحة متبرع كريم","كن جسر العبور من المرض إلى الشفاء","صنائع المعروف تقي مصارع السوء","اجعل يومك مميزاً بإنقاذ حياة","الدنيا بخير ما دام فيها متبرعون","جسمك يجدد دمك… لكن المريض ينتظرك أنت",
+   "أنبل تبرع هو الذي يجري في العروق","بعض الأبطال يرتدون لاصقة على الذراع","نِعمَ العطاء ما كان حياةً تُوهب","تبرعك رسالة حب لإنسان لم تلقه يوماً","اليوم متبرع… وغداً قدوة","بادر… فالمريض لا يملك رفاهية الانتظار",
+   "قليل منك… كثير عند من يحتاجه","افعلها لأجل من ينتظر في العناية","حياة واحدة تنقذها تساوي الدنيا","العطاء يليق بك","دمعة فرح أهل المريض تبدأ من ذراعك","نبضك يكفي لاثنين… شارك به",
+   "من جرب لذة العطاء أدمن الخير","الفصائل تختلف والإنسانية واحدة","تبرعك وسام على صدر مجتمعك","كل 3 ثوانٍ شخص يحتاج دماً… كن أنت الجواب","سلامة نيتك تسبق سلامة دمك","بطولات صامتة تحدث في مراكز التبرع كل يوم",
+   "امنح من دمك… يزدك الله من فضله","لن تعرف قيمة كيس دم حتى تحتاجه","تبرع اليوم… ونم الليلة بقلب مطمئن","المجد لمن يمنح الحياة دون أن يُسأل","خطوة منك… حياة لغيرك","أنت الآن على بعد دقائق من إنقاذ حياة"
+  ];
+  const out=S.slice();
+  for(const a of A)for(const b of B)for(const c of C)out.push(a+" "+b+"، "+c);
+  const rnd=mulberry32(20260706);
+  for(let i=out.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[out[i],out[j]]=[out[j],out[i]];}
+  PHRASES=out; return out;
+}
+function currentPhrase(){const p=phrases();return p[Math.floor(Date.now()/600000)%p.length];}
+
+/* ================= QR ================= */
+let qrReady=null;
+function ensureQR(){qrReady=qrReady||loadJS("https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js");return qrReady;}
+async function drawQR(el,text,size){await ensureQR();el.innerHTML="";new QRCode(el,{text,width:size,height:size,correctLevel:QRCode.CorrectLevel.M});}
+
+/* ================= التوجيه ================= */
+let unsub=null,timers=[];
+function clearPage(){if(unsub){try{unsub();}catch(e){}unsub=null;}timers.forEach(clearInterval);timers=[];}
+function baseURL(){return location.origin+location.pathname;}
+function route(){
+  clearPage();
+  const mb=$("#modal-bg");if(mb)mb.classList.remove("open");
+  const h=location.hash||"#/";
+  let m;
+  if((m=h.match(/^#\/d\/([\w-]+)/)))return renderDonor(m[1]);
+  if((m=h.match(/^#\/s\/([\w-]+)/)))return renderScreen(m[1]);
+  if(h.startsWith("#/stats"))return renderStats();
+  return renderAdmin();
+}
+window.addEventListener("hashchange",route);
+
+/* ================= هيكل الإدارة ================= */
+function shell(inner,active){
+  return `<div class="topbar">
+    <div class="brand"><div class="mk">🩸</div><div><div class="t1">حملات التبرع بالدم</div><div class="t2">بنك الدم — دمام</div></div></div>
+    <div class="spacer"></div>
+    <div class="top-tabs">
+      <button class="top-tab ${active==="admin"?"active":""}" onclick="location.hash='#/'">الحملات</button>
+      <button class="top-tab ${active==="stats"?"active":""}" onclick="location.hash='#/stats'">الأرشيف والإحصائيات</button>
+    </div>
+    <div class="sync-dot" id="sync-dot" title="حالة الاتصال"></div>
+  </div><div class="main">${inner}</div>`;
+}
+
+/* ================= صفحة الإدارة ================= */
+async function renderAdmin(){
+  $("#view").innerHTML=shell(`
+    <div class="page-head"><div><h2>إدارة الحملات</h2><p>أنشئ حملة جديدة، شارك الباركود، وتابع النتائج مباشرة</p></div></div>
+    <div class="grid kpis">
+      <div class="kpi"><div class="lbl">حملات نشطة</div><div class="val" id="k-active">—</div></div>
+      <div class="kpi"><div class="lbl">متبرعو اليوم (الحملات النشطة)</div><div class="val" id="k-today">—</div></div>
+      <div class="kpi"><div class="lbl">إجمالي المتبرعين (كل الحملات)</div><div class="val" id="k-all">—</div></div>
+    </div>
+    <div class="panel"><div class="panel-h"><h3>➕ حملة جديدة</h3><div class="hint">كل الحقول تُحفظ وتتزامن بين الأجهزة</div></div>
+      <div class="panel-b"><div class="form-grid">
+        <div><label class="req">اسم الحملة</label><input id="f-name" list="dl-names" placeholder="مثال: حملة عطاء"><datalist id="dl-names"></datalist></div>
+        <div><label class="req">المدينة</label><input id="f-city" list="dl-cities" placeholder="الدمام"><datalist id="dl-cities"></datalist></div>
+        <div><label class="req">تاريخ البداية</label><input id="f-start" type="date"></div>
+        <div><label class="req">مدة الحملة (أيام)</label><input id="f-days" type="number" min="1" max="14" value="1"></div>
+        <div><label class="req">الأوقات</label><input id="f-times" placeholder="مثال: 4 عصراً – 11 مساءً"></div>
+        <div><label class="req">العدد المتوقع (الهدف)</label><input id="f-goal" type="number" min="1" placeholder="200"></div>
+        <div><label>الجهة المنظمة (التمبلت)</label><input id="f-org" placeholder="اسم الجهة يظهر للمتبرع"></div>
+        <div><label>شعار الجهة</label><input id="f-logo" type="file" accept="image/*"><img class="logo-prev" id="f-logo-prev" style="margin-top:8px"></div>
+        <div class="full"><button class="btn" id="f-save" onclick="createCampaign()">إنشاء الحملة</button></div>
+      </div></div>
+    </div>
+    <div class="panel"><div class="panel-h"><h3>📋 الحملات</h3><div class="hint">الرابط نفسه يعمل على أي متصفح وبنفس البيانات</div></div>
+      <div class="panel-b"><div class="tbl-wrap" id="list-box"><div class="empty">جارِ التحميل…</div></div></div>
+    </div>`,"admin");
+  $("#f-start").value=new Date().toISOString().slice(0,10);
+  $("#f-logo").addEventListener("change",onLogoPick);
+  try{
+    await ensureFB();
+    db.doc(META_DOC).get().then(s=>{const d=s.data()||{};
+      $("#dl-names").innerHTML=(d.names||[]).map(n=>`<option value="${esc(n)}">`).join("");
+      $("#dl-cities").innerHTML=(d.cities||[]).map(n=>`<option value="${esc(n)}">`).join("");
+    }).catch(()=>{});
+    unsub=cQuery().onSnapshot(snap=>{
+      const rows=[];snap.forEach(d=>rows.push({id:d.id,...d.data()}));
+      renderList(sortRows(rows));
+    },err=>{$("#list-box").innerHTML=`<div class="empty">تعذر الاتصال بقاعدة البيانات (${esc(err.code||"")})</div>`;});
+  }catch(e){$("#list-box").innerHTML=`<div class="empty">لا يوجد اتصال بالإنترنت — أعد المحاولة</div>`;}
+}
+let logoData=null;
+function onLogoPick(ev){
+  const f=ev.target.files[0]; logoData=null;
+  if(!f)return $("#f-logo-prev").style.display="none";
+  const img=new Image();
+  img.onload=()=>{
+    const mx=400,sc=Math.min(1,mx/Math.max(img.width,img.height));
+    const cv=document.createElement("canvas");cv.width=Math.round(img.width*sc);cv.height=Math.round(img.height*sc);
+    cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);
+    let d=cv.toDataURL("image/png");
+    if(d.length>250000)d=cv.toDataURL("image/jpeg",.8);
+    if(d.length>350000)return toast("الشعار كبير جداً — اختر صورة أصغر","err");
+    logoData=d;const p=$("#f-logo-prev");p.src=d;p.style.display="block";
+  };
+  img.onerror=()=>toast("تعذر قراءة الصورة","err");
+  img.src=URL.createObjectURL(f);
+}
+async function createCampaign(){
+  const name=$("#f-name").value.trim(),city=$("#f-city").value.trim(),start=$("#f-start").value,
+        days=parseInt($("#f-days").value||"0"),times=$("#f-times").value.trim(),
+        goal=parseInt($("#f-goal").value||"0"),org=$("#f-org").value.trim();
+  if(!name||!city||!start||!days||days<1||!times||!goal||goal<1)return toast("أكمل كل الحقول المطلوبة","err");
+  $("#f-save").disabled=true;
+  try{
+    await ensureFB();
+    const counts={};BT.forEach(b=>counts[b.k]=0);
+    const id=newId();
+    await cDoc(id).set({
+      name,city,startDate:start,days,times,goal,org:org||null,logo:logoData||null,
+      status:"active",total:0,counts,daily:{},
+      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    db.doc(META_DOC).set({names:firebase.firestore.FieldValue.arrayUnion(name),
+                          cities:firebase.firestore.FieldValue.arrayUnion(city)},{merge:true}).catch(()=>{});
+    ["f-name","f-city","f-times","f-goal","f-org"].forEach(i=>$( "#"+i).value="");
+    logoData=null;$("#f-logo").value="";$("#f-logo-prev").style.display="none";
+    toast("تم إنشاء الحملة ✓");
+    showLinks(id,name);
+  }catch(e){toast("تعذر الحفظ: "+(e.code||e.message),"err");}
+  $("#f-save").disabled=false;
+}
+function renderList(rows){
+  window._rows=rows;
+  const act=rows.filter(r=>r.status==="active"),arc=rows.filter(r=>r.status!=="active");
+  $("#k-active").textContent=act.length;
+  $("#k-all").textContent=rows.reduce((s,r)=>s+(r.total||0),0);
+  const tk=dkey(new Date());
+  $("#k-today").textContent=act.reduce((s,r)=>s+(((r.daily||{})[tk]||{}).total||0),0);
+  const row=r=>{
+    const pct=r.goal?Math.round((r.total||0)/r.goal*100):0;
+    return `<tr>
+      <td><b>${esc(r.name)}</b>${r.org?`<div style="font-size:12px;color:var(--muted)">${esc(r.org)}</div>`:""}</td>
+      <td>${esc(r.city)}</td>
+      <td>${fmtDate(r.startDate)} · ${r.days} ${r.days>1?"أيام":"يوم"}<div style="font-size:12px;color:var(--muted)">${esc(r.times||"")}</div></td>
+      <td style="text-align:center"><b>${r.total||0}</b> / ${r.goal} <span class="tag ${pct>=100?"ok":pct>=50?"info":"mut"}">${pct}%</span></td>
+      <td>${r.status==="active"?`<span class="tag ok">نشطة</span>`:`<span class="tag mut">مؤرشفة</span>`}</td>
+      <td><div class="row-actions">
+        <button class="btn sm soft" onclick="showLinks('${r.id}','${esc(r.name).replace(/'/g,"\\'")}')">🔗 الروابط والباركود</button>
+        <button class="btn sm ghost" onclick="location.hash='#/s/${r.id}'">🖥️ شاشة العرض</button>
+        ${r.status==="active"
+          ?`<button class="btn sm ghost" onclick="archiveCampaign('${r.id}')">📦 أرشفة</button>`
+          :`<button class="btn sm ghost" onclick="unarchiveCampaign('${r.id}')">↩️ إعادة تفعيل</button>
+            <button class="btn sm danger" onclick="deleteCampaign('${r.id}')">حذف</button>`}
+      </div></td></tr>`;
+  };
+  $("#list-box").innerHTML=rows.length?`
+    <table><thead><tr><th>الحملة</th><th>المدينة</th><th>الموعد</th><th style="text-align:center">التقدم</th><th>الحالة</th><th></th></tr></thead>
+    <tbody>${act.map(row).join("")}${arc.map(row).join("")}</tbody></table>`
+    :`<div class="empty">لا توجد حملات بعد — أنشئ أول حملة من الأعلى ⬆️</div>`;
+}
+async function archiveCampaign(id){
+  if(!confirm("أرشفة الحملة؟ ستتوقف عن استقبال التسجيل وتنتقل للإحصائيات."))return;
+  await cDoc(id).update({status:"archived",archivedAt:firebase.firestore.FieldValue.serverTimestamp()});
+  toast("تمت الأرشفة ✓");
+}
+async function unarchiveCampaign(id){await cDoc(id).update({status:"active"});toast("أعيد تفعيل الحملة ✓");}
+async function deleteCampaign(id){
+  if(!confirm("حذف الحملة نهائياً مع كل أرقامها؟ لا يمكن التراجع."))return;
+  if(!confirm("تأكيد أخير: حذف نهائي؟"))return;
+  await cDoc(id).delete();toast("حُذفت الحملة");
+}
+async function showLinks(id,name){
+  const dURL=baseURL()+"#/d/"+id, sURL=baseURL()+"#/s/"+id;
+  $("#modal-box").innerHTML=`<h3>${esc(name)}</h3>
+    <p style="color:var(--muted);font-size:13px;margin:0">اطبع الباركود وضعه في موقع الحملة — المتبرع يمسحه ويسجل تبرعه</p>
+    <div class="qr-box"><div id="qr-modal"></div></div>
+    <div style="font-size:13px;font-weight:700">رابط تسجيل المتبرع</div><div class="lnk">${esc(dURL)}</div>
+    <div style="font-size:13px;font-weight:700">رابط شاشة العرض (ساحة المتبرعين)</div><div class="lnk">${esc(sURL)}</div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+      <button class="btn sm soft" onclick="navigator.clipboard.writeText('${dURL}');toast('نُسخ رابط المتبرع ✓')">نسخ رابط المتبرع</button>
+      <button class="btn sm soft" onclick="navigator.clipboard.writeText('${sURL}');toast('نُسخ رابط الشاشة ✓')">نسخ رابط الشاشة</button>
+      <button class="btn sm ghost" onclick="closeModal()">إغلاق</button>
+    </div>`;
+  $("#modal-bg").classList.add("open");
+  drawQR($("#qr-modal"),dURL,190);
+}
+function closeModal(){$("#modal-bg").classList.remove("open");}
+
+/* ================= صفحة المتبرع ================= */
+async function renderDonor(id){
+  $("#view").innerHTML=`<div class="donor-wrap"><div class="donor-card" id="d-card"><div class="empty">جارِ التحميل…</div></div></div>`;
+  let camp=null;
+  try{await ensureFB();}catch(e){$("#d-card").innerHTML=`<div class="empty">تحقق من الاتصال بالإنترنت ثم أعد فتح الرابط</div>`;return;}
+  unsub=cDoc(id).onSnapshot(s=>{
+    if(!s.exists){$("#d-card").innerHTML=`<div class="empty">الحملة غير موجودة</div>`;return;}
+    const first=!camp;camp=s.data();curCamp=camp;
+    if(first)drawDonorForm(id,camp);
+    else{const el=$("#d-live");if(el)el.textContent=camp.total||0;}
+  },()=>{$("#d-card").innerHTML=`<div class="empty">تعذر الاتصال — أعد المحاولة</div>`;});
+}
+let selBT=null,curCamp=null;
+function drawDonorForm(id,c){
+  if(c.status!=="active"){
+    $("#d-card").innerHTML=`<div class="mark">🩸</div><h1>${esc(c.name)}</h1>
+      <p class="sub">${esc(c.city)}</p>
+      <div class="thanks-phrase">انتهت هذه الحملة — شكراً لكل من شارك! بلغ عدد المتبرعين <b>${c.total||0}</b></div>`;
+    return;
+  }
+  selBT=null;
+  $("#d-card").innerHTML=`
+    ${c.logo?`<img class="org-logo" src="${c.logo}" alt="">`:`<div class="mark">🩸</div>`}
+    ${c.org?`<div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px">${esc(c.org)}</div>`:""}
+    <h1>${esc(c.name)}</h1>
+    <p class="sub">${esc(c.city)} · ${esc(c.times||"")}</p>
+    <div style="font-weight:700;font-size:15px;margin-bottom:4px">اختر فصيلة دمك:</div>
+    <div class="bt-grid">${BT.map(b=>`<button class="bt-btn" id="bt-${b.k}" onclick="pickBT('${b.k}')">${b.l}</button>`).join("")}</div>
+    <button class="donate-btn" id="d-go" disabled onclick="registerDonation('${id}')">🩸 تبرعت بالدم</button>
+    <div class="thanks-num" style="margin-top:14px">عدد المتبرعين حتى الآن: <b id="d-live">${c.total||0}</b></div>`;
+}
+function pickBT(k){selBT=k;BT.forEach(b=>$("#bt-"+b.k).classList.toggle("sel",b.k===k));$("#d-go").disabled=false;}
+async function registerDonation(id){
+  if(!selBT)return;
+  const btn=$("#d-go");btn.disabled=true;btn.textContent="جارِ التسجيل…";
+  const guard="dc_done_"+id+"_"+dkey(new Date());
+  if(localStorage.getItem(guard)&&!confirm("سبق التسجيل من هذا الجهاز اليوم — تسجيل متبرع آخر؟")){btn.disabled=false;btn.textContent="🩸 تبرعت بالدم";return;}
+  const dk=dkey(new Date()),u={total:inc(1)};
+  u["counts."+selBT]=inc(1);u["daily."+dk+".total"]=inc(1);u["daily."+dk+"."+selBT]=inc(1);
+  try{
+    const w=cDoc(id).update(u);
+    await Promise.race([w,new Promise(r=>setTimeout(r,4000))]); // لا نحجز المتبرع إذا كانت الشبكة بطيئة — الكتابة تُزامن لاحقاً
+    localStorage.setItem(guard,"1");
+    const lbl=(BT.find(b=>b.k===selBT)||{}).l||"";
+    $("#d-card").innerHTML=`
+      <div class="thanks-emoji">🎉</div><h1>شكراً لعطائك!</h1>
+      <p class="sub">تم تسجيل تبرعك بفصيلة <b style="direction:ltr">${lbl}</b></p>
+      <div class="thanks-phrase">${esc(currentPhrase())}</div>
+      <div class="thanks-num">أنت ضمن <b id="d-live">${(curCamp&&curCamp.total)||1}</b> متبرعاً في هذه الحملة</div>
+      <button class="btn soft" style="margin-top:16px;width:100%" onclick="location.reload()">تسجيل متبرع آخر</button>`;
+  }catch(e){toast("تعذر التسجيل: "+(e.code||e.message),"err");btn.disabled=false;btn.textContent="🩸 تبرعت بالدم";}
+}
+
+/* ================= شاشة العرض ================= */
+async function renderScreen(id){
+  $("#view").innerHTML=`<div class="screen" id="scr"><div class="center-load" style="min-height:80vh;color:#fff">جارِ التحميل…</div></div>`;
+  const cacheKey="dc_cache_"+id;
+  let built=false,lastTotal=null;
+  const build=c=>{
+    localStorage.setItem(cacheKey,JSON.stringify(c));
+    if(!built){drawScreen(id,c);built=true;}
+    updateScreen(c,lastTotal);
+    if(lastTotal!==null&&(c.total||0)>lastTotal)celebrate((c.total||0)-lastTotal);
+    lastTotal=c.total||0;
+  };
+  try{
+    await ensureFB();
+    unsub=cDoc(id).onSnapshot(s=>{if(s.exists)build(s.data());},()=>{
+      const cached=localStorage.getItem(cacheKey);if(cached&&!built)build(JSON.parse(cached));
+    });
+  }catch(e){
+    const cached=localStorage.getItem(cacheKey);
+    if(cached)build(JSON.parse(cached));
+    else $("#scr").innerHTML=`<div class="center-load" style="color:#fff">تحقق من الاتصال بالإنترنت</div>`;
+  }
+  timers.push(setInterval(()=>{ // تبديل العبارة كل 10 دقائق (فحص كل 20 ثانية)
+    const el=$("#phrase");if(!el)return;
+    const p=currentPhrase();
+    if(el.dataset.p!==p){el.classList.add("fade");setTimeout(()=>{el.textContent=p;el.dataset.p=p;el.classList.remove("fade");},800);}
+  },20000));
+}
+function drawScreen(id,c){
+  const R=150,circ=2*Math.PI*R;
+  $("#scr").innerHTML=`
+    <div class="scr-head">
+      ${c.logo?`<img class="scr-logo" src="${c.logo}" alt="">`:""}
+      <div class="scr-title"><h1>${esc(c.name)}</h1><p>${c.org?esc(c.org)+" · ":""}${esc(c.city)} · ${esc(c.times||"")}</p></div>
+      <div class="scr-days" id="scr-days"></div>
+    </div>
+    <div class="scr-body">
+      <div class="ring-wrap" id="ring-wrap">
+        <svg viewBox="0 0 340 340"><circle class="ring-bg" cx="170" cy="170" r="${R}"/>
+          <circle class="ring-fg" id="ring" cx="170" cy="170" r="${R}" stroke-dasharray="${circ}" stroke-dashoffset="${circ}"/></svg>
+        <div class="ring-mid"><div class="pct" id="pct">0%</div><div class="of"><b id="tot">0</b> من <b>${c.goal}</b> متبرعاً</div></div>
+      </div>
+      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">متبرعاً</div></div>`).join("")}</div>
+    </div>
+    <div class="scr-foot">
+      <div class="phrase-box" id="phrase" data-p="">${esc(currentPhrase())}</div>
+      <div class="scr-qr"><div id="scr-qr-box"></div><div class="cap">امسح وسجّل تبرعك</div></div>
+    </div>`;
+  $("#phrase").dataset.p=currentPhrase();
+  drawQR($("#scr-qr-box"),baseURL()+"#/d/"+id,110);
+}
+function updateScreen(c,prevTotal){
+  const total=c.total||0,pct=Math.min(100,c.goal?Math.round(total/c.goal*100):0);
+  const R=150,circ=2*Math.PI*R;
+  $("#ring").style.strokeDashoffset=circ*(1-Math.min(1,c.goal?total/c.goal:0));
+  animNum($("#pct"),parseInt($("#pct").textContent)||0,pct,"%");
+  animNum($("#tot"),prevTotal||0,total,"");
+  BT.forEach(b=>{const el=$("#tc-"+b.k);if(el)el.textContent=(c.counts||{})[b.k]||0;});
+  const ti=todayIdx(c),chips=[];
+  for(let i=1;i<=c.days;i++){
+    const dk=dkeyOf(c.startDate,i-1),n=((c.daily||{})[dk]||{}).total||0;
+    chips.push(`<div class="day-chip ${i===ti?"now":""}">${dayOrd(i)}<b>${n}</b></div>`);
+  }
+  $("#scr-days").innerHTML=chips.join("");
+  const old=$("#ended-ovl");if(old)old.remove();
+  if(c.status!=="active"){
+    $("#scr").insertAdjacentHTML("beforeend",`<div class="scr-ended" id="ended-ovl">
+      <div style="font-size:64px">🏆</div><h2>انتهت الحملة — شكراً لأبطال العطاء!</h2>
+      <p style="font-size:clamp(16px,2.2vw,26px)">${total} متبرعاً من أصل ${c.goal} (${pct}%)</p></div>`);
+  }
+}
+function animNum(el,from,to,suf){
+  if(!el)return;const t0=performance.now(),dur=900;
+  const step=t=>{const k=Math.min(1,(t-t0)/dur);el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-k,3)))+suf;if(k<1)requestAnimationFrame(step);};
+  requestAnimationFrame(step);
+}
+function celebrate(n){
+  const w=$("#ring-wrap");if(w){w.classList.remove("pulse");void w.offsetWidth;w.classList.add("pulse");}
+  const scr=$("#scr");if(!scr)return;
+  for(let i=0;i<Math.min(n*4,16);i++){
+    const d=document.createElement("div");d.className="float-drop";d.textContent=Math.random()<.5?"🩸":"❤️";
+    d.style.left=(10+Math.random()*80)+"%";d.style.bottom=(5+Math.random()*20)+"%";
+    d.style.animationDelay=(Math.random()*.8)+"s";
+    scr.appendChild(d);setTimeout(()=>d.remove(),3600);
+  }
+}
+
+/* ================= الأرشيف والإحصائيات ================= */
+async function renderStats(){
+  $("#view").innerHTML=shell(`
+    <div class="page-head"><div><h2>الأرشيف والإحصائيات</h2><p>نتائج كل الحملات مجمّعة بالسنة وقابلة للتصفية بالاسم</p></div>
+      <div><select id="st-name" onchange="drawStats()" style="padding:9px 12px;border:1px solid var(--line);border-radius:10px"><option value="">كل الحملات</option></select></div>
+    </div>
+    <div id="st-box"><div class="empty">جارِ التحميل…</div></div>`,"stats");
+  try{
+    await ensureFB();
+    unsub=cQuery().onSnapshot(snap=>{
+      const rows=[];snap.forEach(d=>rows.push({id:d.id,...d.data()}));
+      window._srows=sortRows(rows);
+      const names=[...new Set(rows.map(r=>r.name))];
+      const sel=$("#st-name"),cur=sel.value;
+      sel.innerHTML=`<option value="">كل الحملات</option>`+names.map(n=>`<option ${n===cur?"selected":""}>${esc(n)}</option>`).join("");
+      drawStats();
+    },()=>{$("#st-box").innerHTML=`<div class="empty">تعذر الاتصال</div>`;});
+  }catch(e){$("#st-box").innerHTML=`<div class="empty">تحقق من الاتصال بالإنترنت</div>`;}
+}
+function drawStats(){
+  let rows=window._srows||[];
+  const f=$("#st-name").value;if(f)rows=rows.filter(r=>r.name===f);
+  if(!rows.length)return $("#st-box").innerHTML=`<div class="empty">لا توجد بيانات</div>`;
+  const byYear={};
+  rows.forEach(r=>{const y=(r.startDate||"").slice(0,4)||"غير محدد";(byYear[y]=byYear[y]||[]).push(r);});
+  $("#st-box").innerHTML=Object.keys(byYear).sort().reverse().map(y=>{
+    const list=byYear[y],tot=list.reduce((s,r)=>s+(r.total||0),0),goal=list.reduce((s,r)=>s+(r.goal||0),0);
+    const tc={};BT.forEach(b=>tc[b.k]=list.reduce((s,r)=>s+((r.counts||{})[b.k]||0),0));
+    return `<div class="panel"><div class="panel-h"><h3>📅 سنة ${y}</h3>
+      <div class="hint">${list.length} حملة · ${tot} متبرعاً من هدف ${goal} (${goal?Math.round(tot/goal*100):0}%)</div></div>
+      <div class="panel-b">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+          ${BT.map(b=>`<span class="tag info" style="direction:ltr">${b.l}: ${tc[b.k]}</span>`).join("")}
+        </div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>الحملة</th><th>المدينة</th><th>البداية</th><th>الأيام</th><th style="text-align:center">الهدف</th><th style="text-align:center">المتبرعون</th><th style="text-align:center">التحقيق</th><th>الحالة</th></tr></thead>
+          <tbody>${list.map(r=>{const p=r.goal?Math.round((r.total||0)/r.goal*100):0;
+            return `<tr><td><b>${esc(r.name)}</b></td><td>${esc(r.city)}</td><td>${fmtDate(r.startDate)}</td><td>${r.days}</td>
+            <td style="text-align:center">${r.goal}</td><td style="text-align:center"><b>${r.total||0}</b></td>
+            <td style="text-align:center"><span class="tag ${p>=100?"ok":p>=50?"info":"warn"}">${p}%</span></td>
+            <td>${r.status==="active"?`<span class="tag ok">نشطة</span>`:`<span class="tag mut">مؤرشفة</span>`}</td></tr>`;}).join("")}
+          </tbody></table></div>
+      </div></div>`;
+  }).join("");
+}
+
+route();
+</script>
+</body>
+</html>
