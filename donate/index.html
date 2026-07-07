@@ -114,7 +114,7 @@
   .scr-title h1{margin:0;font-size:clamp(22px,3.6vw,44px);font-weight:800;line-height:1.25}
   .scr-title p{margin:2px 0 0;font-size:clamp(13px,1.5vw,19px);opacity:.85}
   .scr-days{display:flex;gap:8px;margin-inline-start:auto;flex-wrap:wrap}
-  .day-chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:6px 13px;text-align:center;font-size:clamp(11px,1.2vw,14px)}
+  .day-chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:4px 12px;text-align:center;font-size:clamp(11px,1.2vw,14px);height:clamp(64px,10vh,104px);min-width:clamp(64px,10vh,104px);display:flex;flex-direction:column;align-items:center;justify-content:center}
   .day-chip b{display:block;font-size:clamp(15px,1.7vw,21px)}
   .day-chip.now{background:#fff;color:#800f2f}
   .scr-body{flex:1;display:flex;align-items:center;gap:3vw;margin-top:2vh;min-height:0}
@@ -146,9 +146,10 @@
   .logo-bar .lg{flex:1;display:flex;justify-content:center}
   .logo-bar .lg:first-child{justify-content:flex-start}
   .logo-bar .lg:last-child{justify-content:flex-end}
-  .logo-bar img{height:10vh;max-height:100px;min-height:52px;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
-  .sponsor-bar{display:flex;align-items:center;justify-content:center;gap:2.5vw;padding:6px 0;margin-top:1.4vh;flex-wrap:wrap}
-  .sponsor-bar img{height:7vh;max-height:70px;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+  /* مقاس الشعارات = مقاس مربع الأيام الأبيض */
+  .logo-bar img{height:clamp(64px,10vh,104px);object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+  .sponsor-bar{display:flex;align-items:center;justify-content:space-around;width:100%;gap:1.5vw;padding:6px 0;margin-top:1.4vh;flex-wrap:wrap}
+  .sponsor-bar img{height:clamp(64px,10vh,104px);object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
   .scr-times{text-align:center;font-size:clamp(22px,3.6vw,44px);font-weight:700;line-height:1.3;margin-top:.6vh}
   .scr-lang{position:absolute;bottom:14px;inset-inline-start:16px;z-index:15;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:20px;padding:6px 16px;font-weight:700;font-size:14px;cursor:pointer}
   .scr-lang:hover{background:rgba(255,255,255,.28)}
@@ -325,8 +326,8 @@ async function renderAdmin(){
             🏅 شهادة شكر لكل المسجلين في التبرع (اختياري)
           </label>
           <div id="cert-opts" style="display:none;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px">
-            <div><label class="req">التصميم العربي — أساسي (PDF أو صورة)</label><input id="f-cert" type="file" accept="application/pdf,image/*"><img class="logo-prev" id="f-cert-prev" style="margin-top:8px;width:120px;height:auto"></div>
-            <div><label>التصميم الإنجليزي — إضافي (PDF أو صورة)</label><input id="f-cert-en" type="file" accept="application/pdf,image/*"><img class="logo-prev" id="f-cert-en-prev" style="margin-top:8px;width:120px;height:auto"></div>
+            <div><label class="req">التصميم العربي — أساسي (PDF/TIF/صورة)</label><input id="f-cert" type="file" accept="application/pdf,image/*,.tif,.tiff"><img class="logo-prev" id="f-cert-prev" style="margin-top:8px;width:120px;height:auto"></div>
+            <div><label>التصميم الإنجليزي — إضافي (PDF/TIF/صورة)</label><input id="f-cert-en" type="file" accept="application/pdf,image/*,.tif,.tiff"><img class="logo-prev" id="f-cert-en-prev" style="margin-top:8px;width:120px;height:auto"></div>
             <div><label>موضع اسم المتبرع على الشهادة</label><select id="f-cert-pos"><option value="mid" selected>وسط الشهادة</option><option value="top">الثلث الأعلى</option><option value="low">الثلث الأسفل</option></select></div>
           </div>
         </div>
@@ -388,31 +389,46 @@ async function onSponsorPick(ev,idx){
   try{sponsorData[idx]=await compressLogo(f,220,70000);toast("تم تجهيز شعار الراعي "+(idx+1)+" ✓");}
   catch(e){ev.target.value="";toast("شعار الراعي كبير جداً — اختر PNG أصغر","err");}
 }
-/* تحويل تصميم الشهادة (PDF أو صورة) إلى صورة عالية الدقة تُخزن مع الحملة — عربي أساسي وإنجليزي إضافي */
+/* تحويل تصميم الشهادة (PDF أو TIF أو صورة) إلى صورة عالية الدقة تُخزن مع الحملة */
+async function certFileToImage(f){
+  let cv;
+  if(f.type==="application/pdf"){
+    await loadJS("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js");
+    pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    const pdf=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;
+    const page=await pdf.getPage(1);
+    const vp0=page.getViewport({scale:1}),scale=1600/vp0.width,vp=page.getViewport({scale});
+    cv=document.createElement("canvas");cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);
+    await page.render({canvasContext:cv.getContext("2d"),viewport:vp}).promise;
+  }else if(f.type==="image/tiff"||/\.tiff?$/i.test(f.name)){
+    // ملفات TIF (تصاميم الطباعة) — المتصفح لا يفكها، نستخدم UTIF
+    await loadJS("https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.min.js");
+    const buf=await f.arrayBuffer(),ifds=UTIF.decode(buf);
+    UTIF.decodeImage(buf,ifds[0]);
+    const w=ifds[0].width,h=ifds[0].height;
+    const c0=document.createElement("canvas");c0.width=w;c0.height=h;
+    c0.getContext("2d").putImageData(new ImageData(new Uint8ClampedArray(UTIF.toRGBA8(ifds[0])),w,h),0,0);
+    const sc=Math.min(1,1600/Math.max(w,h));
+    cv=document.createElement("canvas");cv.width=Math.round(w*sc);cv.height=Math.round(h*sc);
+    cv.getContext("2d").drawImage(c0,0,0,cv.width,cv.height);
+  }else{
+    const img=await fileToImg(f);
+    const sc=Math.min(1,1600/Math.max(img.width,img.height));
+    cv=document.createElement("canvas");cv.width=Math.round(img.width*sc);cv.height=Math.round(img.height*sc);
+    cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);
+  }
+  let d=cv.toDataURL("image/jpeg",.85);
+  if(d.length>400000)d=cv.toDataURL("image/jpeg",.7);
+  if(d.length>450000)throw new Error("big");
+  return d;
+}
 async function onCertPick(ev,lang){
   const prevId=lang==="en"?"#f-cert-en-prev":"#f-cert-prev";
   const f=ev.target.files[0];
   if(lang==="en")certDataEn=null;else certData=null;
   $(prevId).style.display="none";if(!f)return;
   try{
-    let cv;
-    if(f.type==="application/pdf"){
-      await loadJS("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js");
-      pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-      const pdf=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;
-      const page=await pdf.getPage(1);
-      const vp0=page.getViewport({scale:1}),scale=1600/vp0.width,vp=page.getViewport({scale});
-      cv=document.createElement("canvas");cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);
-      await page.render({canvasContext:cv.getContext("2d"),viewport:vp}).promise;
-    }else{
-      const img=await fileToImg(f);
-      const sc=Math.min(1,1600/Math.max(img.width,img.height));
-      cv=document.createElement("canvas");cv.width=Math.round(img.width*sc);cv.height=Math.round(img.height*sc);
-      cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);
-    }
-    let d=cv.toDataURL("image/jpeg",.85);
-    if(d.length>400000)d=cv.toDataURL("image/jpeg",.7);
-    if(d.length>450000)throw new Error("big");
+    const d=await certFileToImage(f);
     if(lang==="en")certDataEn=d;else certData=d;
     const p=$(prevId);p.src=d;p.style.display="block";
     toast(lang==="en"?"تم تجهيز التصميم الإنجليزي ✓":"تم تجهيز التصميم العربي ✓");
@@ -468,6 +484,7 @@ function renderList(rows){
       <td><div class="row-actions">
         <button class="btn sm soft" onclick="showLinks('${r.id}','${esc(r.name).replace(/'/g,"\\'")}')">🔗 الروابط والباركود</button>
         <button class="btn sm ghost" onclick="location.hash='#/s/${r.id}'">🖥️ شاشة العرض</button>
+        <button class="btn sm ghost" onclick="showEdit('${r.id}')">✏️ تعديل</button>
         ${r.status==="active"
           ?`<button class="btn sm ghost" onclick="archiveCampaign('${r.id}')">📦 أرشفة</button>`
           :`<button class="btn sm ghost" onclick="unarchiveCampaign('${r.id}')">↩️ إعادة تفعيل</button>
@@ -507,6 +524,62 @@ async function showLinks(id,name){
   drawQR($("#qr-modal"),dURL,190);
 }
 function closeModal(){$("#modal-bg").classList.remove("open");}
+
+/* ===== تعديل حملة منشورة: الهدف، الأيام، الشهادة، الرعاة ===== */
+let editSp=[],editCertAr=null,editCertEn=null;
+function showEdit(id){
+  const r=(window._rows||window._srows||[]).find(x=>x.id===id);if(!r)return;
+  editSp=[null,null,null,null,null,null];editCertAr=null;editCertEn=null;
+  const sp=r.sponsors||[];
+  const box=$("#modal-box");box.style.maxWidth="640px";
+  box.innerHTML=`<h3>✏️ تعديل: ${esc(r.name)}</h3>
+    <div class="form-grid" style="text-align:start;margin-top:12px">
+      <div><label>العدد المتوقع (الهدف)</label><input id="e-goal" type="number" min="1" value="${r.goal}"></div>
+      <div><label>مدة الحملة (أيام)</label><input id="e-days" type="number" min="1" max="14" value="${r.days}"></div>
+      <div class="full" style="border-top:1px solid var(--line);padding-top:10px;font-size:14px"><b>🏅 شهادة الشكر</b> ${r.cert?`<span class="tag ok">مفعّلة — الرفع يستبدل التصميم</span>`:`<span class="tag mut">غير مفعّلة — ارفع التصميم العربي لتفعيلها</span>`}</div>
+      <div><label>التصميم العربي ${r.cert?"✓":""}</label><input id="e-cert" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
+      <div><label>التصميم الإنجليزي ${(r.cert&&r.cert.imgEn)?"✓":""}</label><input id="e-cert-en" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
+      <div><label>موضع الاسم</label><select id="e-cert-pos">
+        <option value="mid" ${(!r.cert||r.cert.pos==="mid")?"selected":""}>وسط الشهادة</option>
+        <option value="top" ${(r.cert&&r.cert.pos==="top")?"selected":""}>الثلث الأعلى</option>
+        <option value="low" ${(r.cert&&r.cert.pos==="low")?"selected":""}>الثلث الأسفل</option></select></div>
+      <div class="full" style="border-top:1px solid var(--line);padding-top:10px;font-size:14px"><b>🤝 الرعاة</b> <span class="tag info">${sp.length} حالياً — الرفع في خانة يستبدلها</span></div>
+      ${[0,1,2,3,4,5].map(i=>`<div><label>راعي ${i+1} ${sp[i]?"✓":""}</label><input id="e-sp${i}" type="file" accept="image/png,image/*"></div>`).join("")}
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:16px">
+      <button class="btn" id="e-save" onclick="saveEdit('${id}')">حفظ التعديلات</button>
+      <button class="btn ghost" onclick="closeModal()">إلغاء</button>
+    </div>`;
+  $("#e-cert").addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;
+    try{editCertAr=await certFileToImage(f);toast("جُهّز التصميم العربي ✓");}
+    catch(e){ev.target.value="";toast("ملف كبير أو غير مدعوم","err");}});
+  $("#e-cert-en").addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;
+    try{editCertEn=await certFileToImage(f);toast("جُهّز التصميم الإنجليزي ✓");}
+    catch(e){ev.target.value="";toast("ملف كبير أو غير مدعوم","err");}});
+  [0,1,2,3,4,5].forEach(i=>$("#e-sp"+i).addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;
+    try{editSp[i]=await compressLogo(f,220,70000);toast("جُهّز شعار الراعي "+(i+1)+" ✓");}
+    catch(e){ev.target.value="";toast("الشعار كبير جداً","err");}}));
+  $("#modal-bg").classList.add("open");
+}
+async function saveEdit(id){
+  const r=(window._rows||window._srows||[]).find(x=>x.id===id);if(!r)return;
+  const goal=parseInt($("#e-goal").value||"0"),days=parseInt($("#e-days").value||"0");
+  if(!goal||goal<1||!days||days<1)return toast("قيم الهدف أو الأيام غير صحيحة","err");
+  const upd={goal,days};
+  const sp=(r.sponsors||[]).slice(0,6);
+  editSp.forEach((d,i)=>{if(d)sp[i]=d;});
+  upd.sponsors=sp.filter(Boolean);
+  let cert=r.cert||null;
+  const img=editCertAr||(cert&&cert.img)||null;
+  if(editCertEn&&!img)return toast("أضف التصميم العربي أولاً لتفعيل الشهادة","err");
+  if(img)cert={img,imgEn:editCertEn||(cert&&cert.imgEn)||null,pos:$("#e-cert-pos").value};
+  upd.cert=cert;
+  if(JSON.stringify(Object.assign({},r,upd)).length>930000)return toast("حجم الشعارات/الشهادة يتجاوز الحد — قلّل حجم الملفات","err");
+  $("#e-save").disabled=true;
+  try{await cDoc(id).update(upd);toast("حُفظت التعديلات ✓");closeModal();}
+  catch(e){toast("تعذر الحفظ: "+(e.code||e.message),"err");}
+  $("#e-save").disabled=false;
+}
 
 /* ================= صفحة المتبرع ================= */
 async function renderDonor(id){
