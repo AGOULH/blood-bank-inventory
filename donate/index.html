@@ -668,12 +668,12 @@ async function renderDonor(id){
   try{await ensureFB();}catch(e){$("#d-card").innerHTML=`<div class="empty">تحقق من الاتصال بالإنترنت ثم أعد فتح الرابط</div>`;return;}
   unsub=cDoc(id).onSnapshot(s=>{
     if(!s.exists){$("#d-card").innerHTML=`<div class="empty">الحملة غير موجودة</div>`;return;}
-    const first=!camp;camp=s.data();curCamp=camp;
+    const first=!camp;camp=s.data();curCamp=camp;curCampId=id;
     if(first)drawDonorForm(id,camp);
     else{const el=$("#d-live");if(el)el.textContent=camp.total||0;}
   },()=>{$("#d-card").innerHTML=`<div class="empty">تعذر الاتصال — أعد المحاولة</div>`;});
 }
-let selBT=null,curCamp=null;
+let selBT=null,curCamp=null,curCampId=null;
 function drawDonorForm(id,c){
   if(c.status!=="active"){
     $("#d-card").innerHTML=`<div class="mark">🩸</div><h1>${esc(c.name)}</h1>
@@ -754,6 +754,12 @@ async function makeCert(){
     const pdf=new jspdf.jsPDF({orientation:cv.width>=cv.height?"landscape":"portrait",unit:"px",format:[cv.width,cv.height],hotfixes:["px_scaling"]});
     pdf.addImage(cv.toDataURL("image/jpeg",.9),"JPEG",0,0,cv.width,cv.height);
     pdf.save("شهادة-شكر-"+nm+".pdf");
+    // تسجيل اسم مُصدِر الشهادة في سجل الحملة (حسب اليوم) ليظهر في التقرير النهائي
+    if(curCampId){
+      const u={};
+      u["certNames."+dkey(new Date())]=firebase.firestore.FieldValue.arrayUnion({n:nm,bt:(BT.find(b=>b.k===selBT)||{}).l||""});
+      cDoc(curCampId).update(u).catch(()=>{});
+    }
     toast("صدرت الشهادة ✓");
   }catch(e){toast("تعذر إصدار الشهادة — أعد المحاولة","err");}
   if(btn)btn.disabled=false;
@@ -1021,7 +1027,8 @@ function drawStats(){
             <td style="text-align:center"><span class="tag ${p>=100?"ok":p>=50?"info":"warn"}">${p}%</span></td>
             <td>${r.status==="active"?`<span class="tag ok">نشطة</span>`:`<span class="tag mut">مؤرشفة</span>`}</td>
             <td><div class="row-actions"><button class="btn sm soft" onclick="showDays('${r.id}')">📅 إحصائية الأيام</button>
-            <button class="btn sm ghost" onclick="exportCampPDF('${r.id}')">🖨️ PDF</button></div></td></tr>`;}).join("")}
+            <button class="btn sm ghost" onclick="exportCampPDF('${r.id}')">🖨️ PDF</button>
+            ${r.cert?`<button class="btn sm ghost" onclick="showCertNames('${r.id}')">📜 أسماء الشهادات</button>`:""}</div></td></tr>`;}).join("")}
           </tbody></table></div>
       </div></div>`;
   }).join("");
@@ -1051,6 +1058,72 @@ function showDays(id){
       <tbody>${rowsH}</tbody></table></div>
     <div style="margin-top:12px"><button class="btn sm ghost" onclick="closeModal()">إغلاق</button></div>`;
   $("#modal-bg").classList.add("open");
+}
+
+/* ===== سجل أسماء مُصدِري الشهادات (لكل يوم) + تصدير Excel وPDF ===== */
+function certRows(r){
+  const out=[];
+  for(let i=1;i<=r.days;i++){
+    const dk=dkeyOf(r.startDate,i-1),list=((r.certNames||{})[dk])||[];
+    const dt=new Date(r.startDate+"T00:00:00");dt.setDate(dt.getDate()+i-1);
+    const ds=dt.toLocaleDateString("ar-SA-u-nu-latn",{day:"numeric",month:"short",year:"numeric"});
+    list.forEach(o=>out.push({day:dayOrd(i),date:ds,n:(o&&o.n)||String(o||""),bt:(o&&o.bt)||""}));
+  }
+  return out;
+}
+function showCertNames(id){
+  const r=(window._srows||window._rows||[]).find(x=>x.id===id);if(!r)return;
+  const rows=certRows(r);
+  const box=$("#modal-box");box.style.maxWidth="620px";
+  box.innerHTML=`<h3>📜 سجل شهادات الشكر — ${esc(r.name)}</h3>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 10px">كل متبرع أصدر شهادة باسمه، مقسمين حسب أيام الحملة (${rows.length} اسماً)</p>
+    ${rows.length?`<div class="tbl-wrap" style="max-height:55vh;overflow:auto"><table style="font-size:13px">
+      <thead><tr><th>م</th><th>اليوم</th><th>التاريخ</th><th>اسم المتبرع</th><th>الفصيلة</th></tr></thead>
+      <tbody>${rows.map((o,i)=>`<tr><td>${i+1}</td><td>${o.day}</td><td>${o.date}</td><td><b>${esc(o.n)}</b></td><td style="direction:ltr">${esc(o.bt)}</td></tr>`).join("")}</tbody></table></div>`
+    :`<div class="empty">لا توجد أسماء بعد — تظهر هنا تلقائياً عند إصدار المتبرعين شهاداتهم</div>`}
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap">
+      <button class="btn sm" onclick="exportCertXLSX('${id}')">📊 تصدير Excel</button>
+      <button class="btn sm soft" onclick="exportCertPDF('${id}')">🖨️ تصدير PDF</button>
+      <button class="btn sm ghost" onclick="closeModal()">إغلاق</button>
+    </div>`;
+  $("#modal-bg").classList.add("open");
+}
+async function exportCertXLSX(id){
+  const r=(window._srows||window._rows||[]).find(x=>x.id===id);if(!r)return;
+  const rows=certRows(r);if(!rows.length)return toast("لا توجد أسماء بعد","err");
+  try{
+    await loadJS("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");
+    const data=[["م","اليوم","التاريخ","اسم المتبرع","الفصيلة"]];
+    rows.forEach((o,i)=>data.push([i+1,o.day,o.date,o.n,o.bt]));
+    const ws=XLSX.utils.aoa_to_sheet(data);
+    ws["!cols"]=[{wch:5},{wch:14},{wch:16},{wch:32},{wch:9}];
+    const wb=XLSX.utils.book_new();
+    wb.Workbook={Views:[{RTL:true}]};
+    XLSX.utils.book_append_sheet(wb,ws,"أسماء الشهادات");
+    XLSX.writeFile(wb,"أسماء-شهادات-"+r.name+".xlsx");
+    toast("صدر ملف الإكسل ✓");
+  }catch(e){toast("تعذر إصدار الإكسل","err");}
+}
+async function exportCertPDF(id){
+  const r=(window._srows||window._rows||[]).find(x=>x.id===id);if(!r)return;
+  const rows=certRows(r);if(!rows.length)return toast("لا توجد أسماء بعد","err");
+  try{
+    await ensureJsPDF();
+    const per=30,pages=Math.ceil(rows.length/per);
+    const pdf=new jspdf.jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
+    for(let p=0;p<pages;p++){
+      const [cv,x]=rptCanvas();
+      rptHeader(x,"سجل شهادات الشكر — "+trunc(r.name,22),r.city+" · "+rows.length+" اسماً"+(pages>1?" · صفحة "+(p+1)+"/"+pages:""));
+      const widths=[70,170,190,450,110];
+      const slice=rows.slice(p*per,(p+1)*per).map((o,i)=>[p*per+i+1,o.day.replace("اليوم ",""),o.date,trunc(o.n,30),o.bt]);
+      rptTable(x,250,widths,["م","اليوم","التاريخ","اسم المتبرع","الفصيلة"],slice,46,false);
+      rptFooter(x);
+      if(p>0)pdf.addPage();
+      pdf.addImage(cv.toDataURL("image/jpeg",.9),"JPEG",0,0,210,297);
+    }
+    pdf.save("سجل-شهادات-"+r.name+".pdf");
+    toast("صدر ملف PDF ✓");
+  }catch(e){toast("تعذر إصدار التقرير","err");}
 }
 
 /* ===== تصدير التقارير PDF — كل تقرير في صفحة A4 واحدة (رسم عربي عبر canvas ثم jsPDF) ===== */
