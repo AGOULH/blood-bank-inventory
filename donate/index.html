@@ -146,9 +146,12 @@
   .logo-bar .lg{flex:1;display:flex;justify-content:center}
   .logo-bar .lg:first-child{justify-content:flex-start}
   .logo-bar .lg:last-child{justify-content:flex-end}
-  .logo-bar img{height:9vh;max-height:92px;min-height:48px;object-fit:contain;background:#fff;border-radius:12px;padding:6px}
-  .sponsor-bar{display:flex;align-items:center;justify-content:center;gap:2vw;background:rgba(255,255,255,.94);border-radius:14px;padding:8px 16px;margin-top:1.4vh;flex-wrap:wrap}
-  .sponsor-bar img{height:6.5vh;max-height:64px;object-fit:contain}
+  .logo-bar img{height:10vh;max-height:100px;min-height:52px;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+  .sponsor-bar{display:flex;align-items:center;justify-content:center;gap:2.5vw;padding:6px 0;margin-top:1.4vh;flex-wrap:wrap}
+  .sponsor-bar img{height:7vh;max-height:70px;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+  .scr-times{text-align:center;font-size:clamp(22px,3.6vw,44px);font-weight:700;line-height:1.3;margin-top:.6vh}
+  .scr-lang{position:absolute;bottom:14px;inset-inline-start:16px;z-index:15;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:20px;padding:6px 16px;font-weight:700;font-size:14px;cursor:pointer}
+  .scr-lang:hover{background:rgba(255,255,255,.28)}
   .wave-x{animation:waveMove 4.5s linear infinite}
   @keyframes waveMove{from{transform:translateX(0)}to{transform:translateX(80px)}}
   .bub{animation:bubbleRise 4.2s ease-in infinite}
@@ -214,9 +217,15 @@ function sortRows(rows){return rows.sort((a,b)=>((b.createdAt&&b.createdAt.secon
 
 /* ================= العبارات التحفيزية (5250+) ================= */
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-let PHRASES=null;
-function phrases(){
-  if(PHRASES)return PHRASES;
+let PHRASES={};
+function phrases(lang){
+  lang=lang||"ar";
+  if(PHRASES[lang])return PHRASES[lang];
+  if(lang==="en")return PHRASES.en=buildPool(
+    ["Your donation today","A single drop of your blood","Your generosity","Your noble gesture","A few minutes of your time","One bag of your blood","Your decision to donate","Your stand today","Your kindness","Your generous initiative","Your presence at this campaign","Your humane gesture","Your giving spirit","Your courage","Your great resolve","Your helping hand","Your heartbeat","Your sincere giving","Your gallantry","Your goodwill","Your genuine kindness","Your answer to the call","Your step today","Your open heart"],
+    ["may save a human life","brings hope back to an entire family","may light up a patient's life","makes a real difference","may give a child a new tomorrow","plants a smile on a face in need","may be the reason a patient heals","gives an injured person a second chance","may write a new beginning for a patient","eases the pain of a waiting family","may answer a mother's prayer for her child","revives a heart about to stop","may bring a loved one back home","draws joy in the eyes of a patient's family","may return a father to his children","helps ER doctors save a life","may complete a long-awaited recovery","opens a door of hope thought closed"],
+    ["so be the hope","thank you for giving","you are the true hero","stay a pulse of goodness","we are proud of you","goodness lives in you","bless your generosity","keep on giving","stay the reason","you carry the cure","the story ends well because of you","O maker of life"],
+    ["Donate blood… you never know when you will need it","Blood donors are heroes without capes","Your blood is the secret of someone's life","Hope runs in your veins — share it","Donating blood is a living charity","Be the reason a new heart beats","Give blood, gain a life saved","One drop equals a whole lifetime","Donors write unforgettable survival stories","One donation can save three lives","A minute of giving, a lifetime of gratitude","Blood is not made in factories — it is given from hearts","The best gift to a stranger: life itself","Be the good news in an operating room","Whoever saves one life saves all of humanity","Your giving today is a family's peace tonight","Donating blood is a heroes' habit","Healthy? Then someone is waiting for you","Behind every blood bag is a survival story","Hospitals need heroes like you every day","Your donation shortens the distance between fear and hope","With your blood a family's joy is complete","True courage is rolling up your sleeve","You are a walking factory of life","Every type matters… every donor is a hero","Hope flows in your veins — share it","A tiny pinch for a whole lifetime","Write your name among the makers of life","Your donation today is a mark never erased","True giving expects nothing in return","Your blood is the most precious free gift","Where medicine fails, a donor succeeds","Behind every successful surgery is a generous donor","Be the bridge from illness to healing","Good deeds ward off harm","Make your day special by saving a life","The world is fine as long as donors exist","Your body renews its blood — the patient waits for you","The noblest donation is the one that runs in veins","Some heroes wear a bandage on their arm","The finest giving is a life granted","Your donation is a love letter to someone you never met","A donor today, a role model tomorrow","Act now — patients cannot afford to wait","A little from you is a lot for those in need","Do it for the one waiting in intensive care","Saving one life is worth the whole world","Giving suits you","A family's tears of joy start at your arm","Your pulse is enough for two — share it","Whoever tastes the joy of giving becomes addicted to goodness","Blood types differ, humanity is one","Your donation is a medal on your community's chest","Every 3 seconds someone needs blood — be the answer","Silent heroics happen in donation centers every day","Give from your blood and be given more","You never know the value of a blood bag until you need one","Donate today, sleep with a peaceful heart","Glory to those who give life unasked","One step from you, a whole life for another","You are minutes away from saving a life","Kindness is the shortest path to hearts"]);
   const A=["تبرعك اليوم","قطرة دمك","عطاؤك","بادرتك النبيلة","دقائق من وقتك","كيس دم واحد منك","قرارك بالتبرع","وقفتك اليوم","سخاؤك","مبادرتك الكريمة","حضورك للحملة","لفتتك الإنسانية","جودك","إقدامك","همّتك العالية","يدك الممدودة بالخير","نبض قلبك","عطاؤك الصادق","شهامتك","مروءتك","كرمك الأصيل","تلبيتك للنداء","خطوتك اليوم","أريحيتك"];
   const B=["قد ينقذ حياة إنسان","يعيد الأمل لعائلة كاملة","قد ينير حياة مريض","يصنع فرقاً حقيقياً","قد يهب طفلاً غداً جديداً","يزرع البسمة في وجه محتاج","قد يكون سبباً في شفاء مريض","يمنح مصاباً فرصة ثانية","قد يكتب بداية جديدة لمريض","يخفف ألم عائلة تنتظر","قد يستجيب لدعاء أم لطفلها","يحيي قلباً كاد أن يتوقف","قد يعيد غائباً إلى أحبته","يرسم الفرح في عيون أهل مريض","قد يهب أباً عودة لأبنائه","يعين أطباء الطوارئ على إنقاذ مصاب","قد يكمل قصة شفاء طال انتظارها","يفتح باب أمل ظُنّ أنه أُغلق"];
   const C=["فكن أنت الأمل","شكراً لعطائك","أنت البطل الحقيقي","دمت نبضاً للخير","فخورون بك","الخير فيك باقٍ","جزاك الله خيراً","استمر في العطاء","فداوم على الخير","أنت سرّ النجاة","بك تكتمل الحكاية","يا صانع الحياة"];
@@ -232,14 +241,18 @@ function phrases(){
    "من جرب لذة العطاء أدمن الخير","الفصائل تختلف والإنسانية واحدة","تبرعك وسام على صدر مجتمعك","كل 3 ثوانٍ شخص يحتاج دماً… كن أنت الجواب","سلامة نيتك تسبق سلامة دمك","بطولات صامتة تحدث في مراكز التبرع كل يوم",
    "امنح من دمك… يزدك الله من فضله","لن تعرف قيمة كيس دم حتى تحتاجه","تبرع اليوم… ونم الليلة بقلب مطمئن","المجد لمن يمنح الحياة دون أن يُسأل","خطوة منك… حياة لغيرك","أنت الآن على بعد دقائق من إنقاذ حياة"
   ];
+  return PHRASES.ar=buildPool(A,B,C,S);
+}
+function buildPool(A,B,C,S){
+  const sep=/[a-z]/i.test(C[0])?", ":"، ";
   const out=S.slice();
-  for(const a of A)for(const b of B)for(const c of C)out.push(a+" "+b+"، "+c);
+  for(const a of A)for(const b of B)for(const c of C)out.push(a+" "+b+sep+c);
   const rnd=mulberry32(20260706);
   for(let i=out.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[out[i],out[j]]=[out[j],out[i]];}
-  PHRASES=out; return out;
+  return out;
 }
 /* العبارة تتقدم مع كل متبرع (phraseIdx في وثيقة الحملة) + كل 10 دقائق، وبلا تكرار حتى نهاية القائمة المخلوطة */
-function phraseFor(c){const p=phrases();const seq=(((c&&c.phraseIdx)||0)+Math.floor(Date.now()/600000))%p.length;return p[seq];}
+function phraseFor(c,lang){const p=phrases(lang);const seq=(((c&&c.phraseIdx)||0)+Math.floor(Date.now()/600000))%p.length;return p[seq];}
 
 /* ================= QR ================= */
 let qrReady=null;
@@ -312,7 +325,8 @@ async function renderAdmin(){
             🏅 شهادة شكر لكل المسجلين في التبرع (اختياري)
           </label>
           <div id="cert-opts" style="display:none;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px">
-            <div><label class="req">تصميم الشهادة (PDF أو صورة)</label><input id="f-cert" type="file" accept="application/pdf,image/*"><img class="logo-prev" id="f-cert-prev" style="margin-top:8px;width:120px;height:auto"></div>
+            <div><label class="req">التصميم العربي — أساسي (PDF أو صورة)</label><input id="f-cert" type="file" accept="application/pdf,image/*"><img class="logo-prev" id="f-cert-prev" style="margin-top:8px;width:120px;height:auto"></div>
+            <div><label>التصميم الإنجليزي — إضافي (PDF أو صورة)</label><input id="f-cert-en" type="file" accept="application/pdf,image/*"><img class="logo-prev" id="f-cert-en-prev" style="margin-top:8px;width:120px;height:auto"></div>
             <div><label>موضع اسم المتبرع على الشهادة</label><select id="f-cert-pos"><option value="mid" selected>وسط الشهادة</option><option value="top">الثلث الأعلى</option><option value="low">الثلث الأسفل</option></select></div>
           </div>
         </div>
@@ -327,7 +341,8 @@ async function renderAdmin(){
   logoData=[null,null,null];sponsorData=[null,null,null,null,null,null];certData=null;
   [1,2,3].forEach(i=>$("#f-logo"+i).addEventListener("change",e=>onLogoPick(e,i-1)));
   [1,2,3,4,5,6].forEach(i=>$("#f-sp"+i).addEventListener("change",e=>onSponsorPick(e,i-1)));
-  $("#f-cert").addEventListener("change",onCertPick);
+  $("#f-cert").addEventListener("change",e=>onCertPick(e,"ar"));
+  $("#f-cert-en").addEventListener("change",e=>onCertPick(e,"en"));
   try{
     await ensureFB();
     db.doc(META_DOC).get().then(s=>{const d=s.data()||{};
@@ -349,7 +364,7 @@ function timeOptions(sel,defH){
   }
   sel.innerHTML=out.join("");
 }
-let logoData=[null,null,null],sponsorData=[],certData=null;
+let logoData=[null,null,null],sponsorData=[],certData=null,certDataEn=null;
 function fileToImg(f){return new Promise((ok,er)=>{const img=new Image();img.onload=()=>ok(img);img.onerror=er;img.src=URL.createObjectURL(f);});}
 /* ضغط شعار PNG مع الحفاظ على الشفافية وحد أقصى للحجم يناسب سقف وثيقة Firestore (1MB) */
 async function compressLogo(f,maxDim,maxBytes){
@@ -373,9 +388,12 @@ async function onSponsorPick(ev,idx){
   try{sponsorData[idx]=await compressLogo(f,220,70000);toast("تم تجهيز شعار الراعي "+(idx+1)+" ✓");}
   catch(e){ev.target.value="";toast("شعار الراعي كبير جداً — اختر PNG أصغر","err");}
 }
-/* تحويل تصميم الشهادة (PDF أو صورة) إلى صورة عالية الدقة تُخزن مع الحملة */
-async function onCertPick(ev){
-  const f=ev.target.files[0];certData=null;$("#f-cert-prev").style.display="none";if(!f)return;
+/* تحويل تصميم الشهادة (PDF أو صورة) إلى صورة عالية الدقة تُخزن مع الحملة — عربي أساسي وإنجليزي إضافي */
+async function onCertPick(ev,lang){
+  const prevId=lang==="en"?"#f-cert-en-prev":"#f-cert-prev";
+  const f=ev.target.files[0];
+  if(lang==="en")certDataEn=null;else certData=null;
+  $(prevId).style.display="none";if(!f)return;
   try{
     let cv;
     if(f.type==="application/pdf"){
@@ -393,10 +411,11 @@ async function onCertPick(ev){
       cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);
     }
     let d=cv.toDataURL("image/jpeg",.85);
-    if(d.length>500000)d=cv.toDataURL("image/jpeg",.7);
-    if(d.length>600000)throw new Error("big");
-    certData=d;const p=$("#f-cert-prev");p.src=d;p.style.display="block";
-    toast("تم تجهيز تصميم الشهادة ✓");
+    if(d.length>400000)d=cv.toDataURL("image/jpeg",.7);
+    if(d.length>450000)throw new Error("big");
+    if(lang==="en")certDataEn=d;else certData=d;
+    const p=$(prevId);p.src=d;p.style.display="block";
+    toast(lang==="en"?"تم تجهيز التصميم الإنجليزي ✓":"تم تجهيز التصميم العربي ✓");
   }catch(e){ev.target.value="";toast("تعذر تجهيز التصميم — جرّب ملفاً أصغر","err");}
 }
 async function createCampaign(){
@@ -410,7 +429,7 @@ async function createCampaign(){
   const doc={
     name,city,startDate:start,days,times,timeFrom:tFrom,timeTo:tTo,goal,org:org||null,
     logos:logoData.slice(),sponsors:sponsorData.filter(Boolean),
-    cert:certOn?{img:certData,pos:$("#f-cert-pos").value}:null,
+    cert:certOn?{img:certData,imgEn:certDataEn||null,pos:$("#f-cert-pos").value}:null,
     status:"active",total:0,phraseIdx:0,daily:{}
   };
   if(JSON.stringify(doc).length>930000)return toast("حجم الشعارات/الشهادة يتجاوز الحد — قلّل حجم الملفات","err");
@@ -423,9 +442,9 @@ async function createCampaign(){
     await cDoc(id).set(doc);
     db.doc(META_DOC).set({names:firebase.firestore.FieldValue.arrayUnion(name),
                           cities:firebase.firestore.FieldValue.arrayUnion(city)},{merge:true}).catch(()=>{});
-    ["f-name","f-city","f-goal","f-org","f-logo1","f-logo2","f-logo3","f-sp1","f-sp2","f-sp3","f-sp4","f-sp5","f-sp6","f-cert"].forEach(i=>$("#"+i).value="");
-    logoData=[null,null,null];sponsorData=[null,null,null,null,null,null];certData=null;
-    $("#f-cert-on").checked=false;$("#cert-opts").style.display="none";$("#f-cert-prev").style.display="none";
+    ["f-name","f-city","f-goal","f-org","f-logo1","f-logo2","f-logo3","f-sp1","f-sp2","f-sp3","f-sp4","f-sp5","f-sp6","f-cert","f-cert-en"].forEach(i=>$("#"+i).value="");
+    logoData=[null,null,null];sponsorData=[null,null,null,null,null,null];certData=null;certDataEn=null;
+    $("#f-cert-on").checked=false;$("#cert-opts").style.display="none";$("#f-cert-prev").style.display="none";$("#f-cert-en-prev").style.display="none";
     toast("تم إنشاء الحملة ✓");
     showLinks(id,name);
   }catch(e){toast("تعذر الحفظ: "+(e.code||e.message),"err");}
@@ -539,6 +558,10 @@ async function registerDonation(id){
     const certBlock=(curCamp&&curCamp.cert)?`
       <div style="border-top:1px solid var(--line);margin-top:16px;padding-top:14px;text-align:start">
         <div style="font-weight:700;font-size:14px;margin-bottom:8px">🏅 شهادة شكر باسمك (اختياري)</div>
+        ${curCamp.cert.imgEn?`<div style="display:flex;gap:16px;margin-bottom:10px;font-size:14px">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="radio" name="cert-lang" value="ar" checked> شهادة عربية</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="radio" name="cert-lang" value="en"> English certificate</label>
+        </div>`:""}
         <div class="field"><input id="cert-name" placeholder="اكتب اسمك كما تريده في الشهادة"></div>
         <button class="btn" style="width:100%" onclick="makeCert()">إصدار الشهادة PDF</button>
       </div>`:"";
@@ -561,8 +584,10 @@ async function makeCert(){
   const btn=event&&event.target;if(btn)btn.disabled=true;
   try{
     await loadJS("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+    const langSel=document.querySelector('input[name="cert-lang"]:checked');
+    const design=(langSel&&langSel.value==="en"&&curCamp.cert.imgEn)?curCamp.cert.imgEn:curCamp.cert.img;
     const img=new Image();
-    await new Promise((ok,er)=>{img.onload=ok;img.onerror=er;img.src=curCamp.cert.img;});
+    await new Promise((ok,er)=>{img.onload=ok;img.onerror=er;img.src=design;});
     const cv=document.createElement("canvas");cv.width=img.width;cv.height=img.height;
     const ctx=cv.getContext("2d");ctx.drawImage(img,0,0);
     const posMap={top:.38,mid:.55,low:.72},y=cv.height*(posMap[curCamp.cert.pos]||.55);
@@ -580,7 +605,23 @@ async function makeCert(){
 }
 
 /* ================= شاشة العرض ================= */
+/* شاشة العرض ثنائية اللغة — زر تبديل، الاختيار محفوظ على الجهاز */
+let scrLang=localStorage.getItem("dc_scr_lang")||"ar";
+const SCR_T={
+  ar:{start:"بداية الحملة",end:"نهاية الحملة",of:"من",donors:"متبرعاً",scan:"امسح وسجّل تبرعك",
+      ended:"انتهت الحملة — شكراً لأبطال العطاء!",endedSub:(t,g,p)=>t+" متبرعاً من أصل "+g+" ("+p+"%)",
+      credit:"فكرة وإعداد: حسن العاقول",day:i=>dayOrd(i),btn:"English"},
+  en:{start:"Starts",end:"Ends",of:"of",donors:"donors",scan:"Scan & register your donation",
+      ended:"Campaign ended — thank you, heroes of giving!",endedSub:(t,g,p)=>t+" donors out of "+g+" ("+p+"%)",
+      credit:"Idea & Preparation: Hasan Al-Aqoul",day:i=>"Day "+i,btn:"عربي"}
+};
+const timeEn=t=>String(t||"").replace("صباحاً","AM").replace("ظهراً","PM").replace("مساءً","PM");
+function toggleScrLang(){
+  scrLang=scrLang==="ar"?"en":"ar";localStorage.setItem("dc_scr_lang",scrLang);
+  if(window._scrC&&window._scrId){drawScreen(window._scrId,window._scrC);updateScreen(window._scrC,window._scrC.total||0);}
+}
 async function renderScreen(id){
+  window._scrId=id;
   $("#view").innerHTML=`<div class="screen" id="scr"><div class="center-load" style="min-height:80vh;color:#fff">جارِ التحميل…</div></div>`;
   const cacheKey="dc_cache_"+id;
   let built=false,lastTotal=null;
@@ -604,13 +645,14 @@ async function renderScreen(id){
   }
   timers.push(setInterval(()=>{ // تبديل العبارة كل 10 دقائق (فحص كل 20 ثانية)
     const el=$("#phrase");if(!el)return;
-    const p=phraseFor(window._scrC);
+    const p=phraseFor(window._scrC,scrLang);
     if(el.dataset.p!==p){el.classList.add("fade");setTimeout(()=>{el.textContent=p;el.dataset.p=p;el.classList.remove("fade");},800);}
   },20000));
+  timers.push(setInterval(()=>{if(window._scrC&&window._scrC.status==="active")spawnDrops(1);},8000)); // قطرة هادئة دورية
 }
 /* كيس دم كرتوني (مطابق للصورة المرجعية): خطاف + فتحة تعليق، موجة دم متحركة مع فقاعات،
-   ملصق بوجه لطيف بدون كلام، أنبوب ملفوف أسفله. مساحة الدم من y=100 إلى y=390 (ارتفاع 290) */
-const BAG_H=290;
+   ملصق بوجه لطيف بدون كلام، أنبوب ملفوف أسفله. مساحة الدم من y=100 إلى y=384 (ارتفاع 284) */
+const BAG_H=284;
 function bagSVG(){return `
   <svg class="bag-svg" id="bag-svg" viewBox="0 0 340 545" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -620,7 +662,7 @@ function bagSVG(){return `
       <radialGradient id="dropGrad" cx=".35" cy=".3" r=".95">
         <stop offset="0" stop-color="#ff8080"/><stop offset=".5" stop-color="#d00000"/><stop offset="1" stop-color="#7a0c0c"/>
       </radialGradient>
-      <clipPath id="bagClip"><path d="M104,100 h132 q26,0 26,26 v216 q0,42 -42,42 h-100 q-42,0 -42,-42 v-216 q0,-26 26,-26 z"/></clipPath>
+      <clipPath id="bagClip"><path d="M90,100 h160 q34,0 34,34 v202 q0,48 -48,48 h-132 q-48,0 -48,-48 v-202 q0,-34 34,-34 z"/></clipPath>
     </defs>
     <!-- الخطاف -->
     <path d="M170,2 V38" stroke="#9aa3ad" stroke-width="10" stroke-linecap="round"/>
@@ -629,7 +671,7 @@ function bagSVG(){return `
     <path d="M142,66 h56 a12,12 0 0 1 12,12 v24 h-80 v-24 a12,12 0 0 1 12,-12 z" fill="#f6c9cc" stroke="#6b1220" stroke-width="6"/>
     <circle cx="170" cy="82" r="9" fill="#5c0a12" stroke="#6b1220" stroke-width="4"/>
     <!-- جسم الكيس -->
-    <path d="M104,100 h132 q26,0 26,26 v216 q0,42 -42,42 h-100 q-42,0 -42,-42 v-216 q0,-26 26,-26 z"
+    <path d="M90,100 h160 q34,0 34,34 v202 q0,48 -48,48 h-132 q-48,0 -48,-48 v-202 q0,-34 34,-34 z"
           fill="#fbe0e2" stroke="#6b1220" stroke-width="7"/>
     <g clip-path="url(#bagClip)">
       <g id="blood-g" style="transform:translateY(${BAG_H}px)">
@@ -646,8 +688,8 @@ function bagSVG(){return `
         </g>
       </g>
       <g id="drops"></g>
-      <rect x="92" y="118" width="28" height="150" rx="14" fill="#fff" opacity=".35"/>
-      <circle cx="106" cy="292" r="10" fill="#fff" opacity=".28"/>
+      <rect x="74" y="118" width="28" height="150" rx="14" fill="#fff" opacity=".35"/>
+      <circle cx="88" cy="292" r="10" fill="#fff" opacity=".28"/>
     </g>
     <!-- الملصق: وجه لطيف بدون كلام -->
     <g>
@@ -658,12 +700,13 @@ function bagSVG(){return `
       <circle cx="134" cy="207" r="7.5" fill="#f6aeb5"/><circle cx="206" cy="207" r="7.5" fill="#f6aeb5"/>
     </g>
     <!-- منفذ سفلي وأنبوب ملفوف -->
-    <rect x="160" y="382" width="20" height="28" rx="6" fill="#f6c9cc" stroke="#6b1220" stroke-width="5"/>
-    <path d="M170,410 c0,36 -64,30 -64,60 c0,32 100,32 100,4 c0,-26 -78,-24 -78,8" fill="none" stroke="#6b1220" stroke-width="11" stroke-linecap="round"/>
-    <path d="M170,410 c0,36 -64,30 -64,60 c0,32 100,32 100,4 c0,-26 -78,-24 -78,8" fill="none" stroke="#e0596a" stroke-width="5" stroke-linecap="round"/>
+    <rect x="160" y="378" width="20" height="28" rx="6" fill="#f6c9cc" stroke="#6b1220" stroke-width="5"/>
+    <path d="M170,406 c0,36 -64,30 -64,60 c0,32 100,32 100,4 c0,-26 -78,-24 -78,8" fill="none" stroke="#6b1220" stroke-width="11" stroke-linecap="round"/>
+    <path d="M170,406 c0,36 -64,30 -64,60 c0,32 100,32 100,4 c0,-26 -78,-24 -78,8" fill="none" stroke="#e0596a" stroke-width="5" stroke-linecap="round"/>
     <circle cx="128" cy="482" r="7" fill="#f6c9cc" stroke="#6b1220" stroke-width="4"/>
   </svg>`;}
 function drawScreen(id,c){
+  const L=SCR_T[scrLang];
   const lgs=c.logos||(c.logo?[c.logo]:[]);
   const logoBar=(lgs[0]||lgs[1]||lgs[2])?`<div class="logo-bar">
       <div class="lg">${lgs[0]?`<img src="${lgs[0]}" alt="">`:""}</div>
@@ -671,34 +714,40 @@ function drawScreen(id,c){
       <div class="lg">${lgs[1]?`<img src="${lgs[1]}" alt="">`:""}</div>
     </div>`:"";
   const sponsors=(c.sponsors&&c.sponsors.length)?`<div class="sponsor-bar">${c.sponsors.map(s=>`<img src="${s}" alt="">`).join("")}</div>`:"";
+  const tF=scrLang==="en"?timeEn(c.timeFrom):c.timeFrom,tT=scrLang==="en"?timeEn(c.timeTo):c.timeTo;
+  const timesLine=c.timeFrom?`<div class="scr-times">${L.start}: <b>${esc(tF)}</b> — ${L.end}: <b>${esc(tT||"")}</b></div>`
+                            :(c.times?`<div class="scr-times">${esc(c.times)}</div>`:"");
+  $("#scr").setAttribute("dir",scrLang==="en"?"ltr":"rtl");
   $("#scr").innerHTML=`
     ${logoBar}
     <div class="scr-head">
-      <div class="scr-title"><h1>${esc(c.name)}</h1><p>${c.org?esc(c.org)+" · ":""}${esc(c.city)} · ${c.timeFrom?`بداية الحملة: <b>${esc(c.timeFrom)}</b> — نهاية الحملة: <b>${esc(c.timeTo||"")}</b>`:esc(c.times||"")}</p></div>
+      <div class="scr-title"><h1>${esc(c.name)}</h1><p>${c.org?esc(c.org)+" · ":""}${esc(c.city)}</p></div>
       <div class="scr-days" id="scr-days"></div>
     </div>
+    ${timesLine}
     <div class="scr-body">
       <div class="bag-area" id="bag-area">
         ${bagSVG()}
-        <div class="bag-side"><div class="pct" id="pct">0%</div><div class="of"><b id="tot">0</b> من <b>${c.goal}</b> متبرعاً</div></div>
+        <div class="bag-side"><div class="pct" id="pct">0%</div><div class="of"><b id="tot">0</b> ${L.of} <b>${c.goal}</b> ${L.donors}</div></div>
       </div>
-      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">متبرعاً</div></div>`).join("")}</div>
+      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div>`).join("")}</div>
     </div>
     <div class="scr-foot">
-      <div class="phrase-box" id="phrase" data-p="">${esc(phraseFor(c))}</div>
-      <div class="scr-qr"><div id="scr-qr-box"></div><div class="cap">امسح وسجّل تبرعك</div></div>
+      <div class="phrase-box" id="phrase" data-p="">${esc(phraseFor(c,scrLang))}</div>
+      <div class="scr-qr"><div id="scr-qr-box"></div><div class="cap">${L.scan}</div></div>
     </div>
     ${sponsors}
-    <div class="scr-credit">فكرة وإعداد: حسن العاقول</div>`;
-  $("#phrase").dataset.p=phraseFor(c);
+    <div class="scr-credit">${L.credit}</div>
+    <button class="scr-lang" onclick="toggleScrLang()">🌐 ${L.btn}</button>`;
+  $("#phrase").dataset.p=phraseFor(c,scrLang);
   drawQR($("#scr-qr-box"),baseURL()+"#/d/"+id,110);
-  if(c.status==="active")timers.push(setInterval(()=>spawnDrops(1),8000));
 }
 function updateScreen(c,prevTotal){
-  const total=c.total||0,pct=Math.min(100,c.goal?Math.round(total/c.goal*100):0);
-  const ratio=Math.min(1,c.goal?total/c.goal:0);
+  const L=SCR_T[scrLang];
+  const total=c.total||0,pct=c.goal?Math.round(total/c.goal*100):0; // النسبة تستمر فوق 100%
+  const ratio=Math.min(1,c.goal?total/c.goal:0); // امتلاء الكيس يتوقف عند الامتلاء الكامل
   const bg=$("#blood-g");if(bg)bg.style.transform="translateY("+(BAG_H*(1-ratio)).toFixed(1)+"px)";
-  const ph=$("#phrase"),pp=phraseFor(c); // العبارة تتغير مع كل متبرع
+  const ph=$("#phrase"),pp=phraseFor(c,scrLang); // العبارة تتغير مع كل متبرع
   if(ph&&ph.dataset.p!==pp){ph.classList.add("fade");setTimeout(()=>{ph.textContent=pp;ph.dataset.p=pp;ph.classList.remove("fade");},800);}
   animNum($("#pct"),parseInt($("#pct").textContent)||0,pct,"%");
   animNum($("#tot"),prevTotal||0,total,"");
@@ -706,15 +755,15 @@ function updateScreen(c,prevTotal){
   const ti=todayIdx(c),chips=[];
   for(let i=1;i<=c.days;i++){
     const dk=dkeyOf(c.startDate,i-1),n=((c.daily||{})[dk]||{}).total||0;
-    chips.push(`<div class="day-chip ${i===ti?"now":""}">${dayOrd(i)}<b>${n}</b></div>`);
+    chips.push(`<div class="day-chip ${i===ti?"now":""}">${L.day(i)}<b>${n}</b></div>`);
   }
   $("#scr-days").innerHTML=chips.join("");
   const old=$("#ended-ovl");if(old)old.remove();
   if(c.status!=="active"){
     $("#scr").insertAdjacentHTML("beforeend",`<div class="scr-ended" id="ended-ovl">
-      <div style="font-size:64px">🏆</div><h2>انتهت الحملة — شكراً لأبطال العطاء!</h2>
-      <p style="font-size:clamp(16px,2.2vw,26px)">${total} متبرعاً من أصل ${c.goal} (${pct}%)</p>
-      <div class="scr-credit">فكرة وإعداد: حسن العاقول</div></div>`);
+      <div style="font-size:64px">🏆</div><h2>${L.ended}</h2>
+      <p style="font-size:clamp(16px,2.2vw,26px)">${L.endedSub(total,c.goal,pct)}</p>
+      <div class="scr-credit">${L.credit}</div></div>`);
   }
 }
 function animNum(el,from,to,suf){
