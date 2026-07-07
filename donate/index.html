@@ -297,7 +297,15 @@ async function renderAdmin(){
         <div><label>شعار 1 — يمين أعلى الشاشة (PNG)</label><input id="f-logo1" type="file" accept="image/png,image/*"></div>
         <div><label>شعار 2 — يسار أعلى الشاشة (PNG)</label><input id="f-logo2" type="file" accept="image/png,image/*"></div>
         <div><label>شعار 3 — منتصف أعلى الشاشة (PNG)</label><input id="f-logo3" type="file" accept="image/png,image/*"></div>
-        <div class="full"><label>شعارات الرعاة — حتى 6 شعارات أسفل شاشة العرض (PNG)</label><input id="f-sponsors" type="file" accept="image/png,image/*" multiple></div>
+        <div class="full"><label>شعارات الرعاة — تظهر أسفل شاشة العرض (PNG)</label>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+            <div><label style="font-size:12px">راعي 1</label><input id="f-sp1" type="file" accept="image/png,image/*"></div>
+            <div><label style="font-size:12px">راعي 2</label><input id="f-sp2" type="file" accept="image/png,image/*"></div>
+            <div><label style="font-size:12px">راعي 3</label><input id="f-sp3" type="file" accept="image/png,image/*"></div>
+            <div><label style="font-size:12px">راعي 4</label><input id="f-sp4" type="file" accept="image/png,image/*"></div>
+            <div><label style="font-size:12px">راعي 5</label><input id="f-sp5" type="file" accept="image/png,image/*"></div>
+            <div><label style="font-size:12px">راعي 6</label><input id="f-sp6" type="file" accept="image/png,image/*"></div>
+          </div></div>
         <div class="full" style="border:1px dashed var(--line);border-radius:10px;padding:12px">
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:var(--ink)">
             <input type="checkbox" id="f-cert-on" style="width:18px;height:18px" onchange="document.getElementById('cert-opts').style.display=this.checked?'grid':'none'">
@@ -316,9 +324,9 @@ async function renderAdmin(){
     </div>`,"admin");
   $("#f-start").value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
   timeOptions($("#f-time-from"),16);timeOptions($("#f-time-to"),22);
-  logoData=[null,null,null];sponsorData=[];certData=null;
+  logoData=[null,null,null];sponsorData=[null,null,null,null,null,null];certData=null;
   [1,2,3].forEach(i=>$("#f-logo"+i).addEventListener("change",e=>onLogoPick(e,i-1)));
-  $("#f-sponsors").addEventListener("change",onSponsorsPick);
+  [1,2,3,4,5,6].forEach(i=>$("#f-sp"+i).addEventListener("change",e=>onSponsorPick(e,i-1)));
   $("#f-cert").addEventListener("change",onCertPick);
   try{
     await ensureFB();
@@ -360,11 +368,10 @@ async function onLogoPick(ev,idx){
   try{logoData[idx]=await compressLogo(f,280,90000);toast("تم تجهيز الشعار "+(idx+1)+" ✓");}
   catch(e){ev.target.value="";toast("الشعار كبير جداً — اختر PNG أصغر","err");}
 }
-async function onSponsorsPick(ev){
-  const fs=[...ev.target.files].slice(0,6);sponsorData=[];
-  try{for(const f of fs)sponsorData.push(await compressLogo(f,220,70000));
-    toast("تم تجهيز "+sponsorData.length+" من شعارات الرعاة ✓");}
-  catch(e){sponsorData=[];ev.target.value="";toast("أحد شعارات الرعاة كبير جداً","err");}
+async function onSponsorPick(ev,idx){
+  const f=ev.target.files[0];sponsorData[idx]=null;if(!f)return;
+  try{sponsorData[idx]=await compressLogo(f,220,70000);toast("تم تجهيز شعار الراعي "+(idx+1)+" ✓");}
+  catch(e){ev.target.value="";toast("شعار الراعي كبير جداً — اختر PNG أصغر","err");}
 }
 /* تحويل تصميم الشهادة (PDF أو صورة) إلى صورة عالية الدقة تُخزن مع الحملة */
 async function onCertPick(ev){
@@ -402,7 +409,7 @@ async function createCampaign(){
   if(certOn&&!certData)return toast("فعّلت الشهادة — أرفق تصميمها (PDF أو صورة)","err");
   const doc={
     name,city,startDate:start,days,times,timeFrom:tFrom,timeTo:tTo,goal,org:org||null,
-    logos:logoData.slice(),sponsors:sponsorData.slice(),
+    logos:logoData.slice(),sponsors:sponsorData.filter(Boolean),
     cert:certOn?{img:certData,pos:$("#f-cert-pos").value}:null,
     status:"active",total:0,phraseIdx:0,daily:{}
   };
@@ -416,8 +423,8 @@ async function createCampaign(){
     await cDoc(id).set(doc);
     db.doc(META_DOC).set({names:firebase.firestore.FieldValue.arrayUnion(name),
                           cities:firebase.firestore.FieldValue.arrayUnion(city)},{merge:true}).catch(()=>{});
-    ["f-name","f-city","f-goal","f-org","f-logo1","f-logo2","f-logo3","f-sponsors","f-cert"].forEach(i=>$("#"+i).value="");
-    logoData=[null,null,null];sponsorData=[];certData=null;
+    ["f-name","f-city","f-goal","f-org","f-logo1","f-logo2","f-logo3","f-sp1","f-sp2","f-sp3","f-sp4","f-sp5","f-sp6","f-cert"].forEach(i=>$("#"+i).value="");
+    logoData=[null,null,null];sponsorData=[null,null,null,null,null,null];certData=null;
     $("#f-cert-on").checked=false;$("#cert-opts").style.display="none";$("#f-cert-prev").style.display="none";
     toast("تم إنشاء الحملة ✓");
     showLinks(id,name);
@@ -667,7 +674,7 @@ function drawScreen(id,c){
   $("#scr").innerHTML=`
     ${logoBar}
     <div class="scr-head">
-      <div class="scr-title"><h1>${esc(c.name)}</h1><p>${c.org?esc(c.org)+" · ":""}${esc(c.city)} · ${esc(c.times||"")}</p></div>
+      <div class="scr-title"><h1>${esc(c.name)}</h1><p>${c.org?esc(c.org)+" · ":""}${esc(c.city)} · ${c.timeFrom?`بداية الحملة: <b>${esc(c.timeFrom)}</b> — نهاية الحملة: <b>${esc(c.timeTo||"")}</b>`:esc(c.times||"")}</p></div>
       <div class="scr-days" id="scr-days"></div>
     </div>
     <div class="scr-body">
@@ -741,7 +748,10 @@ function celebrate(n){
 async function renderStats(){
   $("#view").innerHTML=shell(`
     <div class="page-head"><div><h2>الأرشيف والإحصائيات</h2><p>نتائج كل الحملات مجمّعة بالسنة وقابلة للتصفية بالاسم</p></div>
-      <div><select id="st-name" onchange="drawStats()" style="padding:9px 12px;border:1px solid var(--line);border-radius:10px"><option value="">كل الحملات</option></select></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <select id="st-name" onchange="drawStats()" style="padding:9px 12px;border:1px solid var(--line);border-radius:10px"><option value="">كل الحملات</option></select>
+        <button class="btn sm soft" onclick="exportAllPDF()">🖨️ تقرير شامل PDF</button>
+      </div>
     </div>
     <div id="st-box"><div class="empty">جارِ التحميل…</div></div>`,"stats");
   try{
@@ -778,7 +788,8 @@ function drawStats(){
             <td style="text-align:center">${r.goal}</td><td style="text-align:center"><b>${r.total||0}</b></td>
             <td style="text-align:center"><span class="tag ${p>=100?"ok":p>=50?"info":"warn"}">${p}%</span></td>
             <td>${r.status==="active"?`<span class="tag ok">نشطة</span>`:`<span class="tag mut">مؤرشفة</span>`}</td>
-            <td><button class="btn sm soft" onclick="showDays('${r.id}')">📅 إحصائية الأيام</button></td></tr>`;}).join("")}
+            <td><div class="row-actions"><button class="btn sm soft" onclick="showDays('${r.id}')">📅 إحصائية الأيام</button>
+            <button class="btn sm ghost" onclick="exportCampPDF('${r.id}')">🖨️ PDF</button></div></td></tr>`;}).join("")}
           </tbody></table></div>
       </div></div>`;
   }).join("");
@@ -808,6 +819,123 @@ function showDays(id){
       <tbody>${rowsH}</tbody></table></div>
     <div style="margin-top:12px"><button class="btn sm ghost" onclick="closeModal()">إغلاق</button></div>`;
   $("#modal-bg").classList.add("open");
+}
+
+/* ===== تصدير التقارير PDF — كل تقرير في صفحة A4 واحدة (رسم عربي عبر canvas ثم jsPDF) ===== */
+async function ensureJsPDF(){await loadJS("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");}
+const RPT_FONT='"Segoe UI","Tajawal","Noto Sans Arabic",Tahoma,Arial';
+function rptCanvas(){
+  const cv=document.createElement("canvas");cv.width=1240;cv.height=1754;
+  const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,1240,1754);
+  x.direction="rtl";x.textAlign="center";x.textBaseline="middle";
+  return [cv,x];
+}
+function rptHeader(x,title,sub){
+  x.fillStyle="#127a3e";x.fillRect(0,0,1240,175);
+  x.fillStyle="#fff";x.font="bold 46px "+RPT_FONT;x.fillText(title,620,70);
+  x.font="bold 32px "+RPT_FONT;x.fillText(sub,620,130);
+}
+function rptFooter(x){
+  x.fillStyle="#6b7280";x.font="24px "+RPT_FONT;
+  const d=new Date().toLocaleDateString("ar-SA-u-nu-latn",{day:"numeric",month:"long",year:"numeric"});
+  x.fillText("بنك الدم — دمام · فكرة وإعداد: حسن العاقول · صدر التقرير في "+d,620,1710);
+}
+function rptSave(cv,fname){
+  const pdf=new jspdf.jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
+  pdf.addImage(cv.toDataURL("image/jpeg",.92),"JPEG",0,0,210,297);
+  pdf.save(fname);
+}
+function rptBox(x,bx,by,bw,bh,label,val,accent){
+  x.fillStyle=accent?"#e7f4ec":"#f4f5f7";
+  x.beginPath();x.roundRect(bx,by,bw,bh,16);x.fill();
+  x.fillStyle="#6b7280";x.font="26px "+RPT_FONT;x.fillText(label,bx+bw/2,by+38);
+  x.fillStyle=accent?"#127a3e":"#1f2530";x.font="bold 52px "+RPT_FONT;x.fillText(String(val),bx+bw/2,by+95);
+}
+/* جدول RTL عام: يبدأ من اليمين، widths مصفوفة عرض الأعمدة */
+function rptTable(x,y0,widths,header,rows,rowH,highlightLast){
+  const totalW=widths.reduce((a,b)=>a+b,0),x0=620+totalW/2; // يمين الجدول (موسّط)
+  const colRight=[];let acc=0;
+  widths.forEach(w=>{colRight.push(x0-acc);acc+=w;});
+  const drawRow=(cells,y,bold,bg)=>{
+    if(bg){x.fillStyle=bg;x.fillRect(x0-totalW,y-rowH/2,totalW,rowH);}
+    x.fillStyle=bold?"#127a3e":"#1f2530";
+    x.font=(bold?"bold ":"")+Math.min(26,rowH*.5)+"px "+RPT_FONT;
+    cells.forEach((cTxt,i)=>x.fillText(String(cTxt),colRight[i]-widths[i]/2,y));
+  };
+  x.fillStyle="#f0f2f5";x.fillRect(x0-totalW,y0-rowH/2,totalW,rowH);
+  x.fillStyle="#6b7280";x.font="bold "+Math.min(24,rowH*.45)+"px "+RPT_FONT;
+  header.forEach((h,i)=>x.fillText(h,colRight[i]-widths[i]/2,y0));
+  rows.forEach((r,ri)=>{
+    const y=y0+rowH*(ri+1);
+    drawRow(r,y,highlightLast&&ri===rows.length-1,highlightLast&&ri===rows.length-1?"#e7f4ec":(ri%2?"#fafbfc":null));
+  });
+  x.strokeStyle="#d5d9df";x.lineWidth=1.5;
+  for(let i=0;i<=rows.length+1;i++){const y=y0-rowH/2+rowH*i;x.beginPath();x.moveTo(x0-totalW,y);x.lineTo(x0,y);x.stroke();}
+  x.beginPath();x.moveTo(x0,y0-rowH/2);x.lineTo(x0,y0-rowH/2+rowH*(rows.length+1));x.stroke();
+  x.beginPath();x.moveTo(x0-totalW,y0-rowH/2);x.lineTo(x0-totalW,y0-rowH/2+rowH*(rows.length+1));x.stroke();
+  return y0+rowH*(rows.length+1);
+}
+const trunc=(s,n)=>{s=String(s||"");return s.length>n?s.slice(0,n-1)+"…":s;};
+/* تقرير حملة واحدة في صفحة */
+async function exportCampPDF(id){
+  const r=(window._srows||window._rows||[]).find(c=>c.id===id);if(!r)return;
+  try{
+    await ensureJsPDF();
+    const [cv,x]=rptCanvas();
+    rptHeader(x,"تقرير حملة التبرع بالدم",r.name+" — "+r.city);
+    x.fillStyle="#1f2530";x.font="27px "+RPT_FONT;
+    const tl=r.timeFrom?("بداية الحملة: "+r.timeFrom+"    نهاية الحملة: "+(r.timeTo||"")):(r.times||"");
+    x.fillText("تاريخ البداية: "+fmtDate(r.startDate)+"    المدة: "+r.days+(r.days>1?" أيام":" يوم"),620,225);
+    x.fillText(tl+(r.org?"    الجهة المنظمة: "+r.org:""),620,268);
+    const pct=(r.goal?Math.round((r.total||0)/r.goal*100):0);
+    rptBox(x,90,310,330,130,"الهدف",r.goal,false);
+    rptBox(x,455,310,330,130,"إجمالي المتبرعين",r.total||0,true);
+    rptBox(x,820,310,330,130,"نسبة التحقيق",pct+"%",pct>=100);
+    x.fillStyle="#1f2530";x.font="bold 30px "+RPT_FONT;x.fillText("إحصائية الأيام والفصائل",620,520);
+    const widths=[140,150, 82,82,82,82,82,82,82,82, 120];
+    const header=["اليوم","التاريخ",...BT.map(b=>b.l),"المجموع"];
+    const sum={total:0};BT.forEach(b=>sum[b.k]=0);
+    const rows=[];
+    for(let i=1;i<=r.days;i++){
+      const dk=dkeyOf(r.startDate,i-1),dd=(r.daily||{})[dk]||{};
+      sum.total+=dd.total||0;BT.forEach(b=>sum[b.k]+=dd[b.k]||0);
+      const dt=new Date(r.startDate+"T00:00:00");dt.setDate(dt.getDate()+i-1);
+      rows.push([dayOrd(i).replace("اليوم ",""),dt.toLocaleDateString("ar-SA-u-nu-latn",{day:"numeric",month:"short"}),...BT.map(b=>dd[b.k]||0),dd.total||0]);
+    }
+    rows.push(["المجموع","",...BT.map(b=>sum[b.k]),sum.total]);
+    const rowH=Math.min(56,Math.max(38,980/(rows.length+1)));
+    rptTable(x,575,widths,header,rows,rowH,true);
+    rptFooter(x);
+    rptSave(cv,"تقرير-"+r.name+".pdf");
+    toast("صدر تقرير الحملة ✓");
+  }catch(e){toast("تعذر إصدار التقرير","err");}
+}
+/* التقرير الشامل (حسب الفلتر الحالي) في صفحة واحدة */
+async function exportAllPDF(){
+  let rows=window._srows||[];
+  const f=$("#st-name")?$("#st-name").value:"";if(f)rows=rows.filter(r=>r.name===f);
+  if(!rows.length)return toast("لا توجد بيانات للتصدير","err");
+  try{
+    await ensureJsPDF();
+    const [cv,x]=rptCanvas();
+    rptHeader(x,"التقرير الشامل لحملات التبرع بالدم",(f?("الحملة: "+f):"كل الحملات")+" · "+rows.length+" حملة");
+    const tot=rows.reduce((s,r)=>s+(r.total||0),0),goal=rows.reduce((s,r)=>s+(r.goal||0),0);
+    rptBox(x,90,215,330,130,"مجموع الأهداف",goal,false);
+    rptBox(x,455,215,330,130,"إجمالي المتبرعين",tot,true);
+    rptBox(x,820,215,330,130,"نسبة التحقيق",(goal?Math.round(tot/goal*100):0)+"%",false);
+    const tc={};BT.forEach(b=>tc[b.k]=rows.reduce((s,r)=>s+((r.counts||{})[b.k]||0),0));
+    x.fillStyle="#1f2530";x.font="bold 28px "+RPT_FONT;
+    x.fillText("مجموع الفصائل:   "+BT.map(b=>b.l+": "+tc[b.k]).join("    "),620,415);
+    const widths=[290,140,170,90,110,140,120];
+    const header=["الحملة","المدينة","التاريخ","الأيام","الهدف","المتبرعون","النسبة"];
+    const list=rows.map(r=>[trunc(r.name,20),trunc(r.city,10),fmtDate(r.startDate),r.days,r.goal,r.total||0,(r.goal?Math.round((r.total||0)/r.goal*100):0)+"%"]);
+    list.push(["الإجمالي","","","",goal,tot,(goal?Math.round(tot/goal*100):0)+"%"]);
+    const rowH=Math.min(54,Math.max(32,1160/(list.length+1)));
+    rptTable(x,480,widths,header,list,rowH,true);
+    rptFooter(x);
+    rptSave(cv,f?("تقرير-"+f+"-شامل.pdf"):"التقرير-الشامل-لكل-الحملات.pdf");
+    toast("صدر التقرير الشامل ✓");
+  }catch(e){toast("تعذر إصدار التقرير","err");}
 }
 
 route();
