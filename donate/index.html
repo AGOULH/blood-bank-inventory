@@ -146,8 +146,8 @@
   .logo-bar .lg{flex:1;display:flex;justify-content:center}
   .logo-bar .lg:first-child{justify-content:flex-start}
   .logo-bar .lg:last-child{justify-content:flex-end}
-  /* شعارات كبيرة وواضحة (بحجم شعار الوزارة في الشهادات تقريباً) */
-  .logo-bar img{height:clamp(90px,15vh,170px);max-width:26vw;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+  /* شعارات المنظمين بنفس مقاس الرعاة */
+  .logo-bar img{height:clamp(80px,13vh,150px);max-width:26vw;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
   .sponsor-bar{display:flex;align-items:center;justify-content:space-around;width:100%;gap:1.5vw;padding:6px 0;margin-top:1.4vh;flex-wrap:wrap}
   .sponsor-bar img{height:clamp(80px,13vh,150px);max-width:15vw;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
   /* أداة تحديد مكان الاسم على الشهادة */
@@ -155,8 +155,14 @@
   .cert-pick img{width:100%;display:block;border:1px solid var(--line);border-radius:8px}
   .cert-pick .marker{position:absolute;transform:translate(-50%,-100%);pointer-events:none;font-size:13px;font-weight:800;color:#c0392b;text-shadow:0 0 4px #fff,0 0 8px #fff;white-space:nowrap}
   .scr-times{text-align:center;font-size:clamp(22px,3.6vw,44px);font-weight:700;line-height:1.3;margin-top:.6vh}
-  .scr-lang{position:absolute;bottom:14px;inset-inline-start:16px;z-index:15;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:20px;padding:6px 16px;font-weight:700;font-size:14px;cursor:pointer}
+  .scr-tools{position:absolute;bottom:14px;inset-inline-start:16px;z-index:15;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .scr-lang{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:20px;padding:6px 16px;font-weight:700;font-size:14px;cursor:pointer}
   .scr-lang:hover{background:rgba(255,255,255,.28)}
+  .scr-theme{display:flex;gap:7px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:5px 12px}
+  .sw{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.75);cursor:pointer;padding:0}
+  .sw.sel{box-shadow:0 0 0 3px #fff}
+  .sw-custom{width:26px;height:26px;border:none;background:none;cursor:pointer;padding:0}
+  .day-chip.now{color:var(--scr-deep,#800f2f)}
   .wave-x{animation:waveMove 4.5s linear infinite}
   @keyframes waveMove{from{transform:translateX(0)}to{transform:translateX(80px)}}
   .bub{animation:bubbleRise 4.2s ease-in infinite}
@@ -227,13 +233,13 @@ function phrases(lang){
   lang=lang||"ar";
   if(PHRASES[lang])return PHRASES[lang];
   if(lang==="en")return PHRASES.en=buildPool(
-    ["Your donation today","A single drop of your blood","Your generosity","Your noble gesture","A few minutes of your time","One bag of your blood","Your decision to donate","Your stand today","Your kindness","Your generous initiative","Your presence at this campaign","Your humane gesture","Your giving spirit","Your courage","Your great resolve","Your helping hand","Your heartbeat","Your sincere giving","Your gallantry","Your goodwill","Your genuine kindness","Your answer to the call","Your step today","Your open heart"],
+    ["Your donation today","A single drop of your blood","Your generosity","Your noble gesture","A few minutes of your time","One bag of your blood","Your decision to donate","Your stand today","Your kindness","Your generous initiative","Your presence at this campaign","Your humane gesture","Your giving spirit","Your courage","Your great resolve","Your helping hand","Your heartbeat","Your sincere giving","The blood bag you gave","Your support for the blood bank","Your response to patients' call","Your volunteering today","Your care for the sick","Your commitment to giving"],
     ["may save a human life","brings hope back to an entire family","may light up a patient's life","makes a real difference","may give a child a new tomorrow","plants a smile on a face in need","may be the reason a patient heals","gives an injured person a second chance","may write a new beginning for a patient","eases the pain of a waiting family","may answer a mother's prayer for her child","revives a heart about to stop","may bring a loved one back home","draws joy in the eyes of a patient's family","may return a father to his children","helps ER doctors save a life","may complete a long-awaited recovery","opens a door of hope thought closed"],
     ["so be the hope","thank you for giving","you are the true hero","stay a pulse of goodness","we are proud of you","goodness lives in you","bless your generosity","keep on giving","stay the reason","you carry the cure","the story ends well because of you","O maker of life"],
     ["Donate blood… you never know when you will need it","Blood donors are heroes without capes","Your blood is the secret of someone's life","Hope runs in your veins — share it","Donating blood is a living charity","Be the reason a new heart beats","Give blood, gain a life saved","One drop equals a whole lifetime","Donors write unforgettable survival stories","One donation can save three lives","A minute of giving, a lifetime of gratitude","Blood is not made in factories — it is given from hearts","The best gift to a stranger: life itself","Be the good news in an operating room","Whoever saves one life saves all of humanity","Your giving today is a family's peace tonight","Donating blood is a heroes' habit","Healthy? Then someone is waiting for you","Behind every blood bag is a survival story","Hospitals need heroes like you every day","Your donation shortens the distance between fear and hope","With your blood a family's joy is complete","True courage is rolling up your sleeve","You are a walking factory of life","Every type matters… every donor is a hero","Hope flows in your veins — share it","A tiny pinch for a whole lifetime","Write your name among the makers of life","Your donation today is a mark never erased","True giving expects nothing in return","Your blood is the most precious free gift","Where medicine fails, a donor succeeds","Behind every successful surgery is a generous donor","Be the bridge from illness to healing","Good deeds ward off harm","Make your day special by saving a life","The world is fine as long as donors exist","Your body renews its blood — the patient waits for you","The noblest donation is the one that runs in veins","Some heroes wear a bandage on their arm","The finest giving is a life granted","Your donation is a love letter to someone you never met","A donor today, a role model tomorrow","Act now — patients cannot afford to wait","A little from you is a lot for those in need","Do it for the one waiting in intensive care","Saving one life is worth the whole world","Giving suits you","A family's tears of joy start at your arm","Your pulse is enough for two — share it","Whoever tastes the joy of giving becomes addicted to goodness","Blood types differ, humanity is one","Your donation is a medal on your community's chest","Every 3 seconds someone needs blood — be the answer","Silent heroics happen in donation centers every day","Give from your blood and be given more","You never know the value of a blood bag until you need one","Donate today, sleep with a peaceful heart","Glory to those who give life unasked","One step from you, a whole life for another","You are minutes away from saving a life","Kindness is the shortest path to hearts"]);
-  const A=["تبرعك اليوم","قطرة دمك","عطاؤك","بادرتك النبيلة","دقائق من وقتك","كيس دم واحد منك","قرارك بالتبرع","وقفتك اليوم","سخاؤك","مبادرتك الكريمة","حضورك للحملة","لفتتك الإنسانية","جودك","إقدامك","همّتك العالية","يدك الممدودة بالخير","نبض قلبك","عطاؤك الصادق","شهامتك","مروءتك","كرمك الأصيل","تلبيتك للنداء","خطوتك اليوم","أريحيتك"];
-  const B=["قد ينقذ حياة إنسان","يعيد الأمل لعائلة كاملة","قد ينير حياة مريض","يصنع فرقاً حقيقياً","قد يهب طفلاً غداً جديداً","يزرع البسمة في وجه محتاج","قد يكون سبباً في شفاء مريض","يمنح مصاباً فرصة ثانية","قد يكتب بداية جديدة لمريض","يخفف ألم عائلة تنتظر","قد يستجيب لدعاء أم لطفلها","يحيي قلباً كاد أن يتوقف","قد يعيد غائباً إلى أحبته","يرسم الفرح في عيون أهل مريض","قد يهب أباً عودة لأبنائه","يعين أطباء الطوارئ على إنقاذ مصاب","قد يكمل قصة شفاء طال انتظارها","يفتح باب أمل ظُنّ أنه أُغلق"];
-  const C=["فكن أنت الأمل","شكراً لعطائك","أنت البطل الحقيقي","دمت نبضاً للخير","فخورون بك","الخير فيك باقٍ","جزاك الله خيراً","استمر في العطاء","فداوم على الخير","أنت سرّ النجاة","بك تكتمل الحكاية","يا صانع الحياة"];
+  const A=["تبرعك اليوم","عطاؤك","كيس الدم الذي وهبته","قرارك بالتبرع","سخاؤك","حضورك لحملة التبرع","جودك","إقدامك على التبرع","نبض قلبك","عطاؤك الصادق","كرمك الأصيل","دمك الطاهر","موقفك النبيل","إحسانك","معروفك","ما بذلته اليوم","تجاوبك مع نداء المرضى","وفاؤك للمرضى","دعمك لبنك الدم","تطوعك اليوم","حماسك لإنقاذ الأرواح","التزامك بالعطاء","مدّك يد العون للمرضى","اهتمامك بمن يتألم"];
+  const B=["قد ينقذ حياة مريض","يعيد الأمل لعائلة مريض بأكملها","قد ينير حياة مصاب","قد يوقف نزيفاً يهدد حياة إنسان","قد يهب طفلاً مريضاً غداً جديداً","يزرع البسمة في وجه مريض","قد يكون سبب شفاء مريض ينتظر","يمنح مصاباً في الطوارئ فرصة ثانية","قد يكتب بداية جديدة لمريض سرطان","يخفف ألم عائلة تنتظر أمام العمليات","قد يكون إجابة دعاء أم لطفلها المريض","يحيي قلباً كاد أن يتوقف","قد يعيد مصاب حادث إلى أحبته","يرسم الفرح في عيون أهل مريض","قد يعين والدة في ولادة متعثرة","يساعد أطباء الطوارئ على إنقاذ مصاب","قد يكمل رحلة شفاء طال انتظارها","يفتح باب أمل لمريض فقر الدم"];
+  const C=["فكن أنت الأمل","شكراً لدمك الذي يحيي","أنت بطل بنك الدم الحقيقي","دمت نبضاً للمرضى","المرضى وذووهم ممتنون لك","عطاؤك في عروق غيرك باقٍ","جزاك الله عن المرضى خيراً","استمر في إنقاذ الأرواح","فداوم على التبرع","أنت سرّ نجاة مريض","بدمك تكتمل حكاية شفاء","يا صانع حياة"];
   const S=[
    "تبرع بالدم… فأنت لا تعرف متى تحتاجه أنت","المتبرع بالدم بطل بلا رداء","دمك سرّ حياة غيرك","في عروقك أمل ينتظر أن يُمنح","التبرع بالدم صدقة جارية في جسد إنسان","كن سبباً في نبض قلب جديد","أعطِ دماً… تُعطَ أجراً وحياة تُنقذ","قطرة دم تساوي عمراً كاملاً",
    "المتبرعون بالدم يكتبون قصص نجاة لا تُنسى","ثلاث أرواح قد تنقذها بتبرع واحد","دقيقة سخاء تساوي عمراً من الامتنان","الدم لا يُصنع في المصانع… يُوهب من القلوب","أجمل ما تهديه لإنسان لا تعرفه: الحياة","كن أنت الخبر السعيد في غرفة عمليات",
@@ -764,6 +770,25 @@ const SCR_T={
       credit:"Idea & Preparation: Hasan Al-Aqoul",day:i=>"Day "+i,btn:"عربي"}
 };
 const timeEn=t=>String(t||"").replace("صباحاً","AM").replace("ظهراً","PM").replace("مساءً","PM");
+/* هويات ألوان شاشة العرض — الكيس والدم يبقيان بالأحمر، تتغير الخلفية فقط */
+const THEMES=[["#d90429","أحمر"],["#127a3e","أخضر الصحة"],["#2e86c1","أزرق فاتح"],["#7d5ba6","بنفسجي"],["#b8902e","ذهبي"]];
+let scrTheme=localStorage.getItem("dc_scr_theme")||"#d90429";
+function hexRGB(h){h=String(h).replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return [parseInt(h.slice(0,2),16)||0,parseInt(h.slice(2,4),16)||0,parseInt(h.slice(4,6),16)||0];}
+function mixC(h,t,toWhite,alpha){
+  const a=hexRGB(h),b=toWhite?[255,255,255]:[0,0,0];
+  const v=a.map((x,i)=>Math.round(x+(b[i]-x)*t));
+  return alpha!=null?`rgba(${v[0]},${v[1]},${v[2]},${alpha})`:`rgb(${v[0]},${v[1]},${v[2]})`;
+}
+function applyTheme(){
+  const scr=$("#scr");if(!scr)return;
+  scr.style.background=`radial-gradient(1400px 800px at 70% -10%, ${mixC(scrTheme,.12,true)} 0%, ${mixC(scrTheme,.3,false)} 45%, ${mixC(scrTheme,.62,false)} 100%)`;
+  scr.style.setProperty("--scr-deep",mixC(scrTheme,.45,false));
+  const ov=$("#ended-ovl");if(ov)ov.style.background=mixC(scrTheme,.62,false,.95);
+}
+function setTheme(c){
+  scrTheme=c;localStorage.setItem("dc_scr_theme",c);applyTheme();
+  const p=$("#sw-row");if(p)[...p.querySelectorAll(".sw")].forEach(el=>el.classList.toggle("sel",el.dataset.c===c));
+}
 function toggleScrLang(){
   scrLang=scrLang==="ar"?"en":"ar";localStorage.setItem("dc_scr_lang",scrLang);
   if(window._scrC&&window._scrId){drawScreen(window._scrId,window._scrC);updateScreen(window._scrC,window._scrC.total||0);}
@@ -886,9 +911,16 @@ function drawScreen(id,c){
     </div>
     ${sponsors}
     <div class="scr-credit">${L.credit}</div>
-    <button class="scr-lang" onclick="toggleScrLang()">🌐 ${L.btn}</button>`;
+    <div class="scr-tools">
+      <button class="scr-lang" onclick="toggleScrLang()">🌐 ${L.btn}</button>
+      <div class="scr-theme" id="sw-row">
+        ${THEMES.map(t=>`<button class="sw ${scrTheme===t[0]?"sel":""}" data-c="${t[0]}" style="background:${t[0]}" title="${t[1]}" onclick="setTheme('${t[0]}')"></button>`).join("")}
+        <input type="color" class="sw-custom" value="${/^#[0-9a-fA-F]{6}$/.test(scrTheme)?scrTheme:"#d90429"}" title="لون مخصص" oninput="setTheme(this.value)">
+      </div>
+    </div>`;
   $("#phrase").dataset.p=phraseFor(c,scrLang);
   drawQR($("#scr-qr-box"),baseURL()+"#/d/"+id,110);
+  applyTheme();
 }
 function updateScreen(c,prevTotal){
   const L=SCR_T[scrLang];
@@ -912,6 +944,7 @@ function updateScreen(c,prevTotal){
       <div style="font-size:64px">🏆</div><h2>${L.ended}</h2>
       <p style="font-size:clamp(16px,2.2vw,26px)">${L.endedSub(total,c.goal,pct)}</p>
       <div class="scr-credit">${L.credit}</div></div>`);
+    applyTheme();
   }
 }
 function animNum(el,from,to,suf){
