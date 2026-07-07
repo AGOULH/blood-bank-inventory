@@ -146,10 +146,14 @@
   .logo-bar .lg{flex:1;display:flex;justify-content:center}
   .logo-bar .lg:first-child{justify-content:flex-start}
   .logo-bar .lg:last-child{justify-content:flex-end}
-  /* مقاس الشعارات = مقاس مربع الأيام الأبيض */
-  .logo-bar img{height:clamp(64px,10vh,104px);object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+  /* شعارات كبيرة وواضحة (بحجم شعار الوزارة في الشهادات تقريباً) */
+  .logo-bar img{height:clamp(90px,15vh,170px);max-width:26vw;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
   .sponsor-bar{display:flex;align-items:center;justify-content:space-around;width:100%;gap:1.5vw;padding:6px 0;margin-top:1.4vh;flex-wrap:wrap}
-  .sponsor-bar img{height:clamp(64px,10vh,104px);object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+  .sponsor-bar img{height:clamp(80px,13vh,150px);max-width:15vw;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+  /* أداة تحديد مكان الاسم على الشهادة */
+  .cert-pick{position:relative;max-width:440px;cursor:crosshair;display:none}
+  .cert-pick img{width:100%;display:block;border:1px solid var(--line);border-radius:8px}
+  .cert-pick .marker{position:absolute;transform:translate(-50%,-100%);pointer-events:none;font-size:13px;font-weight:800;color:#c0392b;text-shadow:0 0 4px #fff,0 0 8px #fff;white-space:nowrap}
   .scr-times{text-align:center;font-size:clamp(22px,3.6vw,44px);font-weight:700;line-height:1.3;margin-top:.6vh}
   .scr-lang{position:absolute;bottom:14px;inset-inline-start:16px;z-index:15;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:20px;padding:6px 16px;font-weight:700;font-size:14px;cursor:pointer}
   .scr-lang:hover{background:rgba(255,255,255,.28)}
@@ -326,9 +330,11 @@ async function renderAdmin(){
             🏅 شهادة شكر لكل المسجلين في التبرع (اختياري)
           </label>
           <div id="cert-opts" style="display:none;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px">
-            <div><label class="req">التصميم العربي — أساسي (PDF/TIF/صورة)</label><input id="f-cert" type="file" accept="application/pdf,image/*,.tif,.tiff"><img class="logo-prev" id="f-cert-prev" style="margin-top:8px;width:120px;height:auto"></div>
+            <div><label class="req">التصميم العربي — أساسي (PDF/TIF/صورة)</label><input id="f-cert" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
             <div><label>التصميم الإنجليزي — إضافي (PDF/TIF/صورة)</label><input id="f-cert-en" type="file" accept="application/pdf,image/*,.tif,.tiff"><img class="logo-prev" id="f-cert-en-prev" style="margin-top:8px;width:120px;height:auto"></div>
-            <div><label>موضع اسم المتبرع على الشهادة</label><select id="f-cert-pos"><option value="mid" selected>وسط الشهادة</option><option value="top">الثلث الأعلى</option><option value="low">الثلث الأسفل</option></select></div>
+            <div class="full"><label>موضع اسم المتبرع — اضغط على التصميم في المكان الذي تريد الاسم فيه</label>
+              <div class="cert-pick" id="f-cert-pick"><img id="f-cert-prev" alt=""><div class="marker" id="f-cert-marker">📍 الاسم هنا</div></div>
+            </div>
           </div>
         </div>
         <div class="full"><button class="btn" id="f-save" onclick="createCampaign()">إنشاء الحملة</button></div>
@@ -365,15 +371,44 @@ function timeOptions(sel,defH){
   }
   sel.innerHTML=out.join("");
 }
-let logoData=[null,null,null],sponsorData=[],certData=null,certDataEn=null;
+let logoData=[null,null,null],sponsorData=[],certData=null,certDataEn=null,certNX=.5,certNY=.55;
+/* أداة اختيار مكان الاسم: النقر على معاينة التصميم يحدد نسبتي x/y */
+function bindCertPick(wrapId,markerId,get,set){
+  const w=$(wrapId),m=$(markerId);
+  const place=()=>{const p=get();m.style.left=(p[0]*100)+"%";m.style.top=(p[1]*100)+"%";};
+  w.onclick=e=>{const r=w.getBoundingClientRect();set((e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height);place();};
+  place();
+}
 function fileToImg(f){return new Promise((ok,er)=>{const img=new Image();img.onload=()=>ok(img);img.onerror=er;img.src=URL.createObjectURL(f);});}
+/* قصّ الهوامش الشفافة حول الشعار حتى يملأ مساحته على الشاشة */
+function trimCanvas(cv){
+  try{
+    const g=cv.getContext("2d"),{data,width,height}=g.getImageData(0,0,cv.width,cv.height);
+    let minX=width,minY=height,maxX=-1,maxY=-1;
+    for(let y=0;y<height;y++)for(let x=0;x<width;x++){
+      if(data[(y*width+x)*4+3]>10){if(x<minX)minX=x;if(x>maxX)maxX=x;if(y<minY)minY=y;if(y>maxY)maxY=y;}
+    }
+    if(maxX<0||(minX===0&&minY===0&&maxX===width-1&&maxY===height-1))return cv;
+    const pad=Math.round(Math.max(maxX-minX,maxY-minY)*.03);
+    minX=Math.max(0,minX-pad);minY=Math.max(0,minY-pad);
+    maxX=Math.min(width-1,maxX+pad);maxY=Math.min(height-1,maxY+pad);
+    const w=maxX-minX+1,h=maxY-minY+1;
+    const out=document.createElement("canvas");out.width=w;out.height=h;
+    out.getContext("2d").drawImage(cv,minX,minY,w,h,0,0,w,h);
+    return out;
+  }catch(e){return cv;}
+}
 /* ضغط شعار PNG مع الحفاظ على الشفافية وحد أقصى للحجم يناسب سقف وثيقة Firestore (1MB) */
 async function compressLogo(f,maxDim,maxBytes){
   const img=await fileToImg(f);
+  const base=Math.min(1,1200/Math.max(img.width,img.height));
+  const c0=document.createElement("canvas");c0.width=Math.max(1,Math.round(img.width*base));c0.height=Math.max(1,Math.round(img.height*base));
+  c0.getContext("2d").drawImage(img,0,0,c0.width,c0.height);
+  const src=trimCanvas(c0);
   for(const dim of [maxDim,Math.round(maxDim*.7),Math.round(maxDim*.5)]){
-    const sc=Math.min(1,dim/Math.max(img.width,img.height));
-    const cv=document.createElement("canvas");cv.width=Math.max(1,Math.round(img.width*sc));cv.height=Math.max(1,Math.round(img.height*sc));
-    cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);
+    const sc=Math.min(1,dim/Math.max(src.width,src.height));
+    const cv=document.createElement("canvas");cv.width=Math.max(1,Math.round(src.width*sc));cv.height=Math.max(1,Math.round(src.height*sc));
+    cv.getContext("2d").drawImage(src,0,0,cv.width,cv.height);
     const d=cv.toDataURL("image/png");
     if(d.length<=maxBytes)return d;
   }
@@ -423,15 +458,18 @@ async function certFileToImage(f){
   return d;
 }
 async function onCertPick(ev,lang){
-  const prevId=lang==="en"?"#f-cert-en-prev":"#f-cert-prev";
   const f=ev.target.files[0];
-  if(lang==="en")certDataEn=null;else certData=null;
-  $(prevId).style.display="none";if(!f)return;
+  if(lang==="en"){certDataEn=null;$("#f-cert-en-prev").style.display="none";}
+  else{certData=null;$("#f-cert-pick").style.display="none";}
+  if(!f)return;
   try{
     const d=await certFileToImage(f);
-    if(lang==="en")certDataEn=d;else certData=d;
-    const p=$(prevId);p.src=d;p.style.display="block";
-    toast(lang==="en"?"تم تجهيز التصميم الإنجليزي ✓":"تم تجهيز التصميم العربي ✓");
+    if(lang==="en"){certDataEn=d;const p=$("#f-cert-en-prev");p.src=d;p.style.display="block";}
+    else{
+      certData=d;$("#f-cert-prev").src=d;$("#f-cert-pick").style.display="block";
+      bindCertPick("#f-cert-pick","#f-cert-marker",()=>[certNX,certNY],(x,y)=>{certNX=x;certNY=y;});
+    }
+    toast(lang==="en"?"تم تجهيز التصميم الإنجليزي ✓":"تم تجهيز التصميم العربي ✓ — اضغط على التصميم لتحديد مكان الاسم");
   }catch(e){ev.target.value="";toast("تعذر تجهيز التصميم — جرّب ملفاً أصغر","err");}
 }
 async function createCampaign(){
@@ -445,7 +483,7 @@ async function createCampaign(){
   const doc={
     name,city,startDate:start,days,times,timeFrom:tFrom,timeTo:tTo,goal,org:org||null,
     logos:logoData.slice(),sponsors:sponsorData.filter(Boolean),
-    cert:certOn?{img:certData,imgEn:certDataEn||null,pos:$("#f-cert-pos").value}:null,
+    cert:certOn?{img:certData,imgEn:certDataEn||null,nx:certNX,ny:certNY}:null,
     status:"active",total:0,phraseIdx:0,daily:{}
   };
   if(JSON.stringify(doc).length>930000)return toast("حجم الشعارات/الشهادة يتجاوز الحد — قلّل حجم الملفات","err");
@@ -460,7 +498,8 @@ async function createCampaign(){
                           cities:firebase.firestore.FieldValue.arrayUnion(city)},{merge:true}).catch(()=>{});
     ["f-name","f-city","f-goal","f-org","f-logo1","f-logo2","f-logo3","f-sp1","f-sp2","f-sp3","f-sp4","f-sp5","f-sp6","f-cert","f-cert-en"].forEach(i=>$("#"+i).value="");
     logoData=[null,null,null];sponsorData=[null,null,null,null,null,null];certData=null;certDataEn=null;
-    $("#f-cert-on").checked=false;$("#cert-opts").style.display="none";$("#f-cert-prev").style.display="none";$("#f-cert-en-prev").style.display="none";
+    $("#f-cert-on").checked=false;$("#cert-opts").style.display="none";$("#f-cert-pick").style.display="none";$("#f-cert-en-prev").style.display="none";
+    certNX=.5;certNY=.55;
     toast("تم إنشاء الحملة ✓");
     showLinks(id,name);
   }catch(e){toast("تعذر الحفظ: "+(e.code||e.message),"err");}
@@ -525,37 +564,59 @@ async function showLinks(id,name){
 }
 function closeModal(){$("#modal-bg").classList.remove("open");}
 
-/* ===== تعديل حملة منشورة: الهدف، الأيام، الشهادة، الرعاة ===== */
-let editSp=[],editCertAr=null,editCertEn=null;
+/* ===== تعديل حملة منشورة: كل الخانات متاحة (الاسم، المدينة، التاريخ، الأوقات، الجهة، الشعارات، الرعاة، الشهادة، الهدف، الأيام) ===== */
+let editSp=[],editLogos=[],editCertAr=null,editCertEn=null,editNX=.5,editNY=.55,editTimesTouched=false;
 function showEdit(id){
   const r=(window._rows||window._srows||[]).find(x=>x.id===id);if(!r)return;
-  editSp=[null,null,null,null,null,null];editCertAr=null;editCertEn=null;
-  const sp=r.sponsors||[];
-  const box=$("#modal-box");box.style.maxWidth="640px";
+  editSp=[null,null,null,null,null,null];editLogos=[null,null,null];editCertAr=null;editCertEn=null;editTimesTouched=false;
+  editNX=(r.cert&&r.cert.nx!=null)?r.cert.nx:.5;
+  editNY=(r.cert&&r.cert.ny!=null)?r.cert.ny:({top:.38,mid:.55,low:.72}[(r.cert||{}).pos]||.55);
+  const sp=r.sponsors||[],lg=r.logos||[];
+  const box=$("#modal-box");box.style.maxWidth="680px";
   box.innerHTML=`<h3>✏️ تعديل: ${esc(r.name)}</h3>
-    <div class="form-grid" style="text-align:start;margin-top:12px">
-      <div><label>العدد المتوقع (الهدف)</label><input id="e-goal" type="number" min="1" value="${r.goal}"></div>
+    <div class="form-grid" style="text-align:start;margin-top:12px;max-height:65vh;overflow:auto;padding:2px">
+      <div><label>اسم الحملة</label><input id="e-name" value="${esc(r.name)}"></div>
+      <div><label>المدينة</label><input id="e-city" value="${esc(r.city)}"></div>
+      <div><label>تاريخ البداية</label><input id="e-start" type="date" value="${esc(r.startDate)}" onclick="try{this.showPicker()}catch(e){}"></div>
       <div><label>مدة الحملة (أيام)</label><input id="e-days" type="number" min="1" max="14" value="${r.days}"></div>
+      <div><label>وقت البداية</label><select id="e-time-from"></select></div>
+      <div><label>وقت النهاية</label><select id="e-time-to"></select></div>
+      <div><label>العدد المتوقع (الهدف)</label><input id="e-goal" type="number" min="1" value="${r.goal}"></div>
+      <div><label>الجهة المنظمة</label><input id="e-org" value="${esc(r.org||"")}"></div>
+      <div class="full" style="border-top:1px solid var(--line);padding-top:10px;font-size:14px"><b>🏛️ شعارات المنظمين</b> <span class="tag info">الرفع في خانة يستبدلها</span></div>
+      <div><label>شعار 1 — يمين ${lg[0]?"✓":""}</label><input id="e-logo1" type="file" accept="image/png,image/*"></div>
+      <div><label>شعار 2 — يسار ${lg[1]?"✓":""}</label><input id="e-logo2" type="file" accept="image/png,image/*"></div>
+      <div><label>شعار 3 — وسط ${lg[2]?"✓":""}</label><input id="e-logo3" type="file" accept="image/png,image/*"></div>
       <div class="full" style="border-top:1px solid var(--line);padding-top:10px;font-size:14px"><b>🏅 شهادة الشكر</b> ${r.cert?`<span class="tag ok">مفعّلة — الرفع يستبدل التصميم</span>`:`<span class="tag mut">غير مفعّلة — ارفع التصميم العربي لتفعيلها</span>`}</div>
       <div><label>التصميم العربي ${r.cert?"✓":""}</label><input id="e-cert" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
       <div><label>التصميم الإنجليزي ${(r.cert&&r.cert.imgEn)?"✓":""}</label><input id="e-cert-en" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
-      <div><label>موضع الاسم</label><select id="e-cert-pos">
-        <option value="mid" ${(!r.cert||r.cert.pos==="mid")?"selected":""}>وسط الشهادة</option>
-        <option value="top" ${(r.cert&&r.cert.pos==="top")?"selected":""}>الثلث الأعلى</option>
-        <option value="low" ${(r.cert&&r.cert.pos==="low")?"selected":""}>الثلث الأسفل</option></select></div>
-      <div class="full" style="border-top:1px solid var(--line);padding-top:10px;font-size:14px"><b>🤝 الرعاة</b> <span class="tag info">${sp.length} حالياً — الرفع في خانة يستبدلها</span></div>
+      <div class="full"><label>موضع اسم المتبرع — اضغط على التصميم في المكان الذي تريده</label>
+        <div class="cert-pick" id="e-cert-pick"><img id="e-cert-prev" alt=""><div class="marker" id="e-cert-marker">📍 الاسم هنا</div></div>
+      </div>
+      <div class="full" style="border-top:1px solid var(--line);padding-top:10px;font-size:14px"><b>🤝 الرعاة</b> <span class="tag info">${sp.filter(Boolean).length} حالياً — الرفع في خانة يستبدلها</span></div>
       ${[0,1,2,3,4,5].map(i=>`<div><label>راعي ${i+1} ${sp[i]?"✓":""}</label><input id="e-sp${i}" type="file" accept="image/png,image/*"></div>`).join("")}
     </div>
     <div style="display:flex;gap:8px;justify-content:center;margin-top:16px">
       <button class="btn" id="e-save" onclick="saveEdit('${id}')">حفظ التعديلات</button>
       <button class="btn ghost" onclick="closeModal()">إلغاء</button>
     </div>`;
+  timeOptions($("#e-time-from"),16);timeOptions($("#e-time-to"),22);
+  if(r.timeFrom)$("#e-time-from").value=r.timeFrom;
+  if(r.timeTo)$("#e-time-to").value=r.timeTo;
+  $("#e-time-from").addEventListener("change",()=>editTimesTouched=true);
+  $("#e-time-to").addEventListener("change",()=>editTimesTouched=true);
+  const showPick=src=>{$("#e-cert-prev").src=src;$("#e-cert-pick").style.display="block";
+    bindCertPick("#e-cert-pick","#e-cert-marker",()=>[editNX,editNY],(x,y)=>{editNX=x;editNY=y;});};
+  if(r.cert&&r.cert.img)showPick(r.cert.img);
   $("#e-cert").addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;
-    try{editCertAr=await certFileToImage(f);toast("جُهّز التصميم العربي ✓");}
+    try{editCertAr=await certFileToImage(f);showPick(editCertAr);toast("جُهّز التصميم العربي ✓ — حدد مكان الاسم");}
     catch(e){ev.target.value="";toast("ملف كبير أو غير مدعوم","err");}});
   $("#e-cert-en").addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;
     try{editCertEn=await certFileToImage(f);toast("جُهّز التصميم الإنجليزي ✓");}
     catch(e){ev.target.value="";toast("ملف كبير أو غير مدعوم","err");}});
+  [1,2,3].forEach(i=>$("#e-logo"+i).addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;
+    try{editLogos[i-1]=await compressLogo(f,280,90000);toast("جُهّز الشعار "+i+" ✓");}
+    catch(e){ev.target.value="";toast("الشعار كبير جداً","err");}}));
   [0,1,2,3,4,5].forEach(i=>$("#e-sp"+i).addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;
     try{editSp[i]=await compressLogo(f,220,70000);toast("جُهّز شعار الراعي "+(i+1)+" ✓");}
     catch(e){ev.target.value="";toast("الشعار كبير جداً","err");}}));
@@ -563,21 +624,33 @@ function showEdit(id){
 }
 async function saveEdit(id){
   const r=(window._rows||window._srows||[]).find(x=>x.id===id);if(!r)return;
-  const goal=parseInt($("#e-goal").value||"0"),days=parseInt($("#e-days").value||"0");
-  if(!goal||goal<1||!days||days<1)return toast("قيم الهدف أو الأيام غير صحيحة","err");
-  const upd={goal,days};
+  const name=$("#e-name").value.trim(),city=$("#e-city").value.trim(),start=$("#e-start").value,
+        goal=parseInt($("#e-goal").value||"0"),days=parseInt($("#e-days").value||"0"),org=$("#e-org").value.trim();
+  if(!name||!city||!start||!goal||goal<1||!days||days<1)return toast("أكمل الحقول الأساسية بقيم صحيحة","err");
+  const upd={name,city,startDate:start,goal,days,org:org||null};
+  if(r.timeFrom||editTimesTouched){ // لا نغيّر أوقات الحملات القديمة (نص حر) إلا إذا لمسها المستخدم
+    const tF=$("#e-time-from").value,tT=$("#e-time-to").value;
+    upd.timeFrom=tF;upd.timeTo=tT;upd.times="من "+tF+" إلى "+tT;
+  }
+  const lg=(r.logos||[null,null,null]).slice(0,3);while(lg.length<3)lg.push(null);
+  editLogos.forEach((d,i)=>{if(d)lg[i]=d;});
+  upd.logos=lg;
   const sp=(r.sponsors||[]).slice(0,6);
   editSp.forEach((d,i)=>{if(d)sp[i]=d;});
   upd.sponsors=sp.filter(Boolean);
   let cert=r.cert||null;
   const img=editCertAr||(cert&&cert.img)||null;
   if(editCertEn&&!img)return toast("أضف التصميم العربي أولاً لتفعيل الشهادة","err");
-  if(img)cert={img,imgEn:editCertEn||(cert&&cert.imgEn)||null,pos:$("#e-cert-pos").value};
+  if(img)cert={img,imgEn:editCertEn||(cert&&cert.imgEn)||null,nx:editNX,ny:editNY};
   upd.cert=cert;
   if(JSON.stringify(Object.assign({},r,upd)).length>930000)return toast("حجم الشعارات/الشهادة يتجاوز الحد — قلّل حجم الملفات","err");
   $("#e-save").disabled=true;
-  try{await cDoc(id).update(upd);toast("حُفظت التعديلات ✓");closeModal();}
-  catch(e){toast("تعذر الحفظ: "+(e.code||e.message),"err");}
+  try{
+    await cDoc(id).update(upd);
+    db.doc(META_DOC).set({names:firebase.firestore.FieldValue.arrayUnion(name),
+                          cities:firebase.firestore.FieldValue.arrayUnion(city)},{merge:true}).catch(()=>{});
+    toast("حُفظت التعديلات ✓");closeModal();
+  }catch(e){toast("تعذر الحفظ: "+(e.code||e.message),"err");}
   $("#e-save").disabled=false;
 }
 
@@ -663,12 +736,14 @@ async function makeCert(){
     await new Promise((ok,er)=>{img.onload=ok;img.onerror=er;img.src=design;});
     const cv=document.createElement("canvas");cv.width=img.width;cv.height=img.height;
     const ctx=cv.getContext("2d");ctx.drawImage(img,0,0);
-    const posMap={top:.38,mid:.55,low:.72},y=cv.height*(posMap[curCamp.cert.pos]||.55);
+    const posMap={top:.38,mid:.55,low:.72};
+    const nx=(curCamp.cert.nx!=null)?curCamp.cert.nx:.5;
+    const ny=(curCamp.cert.ny!=null)?curCamp.cert.ny:(posMap[curCamp.cert.pos]||.55);
     ctx.textAlign="center";ctx.direction="rtl";
     ctx.font="bold "+Math.round(cv.height*.055)+'px "Segoe UI","Tajawal",Tahoma,Arial';
     ctx.fillStyle="#1f2530";
     ctx.shadowColor="rgba(255,255,255,.85)";ctx.shadowBlur=10;
-    ctx.fillText(nm,cv.width/2,y);
+    ctx.fillText(nm,cv.width*nx,cv.height*ny);
     const pdf=new jspdf.jsPDF({orientation:cv.width>=cv.height?"landscape":"portrait",unit:"px",format:[cv.width,cv.height],hotfixes:["px_scaling"]});
     pdf.addImage(cv.toDataURL("image/jpeg",.9),"JPEG",0,0,cv.width,cv.height);
     pdf.save("شهادة-شكر-"+nm+".pdf");
