@@ -6,7 +6,7 @@
 <title>حملات التبرع بالدم — بنك الدم دمام</title>
 <style>
   :root{
-    --crimson:#127a3e; --crimson-dark:#0c5e30; --crimson-soft:#e7f4ec;
+    --crimson:#006c35; --crimson-dark:#004c25; --crimson-soft:#e6f0eb;
     --green-bright:#16a34a; --gold:#b8902e; --blood:#b52440;
     --ink:#1f2530; --muted:#6b7280; --line:#e6e8ec; --bg:#f4f5f7;
     --card:#ffffff; --ok:#1f7a4d; --ok-soft:#e6f4ec; --warn:#b06f00;
@@ -525,7 +525,7 @@ function renderList(rows){
       <td><b>${esc(r.name)}</b>${r.org?`<div style="font-size:12px;color:var(--muted)">${esc(r.org)}</div>`:""}</td>
       <td>${esc(r.city)}</td>
       <td>${fmtDate(r.startDate)} · ${r.days} ${r.days>1?"أيام":"يوم"}<div style="font-size:12px;color:var(--muted)">${esc(r.times||"")}</div></td>
-      <td style="text-align:center"><b>${r.total||0}</b> / ${r.goal} <span class="tag ${pct>=100?"ok":pct>=50?"info":"mut"}">${pct}%</span></td>
+      <td style="text-align:center"><span style="direction:ltr;unicode-bidi:isolate"><b>${r.total||0}</b> / ${r.goal}</span> <span class="tag ${pct>=100?"ok":pct>=50?"info":"mut"}">${pct}%</span></td>
       <td>${r.status==="active"?`<span class="tag ok">نشطة</span>`:`<span class="tag mut">مؤرشفة</span>`}</td>
       <td><div class="row-actions">
         <button class="btn sm soft" onclick="showLinks('${r.id}','${esc(r.name).replace(/'/g,"\\'")}')">🔗 الروابط والباركود</button>
@@ -778,8 +778,8 @@ const SCR_T={
 };
 const timeEn=t=>String(t||"").replace("صباحاً","AM").replace("ظهراً","PM").replace("مساءً","PM");
 /* هويات ألوان شاشة العرض — الكيس والدم يبقيان بالأحمر، تتغير الخلفية فقط */
-const THEMES=[["#d90429","أحمر"],["#127a3e","أخضر الصحة"],["#2e86c1","أزرق فاتح"],["#7d5ba6","بنفسجي"],["#b8902e","ذهبي"]];
-let scrTheme=localStorage.getItem("dc_scr_theme")||"#d90429";
+const THEMES=[["#006c35","أخضر الصحة"],["#d90429","أحمر"],["#2e86c1","أزرق فاتح"],["#7d5ba6","بنفسجي"],["#b8902e","ذهبي"]];
+let scrTheme=localStorage.getItem("dc_scr_theme")||"#006c35";
 function hexRGB(h){h=String(h).replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return [parseInt(h.slice(0,2),16)||0,parseInt(h.slice(2,4),16)||0,parseInt(h.slice(4,6),16)||0];}
 function mixC(h,t,toWhite,alpha){
   const a=hexRGB(h),b=toWhite?[255,255,255]:[0,0,0];
@@ -1136,7 +1136,7 @@ function rptCanvas(){
   return [cv,x];
 }
 function rptHeader(x,title,sub){
-  x.fillStyle="#127a3e";x.fillRect(0,0,1240,175);
+  x.fillStyle="#006c35";x.fillRect(0,0,1240,175);
   x.fillStyle="#fff";x.font="bold 46px "+RPT_FONT;x.fillText(title,620,70);
   x.font="bold 32px "+RPT_FONT;x.fillText(sub,620,130);
 }
@@ -1151,10 +1151,10 @@ function rptSave(cv,fname){
   pdf.save(fname);
 }
 function rptBox(x,bx,by,bw,bh,label,val,accent){
-  x.fillStyle=accent?"#e7f4ec":"#f4f5f7";
+  x.fillStyle=accent?"#e6f0eb":"#f4f5f7";
   x.beginPath();x.roundRect(bx,by,bw,bh,16);x.fill();
   x.fillStyle="#6b7280";x.font="26px "+RPT_FONT;x.fillText(label,bx+bw/2,by+38);
-  x.fillStyle=accent?"#127a3e":"#1f2530";x.font="bold 52px "+RPT_FONT;x.fillText(String(val),bx+bw/2,by+95);
+  x.fillStyle=accent?"#006c35":"#1f2530";x.font="bold 52px "+RPT_FONT;x.fillText(String(val),bx+bw/2,by+95);
 }
 /* جدول RTL عام: يبدأ من اليمين، widths مصفوفة عرض الأعمدة */
 function rptTable(x,y0,widths,header,rows,rowH,highlightLast){
@@ -1163,7 +1163,7 @@ function rptTable(x,y0,widths,header,rows,rowH,highlightLast){
   widths.forEach(w=>{colRight.push(x0-acc);acc+=w;});
   const drawRow=(cells,y,bold,bg)=>{
     if(bg){x.fillStyle=bg;x.fillRect(x0-totalW,y-rowH/2,totalW,rowH);}
-    x.fillStyle=bold?"#127a3e":"#1f2530";
+    x.fillStyle=bold?"#006c35":"#1f2530";
     x.font=(bold?"bold ":"")+Math.min(26,rowH*.5)+"px "+RPT_FONT;
     cells.forEach((cTxt,i)=>x.fillText(String(cTxt),colRight[i]-widths[i]/2,y));
   };
@@ -1172,7 +1172,7 @@ function rptTable(x,y0,widths,header,rows,rowH,highlightLast){
   header.forEach((h,i)=>x.fillText(h,colRight[i]-widths[i]/2,y0));
   rows.forEach((r,ri)=>{
     const y=y0+rowH*(ri+1);
-    drawRow(r,y,highlightLast&&ri===rows.length-1,highlightLast&&ri===rows.length-1?"#e7f4ec":(ri%2?"#fafbfc":null));
+    drawRow(r,y,highlightLast&&ri===rows.length-1,highlightLast&&ri===rows.length-1?"#e6f0eb":(ri%2?"#fafbfc":null));
   });
   x.strokeStyle="#d5d9df";x.lineWidth=1.5;
   for(let i=0;i<=rows.length+1;i++){const y=y0-rowH/2+rowH*i;x.beginPath();x.moveTo(x0-totalW,y);x.lineTo(x0,y);x.stroke();}
