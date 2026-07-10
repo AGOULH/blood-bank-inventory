@@ -946,10 +946,10 @@ const SCR_T={
 };
 const timeEn=t=>String(t||"").replace("صباحاً","AM").replace("ظهراً","PM").replace("مساءً","PM");
 /* هويات ألوان شاشة العرض — الكيس والدم يبقيان بالأحمر، تتغير الخلفية فقط */
-const THEMES=[["#006c35","أخضر الصحة"],["#d90429","أحمر"],["#2e86c1","أزرق فاتح"],["#7d5ba6","بنفسجي"],["#b8902e","ذهبي"]];
-/* هويتان كاملتا التصميم (سداسيات مضيئة + زجاج) تُختاران بنفس آلية أزرار الألوان */
+/* الهويتان المعتمدتان فقط (سداسيات مضيئة + زجاج ذهبي) — الهويات اللونية القديمة أُلغيت */
 const SKINS=[["neon-blue","أزرق مضيء","linear-gradient(135deg,#eafdff 0%,#4fc7e8 45%,#0a3247 100%)"],["gold-glass","ذهبي فاخر","linear-gradient(135deg,#fff6dd 0%,#e8c05a 45%,#8a6d1d 100%)"]];
-let scrTheme=localStorage.getItem("dc_scr_theme")||"#006c35";
+let scrTheme=localStorage.getItem("dc_scr_theme")||"neon-blue";
+if(scrTheme!=="neon-blue"&&scrTheme!=="gold-glass")scrTheme="neon-blue"; // الهويات القديمة أُلغيت — نرجع للافتراضي
 function hexRGB(h){h=String(h).replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return [parseInt(h.slice(0,2),16)||0,parseInt(h.slice(2,4),16)||0,parseInt(h.slice(4,6),16)||0];}
 function mixC(h,t,toWhite,alpha){
   const a=hexRGB(h),b=toWhite?[255,255,255]:[0,0,0];
@@ -1157,8 +1157,6 @@ function drawScreen(id,c){
     <div class="scr-tools">
       <button class="scr-lang" onclick="toggleScrLang()">🌐 ${L.btn}</button>
       <div class="scr-theme" id="sw-row">
-        ${THEMES.map(t=>`<button class="sw ${scrTheme===t[0]?"sel":""}" data-c="${t[0]}" style="background:${t[0]}" title="${t[1]}" onclick="setTheme('${t[0]}')"></button>`).join("")}
-        <input type="color" class="sw-custom" value="${/^#[0-9a-fA-F]{6}$/.test(scrTheme)?scrTheme:"#d90429"}" title="لون مخصص" oninput="setTheme(this.value)">
         ${SKINS.map(s=>`<button class="sw sw-skin ${scrTheme===s[0]?"sel":""}" data-c="${s[0]}" style="background:${s[2]}" title="${s[1]}" onclick="setTheme('${s[0]}')"></button>`).join("")}
       </div>
     </div>`;
