@@ -155,10 +155,14 @@
   .cert-pick img{width:100%;display:block;border:1px solid var(--line);border-radius:8px}
   .cert-pick .marker{position:absolute;transform:translate(-50%,-100%);pointer-events:none;font-size:13px;font-weight:800;color:#c0392b;text-shadow:0 0 4px #fff,0 0 8px #fff;white-space:nowrap}
   .scr-times{text-align:center;font-size:clamp(16px,3.2vh,34px);font-weight:700;line-height:1.25;margin-top:.4vh;flex:none}
+  .scr-time-pill{display:inline-flex;flex-direction:column;gap:5px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.32);border-radius:26px;padding:8px 26px}
   .scr-time-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
   .scr-clock{font-family:"Courier New",monospace;background:rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:1px 10px;letter-spacing:2px;font-size:clamp(15px,2.8vh,28px);font-weight:700}
-  .scr-timebar{height:6px;max-width:560px;margin:6px auto 0;border-radius:4px;background:rgba(255,255,255,.2);overflow:hidden}
+  .scr-timebar{height:6px;max-width:520px;margin:0 auto;border-radius:4px;background:rgba(255,255,255,.2);overflow:hidden}
   .scr-timebar-fill{height:100%;width:0%;border-radius:4px;background:linear-gradient(90deg,#ff9500,#ffd166);transition:width 1s linear}
+  .pct-wrap{position:relative;width:clamp(84px,12.5vh,140px);height:clamp(84px,12.5vh,140px);margin:0 auto;display:flex;align-items:center;justify-content:center}
+  .pct-ring{position:absolute;inset:0;border-radius:50%;background:none}
+  .pct-wrap .pct{position:relative;z-index:1}
   .scr-tools{position:absolute;bottom:14px;inset-inline-start:16px;z-index:15;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
   .scr-lang{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:20px;padding:6px 16px;font-weight:700;font-size:14px;cursor:pointer}
   .scr-lang:hover{background:rgba(255,255,255,.28)}
@@ -172,36 +176,69 @@
   .bub{animation:bubbleRise 4.2s ease-in infinite}
   @keyframes bubbleRise{0%{transform:translateY(0);opacity:.55}80%{opacity:.4}100%{transform:translateY(-60px);opacity:0}}
 
-  /* ===== هويتان كاملتا التصميم: أزرق مضيء (داكن مستقبلي) وذهبي فاخر (زجاجي فاتح) ===== */
+  /* ===== هويتان كاملتا التصميم (طبق الأصل عن الصورتين المرجعيتين): أزرق مضيء (داكن مستقبلي) وذهبي فاخر (زجاجي فاتح) ===== */
   .sw-skin{border-radius:8px}
-  .screen.skin-neonblue,.screen.skin-goldglass{--hexcut:16px}
-  .screen.skin-neonblue .type-tile,.screen.skin-goldglass .type-tile,
-  .screen.skin-neonblue .day-chip,.screen.skin-goldglass .day-chip{
-    clip-path:polygon(var(--hexcut) 0,calc(100% - var(--hexcut)) 0,100% var(--hexcut),100% calc(100% - var(--hexcut)),calc(100% - var(--hexcut)) 100%,var(--hexcut) 100%,0 calc(100% - var(--hexcut)),0 var(--hexcut));
-    border-radius:0}
-  .screen.skin-neonblue{background:radial-gradient(1200px 700px at 72% -10%,#123a44 0%,#0b2530 45%,#041318 100%);color:#eaffff}
-  .screen.skin-neonblue .type-tile{background:linear-gradient(160deg,rgba(30,80,95,.55),rgba(8,26,34,.7));border:1px solid rgba(72,219,255,.55);box-shadow:0 0 14px rgba(72,219,255,.3),inset 0 0 10px rgba(72,219,255,.12)}
+  /* سداسي أفقي حاد (رأس يسار/يمين، حواف علوية وسفلية مسطحة) — مطابق لشكل المربعات في الصورتين */
+  .screen.skin-neonblue .type-tile,.screen.skin-goldglass .type-tile{
+    clip-path:polygon(19% 0,81% 0,100% 50%,81% 100%,19% 100%,0 50%);
+    border-radius:0;border:none;padding:6px 30px;
+  }
+  /* حلقة مزدوجة حول السداسي عبر ظلال داخلية متتابعة + توهج خارجي يتبع شكل القص */
+  .screen.skin-neonblue .type-tile{
+    background:linear-gradient(160deg,rgba(32,86,100,.6),rgba(8,26,34,.75));
+    box-shadow:inset 0 0 0 2px rgba(120,225,255,.85),inset 0 0 0 5px rgba(10,32,40,.9),inset 0 0 0 7px rgba(120,225,255,.45);
+    filter:drop-shadow(0 0 9px rgba(72,219,255,.35));
+  }
+  .screen.skin-goldglass .type-tile{
+    background:rgba(255,255,255,.6);backdrop-filter:blur(6px);
+    box-shadow:inset 0 0 0 2px rgba(184,144,46,.9),inset 0 0 0 5px rgba(255,255,255,.75),inset 0 0 0 7px rgba(184,144,46,.55);
+    filter:drop-shadow(0 3px 10px rgba(184,144,46,.22));
+  }
   .screen.skin-neonblue .type-tile .tc{color:#ffcf4d}
   .screen.skin-neonblue .type-tile .tl,.screen.skin-neonblue .type-tile .ts{color:#eaffff}
-  .screen.skin-neonblue .day-chip{background:linear-gradient(160deg,rgba(30,80,95,.55),rgba(8,26,34,.7));border:1px solid rgba(72,219,255,.5)}
-  .screen.skin-neonblue .day-chip.now{background:linear-gradient(160deg,#8be9ff,#48a6c4);color:#04212b}
-  .screen.skin-neonblue .scr-clock{background:rgba(0,0,0,.5);border-color:rgba(72,219,255,.6);color:#8be9ff;text-shadow:0 0 6px rgba(72,219,255,.7)}
-  .screen.skin-neonblue .scr-timebar{background:rgba(72,219,255,.15)}
-  .screen.skin-neonblue .phrase-box,.screen.skin-neonblue .scr-theme,.screen.skin-neonblue .scr-lang,.screen.skin-neonblue .scr-qr{border-color:rgba(72,219,255,.4)}
-  .screen.skin-goldglass{background:linear-gradient(160deg,#fbfaf7 0%,#f3ecdd 55%,#eee3c8 100%);color:#16213a}
-  .screen.skin-goldglass .type-tile{background:rgba(255,255,255,.55);border:1px solid rgba(184,144,46,.6);box-shadow:0 4px 14px rgba(184,144,46,.2),inset 0 0 8px rgba(255,255,255,.6);backdrop-filter:blur(6px)}
   .screen.skin-goldglass .type-tile .tl,.screen.skin-goldglass .type-tile .ts{color:#16213a}
   .screen.skin-goldglass .type-tile .tc{color:#8a6d1d}
-  .screen.skin-goldglass .day-chip{background:rgba(255,255,255,.6);border:1px solid rgba(184,144,46,.55);color:#16213a}
-  .screen.skin-goldglass .day-chip.now{background:linear-gradient(160deg,#d4af37,#f5d67d);color:#16213a}
+  /* شارة اليوم دائرية بحد مزدوج بدل المربع الحالي */
+  .screen.skin-neonblue .day-chip,.screen.skin-goldglass .day-chip{
+    border-radius:50%;width:var(--chip);min-width:var(--chip);padding:2px 5px;
+    font-size:clamp(8px,1.05vh,11px);line-height:1.15;border:none
+  }
+  .screen.skin-neonblue .day-chip{background:linear-gradient(160deg,rgba(32,86,100,.6),rgba(8,26,34,.75));box-shadow:inset 0 0 0 2px rgba(120,225,255,.85),inset 0 0 0 4px rgba(10,32,40,.9),inset 0 0 0 5px rgba(120,225,255,.4)}
+  .screen.skin-neonblue .day-chip.now{background:linear-gradient(160deg,#8be9ff,#48a6c4);color:#04212b;box-shadow:inset 0 0 0 2px #eaffff}
+  .screen.skin-goldglass .day-chip{background:rgba(255,255,255,.65);box-shadow:inset 0 0 0 2px rgba(184,144,46,.9),inset 0 0 0 4px rgba(255,255,255,.8),inset 0 0 0 5px rgba(184,144,46,.5)}
+  .screen.skin-goldglass .day-chip.now{background:linear-gradient(160deg,#d4af37,#f5d67d);color:#16213a;box-shadow:inset 0 0 0 2px #fff}
+  /* حلقة النسبة الدائرية حول 20% — ظاهرة فقط في الهويتين الكاملتين */
+  .screen.skin-neonblue .pct-ring,.screen.skin-goldglass .pct-ring{background:conic-gradient(var(--ring-c) calc(var(--pctp,0)*1%),var(--ring-track) 0)}
+  .screen.skin-neonblue .pct-ring::after,.screen.skin-goldglass .pct-ring::after{content:"";position:absolute;inset:11%;border-radius:50%;background:var(--ring-hole)}
+  .screen.skin-neonblue .pct-ring{--ring-c:#ffcf4d;--ring-track:rgba(255,255,255,.14);--ring-hole:#0b2530}
+  .screen.skin-goldglass .pct-ring{--ring-c:#b8902e;--ring-track:rgba(184,144,46,.16);--ring-hole:#f7f1e3}
+  .screen.skin-neonblue{background:radial-gradient(1200px 700px at 72% -10%,#123a44 0%,#0b2530 45%,#041318 100%);color:#eaffff}
+  .screen.skin-neonblue .scr-clock{background:rgba(0,0,0,.5);border-color:rgba(72,219,255,.6);color:#8be9ff;text-shadow:0 0 6px rgba(72,219,255,.7)}
+  .screen.skin-neonblue .scr-timebar{background:rgba(72,219,255,.15)}
+  .screen.skin-neonblue .phrase-box,.screen.skin-neonblue .scr-theme,.screen.skin-neonblue .scr-lang,.screen.skin-neonblue .scr-qr,.screen.skin-neonblue .scr-time-pill{border-color:rgba(72,219,255,.4)}
+  .screen.skin-goldglass{background:linear-gradient(160deg,#fbfaf7 0%,#f3ecdd 55%,#eee3c8 100%);color:#16213a}
   .screen.skin-goldglass .scr-title p{color:#3a4258}
   .screen.skin-goldglass .scr-clock{background:rgba(255,255,255,.75);border:1px solid rgba(184,144,46,.6);color:#8a6d1d;text-shadow:none}
   .screen.skin-goldglass .scr-timebar{background:rgba(184,144,46,.2)}
   .screen.skin-goldglass .scr-timebar-fill{background:linear-gradient(90deg,#d4af37,#f5d67d)}
-  .screen.skin-goldglass .phrase-box,.screen.skin-goldglass .scr-theme,.screen.skin-goldglass .scr-lang{background:rgba(255,255,255,.6);border-color:rgba(184,144,46,.5);color:#16213a}
+  .screen.skin-goldglass .scr-time-pill,.screen.skin-goldglass .phrase-box,.screen.skin-goldglass .scr-theme,.screen.skin-goldglass .scr-lang{background:rgba(255,255,255,.6);border-color:rgba(184,144,46,.5);color:#16213a}
   .screen.skin-goldglass .scr-lang{color:#16213a}
+  .screen.skin-goldglass .scr-credit{display:inline-block;background:rgba(255,255,255,.65);border:1px solid rgba(184,144,46,.5);border-radius:20px;padding:5px 18px;margin:.6vh auto 0}
   .screen.skin-goldglass .scr-credit,.screen.skin-goldglass .scr-title h1,.screen.skin-goldglass .scr-title p,.screen.skin-goldglass .bag-side .pct,.screen.skin-goldglass .bag-side .of{text-shadow:none;color:#16213a}
   .screen.skin-goldglass .bag-side .pct{color:#8a6d1d}
+  /* موجات خلفية زخرفية خفيفة تحاكي الصورتين المرجعيتين */
+  .screen.skin-neonblue::before,.screen.skin-goldglass::before{
+    content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background-repeat:repeat;background-size:480px 320px
+  }
+  .screen.skin-neonblue::before{
+    opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='320'%3E%3Cpath d='M-20,140 C40,90 80,190 140,140 S220,90 280,140 S360,190 420,140 S500,90 500,140' fill='none' stroke='%2348dbff' stroke-opacity='.16' stroke-width='2'/%3E%3Cpath d='M-20,190 C40,240 80,140 140,190 S220,240 280,190 S360,140 420,190 S500,240 500,190' fill='none' stroke='%2348dbff' stroke-opacity='.1' stroke-width='2'/%3E%3C/svg%3E")
+  }
+  .screen.skin-goldglass::before{
+    opacity:.6;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='320'%3E%3Cpath d='M-20,140 C40,90 80,190 140,140 S220,90 280,140 S360,190 420,140 S500,90 500,140' fill='none' stroke='%23b8902e' stroke-opacity='.14' stroke-width='2'/%3E%3Cpath d='M-20,190 C40,240 80,140 140,190 S220,240 280,190 S360,140 420,190 S500,240 500,190' fill='none' stroke='%232e86c1' stroke-opacity='.08' stroke-width='2'/%3E%3C/svg%3E")
+  }
+  .screen.skin-neonblue>*:not(.scr-ended),.screen.skin-goldglass>*:not(.scr-ended){position:relative;z-index:1}
   @media(max-width:760px){
     .scr-body{flex-direction:column;gap:2vh}
     .bag-svg{height:32vh}
@@ -970,11 +1007,13 @@ function drawScreen(id,c){
   const sponsors=(c.sponsors&&c.sponsors.length)?`<div class="sponsor-bar">${c.sponsors.map(s=>`<img src="${s}" alt="">`).join("")}</div>`:"";
   const tF=scrLang==="en"?timeEn(c.timeFrom):c.timeFrom,tT=scrLang==="en"?timeEn(c.timeTo):c.timeTo;
   const timesLine=c.timeFrom?`<div class="scr-times">
-      <div class="scr-time-row">
-        <span class="scr-clock" id="scr-clock" dir="ltr">--:--:--</span>
-        <span>${L.start}: <b>${esc(tF)}</b> — ${L.end}: <b>${esc(tT||"")}</b></span>
+      <div class="scr-time-pill">
+        <div class="scr-time-row">
+          <span class="scr-clock" id="scr-clock" dir="ltr">--:--:--</span>
+          <span>${L.start}: <b>${esc(tF)}</b> — ${L.end}: <b>${esc(tT||"")}</b></span>
+        </div>
+        <div class="scr-timebar"><div class="scr-timebar-fill" id="scr-timebar"></div></div>
       </div>
-      <div class="scr-timebar"><div class="scr-timebar-fill" id="scr-timebar"></div></div>
     </div>`
                             :(c.times?`<div class="scr-times">${esc(c.times)}</div>`:"");
   $("#scr").setAttribute("dir",scrLang==="en"?"ltr":"rtl");
@@ -988,7 +1027,10 @@ function drawScreen(id,c){
     <div class="scr-body">
       <div class="bag-area" id="bag-area">
         ${bagSVG()}
-        <div class="bag-side"><div class="pct" id="pct">0%</div><div class="of"><b id="tot">0</b> ${L.of} <b>${c.goal}</b> ${L.donors}</div></div>
+        <div class="bag-side">
+          <div class="pct-wrap" id="pct-wrap"><div class="pct-ring" id="pct-ring"></div><div class="pct" id="pct">0%</div></div>
+          <div class="of"><b id="tot">0</b> ${L.of} <b>${c.goal}</b> ${L.donors}</div>
+        </div>
       </div>
       <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div>`).join("")}</div>
     </div>
@@ -1015,6 +1057,7 @@ function updateScreen(c,prevTotal){
   const total=c.total||0,pct=c.goal?Math.round(total/c.goal*100):0; // النسبة تستمر فوق 100%
   const ratio=Math.min(1,c.goal?total/c.goal:0); // امتلاء الكيس يتوقف عند الامتلاء الكامل
   const bg=$("#blood-g");if(bg)bg.style.transform="translateY("+(BAG_H*(1-ratio)).toFixed(1)+"px)";
+  const pr=$("#pct-ring");if(pr)pr.style.setProperty("--pctp",Math.min(100,pct));
   const ph=$("#phrase"),pp=phraseFor(c,scrLang); // العبارة تتغير مع كل متبرع
   if(ph&&ph.dataset.p!==pp){ph.classList.add("fade");setTimeout(()=>{ph.textContent=pp;ph.dataset.p=pp;ph.classList.remove("fade");},800);}
   animNum($("#pct"),parseInt($("#pct").textContent)||0,pct,"%");
