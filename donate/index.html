@@ -315,15 +315,15 @@
   .screen.skin-goldglass .bag-svg .ecg-wings{display:block;stroke:#d4af37}
   /* الأزرق: العدّاد سماوي متوهج مثل المرجع */
   .screen.skin-neonblue .type-tile .tc{color:#7fe9ff;text-shadow:0 0 12px rgba(72,219,255,.8)}
-  .screen.skin-neonblue .tile-in{background:linear-gradient(160deg,rgba(190,245,255,.95),rgba(90,200,235,.6) 45%,rgba(50,140,175,.85));filter:drop-shadow(0 0 12px rgba(72,219,255,.5))}
-  .screen.skin-neonblue .tile-in::before{inset:3px;background:linear-gradient(170deg,rgba(16,55,70,.72),rgba(6,26,36,.85))}
-  .screen.skin-goldglass .tile-in::before{inset:4px}
+  .screen.skin-neonblue .tile-in{background:linear-gradient(145deg,#eafdff 0%,#7fe0f5 30%,#1f8fb8 62%,#0a3247 100%);filter:drop-shadow(0 0 12px rgba(72,219,255,.5))}
+  .screen.skin-neonblue .tile-in::before{inset:3px;background:linear-gradient(145deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,0) 40%,rgba(0,10,20,.3) 100%)}
+  .screen.skin-goldglass .tile-in::before{inset:4px;background:linear-gradient(150deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,0) 40%,rgba(110,80,20,.16) 100%)}
   /* شارات الأيام بألوان المرجع */
   .screen.skin-goldglass .day-chip{background:linear-gradient(140deg,#f0f0ee,#c8cdd4 30%,#f5d67d 65%,#b8902e)}
-  .screen.skin-goldglass .day-in{background:#fff;color:#16213a}
+  .screen.skin-goldglass .day-in{background:linear-gradient(140deg,rgba(255,255,255,.6) 0%,rgba(255,255,255,.15) 50%,rgba(120,90,20,.14) 100%);color:#16213a}
   .screen.skin-goldglass .day-chip.now .day-in{background:linear-gradient(170deg,#fff,#f3e3b6);color:#16213a}
-  .screen.skin-neonblue .day-chip{background:linear-gradient(160deg,rgba(160,235,255,.85),rgba(50,130,160,.5))}
-  .screen.skin-neonblue .day-in{background:rgba(8,30,40,.88)}
+  .screen.skin-neonblue .day-chip{background:linear-gradient(155deg,#d8f7ff 0%,#4fc7e8 45%,#0d4a5e 100%)}
+  .screen.skin-neonblue .day-in{background:linear-gradient(155deg,rgba(255,255,255,.25) 0%,rgba(255,255,255,0) 40%,rgba(0,10,18,.32) 100%)}
   /* إطار معدني خارجي للساعة */
   .screen.skin-goldglass .scr-clock{background:linear-gradient(160deg,#f2dc9e,#b8902e);padding:3px 6px;border-radius:10px;border:none}
   .screen.skin-goldglass .scr-clock b{background:#fbf6e8}
@@ -964,13 +964,13 @@ function applyTheme(){
     if(ov)ov.style.background=scrTheme==="neon-blue"?"rgba(4,20,30,.94)":"rgba(255,255,255,.94)";
     return;
   }
-  scr.style.background=`radial-gradient(1400px 800px at 70% -10%, ${mixC(scrTheme,.12,true)} 0%, ${mixC(scrTheme,.3,false)} 45%, ${mixC(scrTheme,.62,false)} 100%)`;
+  scr.style.background=`radial-gradient(1400px 800px at 70% -10%, ${mixC(scrTheme,.78,true)} 0%, ${scrTheme} 45%, ${mixC(scrTheme,.82,false)} 100%)`;
   scr.style.setProperty("--scr-deep",mixC(scrTheme,.45,false));
   scr.style.setProperty("--tile-g1",mixC(scrTheme,.55,true,.4));
   scr.style.setProperty("--tile-g2",mixC(scrTheme,.15,false,.22));
   scr.style.setProperty("--chip-g1",mixC(scrTheme,.5,true,.45));
   scr.style.setProperty("--chip-g2",mixC(scrTheme,.1,false,.3));
-  if(ov)ov.style.background=mixC(scrTheme,.62,false,.95);
+  if(ov)ov.style.background=mixC(scrTheme,.82,false,.95);
 }
 function setTheme(c){
   scrTheme=c;localStorage.setItem("dc_scr_theme",c);applyTheme();
