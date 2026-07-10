@@ -238,7 +238,8 @@
   .screen.skin-neonblue .pct-ring::after,.screen.skin-goldglass .pct-ring::after{content:"";position:absolute;inset:20%;border-radius:50%;background:var(--ring-hole)}
   .screen.skin-neonblue .pct-ring{--ring-c:#ffcf4d;--ring-track:rgba(255,255,255,.3);--ring-hole:#0b2530}
   .screen.skin-goldglass .pct-ring{--ring-c:#b8902e;--ring-track:rgba(122,95,30,.28);--ring-hole:#f7f1e3}
-  .screen.skin-neonblue{background:radial-gradient(1200px 700px at 72% -10%,#123a44 0%,#0b2530 45%,#041318 100%);color:#eaffff}
+  /* نفس التدرج المميز للهويات اللونية: إضاءة أعلى → اللون → غامق أسفل */
+  .screen.skin-neonblue{background:radial-gradient(1400px 800px at 70% -10%,#cee8f2 0%,#1f97c2 45%,#061b23 100%);color:#eaffff}
   .screen.skin-neonblue .scr-clock{background:rgba(0,0,0,.5);border-color:rgba(72,219,255,.6);color:#8be9ff;text-shadow:0 0 6px rgba(72,219,255,.7)}
   .screen.skin-neonblue .scr-timebar{background:rgba(72,219,255,.15)}
   .screen.skin-neonblue .phrase-box,.screen.skin-neonblue .scr-theme,.screen.skin-neonblue .scr-lang,.screen.skin-neonblue .scr-time-pill{border-color:rgba(72,219,255,.4)}
@@ -247,15 +248,16 @@
   .screen.skin-neonblue .scr-qr #scr-qr-box,.screen.skin-goldglass .scr-qr #scr-qr-box{background:#fff;border-radius:6px;padding:6px}
   .screen.skin-neonblue .scr-qr .cap,.screen.skin-goldglass .scr-qr .cap{color:#fff}
   .screen.skin-neonblue .scr-qr::after,.screen.skin-goldglass .scr-qr::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);width:46%;height:10px;background:#1c2f45;clip-path:polygon(12% 0,88% 0,100% 100%,0 100%);border-radius:0 0 4px 4px}
-  .screen.skin-goldglass{background:linear-gradient(160deg,#fbfaf7 0%,#f3ecdd 55%,#eee3c8 100%);color:#16213a}
-  .screen.skin-goldglass .scr-title p{color:#3a4258}
+  .screen.skin-goldglass{background:radial-gradient(1400px 800px at 70% -10%,#f3ebd4 0%,#c9a23a 45%,#33290e 100%);color:#fff}
+  .screen.skin-goldglass .scr-title p{color:rgba(255,255,255,.9)}
   .screen.skin-goldglass .scr-clock{background:rgba(255,255,255,.75);border:1px solid rgba(184,144,46,.6);color:#8a6d1d;text-shadow:none}
-  .screen.skin-goldglass .scr-timebar{background:rgba(184,144,46,.2)}
+  .screen.skin-goldglass .scr-timebar{background:rgba(0,0,0,.25)}
   .screen.skin-goldglass .scr-timebar-fill{background:linear-gradient(90deg,#d4af37,#f5d67d)}
   .screen.skin-goldglass .scr-time-pill,.screen.skin-goldglass .phrase-box,.screen.skin-goldglass .scr-theme,.screen.skin-goldglass .scr-lang{background:rgba(255,255,255,.6);border-color:rgba(184,144,46,.5);color:#16213a}
   .screen.skin-goldglass .scr-lang{color:#16213a}
   .screen.skin-goldglass .scr-credit{display:inline-block;background:rgba(255,255,255,.65);border:1px solid rgba(184,144,46,.5);border-radius:20px;padding:5px 18px;margin:.6vh auto 0}
-  .screen.skin-goldglass .scr-credit,.screen.skin-goldglass .scr-title h1,.screen.skin-goldglass .scr-title p,.screen.skin-goldglass .bag-side .pct,.screen.skin-goldglass .bag-side .of{text-shadow:none;color:#16213a}
+  .screen.skin-goldglass .scr-credit{text-shadow:none;color:#16213a}
+  .screen.skin-goldglass .scr-title h1,.screen.skin-goldglass .bag-side .pct,.screen.skin-goldglass .bag-side .of{color:#fff;text-shadow:0 2px 14px rgba(60,45,10,.6)}
   .screen.skin-goldglass .bag-side .pct{color:#8a6d1d}
   /* موجات خلفية زخرفية خفيفة تحاكي الصورتين المرجعيتين */
   .screen.skin-neonblue::before,.screen.skin-goldglass::before{
