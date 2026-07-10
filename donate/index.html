@@ -946,7 +946,7 @@ const timeEn=t=>String(t||"").replace("صباحاً","AM").replace("ظهراً",
 /* هويات ألوان شاشة العرض — الكيس والدم يبقيان بالأحمر، تتغير الخلفية فقط */
 const THEMES=[["#006c35","أخضر الصحة"],["#d90429","أحمر"],["#2e86c1","أزرق فاتح"],["#7d5ba6","بنفسجي"],["#b8902e","ذهبي"]];
 /* هويتان كاملتا التصميم (سداسيات مضيئة + زجاج) تُختاران بنفس آلية أزرار الألوان */
-const SKINS=[["neon-blue","أزرق مضيء","linear-gradient(135deg,#0b2530,#1c4650 60%,#48dbff)"],["gold-glass","ذهبي فاخر","linear-gradient(135deg,#f3ecdd,#eee3c8 60%,#b8902e)"]];
+const SKINS=[["neon-blue","أزرق مضيء","linear-gradient(135deg,#eafdff 0%,#4fc7e8 45%,#0a3247 100%)"],["gold-glass","ذهبي فاخر","linear-gradient(135deg,#fff6dd 0%,#e8c05a 45%,#8a6d1d 100%)"]];
 let scrTheme=localStorage.getItem("dc_scr_theme")||"#006c35";
 function hexRGB(h){h=String(h).replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return [parseInt(h.slice(0,2),16)||0,parseInt(h.slice(2,4),16)||0,parseInt(h.slice(4,6),16)||0];}
 function mixC(h,t,toWhite,alpha){
