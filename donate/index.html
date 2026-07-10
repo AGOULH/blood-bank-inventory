@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800&display=swap">
 <title>حملات التبرع بالدم — بنك الدم دمام</title>
 <style>
   :root{
@@ -185,37 +187,45 @@
      المرجعية: القص الخارجي أكبر (إطار رفيع)، والقص الداخلي أصغر (التعبئة الزجاجية تبدو أقرب لمستطيل).
      ملاحظة: box-shadow لا يتبع الحواف المائلة لـ clip-path، لذا الإطار هنا طبقتان مقصوصتان فعلياً
      (خارجية = لون الإطار، داخلية مُزاحة بالبكسل = التعبئة) بدل ظل داخلي واحد */
+  /* بطاقة زجاجية مستديرة الزوايا وبداخلها شارة سداسية عمودية بإطار معدني — طبق المرجع */
   .screen.skin-neonblue .type-tile,.screen.skin-goldglass .type-tile{
-    --cutO:22px;
-    clip-path:polygon(var(--cutO) 0,calc(100% - var(--cutO)) 0,100% var(--cutO),100% calc(100% - var(--cutO)),calc(100% - var(--cutO)) 100%,var(--cutO) 100%,0 calc(100% - var(--cutO)),0 var(--cutO));
-    border-radius:0;border:none;padding:0
+    --hx:polygon(50% 0,100% 26%,100% 74%,50% 100%,0 74%,0 26%);
+    border-radius:20px;border:none;padding:0;clip-path:none;position:relative
   }
   .screen.skin-neonblue .tile-in,.screen.skin-goldglass .tile-in{
-    --cutI:12px;position:absolute;inset:4px;
-    clip-path:polygon(var(--cutI) 0,calc(100% - var(--cutI)) 0,100% var(--cutI),100% calc(100% - var(--cutI)),calc(100% - var(--cutI)) 100%,var(--cutI) 100%,0 calc(100% - var(--cutI)),0 var(--cutI));
-    padding:4px 24px
+    position:absolute;inset:auto;top:50%;left:50%;transform:translate(-50%,-50%);
+    height:94%;aspect-ratio:.94;width:auto;
+    clip-path:var(--hx);padding:12% 14%
   }
-  .screen.skin-neonblue .scr-types,.screen.skin-goldglass .scr-types{gap:.5vh .5vw}
-  .screen.skin-neonblue .type-tile{background:linear-gradient(160deg,#9beeff,#3fa9c9 55%,#1c5770);filter:drop-shadow(0 0 8px rgba(72,219,255,.4))}
-  .screen.skin-neonblue .tile-in{background:linear-gradient(160deg,rgba(32,86,100,.65),rgba(8,26,34,.8))}
-  .screen.skin-goldglass .type-tile{background:linear-gradient(160deg,#f5d67d,#b8902e 55%,#8a6d1d);filter:drop-shadow(0 3px 8px rgba(184,144,46,.3))}
-  .screen.skin-goldglass .tile-in{background:rgba(255,255,255,.82);backdrop-filter:blur(6px)}
+  .screen.skin-neonblue .tile-in::before,.screen.skin-goldglass .tile-in::before{
+    content:"";position:absolute;inset:5px;clip-path:var(--hx);z-index:0
+  }
+  .screen.skin-neonblue .tile-in>*,.screen.skin-goldglass .tile-in>*{position:relative;z-index:1}
+  .screen.skin-neonblue .type-tile .tl,.screen.skin-goldglass .type-tile .tl{font-size:clamp(13px,2.5vh,27px)}
+  .screen.skin-neonblue .type-tile .tc,.screen.skin-goldglass .type-tile .tc{font-size:clamp(18px,4.2vh,46px)}
+  .screen.skin-neonblue .type-tile .ts,.screen.skin-goldglass .type-tile .ts{font-size:clamp(9px,1.2vh,13px)}
+  .screen.skin-neonblue .scr-types,.screen.skin-goldglass .scr-types{gap:1.6vh 1.4vw}
+  .screen.skin-neonblue .type-tile{background:rgba(12,44,56,.42);border:1px solid rgba(120,220,255,.22);box-shadow:inset 0 0 22px rgba(72,219,255,.08),0 10px 26px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
+  .screen.skin-neonblue .tile-in{background:linear-gradient(160deg,rgba(155,238,255,.95),rgba(63,169,201,.8) 55%,rgba(28,87,112,.95));filter:drop-shadow(0 0 10px rgba(72,219,255,.45))}
+  .screen.skin-neonblue .tile-in::before{background:linear-gradient(165deg,rgba(14,52,66,.94),rgba(5,22,30,.96))}
+  .screen.skin-goldglass .type-tile{background:rgba(255,255,255,.5);border:1px solid rgba(184,144,46,.28);box-shadow:0 10px 26px rgba(140,110,40,.10);backdrop-filter:blur(8px)}
+  .screen.skin-goldglass .tile-in{background:linear-gradient(155deg,#f9e9bd 0%,#caa63f 38%,#fdf6e0 55%,#a8842a 100%)}
+  .screen.skin-goldglass .tile-in::before{background:linear-gradient(175deg,#ffffff 0%,#f5efe0 100%)}
   .screen.skin-neonblue .type-tile .tc{color:#ffcf4d}
   .screen.skin-neonblue .type-tile .tl,.screen.skin-neonblue .type-tile .ts{color:#eaffff}
   .screen.skin-goldglass .type-tile .tl,.screen.skin-goldglass .type-tile .ts{color:#16213a}
   .screen.skin-goldglass .type-tile .tc{color:#8a6d1d}
-  .screen.skin-neonblue .tile-ic,.screen.skin-goldglass .tile-ic{display:block;position:absolute;inset-inline-start:10px;top:50%;transform:translateY(-50%);font-size:clamp(9px,1.3vh,14px);opacity:.85}
+  .screen.skin-neonblue .tile-ic,.screen.skin-goldglass .tile-ic{display:block;position:absolute;inset-inline-start:12px;top:50%;transform:translateY(-50%);font-size:clamp(9px,1.3vh,14px);opacity:.85;z-index:2}
   .screen.skin-neonblue .tile-ic{color:#8be9ff}
   .screen.skin-goldglass .tile-ic{color:#b8902e}
   /* شارة اليوم بنفس شكل الثُماني المزدوج بدل الدائرة */
   .screen.skin-neonblue .day-chip,.screen.skin-goldglass .day-chip{
-    --cutO:10px;width:var(--chip);min-width:var(--chip);border-radius:0;border:none;
-    clip-path:polygon(var(--cutO) 0,calc(100% - var(--cutO)) 0,100% var(--cutO),100% calc(100% - var(--cutO)),calc(100% - var(--cutO)) 100%,var(--cutO) 100%,0 calc(100% - var(--cutO)),0 var(--cutO))
+    --hx:polygon(50% 0,100% 27%,100% 73%,50% 100%,0 73%,0 27%);
+    width:var(--chip);min-width:var(--chip);border-radius:0;border:none;clip-path:var(--hx)
   }
   .day-in{font-size:clamp(8px,1.05vh,11px);line-height:1.15}
   .screen.skin-neonblue .day-in,.screen.skin-goldglass .day-in{
-    --cutI:5px;position:absolute;inset:3px;
-    clip-path:polygon(var(--cutI) 0,calc(100% - var(--cutI)) 0,100% var(--cutI),100% calc(100% - var(--cutI)),calc(100% - var(--cutI)) 100%,var(--cutI) 100%,0 calc(100% - var(--cutI)),0 var(--cutI))
+    position:absolute;inset:4px;clip-path:var(--hx)
   }
   .screen.skin-neonblue .day-chip{background:linear-gradient(160deg,#9beeff,#3fa9c9 55%,#1c5770)}
   .screen.skin-neonblue .day-in{background:linear-gradient(160deg,rgba(32,86,100,.65),rgba(8,26,34,.8))}
@@ -260,6 +270,69 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='320'%3E%3Cpath d='M-20,140 C40,90 80,190 140,140 S220,90 280,140 S360,190 420,140 S500,90 500,140' fill='none' stroke='%23b8902e' stroke-opacity='.14' stroke-width='2'/%3E%3Cpath d='M-20,190 C40,240 80,140 140,190 S220,240 280,190 S360,140 420,190 S500,240 500,190' fill='none' stroke='%232e86c1' stroke-opacity='.08' stroke-width='2'/%3E%3C/svg%3E")
   }
   .screen.skin-neonblue>*:not(.scr-ended),.screen.skin-goldglass>*:not(.scr-ended){position:relative;z-index:1}
+  /* موجات جزيئية نقطية (مثل المرجع): شريط أوسط ذهبي/نيلي في الفاتح، وأسفل متوهج في الداكن */
+  .screen.skin-neonblue::after,.screen.skin-goldglass::after{content:"";position:absolute;left:0;right:0;z-index:0;pointer-events:none;background-repeat:repeat-x}
+  .screen.skin-goldglass::after{top:36%;height:34%;opacity:.55;background-size:900px 100%;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='300'%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cpath d='M0,150 C150,90 300,210 450,150 S750,90 900,150' stroke='%232e86c1' stroke-opacity='.55' stroke-width='4' stroke-dasharray='0.1 16'/%3E%3Cpath d='M0,170 C150,110 300,230 450,170 S750,110 900,170' stroke='%23b8902e' stroke-opacity='.6' stroke-width='4' stroke-dasharray='0.1 13'/%3E%3Cpath d='M0,130 C150,190 300,70 450,130 S750,190 900,130' stroke='%232e86c1' stroke-opacity='.35' stroke-width='3' stroke-dasharray='0.1 11'/%3E%3Cpath d='M0,190 C150,250 300,130 450,190 S750,250 900,190' stroke='%23b8902e' stroke-opacity='.35' stroke-width='3' stroke-dasharray='0.1 10'/%3E%3C/g%3E%3C/svg%3E")}
+  .screen.skin-neonblue::after{bottom:0;height:40%;opacity:.6;background-size:900px 100%;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='360'%3E%3Cg fill='none' stroke='%2348dbff' stroke-linecap='round'%3E%3Cpath d='M0,180 C150,120 300,240 450,180 S750,120 900,180' stroke-opacity='.5' stroke-width='4' stroke-dasharray='0.1 15'/%3E%3Cpath d='M0,220 C150,160 300,280 450,220 S750,160 900,220' stroke-opacity='.35' stroke-width='3' stroke-dasharray='0.1 12'/%3E%3Cpath d='M0,150 C150,210 300,90 450,150 S750,210 900,150' stroke-opacity='.25' stroke-width='3' stroke-dasharray='0.1 10'/%3E%3C/g%3E%3C/svg%3E")}
+  /* ساعة LED بخانات منفصلة مثل المرجع */
+  .scr-clock b{font-weight:inherit}
+  .scr-clock i{font-style:normal}
+  .screen.skin-neonblue .scr-clock,.screen.skin-goldglass .scr-clock{background:none;border:none;padding:0;display:inline-flex;align-items:center;gap:3px;letter-spacing:1px}
+  .screen.skin-neonblue .scr-clock b,.screen.skin-goldglass .scr-clock b{border-radius:7px;padding:1px 9px;display:inline-block}
+  .screen.skin-neonblue .scr-clock b{background:rgba(0,0,0,.55);border:1px solid rgba(72,219,255,.55);color:#8be9ff;text-shadow:0 0 6px rgba(72,219,255,.7)}
+  .screen.skin-goldglass .scr-clock b{background:#fdf8ea;border:1px solid rgba(184,144,46,.55);color:#8a6d1d;box-shadow:inset 0 1px 3px rgba(140,110,40,.25)}
+  .screen.skin-neonblue .scr-clock i{color:#8be9ff}
+  .screen.skin-goldglass .scr-clock i{color:#8a6d1d}
+  .screen.skin-neonblue .scr-timebar,.screen.skin-goldglass .scr-timebar{height:9px;border-radius:6px}
+  .screen.skin-neonblue .scr-timebar-fill{background:linear-gradient(90deg,#2fb6d9,#8be9ff);box-shadow:0 0 10px rgba(72,219,255,.7)}
+  /* النسبة: حلقة كبيرة تحتضن النص في الذهبي، ورقم متوهج بلا حلقة في الأزرق مثل المرجع */
+  .screen.skin-neonblue .pct-ring{display:none}
+  .screen.skin-neonblue .bag-side .pct{color:#ffcf4d;text-shadow:0 0 16px rgba(255,207,77,.55)}
+  .screen.skin-goldglass .pct-wrap{width:clamp(120px,19vh,200px);height:clamp(120px,19vh,200px)}
+  .screen.skin-goldglass .pct-ring::after{inset:8%}
+  .screen.skin-goldglass .pct-wrap .pct{transform:translateY(-1.6vh)}
+  .screen.skin-goldglass .bag-side .of{position:relative;z-index:2;margin-top:-8.5vh;font-size:clamp(11px,1.7vh,17px)}
+  /* خط نبض ECG على كيس الدم في الهويتين */
+  .bag-svg .ecg{display:none}
+  .screen.skin-neonblue .bag-svg .ecg,.screen.skin-goldglass .bag-svg .ecg{display:block}
+  .screen.skin-goldglass .bag-svg .ecg path{stroke:#d4af37}
+  .screen.skin-neonblue .bag-svg .ecg path{stroke:#ff4d5a;filter:drop-shadow(0 0 6px rgba(255,77,90,.8))}
+  /* ===== لمسات المطابقة النهائية مع الصورتين المرجعيتين ===== */
+  .screen.skin-neonblue,.screen.skin-goldglass{font-family:"Tajawal","Segoe UI","Noto Sans Arabic",Tahoma,sans-serif}
+  /* كيس دم زجاجي بدل الكرتوني في الهويتين */
+  .screen.skin-goldglass .bag-body{fill:rgba(255,255,255,.72);stroke:#aab3bd;stroke-width:5}
+  .screen.skin-goldglass .bag-tab,.screen.skin-goldglass .bag-port{fill:#e9edf2;stroke:#aab3bd;stroke-width:4}
+  .screen.skin-goldglass .bag-hole{fill:#5c6672;stroke:#aab3bd}
+  .screen.skin-goldglass .tube-o{stroke:#aab3bd;stroke-width:9}
+  .screen.skin-goldglass .tube-end{fill:#e9edf2;stroke:#aab3bd}
+  .screen.skin-neonblue .bag-body{fill:rgba(210,245,255,.14);stroke:#cfeef8;stroke-width:5}
+  .screen.skin-neonblue .bag-tab,.screen.skin-neonblue .bag-port{fill:rgba(210,245,255,.35);stroke:#cfeef8;stroke-width:4}
+  .screen.skin-neonblue .bag-hole{fill:#0b2530;stroke:#cfeef8}
+  .screen.skin-neonblue .tube-o{stroke:#cfeef8;stroke-width:9}
+  .screen.skin-neonblue .tube-end{fill:rgba(210,245,255,.35);stroke:#cfeef8}
+  .bag-svg .bag-under,.bag-svg .ecg-wings{display:none}
+  .screen.skin-neonblue .bag-svg .bag-under,.screen.skin-goldglass .bag-svg .bag-under{display:block}
+  .screen.skin-goldglass .bag-svg .ecg-wings{display:block;stroke:#d4af37}
+  /* الأزرق: العدّاد سماوي متوهج مثل المرجع */
+  .screen.skin-neonblue .type-tile .tc{color:#7fe9ff;text-shadow:0 0 12px rgba(72,219,255,.8)}
+  .screen.skin-neonblue .tile-in{background:linear-gradient(160deg,rgba(190,245,255,.95),rgba(90,200,235,.6) 45%,rgba(50,140,175,.85));filter:drop-shadow(0 0 12px rgba(72,219,255,.5))}
+  .screen.skin-neonblue .tile-in::before{inset:3px;background:linear-gradient(170deg,rgba(16,55,70,.72),rgba(6,26,36,.85))}
+  .screen.skin-goldglass .tile-in::before{inset:4px}
+  /* شارات الأيام بألوان المرجع */
+  .screen.skin-goldglass .day-chip{background:linear-gradient(140deg,#f0f0ee,#c8cdd4 30%,#f5d67d 65%,#b8902e)}
+  .screen.skin-goldglass .day-in{background:#fff;color:#16213a}
+  .screen.skin-goldglass .day-chip.now .day-in{background:linear-gradient(170deg,#fff,#f3e3b6);color:#16213a}
+  .screen.skin-neonblue .day-chip{background:linear-gradient(160deg,rgba(160,235,255,.85),rgba(50,130,160,.5))}
+  .screen.skin-neonblue .day-in{background:rgba(8,30,40,.88)}
+  /* إطار معدني خارجي للساعة */
+  .screen.skin-goldglass .scr-clock{background:linear-gradient(160deg,#f2dc9e,#b8902e);padding:3px 6px;border-radius:10px;border:none}
+  .screen.skin-goldglass .scr-clock b{background:#fbf6e8}
+  .screen.skin-goldglass .scr-clock i{color:#5c4a12}
+  .screen.skin-neonblue .scr-clock{background:rgba(0,0,0,.4);border:1px solid rgba(72,219,255,.45);padding:3px 6px;border-radius:10px}
+  .screen.skin-neonblue .scr-clock b{background:#06141b;border:1px solid rgba(72,219,255,.35)}
+  .screen.skin-goldglass .scr-timebar-fill{box-shadow:0 0 10px rgba(212,175,55,.8)}
+  .screen.skin-goldglass::after{opacity:.72}
+  .screen.skin-neonblue::after{opacity:.75}
   @media(max-width:760px){
     .scr-body{flex-direction:column;gap:2vh}
     .bag-svg{height:32vh}
@@ -959,7 +1032,8 @@ function tickClock(){
   else if(now>end){remain=0;pct=100;}
   else{remain=end-now;pct=Math.min(100,Math.round((now-start)/(end-start)*100));}
   const s=Math.max(0,Math.floor(remain/1000));
-  clockEl.textContent=String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+  const hh=String(Math.floor(s/3600)).padStart(2,"0"),mm=String(Math.floor(s%3600/60)).padStart(2,"0"),ss=String(s%60).padStart(2,"0");
+  clockEl.innerHTML="<b>"+hh+"</b><i>:</i><b>"+mm+"</b><i>:</i><b>"+ss+"</b>";
   if(barEl)barEl.style.width=pct+"%";
 }
 /* كيس دم كرتوني (مطابق للصورة المرجعية): خطاف + فتحة تعليق، موجة دم متحركة مع فقاعات،
@@ -980,10 +1054,10 @@ function bagSVG(){return `
     <path d="M170,2 V38" stroke="#9aa3ad" stroke-width="10" stroke-linecap="round"/>
     <path d="M184,60 a14,14 0 1 0 -28,0" fill="none" stroke="#9aa3ad" stroke-width="9" stroke-linecap="round"/>
     <!-- لسان التعليق وفتحته -->
-    <path d="M142,66 h56 a12,12 0 0 1 12,12 v24 h-80 v-24 a12,12 0 0 1 12,-12 z" fill="#f6c9cc" stroke="#6b1220" stroke-width="6"/>
-    <circle cx="170" cy="82" r="9" fill="#5c0a12" stroke="#6b1220" stroke-width="4"/>
+    <path class="bag-tab" d="M142,66 h56 a12,12 0 0 1 12,12 v24 h-80 v-24 a12,12 0 0 1 12,-12 z" fill="#f6c9cc" stroke="#6b1220" stroke-width="6"/>
+    <circle class="bag-hole" cx="170" cy="82" r="9" fill="#5c0a12" stroke="#6b1220" stroke-width="4"/>
     <!-- جسم الكيس -->
-    <path d="M90,100 h160 q34,0 34,34 v202 q0,48 -48,48 h-132 q-48,0 -48,-48 v-202 q0,-34 34,-34 z"
+    <path class="bag-body" d="M90,100 h160 q34,0 34,34 v202 q0,48 -48,48 h-132 q-48,0 -48,-48 v-202 q0,-34 34,-34 z"
           fill="#fbe0e2" stroke="#6b1220" stroke-width="7"/>
     <g clip-path="url(#bagClip)">
       <g id="blood-g" style="transform:translateY(${BAG_H}px)">
@@ -1011,11 +1085,24 @@ function bagSVG(){return `
       <path d="M152,212 Q170,228 188,212" fill="none" stroke="#33272a" stroke-width="5" stroke-linecap="round"/>
       <circle cx="134" cy="207" r="7.5" fill="#f6aeb5"/><circle cx="206" cy="207" r="7.5" fill="#f6aeb5"/>
     </g>
+    <!-- خط نبض ECG (يظهر في هويتي التصميم فقط) -->
+    <g class="ecg" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M66,300 h40 l12,-22 15,44 12,-22 h46 l12,-20 15,40 12,-20 h44" stroke-width="7"/>
+    </g>
     <!-- منفذ سفلي وأنبوب ملفوف -->
-    <rect x="160" y="378" width="20" height="28" rx="6" fill="#f6c9cc" stroke="#6b1220" stroke-width="5"/>
-    <path d="M170,406 c0,36 -64,30 -64,60 c0,32 100,32 100,4 c0,-26 -78,-24 -78,8" fill="none" stroke="#6b1220" stroke-width="11" stroke-linecap="round"/>
-    <path d="M170,406 c0,36 -64,30 -64,60 c0,32 100,32 100,4 c0,-26 -78,-24 -78,8" fill="none" stroke="#e0596a" stroke-width="5" stroke-linecap="round"/>
-    <circle cx="128" cy="482" r="7" fill="#f6c9cc" stroke="#6b1220" stroke-width="4"/>
+    <rect class="bag-port" x="160" y="378" width="20" height="28" rx="6" fill="#f6c9cc" stroke="#6b1220" stroke-width="5"/>
+    <path class="tube-o" d="M170,406 c0,36 -64,30 -64,60 c0,32 100,32 100,4 c0,-26 -78,-24 -78,8" fill="none" stroke="#6b1220" stroke-width="11" stroke-linecap="round"/>
+    <path class="tube-i" d="M170,406 c0,36 -64,30 -64,60 c0,32 100,32 100,4 c0,-26 -78,-24 -78,8" fill="none" stroke="#e0596a" stroke-width="5" stroke-linecap="round"/>
+    <circle class="tube-end" cx="128" cy="482" r="7" fill="#f6c9cc" stroke="#6b1220" stroke-width="4"/>
+    <!-- قطرات تحت الكيس + أجنحة نبض جانبية (لهويتي التصميم فقط) -->
+    <g class="bag-under" fill="url(#dropGrad)">
+      <path d="M240,468 C244,475 247,479 247,483 a7,7 0 1,1 -14,0 c0,-4 3,-8 7,-15 z"/>
+      <path d="M263,502 C266,508 269,511 269,515 a6,6 0 1,1 -12,0 c0,-3.5 3,-7 6,-13 z"/>
+    </g>
+    <g class="ecg-wings" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="6">
+      <path d="M6,300 h14 l8,-14 10,28 8,-14 h6"/>
+      <path d="M288,300 h6 l8,-14 10,28 8,-14 h14"/>
+    </g>
   </svg>`;}
 function drawScreen(id,c){
   const L=SCR_T[scrLang];
@@ -1053,7 +1140,7 @@ function drawScreen(id,c){
           <div class="of"><b id="tot">0</b> ${L.of} <b>${c.goal}</b> ${L.donors}</div>
         </div>
       </div>
-      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div><span class="tile-ic">(🧑)</span></div></div>`).join("")}</div>
+      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div><span class="tile-ic">(🧑)</span></div>`).join("")}</div>
     </div>
     <div class="scr-foot">
       <div class="phrase-box" id="phrase" data-p="">${esc(phraseFor(c,scrLang))}</div>
