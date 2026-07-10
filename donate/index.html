@@ -133,6 +133,7 @@
   .type-tile .tl{font-size:clamp(13px,2.6vh,26px);font-weight:800;direction:ltr}
   .type-tile .tc{font-size:clamp(18px,4vh,42px);font-weight:800;line-height:1.15}
   .type-tile .ts{font-size:clamp(9px,1.1vh,12px);opacity:.75}
+  .tile-ic{display:none}
   .scr-foot{display:flex;align-items:center;gap:2vw;margin-top:.8vh;flex:none}
   .phrase-box{flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:1.2vh 2vw;font-size:clamp(13px,2.3vh,24px);font-weight:700;text-align:center;transition:opacity .8s}
   .phrase-box.fade{opacity:0}
@@ -203,6 +204,9 @@
   .screen.skin-neonblue .type-tile .tl,.screen.skin-neonblue .type-tile .ts{color:#eaffff}
   .screen.skin-goldglass .type-tile .tl,.screen.skin-goldglass .type-tile .ts{color:#16213a}
   .screen.skin-goldglass .type-tile .tc{color:#8a6d1d}
+  .screen.skin-neonblue .tile-ic,.screen.skin-goldglass .tile-ic{display:block;position:absolute;inset-inline-start:10px;top:50%;transform:translateY(-50%);font-size:clamp(9px,1.3vh,14px);opacity:.85}
+  .screen.skin-neonblue .tile-ic{color:#8be9ff}
+  .screen.skin-goldglass .tile-ic{color:#b8902e}
   /* شارة اليوم بنفس شكل الثُماني المزدوج بدل الدائرة */
   .screen.skin-neonblue .day-chip,.screen.skin-goldglass .day-chip{
     --cutO:10px;width:var(--chip);min-width:var(--chip);border-radius:0;border:none;
@@ -1049,7 +1053,7 @@ function drawScreen(id,c){
           <div class="of"><b id="tot">0</b> ${L.of} <b>${c.goal}</b> ${L.donors}</div>
         </div>
       </div>
-      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div></div>`).join("")}</div>
+      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div><span class="tile-ic">(🧑)</span></div></div>`).join("")}</div>
     </div>
     <div class="scr-foot">
       <div class="phrase-box" id="phrase" data-p="">${esc(phraseFor(c,scrLang))}</div>
