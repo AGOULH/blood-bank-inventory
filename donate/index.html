@@ -127,7 +127,8 @@
   .drop-fall{animation:dropFall 1.15s cubic-bezier(.45,0,.9,.55) forwards}
   @keyframes dropFall{0%{transform:translateY(0) scale(.85);opacity:0}12%{opacity:1}80%{opacity:1}100%{transform:translateY(258px) scale(1.02);opacity:0}}
   .scr-types{flex:1;height:100%;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:1vh 1.2vw;min-width:0}
-  .type-tile{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:4px 8px;text-align:center;backdrop-filter:blur(4px);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0}
+  .type-tile{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);border-radius:16px;text-align:center;backdrop-filter:blur(4px);min-height:0;position:relative}
+  .tile-in{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:4px 8px}
   .type-tile .tl{font-size:clamp(13px,2.6vh,26px);font-weight:800;direction:ltr}
   .type-tile .tc{font-size:clamp(18px,4vh,42px);font-weight:800;line-height:1.15}
   .type-tile .ts{font-size:clamp(9px,1.1vh,12px);opacity:.75}
@@ -178,22 +179,20 @@
 
   /* ===== هويتان كاملتا التصميم (طبق الأصل عن الصورتين المرجعيتين): أزرق مضيء (داكن مستقبلي) وذهبي فاخر (زجاجي فاتح) ===== */
   .sw-skin{border-radius:8px}
-  /* سداسي أفقي حاد (رأس يسار/يمين، حواف علوية وسفلية مسطحة) — مطابق لشكل المربعات في الصورتين */
+  /* سداسي أفقي حاد (رأس يسار/يمين، حواف علوية وسفلية مسطحة) — مطابق لشكل المربعات في الصورتين.
+     ملاحظة: box-shadow لا يتبع الحواف المائلة لـ clip-path، لذا الإطار هنا طبقتان سداسيتان متداخلتان
+     (خارجية = لون الإطار، داخلية medium مُزاحة بالبكسل = التعبئة) بدل ظل داخلي واحد */
   .screen.skin-neonblue .type-tile,.screen.skin-goldglass .type-tile{
-    clip-path:polygon(19% 0,81% 0,100% 50%,81% 100%,19% 100%,0 50%);
-    border-radius:0;border:none;padding:6px 30px;
+    --hexclip:polygon(19% 0,81% 0,100% 50%,81% 100%,19% 100%,0 50%);
+    clip-path:var(--hexclip);border-radius:0;border:none;padding:0
   }
-  /* حلقة مزدوجة حول السداسي عبر ظلال داخلية متتابعة + توهج خارجي يتبع شكل القص */
-  .screen.skin-neonblue .type-tile{
-    background:linear-gradient(160deg,rgba(32,86,100,.6),rgba(8,26,34,.75));
-    box-shadow:inset 0 0 0 2px rgba(120,225,255,.85),inset 0 0 0 5px rgba(10,32,40,.9),inset 0 0 0 7px rgba(120,225,255,.45);
-    filter:drop-shadow(0 0 9px rgba(72,219,255,.35));
+  .screen.skin-neonblue .tile-in,.screen.skin-goldglass .tile-in{
+    position:absolute;inset:3px;clip-path:var(--hexclip);padding:4px 28px
   }
-  .screen.skin-goldglass .type-tile{
-    background:rgba(255,255,255,.6);backdrop-filter:blur(6px);
-    box-shadow:inset 0 0 0 2px rgba(184,144,46,.9),inset 0 0 0 5px rgba(255,255,255,.75),inset 0 0 0 7px rgba(184,144,46,.55);
-    filter:drop-shadow(0 3px 10px rgba(184,144,46,.22));
-  }
+  .screen.skin-neonblue .type-tile{background:linear-gradient(160deg,#8be9ff,#2f7f95 45%,#123a44);filter:drop-shadow(0 0 8px rgba(72,219,255,.4))}
+  .screen.skin-neonblue .tile-in{background:linear-gradient(160deg,rgba(32,86,100,.65),rgba(8,26,34,.8))}
+  .screen.skin-goldglass .type-tile{background:linear-gradient(160deg,#f5d67d,#b8902e 55%,#8a6d1d);filter:drop-shadow(0 3px 8px rgba(184,144,46,.3))}
+  .screen.skin-goldglass .tile-in{background:rgba(255,255,255,.82);backdrop-filter:blur(6px)}
   .screen.skin-neonblue .type-tile .tc{color:#ffcf4d}
   .screen.skin-neonblue .type-tile .tl,.screen.skin-neonblue .type-tile .ts{color:#eaffff}
   .screen.skin-goldglass .type-tile .tl,.screen.skin-goldglass .type-tile .ts{color:#16213a}
@@ -210,8 +209,8 @@
   /* حلقة النسبة الدائرية حول 20% — ظاهرة فقط في الهويتين الكاملتين */
   .screen.skin-neonblue .pct-ring,.screen.skin-goldglass .pct-ring{background:conic-gradient(var(--ring-c) calc(var(--pctp,0)*1%),var(--ring-track) 0)}
   .screen.skin-neonblue .pct-ring::after,.screen.skin-goldglass .pct-ring::after{content:"";position:absolute;inset:11%;border-radius:50%;background:var(--ring-hole)}
-  .screen.skin-neonblue .pct-ring{--ring-c:#ffcf4d;--ring-track:rgba(255,255,255,.14);--ring-hole:#0b2530}
-  .screen.skin-goldglass .pct-ring{--ring-c:#b8902e;--ring-track:rgba(184,144,46,.16);--ring-hole:#f7f1e3}
+  .screen.skin-neonblue .pct-ring{--ring-c:#ffcf4d;--ring-track:rgba(255,255,255,.3);--ring-hole:#0b2530}
+  .screen.skin-goldglass .pct-ring{--ring-c:#b8902e;--ring-track:rgba(122,95,30,.28);--ring-hole:#f7f1e3}
   .screen.skin-neonblue{background:radial-gradient(1200px 700px at 72% -10%,#123a44 0%,#0b2530 45%,#041318 100%);color:#eaffff}
   .screen.skin-neonblue .scr-clock{background:rgba(0,0,0,.5);border-color:rgba(72,219,255,.6);color:#8be9ff;text-shadow:0 0 6px rgba(72,219,255,.7)}
   .screen.skin-neonblue .scr-timebar{background:rgba(72,219,255,.15)}
@@ -1032,7 +1031,7 @@ function drawScreen(id,c){
           <div class="of"><b id="tot">0</b> ${L.of} <b>${c.goal}</b> ${L.donors}</div>
         </div>
       </div>
-      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div>`).join("")}</div>
+      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div></div>`).join("")}</div>
     </div>
     <div class="scr-foot">
       <div class="phrase-box" id="phrase" data-p="">${esc(phraseFor(c,scrLang))}</div>
