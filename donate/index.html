@@ -201,23 +201,20 @@
     content:"";position:absolute;inset:5px;clip-path:var(--hx);z-index:0
   }
   .screen.skin-neonblue .tile-in>*,.screen.skin-goldglass .tile-in>*{position:relative;z-index:1}
-  .screen.skin-neonblue .type-tile .tl,.screen.skin-goldglass .type-tile .tl{font-size:clamp(13px,2.5vh,27px)}
+  .screen.skin-neonblue .type-tile .tl,.screen.skin-goldglass .type-tile .tl{font-size:clamp(16px,3.5vh,40px)}
   .screen.skin-neonblue .type-tile .tc,.screen.skin-goldglass .type-tile .tc{font-size:clamp(18px,4.2vh,46px)}
   .screen.skin-neonblue .type-tile .ts,.screen.skin-goldglass .type-tile .ts{font-size:clamp(9px,1.2vh,13px)}
   .screen.skin-neonblue .scr-types,.screen.skin-goldglass .scr-types{gap:1.6vh 1.4vw}
-  .screen.skin-neonblue .type-tile{background:rgba(12,44,56,.42);border:1px solid rgba(120,220,255,.22);box-shadow:inset 0 0 22px rgba(72,219,255,.08),0 10px 26px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
+  .screen.skin-neonblue .type-tile{background:var(--sk-tile-bg,rgba(12,44,56,.42));border:1px solid var(--sk-border-soft,rgba(120,220,255,.22));box-shadow:inset 0 0 22px rgba(72,219,255,.08),0 10px 26px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
   .screen.skin-neonblue .tile-in{background:var(--sk-tile,linear-gradient(160deg,rgba(155,238,255,.95),rgba(63,169,201,.8) 55%,rgba(28,87,112,.95)));filter:drop-shadow(0 0 10px rgba(72,219,255,.45))}
-  .screen.skin-neonblue .tile-in::before{background:linear-gradient(165deg,rgba(14,52,66,.94),rgba(5,22,30,.96))}
-  .screen.skin-goldglass .type-tile{background:rgba(255,255,255,.5);border:1px solid rgba(184,144,46,.28);box-shadow:0 10px 26px rgba(140,110,40,.10);backdrop-filter:blur(8px)}
+  .screen.skin-neonblue .tile-in::before{background:var(--sk-tile-in,linear-gradient(165deg,rgba(14,52,66,.94),rgba(5,22,30,.96)))}
+  .screen.skin-goldglass .type-tile{background:rgba(255,255,255,.5);border:1px solid var(--sk-border-soft,rgba(184,144,46,.28));box-shadow:0 10px 26px rgba(140,110,40,.10);backdrop-filter:blur(8px)}
   .screen.skin-goldglass .tile-in{background:var(--sk-tile,linear-gradient(155deg,#f9e9bd 0%,#caa63f 38%,#fdf6e0 55%,#a8842a 100%))}
   .screen.skin-goldglass .tile-in::before{background:linear-gradient(175deg,#ffffff 0%,#f5efe0 100%)}
   .screen.skin-neonblue .type-tile .tc{color:#ffcf4d}
   .screen.skin-neonblue .type-tile .tl,.screen.skin-neonblue .type-tile .ts{color:#eaffff}
   .screen.skin-goldglass .type-tile .tl,.screen.skin-goldglass .type-tile .ts{color:#16213a}
   .screen.skin-goldglass .type-tile .tc{color:#8a6d1d}
-  .screen.skin-neonblue .tile-ic,.screen.skin-goldglass .tile-ic{display:block;position:absolute;inset-inline-start:12px;top:50%;transform:translateY(-50%);font-size:clamp(9px,1.3vh,14px);opacity:.85;z-index:2}
-  .screen.skin-neonblue .tile-ic{color:#8be9ff}
-  .screen.skin-goldglass .tile-ic{color:#b8902e}
   /* شارة اليوم بنفس شكل الثُماني المزدوج بدل الدائرة */
   .screen.skin-neonblue .day-chip,.screen.skin-goldglass .day-chip{
     --hx:polygon(50% 0,100% 27%,100% 73%,50% 100%,0 73%,0 27%);
@@ -228,23 +225,23 @@
     position:absolute;inset:4px;clip-path:var(--hx)
   }
   .screen.skin-neonblue .day-chip{background:var(--sk-chip,linear-gradient(160deg,#9beeff,#3fa9c9 55%,#1c5770))}
-  .screen.skin-neonblue .day-in{background:linear-gradient(160deg,rgba(32,86,100,.65),rgba(8,26,34,.8))}
-  .screen.skin-neonblue .day-chip.now .day-in{background:linear-gradient(160deg,#8be9ff,#48a6c4);color:#04212b}
+  .screen.skin-neonblue .day-in{background:var(--sk-chip-in,linear-gradient(160deg,rgba(32,86,100,.65),rgba(8,26,34,.8)))}
+  .screen.skin-neonblue .day-chip.now .day-in{background:var(--sk-chip-now,linear-gradient(160deg,#8be9ff,#48a6c4));color:#04212b}
   .screen.skin-goldglass .day-chip{background:var(--sk-chip,linear-gradient(160deg,#f5d67d,#b8902e 55%,#8a6d1d))}
   .screen.skin-goldglass .day-in{background:rgba(255,255,255,.85)}
-  .screen.skin-goldglass .day-chip.now .day-in{background:linear-gradient(160deg,#d4af37,#f5d67d);color:#16213a}
+  .screen.skin-goldglass .day-chip.now .day-in{background:var(--sk-chip-now,linear-gradient(160deg,#d4af37,#f5d67d));color:#16213a}
   /* حلقة النسبة الدائرية حول 20% — أعرض لتُقارب سماكة الحلقة في الصورة المرجعية */
   .screen.skin-neonblue .pct-ring,.screen.skin-goldglass .pct-ring{background:conic-gradient(var(--ring-c) calc(var(--pctp,0)*1%),var(--ring-track) 0)}
   .screen.skin-neonblue .pct-ring::after,.screen.skin-goldglass .pct-ring::after{content:"";position:absolute;inset:20%;border-radius:50%;background:var(--ring-hole)}
-  .screen.skin-neonblue .pct-ring{--ring-c:#ffcf4d;--ring-track:rgba(255,255,255,.3);--ring-hole:rgba(4,22,30,.78)}
-  .screen.skin-goldglass .pct-ring{--ring-c:#b8902e;--ring-track:rgba(122,95,30,.28);--ring-hole:rgba(255,255,255,.9)}
+  .screen.skin-neonblue .pct-ring{--ring-c:var(--sk-ring,#ffcf4d);--ring-track:rgba(255,255,255,.3);--ring-hole:var(--sk-hole,rgba(4,22,30,.78))}
+  .screen.skin-goldglass .pct-ring{--ring-c:var(--sk-ring,#b8902e);--ring-track:rgba(122,95,30,.28);--ring-hole:rgba(255,255,255,.9)}
   /* نفس التدرج المميز للهويات اللونية: إضاءة أعلى → اللون → غامق أسفل */
   .screen.skin-neonblue{background:var(--sk-bg,radial-gradient(1400px 800px at 70% -10%,#cee8f2 0%,#1f97c2 45%,#061b23 100%));color:#eaffff}
   .screen.skin-neonblue .scr-clock{background:rgba(0,0,0,.5);border-color:rgba(72,219,255,.6);color:#8be9ff;text-shadow:0 0 6px rgba(72,219,255,.7)}
-  .screen.skin-neonblue .scr-timebar{background:rgba(72,219,255,.15)}
-  .screen.skin-neonblue .phrase-box,.screen.skin-neonblue .scr-theme,.screen.skin-neonblue .scr-lang,.screen.skin-neonblue .scr-time-pill{border-color:rgba(72,219,255,.4)}
+  .screen.skin-neonblue .scr-timebar{background:var(--sk-track,rgba(72,219,255,.15))}
+  .screen.skin-neonblue .phrase-box,.screen.skin-neonblue .scr-theme,.screen.skin-neonblue .scr-lang,.screen.skin-neonblue .scr-time-pill{border-color:var(--sk-border,rgba(72,219,255,.4))}
   /* حامل تقني أسفل رمز الاستجابة يحاكي الصورة المرجعية */
-  .screen.skin-neonblue .scr-qr,.screen.skin-goldglass .scr-qr{background:#1c2f45;padding:10px 10px 6px;border-radius:12px;position:relative;margin-bottom:10px}
+  .screen.skin-neonblue .scr-qr,.screen.skin-goldglass .scr-qr{background:var(--sk-deep,#1c2f45);padding:10px 10px 6px;border-radius:12px;position:relative;margin-bottom:10px}
   .screen.skin-neonblue .scr-qr #scr-qr-box,.screen.skin-goldglass .scr-qr #scr-qr-box{background:#fff;border-radius:6px;padding:6px}
   .screen.skin-neonblue .scr-qr .cap,.screen.skin-goldglass .scr-qr .cap{color:#fff}
   .screen.skin-neonblue .scr-qr::after,.screen.skin-goldglass .scr-qr::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);width:46%;height:10px;background:#1c2f45;clip-path:polygon(12% 0,88% 0,100% 100%,0 100%);border-radius:0 0 4px 4px}
@@ -252,7 +249,7 @@
   .screen.skin-goldglass .scr-title p{color:rgba(255,255,255,.9)}
   .screen.skin-goldglass .scr-clock{background:rgba(255,255,255,.75);border:1px solid rgba(184,144,46,.6);color:#8a6d1d;text-shadow:none}
   .screen.skin-goldglass .scr-timebar{background:rgba(0,0,0,.25)}
-  .screen.skin-goldglass .scr-timebar-fill{background:linear-gradient(90deg,#d4af37,#f5d67d)}
+  .screen.skin-goldglass .scr-timebar-fill{background:var(--sk-bar,linear-gradient(90deg,#d4af37,#f5d67d))}
   .screen.skin-goldglass .scr-time-pill,.screen.skin-goldglass .phrase-box,.screen.skin-goldglass .scr-theme,.screen.skin-goldglass .scr-lang{background:rgba(255,255,255,.6);border-color:rgba(184,144,46,.5);color:#16213a}
   .screen.skin-goldglass .scr-lang{color:#16213a}
   .screen.skin-goldglass .scr-credit{display:inline-block;background:rgba(255,255,255,.65);border:1px solid rgba(184,144,46,.5);border-radius:20px;padding:5px 18px;margin:.6vh auto 0}
@@ -281,12 +278,12 @@
   .scr-clock i{font-style:normal}
   .screen.skin-neonblue .scr-clock,.screen.skin-goldglass .scr-clock{background:none;border:none;padding:0;display:inline-flex;align-items:center;gap:3px;letter-spacing:1px}
   .screen.skin-neonblue .scr-clock b,.screen.skin-goldglass .scr-clock b{border-radius:7px;padding:1px 9px;display:inline-block}
-  .screen.skin-neonblue .scr-clock b{background:rgba(0,0,0,.55);border:1px solid rgba(72,219,255,.55);color:#8be9ff;text-shadow:0 0 6px rgba(72,219,255,.7)}
+  .screen.skin-neonblue .scr-clock b{background:rgba(0,0,0,.55);border:1px solid var(--sk-border,rgba(72,219,255,.55));color:var(--sk-accent,#8be9ff);text-shadow:0 0 6px rgba(0,0,0,.4)}
   .screen.skin-goldglass .scr-clock b{background:#fdf8ea;border:1px solid rgba(184,144,46,.55);color:#8a6d1d;box-shadow:inset 0 1px 3px rgba(140,110,40,.25)}
-  .screen.skin-neonblue .scr-clock i{color:#8be9ff}
+  .screen.skin-neonblue .scr-clock i{color:var(--sk-accent,#8be9ff)}
   .screen.skin-goldglass .scr-clock i{color:#8a6d1d}
   .screen.skin-neonblue .scr-timebar,.screen.skin-goldglass .scr-timebar{height:9px;border-radius:6px}
-  .screen.skin-neonblue .scr-timebar-fill{background:linear-gradient(90deg,#2fb6d9,#8be9ff);box-shadow:0 0 10px rgba(72,219,255,.7)}
+  .screen.skin-neonblue .scr-timebar-fill{background:var(--sk-bar,linear-gradient(90deg,#2fb6d9,#8be9ff));box-shadow:0 0 10px rgba(0,0,0,.35)}
   /* النسبة داخل حلقة دائرية في الهويتين: الرقم في مركز الدائرة والأعداد أسفلها */
   .screen.skin-neonblue .bag-side .pct{color:#ffcf4d;text-shadow:0 0 16px rgba(255,207,77,.55)}
   .screen.skin-neonblue .pct-wrap,.screen.skin-goldglass .pct-wrap{width:clamp(120px,19vh,200px);height:clamp(120px,19vh,200px)}
@@ -326,11 +323,11 @@
   .screen.skin-neonblue .day-chip{background:linear-gradient(155deg,#d8f7ff 0%,#4fc7e8 45%,#0d4a5e 100%)}
   .screen.skin-neonblue .day-in{background:linear-gradient(155deg,rgba(255,255,255,.25) 0%,rgba(255,255,255,0) 40%,rgba(0,10,18,.32) 100%)}
   /* إطار معدني خارجي للساعة */
-  .screen.skin-goldglass .scr-clock{background:linear-gradient(160deg,#f2dc9e,#b8902e);padding:3px 6px;border-radius:10px;border:none}
+  .screen.skin-goldglass .scr-clock{background:var(--sk-chip,linear-gradient(160deg,#f2dc9e,#b8902e));padding:3px 6px;border-radius:10px;border:none}
   .screen.skin-goldglass .scr-clock b{background:#fbf6e8}
   .screen.skin-goldglass .scr-clock i{color:#5c4a12}
   .screen.skin-neonblue .scr-clock{background:rgba(0,0,0,.4);border:1px solid rgba(72,219,255,.45);padding:3px 6px;border-radius:10px}
-  .screen.skin-neonblue .scr-clock b{background:#06141b;border:1px solid rgba(72,219,255,.35)}
+  .screen.skin-neonblue .scr-clock b{background:var(--sk-deep2,#06141b);border:1px solid var(--sk-border,rgba(72,219,255,.35))}
   .screen.skin-goldglass .scr-timebar-fill{box-shadow:0 0 10px rgba(212,175,55,.8)}
   .screen.skin-goldglass::after{opacity:.72}
   .screen.skin-neonblue::after{opacity:.75}
@@ -870,6 +867,8 @@ async function registerDonation(id){
   if(localStorage.getItem(guard)&&!confirm("سبق التسجيل من هذا الجهاز اليوم — تسجيل متبرع آخر؟")){btn.disabled=false;btn.textContent="🩸 تبرعت بالدم";return;}
   const dk=dkey(new Date()),u={total:inc(1),phraseIdx:inc(1)};
   u["counts."+selBT]=inc(1);u["daily."+dk+".total"]=inc(1);u["daily."+dk+"."+selBT]=inc(1);
+  // سجل زمني لكل تسجيل: الوقت + الفصيلة (يظهر في إحصائية الأيام ويُصدَّر Excel/PDF)
+  u["log."+dk]=firebase.firestore.FieldValue.arrayUnion({bt:(BT.find(b=>b.k===selBT)||{}).l||"",t:new Date().toTimeString().slice(0,8),r:Math.random().toString(36).slice(2,6)});
   try{
     const w=cDoc(id).update(u);
     await Promise.race([w,new Promise(r=>setTimeout(r,4000))]); // لا نحجز المتبرع إذا كانت الشبكة بطيئة — الكتابة تُزامن لاحقاً
@@ -965,13 +964,29 @@ function applyTheme(){
   if(scrTheme==="neon-blue"||scrTheme==="gold-glass"){
     scr.classList.add(scrTheme==="neon-blue"?"skin-neonblue":"skin-goldglass");
     scr.style.background="";scr.style.removeProperty("--scr-deep");
-    if(scrTint){ // نفس التدرج المميز لكن باللون المختار
-      scr.style.setProperty("--sk-bg",`radial-gradient(1400px 800px at 70% -10%, ${mixC(scrTint,.78,true)} 0%, ${scrTint} 45%, ${mixC(scrTint,.82,false)} 100%)`);
-      scr.style.setProperty("--sk-tile",`linear-gradient(160deg, ${mixC(scrTint,.55,true)}, ${scrTint} 55%, ${mixC(scrTint,.45,false)})`);
-      scr.style.setProperty("--sk-chip",`linear-gradient(160deg, ${mixC(scrTint,.55,true)}, ${scrTint} 55%, ${mixC(scrTint,.45,false)})`);
-      if(ov)ov.style.background=mixC(scrTint,.82,false,.94);
+    const SK_VARS=["--sk-bg","--sk-tile","--sk-tile-in","--sk-tile-bg","--sk-chip","--sk-chip-in","--sk-chip-now",
+                   "--sk-border","--sk-border-soft","--sk-accent","--sk-deep","--sk-deep2","--sk-bar","--sk-track","--sk-ring","--sk-hole"];
+    if(scrTint){ // نفس التدرج المميز باللون المختار — يسري على كل عناصر الهوية
+      const t=scrTint,S=(k,v)=>scr.style.setProperty(k,v);
+      S("--sk-bg",`radial-gradient(1400px 800px at 70% -10%, ${mixC(t,.78,true)} 0%, ${t} 45%, ${mixC(t,.82,false)} 100%)`);
+      S("--sk-tile",`linear-gradient(160deg, ${mixC(t,.62,true)}, ${mixC(t,.15,true)} 55%, ${mixC(t,.35,false)})`);
+      S("--sk-tile-in",`linear-gradient(165deg, ${mixC(t,.68,false,.94)}, ${mixC(t,.84,false,.96)})`);
+      S("--sk-tile-bg",mixC(t,.55,false,.42));
+      S("--sk-chip",`linear-gradient(160deg, ${mixC(t,.62,true)}, ${mixC(t,.15,true)} 55%, ${mixC(t,.35,false)})`);
+      S("--sk-chip-in",`linear-gradient(160deg, ${mixC(t,.5,false,.65)}, ${mixC(t,.78,false,.8)})`);
+      S("--sk-chip-now",`linear-gradient(160deg, ${mixC(t,.65,true)}, ${mixC(t,.3,true)})`);
+      S("--sk-border",mixC(t,.45,true,.55));
+      S("--sk-border-soft",mixC(t,.5,true,.25));
+      S("--sk-accent",mixC(t,.72,true));
+      S("--sk-deep",mixC(t,.7,false));
+      S("--sk-deep2",mixC(t,.8,false));
+      S("--sk-bar",`linear-gradient(90deg, ${mixC(t,.25,true)}, ${mixC(t,.6,true)})`);
+      S("--sk-track",mixC(t,.4,true,.18));
+      S("--sk-ring",mixC(t,.55,true));
+      S("--sk-hole",mixC(t,.8,false,.8));
+      if(ov)ov.style.background=mixC(t,.82,false,.94);
     }else{
-      scr.style.removeProperty("--sk-bg");scr.style.removeProperty("--sk-tile");scr.style.removeProperty("--sk-chip");
+      SK_VARS.forEach(k=>scr.style.removeProperty(k));
       if(ov)ov.style.background=scrTheme==="neon-blue"?"rgba(4,20,30,.94)":"rgba(255,255,255,.94)";
     }
     return;
@@ -1163,7 +1178,7 @@ function drawScreen(id,c){
           <div class="of"><b id="tot">0</b> ${L.of} <b>${c.goal}</b> ${L.donors}</div>
         </div>
       </div>
-      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div><span class="tile-ic">(🧑)</span></div>`).join("")}</div>
+      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div></div>`).join("")}</div>
     </div>
     <div class="scr-foot">
       <div class="phrase-box" id="phrase" data-p="">${esc(phraseFor(c,scrLang))}</div>
@@ -1303,14 +1318,74 @@ function showDays(id){
   rowsH+=`<tr style="background:var(--crimson-soft)"><td><b>مجموع كل الأيام</b></td>`
     +BT.map(b=>`<td style="text-align:center"><b>${sum[b.k]}</b></td>`).join("")
     +`<td style="text-align:center"><b style="color:var(--crimson)">${sum.total}</b></td></tr>`;
+  const lg=logRows(r);
+  const logH=lg.length?`
+    <div style="font-weight:700;font-size:14px;margin:14px 0 6px;text-align:start">⏱️ السجل الزمني للتسجيلات (${lg.length})</div>
+    <div class="tbl-wrap" style="max-height:30vh;overflow:auto"><table style="font-size:12.5px">
+      <thead><tr><th>م</th><th>اليوم</th><th>التاريخ</th><th>وقت التسجيل</th><th>الفصيلة</th></tr></thead>
+      <tbody>${lg.map((o,i)=>`<tr><td>${i+1}</td><td>${o.day}</td><td>${o.date}</td><td><b>${o.t}</b></td><td style="direction:ltr">${esc(o.bt)}</td></tr>`).join("")}</tbody></table></div>`
+    :`<div style="color:var(--muted);font-size:12.5px;margin-top:12px;text-align:start">⏱️ السجل الزمني يُسجَّل تلقائياً للتبرعات الجديدة (وقت التسجيل + الفصيلة)</div>`;
   const box=$("#modal-box");box.style.maxWidth="780px";
   box.innerHTML=`<h3>${esc(r.name)} — إحصائية الأيام</h3>
     <p style="color:var(--muted);font-size:13px;margin:0 0 10px">كل يوم مستقل بفصائله ثم المجموع الكلي</p>
-    <div class="tbl-wrap" style="max-height:60vh;overflow:auto"><table style="font-size:13px">
+    <div class="tbl-wrap" style="max-height:38vh;overflow:auto"><table style="font-size:13px">
       <thead><tr><th>اليوم</th>${BT.map(b=>`<th style="text-align:center;direction:ltr">${b.l}</th>`).join("")}<th style="text-align:center">المجموع</th></tr></thead>
       <tbody>${rowsH}</tbody></table></div>
-    <div style="margin-top:12px"><button class="btn sm ghost" onclick="closeModal()">إغلاق</button></div>`;
+    ${logH}
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+      <button class="btn sm" onclick="exportLogXLSX('${id}')">📊 السجل الزمني Excel</button>
+      <button class="btn sm soft" onclick="exportLogPDF('${id}')">🖨️ السجل الزمني PDF</button>
+      <button class="btn sm ghost" onclick="closeModal()">إغلاق</button>
+    </div>`;
   $("#modal-bg").classList.add("open");
+}
+
+/* ===== السجل الزمني للتسجيلات (وقت كل تبرع وفصيلته لكل يوم) + تصدير Excel وPDF ===== */
+function logRows(r){
+  const out=[];
+  for(let i=1;i<=r.days;i++){
+    const dk=dkeyOf(r.startDate,i-1),list=(((r.log||{})[dk])||[]).slice().sort((a,b)=>String(a.t).localeCompare(String(b.t)));
+    const dt=new Date(r.startDate+"T00:00:00");dt.setDate(dt.getDate()+i-1);
+    const ds=dt.toLocaleDateString("ar-SA-u-nu-latn",{day:"numeric",month:"short",year:"numeric"});
+    list.forEach(o=>out.push({day:dayOrd(i),date:ds,t:String(o.t||"").slice(0,5),bt:o.bt||""}));
+  }
+  return out;
+}
+async function exportLogXLSX(id){
+  const r=(window._srows||window._rows||[]).find(x=>x.id===id);if(!r)return;
+  const rows=logRows(r);if(!rows.length)return toast("لا يوجد سجل زمني بعد","err");
+  try{
+    await loadJS("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");
+    const data=[["م","اليوم","التاريخ","وقت التسجيل","الفصيلة"]];
+    rows.forEach((o,i)=>data.push([i+1,o.day,o.date,o.t,o.bt]));
+    const ws=XLSX.utils.aoa_to_sheet(data);
+    ws["!cols"]=[{wch:5},{wch:14},{wch:16},{wch:12},{wch:9}];
+    const wb=XLSX.utils.book_new();wb.Workbook={Views:[{RTL:true}]};
+    XLSX.utils.book_append_sheet(wb,ws,"سجل التسجيلات");
+    XLSX.writeFile(wb,"سجل-تسجيلات-"+r.name+".xlsx");
+    toast("صدر ملف الإكسل ✓");
+  }catch(e){toast("تعذر إصدار الإكسل","err");}
+}
+async function exportLogPDF(id){
+  const r=(window._srows||window._rows||[]).find(x=>x.id===id);if(!r)return;
+  const rows=logRows(r);if(!rows.length)return toast("لا يوجد سجل زمني بعد","err");
+  try{
+    await ensureJsPDF();
+    const per=30,pages=Math.ceil(rows.length/per);
+    const pdf=new jspdf.jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
+    for(let p=0;p<pages;p++){
+      const [cv,x]=rptCanvas();
+      rptHeader(x,"السجل الزمني للتسجيلات — "+trunc(r.name,20),r.city+" · "+rows.length+" تسجيلاً"+(pages>1?" · صفحة "+(p+1)+"/"+pages:""));
+      const widths=[70,180,200,180,120];
+      const slice=rows.slice(p*per,(p+1)*per).map((o,i)=>[p*per+i+1,o.day.replace("اليوم ",""),o.date,o.t,o.bt]);
+      rptTable(x,250,widths,["م","اليوم","التاريخ","الوقت","الفصيلة"],slice,46,false);
+      rptFooter(x);
+      if(p>0)pdf.addPage();
+      pdf.addImage(cv.toDataURL("image/jpeg",.9),"JPEG",0,0,210,297);
+    }
+    pdf.save("سجل-تسجيلات-"+r.name+".pdf");
+    toast("صدر ملف PDF ✓");
+  }catch(e){toast("تعذر إصدار التقرير","err");}
 }
 
 /* ===== سجل أسماء مُصدِري الشهادات (لكل يوم) + تصدير Excel وPDF ===== */
