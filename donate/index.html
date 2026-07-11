@@ -206,10 +206,10 @@
   .screen.skin-neonblue .type-tile .ts,.screen.skin-goldglass .type-tile .ts{font-size:clamp(9px,1.2vh,13px)}
   .screen.skin-neonblue .scr-types,.screen.skin-goldglass .scr-types{gap:1.6vh 1.4vw}
   .screen.skin-neonblue .type-tile{background:rgba(12,44,56,.42);border:1px solid rgba(120,220,255,.22);box-shadow:inset 0 0 22px rgba(72,219,255,.08),0 10px 26px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
-  .screen.skin-neonblue .tile-in{background:linear-gradient(160deg,rgba(155,238,255,.95),rgba(63,169,201,.8) 55%,rgba(28,87,112,.95));filter:drop-shadow(0 0 10px rgba(72,219,255,.45))}
+  .screen.skin-neonblue .tile-in{background:var(--sk-tile,linear-gradient(160deg,rgba(155,238,255,.95),rgba(63,169,201,.8) 55%,rgba(28,87,112,.95)));filter:drop-shadow(0 0 10px rgba(72,219,255,.45))}
   .screen.skin-neonblue .tile-in::before{background:linear-gradient(165deg,rgba(14,52,66,.94),rgba(5,22,30,.96))}
   .screen.skin-goldglass .type-tile{background:rgba(255,255,255,.5);border:1px solid rgba(184,144,46,.28);box-shadow:0 10px 26px rgba(140,110,40,.10);backdrop-filter:blur(8px)}
-  .screen.skin-goldglass .tile-in{background:linear-gradient(155deg,#f9e9bd 0%,#caa63f 38%,#fdf6e0 55%,#a8842a 100%)}
+  .screen.skin-goldglass .tile-in{background:var(--sk-tile,linear-gradient(155deg,#f9e9bd 0%,#caa63f 38%,#fdf6e0 55%,#a8842a 100%))}
   .screen.skin-goldglass .tile-in::before{background:linear-gradient(175deg,#ffffff 0%,#f5efe0 100%)}
   .screen.skin-neonblue .type-tile .tc{color:#ffcf4d}
   .screen.skin-neonblue .type-tile .tl,.screen.skin-neonblue .type-tile .ts{color:#eaffff}
@@ -227,19 +227,19 @@
   .screen.skin-neonblue .day-in,.screen.skin-goldglass .day-in{
     position:absolute;inset:4px;clip-path:var(--hx)
   }
-  .screen.skin-neonblue .day-chip{background:linear-gradient(160deg,#9beeff,#3fa9c9 55%,#1c5770)}
+  .screen.skin-neonblue .day-chip{background:var(--sk-chip,linear-gradient(160deg,#9beeff,#3fa9c9 55%,#1c5770))}
   .screen.skin-neonblue .day-in{background:linear-gradient(160deg,rgba(32,86,100,.65),rgba(8,26,34,.8))}
   .screen.skin-neonblue .day-chip.now .day-in{background:linear-gradient(160deg,#8be9ff,#48a6c4);color:#04212b}
-  .screen.skin-goldglass .day-chip{background:linear-gradient(160deg,#f5d67d,#b8902e 55%,#8a6d1d)}
+  .screen.skin-goldglass .day-chip{background:var(--sk-chip,linear-gradient(160deg,#f5d67d,#b8902e 55%,#8a6d1d))}
   .screen.skin-goldglass .day-in{background:rgba(255,255,255,.85)}
   .screen.skin-goldglass .day-chip.now .day-in{background:linear-gradient(160deg,#d4af37,#f5d67d);color:#16213a}
   /* حلقة النسبة الدائرية حول 20% — أعرض لتُقارب سماكة الحلقة في الصورة المرجعية */
   .screen.skin-neonblue .pct-ring,.screen.skin-goldglass .pct-ring{background:conic-gradient(var(--ring-c) calc(var(--pctp,0)*1%),var(--ring-track) 0)}
   .screen.skin-neonblue .pct-ring::after,.screen.skin-goldglass .pct-ring::after{content:"";position:absolute;inset:20%;border-radius:50%;background:var(--ring-hole)}
-  .screen.skin-neonblue .pct-ring{--ring-c:#ffcf4d;--ring-track:rgba(255,255,255,.3);--ring-hole:#0b2530}
-  .screen.skin-goldglass .pct-ring{--ring-c:#b8902e;--ring-track:rgba(122,95,30,.28);--ring-hole:#f7f1e3}
+  .screen.skin-neonblue .pct-ring{--ring-c:#ffcf4d;--ring-track:rgba(255,255,255,.3);--ring-hole:rgba(4,22,30,.78)}
+  .screen.skin-goldglass .pct-ring{--ring-c:#b8902e;--ring-track:rgba(122,95,30,.28);--ring-hole:rgba(255,255,255,.9)}
   /* نفس التدرج المميز للهويات اللونية: إضاءة أعلى → اللون → غامق أسفل */
-  .screen.skin-neonblue{background:radial-gradient(1400px 800px at 70% -10%,#cee8f2 0%,#1f97c2 45%,#061b23 100%);color:#eaffff}
+  .screen.skin-neonblue{background:var(--sk-bg,radial-gradient(1400px 800px at 70% -10%,#cee8f2 0%,#1f97c2 45%,#061b23 100%));color:#eaffff}
   .screen.skin-neonblue .scr-clock{background:rgba(0,0,0,.5);border-color:rgba(72,219,255,.6);color:#8be9ff;text-shadow:0 0 6px rgba(72,219,255,.7)}
   .screen.skin-neonblue .scr-timebar{background:rgba(72,219,255,.15)}
   .screen.skin-neonblue .phrase-box,.screen.skin-neonblue .scr-theme,.screen.skin-neonblue .scr-lang,.screen.skin-neonblue .scr-time-pill{border-color:rgba(72,219,255,.4)}
@@ -248,7 +248,7 @@
   .screen.skin-neonblue .scr-qr #scr-qr-box,.screen.skin-goldglass .scr-qr #scr-qr-box{background:#fff;border-radius:6px;padding:6px}
   .screen.skin-neonblue .scr-qr .cap,.screen.skin-goldglass .scr-qr .cap{color:#fff}
   .screen.skin-neonblue .scr-qr::after,.screen.skin-goldglass .scr-qr::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);width:46%;height:10px;background:#1c2f45;clip-path:polygon(12% 0,88% 0,100% 100%,0 100%);border-radius:0 0 4px 4px}
-  .screen.skin-goldglass{background:radial-gradient(1400px 800px at 70% -10%,#f3ebd4 0%,#c9a23a 45%,#33290e 100%);color:#fff}
+  .screen.skin-goldglass{background:var(--sk-bg,radial-gradient(1400px 800px at 70% -10%,#f3ebd4 0%,#c9a23a 45%,#33290e 100%));color:#fff}
   .screen.skin-goldglass .scr-title p{color:rgba(255,255,255,.9)}
   .screen.skin-goldglass .scr-clock{background:rgba(255,255,255,.75);border:1px solid rgba(184,144,46,.6);color:#8a6d1d;text-shadow:none}
   .screen.skin-goldglass .scr-timebar{background:rgba(0,0,0,.25)}
@@ -287,13 +287,12 @@
   .screen.skin-goldglass .scr-clock i{color:#8a6d1d}
   .screen.skin-neonblue .scr-timebar,.screen.skin-goldglass .scr-timebar{height:9px;border-radius:6px}
   .screen.skin-neonblue .scr-timebar-fill{background:linear-gradient(90deg,#2fb6d9,#8be9ff);box-shadow:0 0 10px rgba(72,219,255,.7)}
-  /* النسبة: حلقة كبيرة تحتضن النص في الذهبي، ورقم متوهج بلا حلقة في الأزرق مثل المرجع */
-  .screen.skin-neonblue .pct-ring{display:none}
+  /* النسبة داخل حلقة دائرية في الهويتين: الرقم في مركز الدائرة والأعداد أسفلها */
   .screen.skin-neonblue .bag-side .pct{color:#ffcf4d;text-shadow:0 0 16px rgba(255,207,77,.55)}
-  .screen.skin-goldglass .pct-wrap{width:clamp(120px,19vh,200px);height:clamp(120px,19vh,200px)}
-  .screen.skin-goldglass .pct-ring::after{inset:8%}
-  .screen.skin-goldglass .pct-wrap .pct{transform:translateY(-1.6vh)}
-  .screen.skin-goldglass .bag-side .of{position:relative;z-index:2;margin-top:-8.5vh;font-size:clamp(11px,1.7vh,17px)}
+  .screen.skin-neonblue .pct-wrap,.screen.skin-goldglass .pct-wrap{width:clamp(120px,19vh,200px);height:clamp(120px,19vh,200px)}
+  .screen.skin-neonblue .pct-ring::after,.screen.skin-goldglass .pct-ring::after{inset:8%}
+  .screen.skin-neonblue .bag-side,.screen.skin-goldglass .bag-side{text-align:center}
+  .screen.skin-neonblue .bag-side .of,.screen.skin-goldglass .bag-side .of{margin-top:1.2vh;font-size:clamp(11px,1.7vh,17px)}
   /* خط نبض ECG على كيس الدم في الهويتين */
   .bag-svg .ecg{display:none}
   .screen.skin-neonblue .bag-svg .ecg,.screen.skin-goldglass .bag-svg .ecg{display:block}
@@ -950,6 +949,9 @@ const timeEn=t=>String(t||"").replace("صباحاً","AM").replace("ظهراً",
 const SKINS=[["neon-blue","أزرق مضيء","linear-gradient(135deg,#eafdff 0%,#4fc7e8 45%,#0a3247 100%)"],["gold-glass","ذهبي فاخر","linear-gradient(135deg,#fff6dd 0%,#e8c05a 45%,#8a6d1d 100%)"]];
 let scrTheme=localStorage.getItem("dc_scr_theme")||"neon-blue";
 if(scrTheme!=="neon-blue"&&scrTheme!=="gold-glass")scrTheme="neon-blue"; // الهويات القديمة أُلغيت — نرجع للافتراضي
+/* تلوين حر للهوية الحالية: يغيّر تدرج الخلفية والمربعات وشرائح الأيام مع بقاء تصميم الهوية */
+let scrTint=localStorage.getItem("dc_scr_tint")||"";
+if(!/^#[0-9a-fA-F]{6}$/.test(scrTint))scrTint="";
 function hexRGB(h){h=String(h).replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return [parseInt(h.slice(0,2),16)||0,parseInt(h.slice(2,4),16)||0,parseInt(h.slice(4,6),16)||0];}
 function mixC(h,t,toWhite,alpha){
   const a=hexRGB(h),b=toWhite?[255,255,255]:[0,0,0];
@@ -963,7 +965,15 @@ function applyTheme(){
   if(scrTheme==="neon-blue"||scrTheme==="gold-glass"){
     scr.classList.add(scrTheme==="neon-blue"?"skin-neonblue":"skin-goldglass");
     scr.style.background="";scr.style.removeProperty("--scr-deep");
-    if(ov)ov.style.background=scrTheme==="neon-blue"?"rgba(4,20,30,.94)":"rgba(255,255,255,.94)";
+    if(scrTint){ // نفس التدرج المميز لكن باللون المختار
+      scr.style.setProperty("--sk-bg",`radial-gradient(1400px 800px at 70% -10%, ${mixC(scrTint,.78,true)} 0%, ${scrTint} 45%, ${mixC(scrTint,.82,false)} 100%)`);
+      scr.style.setProperty("--sk-tile",`linear-gradient(160deg, ${mixC(scrTint,.55,true)}, ${scrTint} 55%, ${mixC(scrTint,.45,false)})`);
+      scr.style.setProperty("--sk-chip",`linear-gradient(160deg, ${mixC(scrTint,.55,true)}, ${scrTint} 55%, ${mixC(scrTint,.45,false)})`);
+      if(ov)ov.style.background=mixC(scrTint,.82,false,.94);
+    }else{
+      scr.style.removeProperty("--sk-bg");scr.style.removeProperty("--sk-tile");scr.style.removeProperty("--sk-chip");
+      if(ov)ov.style.background=scrTheme==="neon-blue"?"rgba(4,20,30,.94)":"rgba(255,255,255,.94)";
+    }
     return;
   }
   scr.style.background=`radial-gradient(1400px 800px at 70% -10%, ${mixC(scrTheme,.78,true)} 0%, ${scrTheme} 45%, ${mixC(scrTheme,.82,false)} 100%)`;
@@ -975,8 +985,15 @@ function applyTheme(){
   if(ov)ov.style.background=mixC(scrTheme,.82,false,.95);
 }
 function setTheme(c){
-  scrTheme=c;localStorage.setItem("dc_scr_theme",c);applyTheme();
+  scrTheme=c;localStorage.setItem("dc_scr_theme",c);
+  scrTint="";localStorage.removeItem("dc_scr_tint"); // اختيار الهوية يعيد لونها الأصلي
+  const inp=$(".sw-custom");if(inp)inp.value=c==="gold-glass"?"#c9a23a":"#1f97c2";
+  applyTheme();
   const p=$("#sw-row");if(p)[...p.querySelectorAll(".sw")].forEach(el=>el.classList.toggle("sel",el.dataset.c===c));
+}
+function setTint(c){
+  if(!/^#[0-9a-fA-F]{6}$/.test(c))return;
+  scrTint=c;localStorage.setItem("dc_scr_tint",c);applyTheme();
 }
 function toggleScrLang(){
   scrLang=scrLang==="ar"?"en":"ar";localStorage.setItem("dc_scr_lang",scrLang);
@@ -1158,6 +1175,7 @@ function drawScreen(id,c){
       <button class="scr-lang" onclick="toggleScrLang()">🌐 ${L.btn}</button>
       <div class="scr-theme" id="sw-row">
         ${SKINS.map(s=>`<button class="sw sw-skin ${scrTheme===s[0]?"sel":""}" data-c="${s[0]}" style="background:${s[2]}" title="${s[1]}" onclick="setTheme('${s[0]}')"></button>`).join("")}
+        <input type="color" class="sw-custom" value="${scrTint||(scrTheme==="gold-glass"?"#c9a23a":"#1f97c2")}" title="غيّر لون الهوية" oninput="setTint(this.value)">
       </div>
     </div>`;
   $("#phrase").dataset.p=phraseFor(c,scrLang);
