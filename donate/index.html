@@ -313,15 +313,30 @@
   .screen.skin-goldglass .bag-svg .ecg-wings{display:block;stroke:#d4af37}
   /* الأزرق: العدّاد سماوي متوهج مثل المرجع */
   .screen.skin-neonblue .type-tile .tc{color:#7fe9ff;text-shadow:0 0 12px rgba(72,219,255,.8)}
-  .screen.skin-neonblue .tile-in{background:linear-gradient(145deg,#eafdff 0%,#7fe0f5 30%,#1f8fb8 62%,#0a3247 100%);filter:drop-shadow(0 0 12px rgba(72,219,255,.5))}
+  .screen.skin-neonblue .tile-in{background:var(--sk-tile,linear-gradient(145deg,#eafdff 0%,#7fe0f5 30%,#1f8fb8 62%,#0a3247 100%));filter:drop-shadow(0 0 12px rgba(72,219,255,.5))}
   .screen.skin-neonblue .tile-in::before{inset:3px;background:linear-gradient(145deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,0) 40%,rgba(0,10,20,.3) 100%)}
   .screen.skin-goldglass .tile-in::before{inset:4px;background:linear-gradient(150deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,0) 40%,rgba(110,80,20,.16) 100%)}
   /* شارات الأيام بألوان المرجع */
-  .screen.skin-goldglass .day-chip{background:linear-gradient(140deg,#f0f0ee,#c8cdd4 30%,#f5d67d 65%,#b8902e)}
+  .screen.skin-goldglass .day-chip{background:var(--sk-chip,linear-gradient(140deg,#f0f0ee,#c8cdd4 30%,#f5d67d 65%,#b8902e))}
   .screen.skin-goldglass .day-in{background:linear-gradient(140deg,rgba(255,255,255,.6) 0%,rgba(255,255,255,.15) 50%,rgba(120,90,20,.14) 100%);color:#16213a}
-  .screen.skin-goldglass .day-chip.now .day-in{background:linear-gradient(170deg,#fff,#f3e3b6);color:#16213a}
-  .screen.skin-neonblue .day-chip{background:linear-gradient(155deg,#d8f7ff 0%,#4fc7e8 45%,#0d4a5e 100%)}
+  .screen.skin-goldglass .day-chip.now .day-in{background:var(--sk-chip-now,linear-gradient(170deg,#fff,#f3e3b6));color:#16213a}
+  .screen.skin-neonblue .day-chip{background:var(--sk-chip,linear-gradient(155deg,#d8f7ff 0%,#4fc7e8 45%,#0d4a5e 100%))}
   .screen.skin-neonblue .day-in{background:linear-gradient(155deg,rgba(255,255,255,.25) 0%,rgba(255,255,255,0) 40%,rgba(0,10,18,.32) 100%)}
+  /* لون الخط المستقل (--sk-font): عند اختياره يسري على كل نصوص الهويتين */
+  .screen.skin-neonblue{color:var(--sk-font,#eaffff)}
+  .screen.skin-goldglass{color:var(--sk-font,#fff)}
+  .screen.skin-neonblue .scr-title h1{color:var(--sk-font,#eaffff)}
+  .screen.skin-neonblue .type-tile .tl,.screen.skin-neonblue .type-tile .ts{color:var(--sk-font,#eaffff)}
+  .screen.skin-neonblue .type-tile .tc,.screen.skin-neonblue .bag-side .pct{color:var(--sk-font,#ffcf4d)}
+  .screen.skin-neonblue .scr-clock b,.screen.skin-neonblue .scr-clock i{color:var(--sk-font,var(--sk-accent,#8be9ff))}
+  .screen.skin-goldglass .scr-title h1,.screen.skin-goldglass .bag-side .pct,.screen.skin-goldglass .bag-side .of{color:var(--sk-font,#fff)}
+  .screen.skin-goldglass .type-tile .tl,.screen.skin-goldglass .type-tile .ts{color:var(--sk-font,#16213a)}
+  .screen.skin-goldglass .type-tile .tc{color:var(--sk-font,#8a6d1d)}
+  .screen.skin-goldglass .scr-clock b{color:var(--sk-font,#8a6d1d)}
+  .screen.skin-goldglass .scr-clock i{color:var(--sk-font,#5c4a12)}
+  .screen.skin-goldglass .scr-time-pill,.screen.skin-goldglass .phrase-box,.screen.skin-goldglass .scr-lang,.screen.skin-goldglass .scr-theme{color:var(--sk-font,#16213a)}
+  .screen.skin-goldglass .day-in,.screen.skin-goldglass .day-chip.now .day-in{color:var(--sk-font,#16213a)}
+  .screen.skin-neonblue .day-chip.now .day-in{color:var(--sk-font,#04212b)}
   /* إطار معدني خارجي للساعة */
   .screen.skin-goldglass .scr-clock{background:var(--sk-chip,linear-gradient(160deg,#f2dc9e,#b8902e));padding:3px 6px;border-radius:10px;border:none}
   .screen.skin-goldglass .scr-clock b{background:#fbf6e8}
@@ -949,8 +964,12 @@ const SKINS=[["neon-blue","أزرق مضيء","linear-gradient(135deg,#eafdff 0%
 let scrTheme=localStorage.getItem("dc_scr_theme")||"neon-blue";
 if(scrTheme!=="neon-blue"&&scrTheme!=="gold-glass")scrTheme="neon-blue"; // الهويات القديمة أُلغيت — نرجع للافتراضي
 /* تلوين حر للهوية الحالية: يغيّر تدرج الخلفية والمربعات وشرائح الأيام مع بقاء تصميم الهوية */
+const HEXOK=v=>/^#[0-9a-fA-F]{6}$/.test(v||"");
 let scrTint=localStorage.getItem("dc_scr_tint")||"";
-if(!/^#[0-9a-fA-F]{6}$/.test(scrTint))scrTint="";
+if(!HEXOK(scrTint))scrTint="";
+/* لون الخط المستقل */
+let scrFont=localStorage.getItem("dc_scr_font")||"";
+if(!HEXOK(scrFont))scrFont="";
 function hexRGB(h){h=String(h).replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return [parseInt(h.slice(0,2),16)||0,parseInt(h.slice(2,4),16)||0,parseInt(h.slice(4,6),16)||0];}
 function mixC(h,t,toWhite,alpha){
   const a=hexRGB(h),b=toWhite?[255,255,255]:[0,0,0];
@@ -966,6 +985,7 @@ function applyTheme(){
     scr.style.background="";scr.style.removeProperty("--scr-deep");
     const SK_VARS=["--sk-bg","--sk-tile","--sk-tile-in","--sk-tile-bg","--sk-chip","--sk-chip-in","--sk-chip-now",
                    "--sk-border","--sk-border-soft","--sk-accent","--sk-deep","--sk-deep2","--sk-bar","--sk-track","--sk-ring","--sk-hole"];
+    if(scrFont)scr.style.setProperty("--sk-font",scrFont);else scr.style.removeProperty("--sk-font");
     if(scrTint){ // نفس التدرج المميز باللون المختار — يسري على كل عناصر الهوية
       const t=scrTint,S=(k,v)=>scr.style.setProperty(k,v);
       S("--sk-bg",`radial-gradient(1400px 800px at 70% -10%, ${mixC(t,.78,true)} 0%, ${t} 45%, ${mixC(t,.82,false)} 100%)`);
@@ -1001,14 +1021,30 @@ function applyTheme(){
 }
 function setTheme(c){
   scrTheme=c;localStorage.setItem("dc_scr_theme",c);
-  scrTint="";localStorage.removeItem("dc_scr_tint"); // اختيار الهوية يعيد لونها الأصلي
-  const inp=$(".sw-custom");if(inp)inp.value=c==="gold-glass"?"#c9a23a":"#1f97c2";
+  scrTint="";localStorage.removeItem("dc_scr_tint"); // اختيار الهوية يعيد ألوانها الأصلية
+  scrFont="";localStorage.removeItem("dc_scr_font");
+  const ti=$("#sw-tint");if(ti)ti.value=c==="gold-glass"?"#c9a23a":"#1f97c2";
+  const fo=$("#sw-font");if(fo)fo.value="#ffffff";
   applyTheme();
   const p=$("#sw-row");if(p)[...p.querySelectorAll(".sw")].forEach(el=>el.classList.toggle("sel",el.dataset.c===c));
 }
 function setTint(c){
-  if(!/^#[0-9a-fA-F]{6}$/.test(c))return;
+  if(!HEXOK(c))return;
   scrTint=c;localStorage.setItem("dc_scr_tint",c);applyTheme();
+}
+function setFont(c){
+  if(!HEXOK(c))return;
+  scrFont=c;localStorage.setItem("dc_scr_font",c);applyTheme();
+}
+/* حفظ شكل الشاشة (الهوية + اللون + لون الخط) مع الحملة في السحابة — يثبت على كل الشاشات */
+async function saveScrCfg(){
+  if(!window._scrId)return;
+  const btn=$("#scr-save");if(btn)btn.disabled=true;
+  try{
+    await cDoc(window._scrId).update({scrCfg:{skin:scrTheme,tint:scrTint||null,font:scrFont||null}});
+    toast("حُفظ شكل الشاشة لهذه الحملة ✓");
+  }catch(e){toast("تعذر الحفظ: "+(e.code||e.message),"err");}
+  if(btn)btn.disabled=false;
 }
 function toggleScrLang(){
   scrLang=scrLang==="ar"?"en":"ar";localStorage.setItem("dc_scr_lang",scrLang);
@@ -1023,6 +1059,11 @@ async function renderScreen(id){
   const build=c=>{
     window._scrC=c;
     localStorage.setItem(cacheKey,JSON.stringify(c));
+    if(!built&&c.scrCfg){ // الشكل المحفوظ مع الحملة يسبق إعدادات الجهاز
+      if(c.scrCfg.skin==="neon-blue"||c.scrCfg.skin==="gold-glass")scrTheme=c.scrCfg.skin;
+      scrTint=HEXOK(c.scrCfg.tint)?c.scrCfg.tint:"";
+      scrFont=HEXOK(c.scrCfg.font)?c.scrCfg.font:"";
+    }
     if(!built){drawScreen(id,c);built=true;}
     updateScreen(c,lastTotal);
     tickClock();
@@ -1190,8 +1231,12 @@ function drawScreen(id,c){
       <button class="scr-lang" onclick="toggleScrLang()">🌐 ${L.btn}</button>
       <div class="scr-theme" id="sw-row">
         ${SKINS.map(s=>`<button class="sw sw-skin ${scrTheme===s[0]?"sel":""}" data-c="${s[0]}" style="background:${s[2]}" title="${s[1]}" onclick="setTheme('${s[0]}')"></button>`).join("")}
-        <input type="color" class="sw-custom" value="${scrTint||(scrTheme==="gold-glass"?"#c9a23a":"#1f97c2")}" title="غيّر لون الهوية" oninput="setTint(this.value)">
+        <span style="font-size:11px;opacity:.85">لون</span>
+        <input type="color" class="sw-custom" id="sw-tint" value="${scrTint||(scrTheme==="gold-glass"?"#c9a23a":"#1f97c2")}" title="لون الهوية" oninput="setTint(this.value)">
+        <span style="font-size:11px;opacity:.85">خط</span>
+        <input type="color" class="sw-custom" id="sw-font" value="${scrFont||"#ffffff"}" title="لون الخط" oninput="setFont(this.value)">
       </div>
+      <button class="scr-lang" id="scr-save" onclick="saveScrCfg()">💾 حفظ</button>
     </div>`;
   $("#phrase").dataset.p=phraseFor(c,scrLang);
   drawQR($("#scr-qr-box"),baseURL()+"#/d/"+id,110);
