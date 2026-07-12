@@ -11,7 +11,7 @@
     --crimson:#006c35; --crimson-dark:#004c25; --crimson-soft:#e6f0eb;
     --green-bright:#16a34a; --gold:#b8902e; --blood:#b52440;
     --ink:#1f2530; --muted:#6b7280; --line:#e6e8ec; --bg:#f4f5f7;
-    --card:#ffffff; --ok:#1f7a4d; --ok-soft:#e6f4ec; --warn:#b06f00;
+    --card:#ffffff; --ok:#1f7a4d; --ok-soft:#e6f4ec; --warn:#8c5800;
     --warn-soft:#fff4e0; --danger:#c0392b; --danger-soft:#fdecea;
     --info:#1f5f9e; --info-soft:#e8f1fb; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
     --r:14px; --r-sm:10px;
@@ -171,10 +171,10 @@
   .scr-tools{position:absolute;bottom:14px;inset-inline-start:16px;z-index:15;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
   .scr-lang{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:20px;padding:6px 16px;font-weight:700;font-size:14px;cursor:pointer}
   .scr-lang:hover{background:rgba(255,255,255,.28)}
-  .scr-theme{display:flex;gap:7px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:5px 12px}
-  .sw{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.75);cursor:pointer;padding:0}
+  .scr-theme{display:flex;gap:9px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);border-radius:24px;padding:6px 14px}
+  .sw{width:36px;height:36px;border-radius:50%;border:3px solid rgba(255,255,255,.75);cursor:pointer;padding:0}
   .sw.sel{box-shadow:0 0 0 3px #fff}
-  .sw-custom{width:26px;height:26px;border:none;background:none;cursor:pointer;padding:0}
+  .sw-custom{width:36px;height:36px;border:none;background:none;cursor:pointer;padding:0}
   .day-chip.now{color:var(--scr-deep,#800f2f)}
   .wave-x{animation:waveMove 4.5s linear infinite}
   @keyframes waveMove{from{transform:translateX(0)}to{transform:translateX(80px)}}
@@ -246,7 +246,7 @@
   .screen.skin-neonblue .scr-qr .cap,.screen.skin-goldglass .scr-qr .cap{color:#fff}
   .screen.skin-neonblue .scr-qr::after,.screen.skin-goldglass .scr-qr::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);width:46%;height:10px;background:#1c2f45;clip-path:polygon(12% 0,88% 0,100% 100%,0 100%);border-radius:0 0 4px 4px}
   .screen.skin-goldglass{background:var(--sk-bg,radial-gradient(1400px 800px at 70% -10%,#f3ebd4 0%,#c9a23a 45%,#33290e 100%));color:#fff}
-  .screen.skin-goldglass .scr-title p{color:rgba(255,255,255,.9)}
+  .screen.skin-goldglass .scr-title p{color:rgba(255,255,255,.9);text-shadow:0 1px 3px rgba(0,0,0,.8),0 0 2px rgba(0,0,0,.8)}
   .screen.skin-goldglass .scr-clock{background:rgba(255,255,255,.75);border:1px solid rgba(184,144,46,.6);color:#8a6d1d;text-shadow:none}
   .screen.skin-goldglass .scr-timebar{background:rgba(0,0,0,.25)}
   .screen.skin-goldglass .scr-timebar-fill{background:var(--sk-bar,linear-gradient(90deg,#d4af37,#f5d67d))}
@@ -254,7 +254,7 @@
   .screen.skin-goldglass .scr-lang{color:#16213a}
   .screen.skin-goldglass .scr-credit{display:inline-block;background:rgba(255,255,255,.65);border:1px solid rgba(184,144,46,.5);border-radius:20px;padding:5px 18px;margin:.6vh auto 0}
   .screen.skin-goldglass .scr-credit{text-shadow:none;color:#16213a}
-  .screen.skin-goldglass .scr-title h1,.screen.skin-goldglass .bag-side .pct,.screen.skin-goldglass .bag-side .of{color:#fff;text-shadow:0 2px 14px rgba(60,45,10,.6)}
+  .screen.skin-goldglass .scr-title h1,.screen.skin-goldglass .bag-side .pct,.screen.skin-goldglass .bag-side .of{color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.85),0 2px 14px rgba(60,45,10,.6)}
   .screen.skin-goldglass .bag-side .pct{color:#8a6d1d}
   /* موجات خلفية زخرفية خفيفة تحاكي الصورتين المرجعيتين */
   .screen.skin-neonblue::before,.screen.skin-goldglass::before{
@@ -314,18 +314,20 @@
   /* الأزرق: العدّاد سماوي متوهج مثل المرجع */
   .screen.skin-neonblue .type-tile .tc{color:#7fe9ff;text-shadow:0 0 12px rgba(72,219,255,.8)}
   .screen.skin-neonblue .tile-in{background:var(--sk-tile,linear-gradient(145deg,#eafdff 0%,#7fe0f5 30%,#1f8fb8 62%,#0a3247 100%));filter:drop-shadow(0 0 12px rgba(72,219,255,.5))}
-  .screen.skin-neonblue .tile-in::before{inset:3px;background:linear-gradient(145deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,0) 40%,rgba(0,10,20,.3) 100%)}
-  .screen.skin-goldglass .tile-in::before{inset:4px;background:linear-gradient(150deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,0) 40%,rgba(110,80,20,.16) 100%)}
+  /* أرضية داكنة/فاتحة شبه صلبة خلف نص المربّع دائماً — بلا هذا يفقد النص تباينه الكافي عند طرف التدرّج الفاتح */
+  .screen.skin-neonblue .tile-in::before{inset:3px;background:linear-gradient(145deg,rgba(10,32,42,.7) 0%,rgba(6,20,28,.82) 45%,rgba(4,14,20,.88) 100%)}
+  .screen.skin-goldglass .tile-in::before{inset:4px;background:linear-gradient(150deg,rgba(255,255,255,.8) 0%,rgba(255,252,244,.62) 45%,rgba(255,250,240,.68) 100%)}
   /* شارات الأيام بألوان المرجع */
   .screen.skin-goldglass .day-chip{background:var(--sk-chip,linear-gradient(140deg,#f0f0ee,#c8cdd4 30%,#f5d67d 65%,#b8902e))}
-  .screen.skin-goldglass .day-in{background:linear-gradient(140deg,rgba(255,255,255,.6) 0%,rgba(255,255,255,.15) 50%,rgba(120,90,20,.14) 100%);color:#16213a}
+  .screen.skin-goldglass .day-in{background:linear-gradient(140deg,rgba(255,255,255,.85) 0%,rgba(255,252,242,.68) 50%,rgba(255,248,232,.72) 100%);color:#16213a}
   .screen.skin-goldglass .day-chip.now .day-in{background:var(--sk-chip-now,linear-gradient(170deg,#fff,#f3e3b6));color:#16213a}
   .screen.skin-neonblue .day-chip{background:var(--sk-chip,linear-gradient(155deg,#d8f7ff 0%,#4fc7e8 45%,#0d4a5e 100%))}
-  .screen.skin-neonblue .day-in{background:linear-gradient(155deg,rgba(255,255,255,.25) 0%,rgba(255,255,255,0) 40%,rgba(0,10,18,.32) 100%)}
+  .screen.skin-neonblue .day-in{background:linear-gradient(155deg,rgba(10,32,42,.68) 0%,rgba(6,20,28,.8) 45%,rgba(4,14,20,.86) 100%)}
   /* لون الخط المستقل (--sk-font): عند اختياره يسري على كل نصوص الهويتين */
   .screen.skin-neonblue{color:var(--sk-font,#eaffff)}
   .screen.skin-goldglass{color:var(--sk-font,#fff)}
-  .screen.skin-neonblue .scr-title h1{color:var(--sk-font,#eaffff)}
+  .screen.skin-neonblue .scr-title h1{color:var(--sk-font,#eaffff);text-shadow:0 1px 3px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.85),0 2px 14px rgba(0,10,20,.55)}
+  .screen.skin-neonblue .scr-title p,.screen.skin-goldglass .scr-title p{text-shadow:0 1px 3px rgba(0,0,0,.8),0 0 2px rgba(0,0,0,.8)}
   .screen.skin-neonblue .type-tile .tl,.screen.skin-neonblue .type-tile .ts{color:var(--sk-font,#eaffff)}
   .screen.skin-neonblue .type-tile .tc,.screen.skin-neonblue .bag-side .pct{color:var(--sk-font,#ffcf4d)}
   .screen.skin-neonblue .scr-clock b,.screen.skin-neonblue .scr-clock i{color:var(--sk-font,var(--sk-accent,#8be9ff))}
@@ -351,7 +353,7 @@
     .bag-svg{height:32vh}
     .scr-types{grid-template-columns:repeat(4,1fr);width:100%}
     .scr-foot{flex-direction:column}
-    .scr-qr{display:none}
+    .scr-qr{padding:6px 6px 4px}
   }
 
   .toast{position:fixed;bottom:18px;inset-inline-start:50%;transform:translateX(50%);background:var(--ink);color:#fff;border-radius:12px;padding:10px 18px;font-size:14px;font-weight:600;z-index:80;display:none}
@@ -362,8 +364,8 @@
 </head>
 <body>
 <div id="view"><div class="center-load">جارِ التحميل…</div></div>
-<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal" id="modal-box"></div></div>
-<div class="toast" id="toast"></div>
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal" id="modal-box" role="dialog" aria-modal="true" tabindex="-1"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 "use strict";
@@ -377,6 +379,38 @@ const ORD=["الأول","الثاني","الثالث","الرابع","الخام
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function toast(m,cls){const t=$("#toast");t.textContent=m;t.className="toast"+(cls?" "+cls:"");t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",3200);}
+/* يبرز الحقول الناقصة بحدّ أحمر وينقل التركيز لأولها — بدل الاكتفاء برسالة toast عامة */
+function markMissing(pairs){
+  let firstBad=null;
+  pairs.forEach(([id,bad])=>{
+    const el=$("#"+id);if(!el)return;
+    if(bad){
+      el.style.borderColor="var(--danger)";el.style.boxShadow="0 0 0 3px var(--danger-soft)";
+      if(!firstBad)firstBad=el;
+      const clear=()=>{el.style.borderColor="";el.style.boxShadow="";el.removeEventListener("input",clear);el.removeEventListener("change",clear);};
+      el.addEventListener("input",clear);el.addEventListener("change",clear);
+    }else{el.style.borderColor="";el.style.boxShadow="";}
+  });
+  if(firstBad)firstBad.focus();
+}
+/* صياغة موحّدة لانقطاع الاتصال — بدل عبارات متفرقة لنفس الحالة عبر صفحات التطبيق */
+const NET_ERR="لا يوجد اتصال بالإنترنت — تحقّق من الشبكة وأعد المحاولة";
+/* ترجمة أكواد أخطاء Firestore الشائعة لرسالة عربية مفهومة؛ الكود التقني يبقى في console فقط لأغراض الدعم الفني */
+function friendlyErr(e){
+  const code=(e&&e.code)||"";
+  const map={
+    "permission-denied":"تعذّر الحفظ — لا صلاحية لتنفيذ هذا الإجراء",
+    "unavailable":"تعذّر الحفظ — الاتصال غير مستقر، حاول مرة أخرى بعد قليل",
+    "deadline-exceeded":"تعذّر الحفظ — استغرق الاتصال وقتاً طويلاً، أعد المحاولة",
+    "resource-exhausted":"تعذّر الحفظ — تجاوزت الحملة الحد المسموح من البيانات",
+    "unauthenticated":"تعذّر الحفظ — انتهت الجلسة، أعد تحميل الصفحة",
+    "not-found":"تعذّر الحفظ — الحملة لم تعد موجودة",
+    "cancelled":"تعذّر الحفظ — أُلغيت العملية، أعد المحاولة"
+  };
+  if(map[code])return map[code];
+  console.error("Firestore error:",code,e&&e.message);
+  return "تعذّر الحفظ — حدث خطأ غير متوقع، حاول مرة أخرى بعد قليل";
+}
 function dayOrd(n){return "اليوم "+(ORD[n-1]||("رقم "+n));}
 function dkey(d){return "d"+d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");}
 function dkeyOf(startISO,i){const d=new Date(startISO+"T00:00:00");d.setDate(d.getDate()+i);return dkey(d);}
@@ -457,10 +491,11 @@ function route(){
   clearPage();
   const mb=$("#modal-bg");if(mb)mb.classList.remove("open");
   document.documentElement.style.overflow="";document.body.style.overflow=""; // شاشة العرض تعيد تفعيله لمنع أي تمرير
+  document.documentElement.lang="ar"; // شاشة العرض تضبطها بنفسها حسب scrLang
   const h=location.hash||"#/";
   let m;
   if((m=h.match(/^#\/d\/([\w-]+)/)))return renderDonor(m[1]);
-  if((m=h.match(/^#\/s\/([\w-]+)/)))return renderScreen(m[1]);
+  if((m=h.match(/^#\/s\/([\w-]+)/))){document.documentElement.lang=scrLang;return renderScreen(m[1]);}
   if(h.startsWith("#/stats"))return renderStats();
   return renderAdmin();
 }
@@ -490,34 +525,37 @@ async function renderAdmin(){
     </div>
     <div class="panel"><div class="panel-h"><h3>➕ حملة جديدة</h3><div class="hint">كل الحقول تُحفظ وتتزامن بين الأجهزة</div></div>
       <div class="panel-b"><div class="form-grid">
-        <div><label class="req">اسم الحملة</label><input id="f-name" list="dl-names" placeholder="مثال: حملة عطاء"><datalist id="dl-names"></datalist></div>
-        <div><label class="req">المدينة</label><input id="f-city" list="dl-cities" placeholder="الدمام"><datalist id="dl-cities"></datalist></div>
-        <div><label class="req">تاريخ البداية</label><input id="f-start" type="date" onclick="try{this.showPicker()}catch(e){}"></div>
-        <div><label class="req">مدة الحملة (أيام)</label><input id="f-days" type="number" min="1" max="14" value="1"></div>
-        <div><label class="req">وقت البداية</label><select id="f-time-from"></select></div>
-        <div><label class="req">وقت النهاية</label><select id="f-time-to"></select></div>
-        <div><label class="req">العدد المتوقع (الهدف)</label><input id="f-goal" type="number" min="1" placeholder="200"></div>
-        <div><label>الجهة المنظمة (التمبلت)</label><input id="f-org" placeholder="اسم الجهة يظهر للمتبرع"></div>
-        <div><label>شعار 1 — يمين أعلى الشاشة (PNG)</label><input id="f-logo1" type="file" accept="image/png,image/*"></div>
-        <div><label>شعار 2 — يسار أعلى الشاشة (PNG)</label><input id="f-logo2" type="file" accept="image/png,image/*"></div>
-        <div><label>شعار 3 — منتصف أعلى الشاشة (PNG)</label><input id="f-logo3" type="file" accept="image/png,image/*"></div>
-        <div class="full"><label>شعارات الرعاة — تظهر أسفل شاشة العرض (PNG)</label>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
-            <div><label style="font-size:12px">راعي 1</label><input id="f-sp1" type="file" accept="image/png,image/*"></div>
-            <div><label style="font-size:12px">راعي 2</label><input id="f-sp2" type="file" accept="image/png,image/*"></div>
-            <div><label style="font-size:12px">راعي 3</label><input id="f-sp3" type="file" accept="image/png,image/*"></div>
-            <div><label style="font-size:12px">راعي 4</label><input id="f-sp4" type="file" accept="image/png,image/*"></div>
-            <div><label style="font-size:12px">راعي 5</label><input id="f-sp5" type="file" accept="image/png,image/*"></div>
-            <div><label style="font-size:12px">راعي 6</label><input id="f-sp6" type="file" accept="image/png,image/*"></div>
+        <div><label class="req" for="f-name">اسم الحملة</label><input id="f-name" list="dl-names" placeholder="مثال: حملة عطاء"><datalist id="dl-names"></datalist></div>
+        <div><label class="req" for="f-city">المدينة</label><input id="f-city" list="dl-cities" placeholder="الدمام"><datalist id="dl-cities"></datalist></div>
+        <div><label class="req" for="f-start">تاريخ البداية</label><input id="f-start" type="date" onclick="try{this.showPicker()}catch(e){}"></div>
+        <div><label class="req" for="f-days">مدة الحملة (أيام)</label><input id="f-days" type="number" min="1" max="14" value="1"></div>
+        <div><label class="req" for="f-time-from">وقت البداية</label><select id="f-time-from"></select></div>
+        <div><label class="req" for="f-time-to">وقت النهاية</label><select id="f-time-to"></select></div>
+        <div><label class="req" for="f-goal">العدد المتوقع (الهدف)</label><input id="f-goal" type="number" min="1" placeholder="200"></div>
+        <div><label for="f-org">الجهة المنظمة (التمبلت)</label><input id="f-org" placeholder="اسم الجهة يظهر للمتبرع"></div>
+        <div><label for="f-logo1">شعار 1 — يمين أعلى الشاشة (PNG)</label><input id="f-logo1" type="file" accept="image/png,image/*"></div>
+        <div><label for="f-logo1-name">اسم الجهة لشعار 1 (لقارئ الشاشة)</label><input id="f-logo1-name" placeholder="مثال: بنك الدم دمام"></div>
+        <div><label for="f-logo2">شعار 2 — يسار أعلى الشاشة (PNG)</label><input id="f-logo2" type="file" accept="image/png,image/*"></div>
+        <div><label for="f-logo2-name">اسم الجهة لشعار 2 (لقارئ الشاشة)</label><input id="f-logo2-name" placeholder="اسم الجهة"></div>
+        <div><label for="f-logo3">شعار 3 — منتصف أعلى الشاشة (PNG)</label><input id="f-logo3" type="file" accept="image/png,image/*"></div>
+        <div><label for="f-logo3-name">اسم الجهة لشعار 3 (لقارئ الشاشة)</label><input id="f-logo3-name" placeholder="اسم الجهة"></div>
+        <div class="full"><label id="f-sp-label">شعارات الرعاة — تظهر أسفل شاشة العرض (PNG)، مع اسم كل راعٍ لقارئ الشاشة</label>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px" role="group" aria-labelledby="f-sp-label">
+            <div><label style="font-size:12px" for="f-sp1">راعي 1</label><input id="f-sp1" type="file" accept="image/png,image/*"><input id="f-sp1-name" placeholder="اسم الراعي 1" style="margin-top:6px"></div>
+            <div><label style="font-size:12px" for="f-sp2">راعي 2</label><input id="f-sp2" type="file" accept="image/png,image/*"><input id="f-sp2-name" placeholder="اسم الراعي 2" style="margin-top:6px"></div>
+            <div><label style="font-size:12px" for="f-sp3">راعي 3</label><input id="f-sp3" type="file" accept="image/png,image/*"><input id="f-sp3-name" placeholder="اسم الراعي 3" style="margin-top:6px"></div>
+            <div><label style="font-size:12px" for="f-sp4">راعي 4</label><input id="f-sp4" type="file" accept="image/png,image/*"><input id="f-sp4-name" placeholder="اسم الراعي 4" style="margin-top:6px"></div>
+            <div><label style="font-size:12px" for="f-sp5">راعي 5</label><input id="f-sp5" type="file" accept="image/png,image/*"><input id="f-sp5-name" placeholder="اسم الراعي 5" style="margin-top:6px"></div>
+            <div><label style="font-size:12px" for="f-sp6">راعي 6</label><input id="f-sp6" type="file" accept="image/png,image/*"><input id="f-sp6-name" placeholder="اسم الراعي 6" style="margin-top:6px"></div>
           </div></div>
         <div class="full" style="border:1px dashed var(--line);border-radius:10px;padding:12px">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:var(--ink)">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:var(--ink)" for="f-cert-on">
             <input type="checkbox" id="f-cert-on" style="width:18px;height:18px" onchange="document.getElementById('cert-opts').style.display=this.checked?'grid':'none'">
             🏅 شهادة شكر لكل المسجلين في التبرع (اختياري)
           </label>
           <div id="cert-opts" style="display:none;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px">
-            <div><label class="req">التصميم العربي — أساسي (PDF/TIF/صورة)</label><input id="f-cert" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
-            <div><label>التصميم الإنجليزي — إضافي (PDF/TIF/صورة)</label><input id="f-cert-en" type="file" accept="application/pdf,image/*,.tif,.tiff"><img class="logo-prev" id="f-cert-en-prev" style="margin-top:8px;width:120px;height:auto"></div>
+            <div><label class="req" for="f-cert">التصميم العربي — أساسي (PDF/TIF/صورة)</label><input id="f-cert" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
+            <div><label for="f-cert-en">التصميم الإنجليزي — إضافي (PDF/TIF/صورة)</label><input id="f-cert-en" type="file" accept="application/pdf,image/*,.tif,.tiff"><img class="logo-prev" id="f-cert-en-prev" style="margin-top:8px;width:120px;height:auto"></div>
             <div class="full"><label>موضع اسم المتبرع — اضغط على التصميم في المكان الذي تريد الاسم فيه</label>
               <div class="cert-pick" id="f-cert-pick"><img id="f-cert-prev" alt=""><div class="marker" id="f-cert-marker">📍 الاسم هنا</div></div>
             </div>
@@ -545,8 +583,8 @@ async function renderAdmin(){
     unsub=cQuery().onSnapshot(snap=>{
       const rows=[];snap.forEach(d=>rows.push({id:d.id,...d.data()}));
       renderList(sortRows(rows));
-    },err=>{$("#list-box").innerHTML=`<div class="empty">تعذر الاتصال بقاعدة البيانات (${esc(err.code||"")})</div>`;});
-  }catch(e){$("#list-box").innerHTML=`<div class="empty">لا يوجد اتصال بالإنترنت — أعد المحاولة</div>`;}
+    },err=>{console.error("Firestore error:",err.code);$("#list-box").innerHTML=`<div class="empty">${NET_ERR}</div>`;});
+  }catch(e){$("#list-box").innerHTML=`<div class="empty">${NET_ERR}</div>`;}
 }
 function timeOptions(sel,defH){
   const out=[];
@@ -663,12 +701,18 @@ async function createCampaign(){
         days=parseInt($("#f-days").value||"0"),tFrom=$("#f-time-from").value,tTo=$("#f-time-to").value,
         times="من "+tFrom+" إلى "+tTo,
         goal=parseInt($("#f-goal").value||"0"),org=$("#f-org").value.trim();
-  if(!name||!city||!start||!days||days<1||!goal||goal<1)return toast("أكمل كل الحقول المطلوبة","err");
+  if(!name||!city||!start||!days||days<1||!goal||goal<1){
+    markMissing([["f-name",!name],["f-city",!city],["f-start",!start],["f-days",!days||days<1],["f-goal",!goal||goal<1]]);
+    return toast("أكمل الحقول المميّزة بالأحمر","err");
+  }
   const certOn=$("#f-cert-on").checked;
   if(certOn&&!certData)return toast("فعّلت الشهادة — أرفق تصميمها (PDF أو صورة)","err");
+  const logoNames=[1,2,3].map(i=>$("#f-logo"+i+"-name").value.trim()||null);
+  const spPairs=sponsorData.map((d,i)=>d?{img:d,name:$("#f-sp"+(i+1)+"-name").value.trim()||null}:null).filter(Boolean);
   const doc={
     name,city,startDate:start,days,times,timeFrom:tFrom,timeTo:tTo,goal,org:org||null,
-    logos:logoData.slice(),sponsors:sponsorData.filter(Boolean),
+    logos:logoData.slice(),logoNames,
+    sponsors:spPairs.map(s=>s.img),sponsorNames:spPairs.map(s=>s.name),
     cert:certOn?{img:certData,imgEn:certDataEn||null,nx:certNX,ny:certNY}:null,
     status:"active",total:0,phraseIdx:0,daily:{}
   };
@@ -682,13 +726,15 @@ async function createCampaign(){
     await cDoc(id).set(doc);
     db.doc(META_DOC).set({names:firebase.firestore.FieldValue.arrayUnion(name),
                           cities:firebase.firestore.FieldValue.arrayUnion(city)},{merge:true}).catch(()=>{});
-    ["f-name","f-city","f-goal","f-org","f-logo1","f-logo2","f-logo3","f-sp1","f-sp2","f-sp3","f-sp4","f-sp5","f-sp6","f-cert","f-cert-en"].forEach(i=>$("#"+i).value="");
+    ["f-name","f-city","f-goal","f-org","f-logo1","f-logo2","f-logo3","f-logo1-name","f-logo2-name","f-logo3-name",
+     "f-sp1","f-sp2","f-sp3","f-sp4","f-sp5","f-sp6","f-sp1-name","f-sp2-name","f-sp3-name","f-sp4-name","f-sp5-name","f-sp6-name",
+     "f-cert","f-cert-en"].forEach(i=>$("#"+i).value="");
     logoData=[null,null,null];sponsorData=[null,null,null,null,null,null];certData=null;certDataEn=null;
     $("#f-cert-on").checked=false;$("#cert-opts").style.display="none";$("#f-cert-pick").style.display="none";$("#f-cert-en-prev").style.display="none";
     certNX=.5;certNY=.55;
     toast("تم إنشاء الحملة ✓");
     showLinks(id,name);
-  }catch(e){toast("تعذر الحفظ: "+(e.code||e.message),"err");}
+  }catch(e){toast(friendlyErr(e),"err");}
   $("#f-save").disabled=false;
 }
 function renderList(rows){
@@ -727,9 +773,19 @@ async function archiveCampaign(id){
   toast("تمت الأرشفة ✓");
 }
 async function unarchiveCampaign(id){await cDoc(id).update({status:"active"});toast("أعيد تفعيل الحملة ✓");}
-async function deleteCampaign(id){
-  if(!confirm("حذف الحملة نهائياً مع كل أرقامها؟ لا يمكن التراجع."))return;
-  if(!confirm("تأكيد أخير: حذف نهائي؟"))return;
+function deleteCampaign(id){
+  const r=(window._rows||window._srows||[]).find(x=>x.id===id);
+  const box=$("#modal-box");box.style.maxWidth="440px";
+  box.innerHTML=`<h3>حذف «${esc((r&&r.name)||"الحملة")}» نهائياً؟</h3>
+    <p style="color:var(--muted);font-size:14px;margin:0 0 4px">سيُحذف سجل كل المتبرعين المرتبط بهذه الحملة (${(r&&r.total)||0} متبرعاً) ولا يمكن التراجع عن هذا الإجراء.</p>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:18px;flex-wrap:wrap">
+      <button class="btn danger" onclick="_deleteCampaignConfirmed('${id}')">حذف الحملة نهائياً</button>
+      <button class="btn ghost" onclick="closeModal()">إبقاء الحملة</button>
+    </div>`;
+  openModal();
+}
+async function _deleteCampaignConfirmed(id){
+  closeModal();
   await cDoc(id).delete();toast("حُذفت الحملة");
 }
 async function showLinks(id,name){
@@ -745,10 +801,24 @@ async function showLinks(id,name){
       <button class="btn sm soft" onclick="navigator.clipboard.writeText('${sURL}');toast('نُسخ رابط الشاشة ✓')">نسخ رابط الشاشة</button>
       <button class="btn sm ghost" onclick="closeModal()">إغلاق</button>
     </div>`;
-  $("#modal-bg").classList.add("open");
+  openModal();
   drawQR($("#qr-modal"),dURL,190);
 }
-function closeModal(){$("#modal-bg").classList.remove("open");}
+let _modalLastFocus=null;
+function _modalEsc(e){if(e.key==="Escape")closeModal();}
+/* يفتح النافذة المنبثقة مع نقل التركيز إليها وإغلاقها بمفتاح Esc — يستدعى بعد تعبئة modal-box */
+function openModal(){
+  _modalLastFocus=document.activeElement;
+  $("#modal-bg").classList.add("open");
+  $("#modal-box").focus();
+  document.addEventListener("keydown",_modalEsc);
+}
+function closeModal(){
+  $("#modal-bg").classList.remove("open");
+  document.removeEventListener("keydown",_modalEsc);
+  if(_modalLastFocus&&_modalLastFocus.focus){try{_modalLastFocus.focus();}catch(e){}}
+  _modalLastFocus=null;
+}
 
 /* ===== تعديل حملة منشورة: كل الخانات متاحة (الاسم، المدينة، التاريخ، الأوقات، الجهة، الشعارات، الرعاة، الشهادة، الهدف، الأيام) ===== */
 let editSp=[],editLogos=[],editCertAr=null,editCertEn=null,editNX=.5,editNY=.55,editTimesTouched=false;
@@ -757,30 +827,33 @@ function showEdit(id){
   editSp=[null,null,null,null,null,null];editLogos=[null,null,null];editCertAr=null;editCertEn=null;editTimesTouched=false;
   editNX=(r.cert&&r.cert.nx!=null)?r.cert.nx:.5;
   editNY=(r.cert&&r.cert.ny!=null)?r.cert.ny:({top:.38,mid:.55,low:.72}[(r.cert||{}).pos]||.55);
-  const sp=r.sponsors||[],lg=r.logos||[];
+  const sp=r.sponsors||[],lg=r.logos||[],lgn=r.logoNames||[],spn=r.sponsorNames||[];
   const box=$("#modal-box");box.style.maxWidth="680px";
   box.innerHTML=`<h3>✏️ تعديل: ${esc(r.name)}</h3>
     <div class="form-grid" style="text-align:start;margin-top:12px;max-height:65vh;overflow:auto;padding:2px">
-      <div><label>اسم الحملة</label><input id="e-name" value="${esc(r.name)}"></div>
-      <div><label>المدينة</label><input id="e-city" value="${esc(r.city)}"></div>
-      <div><label>تاريخ البداية</label><input id="e-start" type="date" value="${esc(r.startDate)}" onclick="try{this.showPicker()}catch(e){}"></div>
-      <div><label>مدة الحملة (أيام)</label><input id="e-days" type="number" min="1" max="14" value="${r.days}"></div>
-      <div><label>وقت البداية</label><select id="e-time-from"></select></div>
-      <div><label>وقت النهاية</label><select id="e-time-to"></select></div>
-      <div><label>العدد المتوقع (الهدف)</label><input id="e-goal" type="number" min="1" value="${r.goal}"></div>
-      <div><label>الجهة المنظمة</label><input id="e-org" value="${esc(r.org||"")}"></div>
+      <div><label for="e-name">اسم الحملة</label><input id="e-name" value="${esc(r.name)}"></div>
+      <div><label for="e-city">المدينة</label><input id="e-city" value="${esc(r.city)}"></div>
+      <div><label for="e-start">تاريخ البداية</label><input id="e-start" type="date" value="${esc(r.startDate)}" onclick="try{this.showPicker()}catch(e){}"></div>
+      <div><label for="e-days">مدة الحملة (أيام)</label><input id="e-days" type="number" min="1" max="14" value="${r.days}"></div>
+      <div><label for="e-time-from">وقت البداية</label><select id="e-time-from"></select></div>
+      <div><label for="e-time-to">وقت النهاية</label><select id="e-time-to"></select></div>
+      <div><label for="e-goal">العدد المتوقع (الهدف)</label><input id="e-goal" type="number" min="1" value="${r.goal}"></div>
+      <div><label for="e-org">الجهة المنظمة</label><input id="e-org" value="${esc(r.org||"")}"></div>
       <div class="full" style="border-top:1px solid var(--line);padding-top:10px;font-size:14px"><b>🏛️ شعارات المنظمين</b> <span class="tag info">الرفع في خانة يستبدلها</span></div>
-      <div><label>شعار 1 — يمين ${lg[0]?"✓":""}</label><input id="e-logo1" type="file" accept="image/png,image/*"></div>
-      <div><label>شعار 2 — يسار ${lg[1]?"✓":""}</label><input id="e-logo2" type="file" accept="image/png,image/*"></div>
-      <div><label>شعار 3 — وسط ${lg[2]?"✓":""}</label><input id="e-logo3" type="file" accept="image/png,image/*"></div>
+      <div><label for="e-logo1">شعار 1 — يمين ${lg[0]?"✓":""}</label><input id="e-logo1" type="file" accept="image/png,image/*"></div>
+      <div><label for="e-logo1-name">اسم الجهة 1 (لقارئ الشاشة)</label><input id="e-logo1-name" value="${esc(lgn[0]||"")}"></div>
+      <div><label for="e-logo2">شعار 2 — يسار ${lg[1]?"✓":""}</label><input id="e-logo2" type="file" accept="image/png,image/*"></div>
+      <div><label for="e-logo2-name">اسم الجهة 2 (لقارئ الشاشة)</label><input id="e-logo2-name" value="${esc(lgn[1]||"")}"></div>
+      <div><label for="e-logo3">شعار 3 — وسط ${lg[2]?"✓":""}</label><input id="e-logo3" type="file" accept="image/png,image/*"></div>
+      <div><label for="e-logo3-name">اسم الجهة 3 (لقارئ الشاشة)</label><input id="e-logo3-name" value="${esc(lgn[2]||"")}"></div>
       <div class="full" style="border-top:1px solid var(--line);padding-top:10px;font-size:14px"><b>🏅 شهادة الشكر</b> ${r.cert?`<span class="tag ok">مفعّلة — الرفع يستبدل التصميم</span>`:`<span class="tag mut">غير مفعّلة — ارفع التصميم العربي لتفعيلها</span>`}</div>
-      <div><label>التصميم العربي ${r.cert?"✓":""}</label><input id="e-cert" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
-      <div><label>التصميم الإنجليزي ${(r.cert&&r.cert.imgEn)?"✓":""}</label><input id="e-cert-en" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
+      <div><label for="e-cert">التصميم العربي ${r.cert?"✓":""}</label><input id="e-cert" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
+      <div><label for="e-cert-en">التصميم الإنجليزي ${(r.cert&&r.cert.imgEn)?"✓":""}</label><input id="e-cert-en" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
       <div class="full"><label>موضع اسم المتبرع — اضغط على التصميم في المكان الذي تريده</label>
         <div class="cert-pick" id="e-cert-pick"><img id="e-cert-prev" alt=""><div class="marker" id="e-cert-marker">📍 الاسم هنا</div></div>
       </div>
       <div class="full" style="border-top:1px solid var(--line);padding-top:10px;font-size:14px"><b>🤝 الرعاة</b> <span class="tag info">${sp.filter(Boolean).length} حالياً — الرفع في خانة يستبدلها</span></div>
-      ${[0,1,2,3,4,5].map(i=>`<div><label>راعي ${i+1} ${sp[i]?"✓":""}</label><input id="e-sp${i}" type="file" accept="image/png,image/*"></div>`).join("")}
+      ${[0,1,2,3,4,5].map(i=>`<div><label for="e-sp${i}">راعي ${i+1} ${sp[i]?"✓":""}</label><input id="e-sp${i}" type="file" accept="image/png,image/*"><input id="e-sp${i}-name" placeholder="اسم الراعي" value="${esc(spn[i]||"")}" style="margin-top:6px"></div>`).join("")}
     </div>
     <div style="display:flex;gap:8px;justify-content:center;margin-top:16px">
       <button class="btn" id="e-save" onclick="saveEdit('${id}')">حفظ التعديلات</button>
@@ -806,13 +879,16 @@ function showEdit(id){
   [0,1,2,3,4,5].forEach(i=>$("#e-sp"+i).addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;
     try{editSp[i]=await compressLogo(f,220,70000);toast("جُهّز شعار الراعي "+(i+1)+" ✓");}
     catch(e){ev.target.value="";toast("الشعار كبير جداً","err");}}));
-  $("#modal-bg").classList.add("open");
+  openModal();
 }
 async function saveEdit(id){
   const r=(window._rows||window._srows||[]).find(x=>x.id===id);if(!r)return;
   const name=$("#e-name").value.trim(),city=$("#e-city").value.trim(),start=$("#e-start").value,
         goal=parseInt($("#e-goal").value||"0"),days=parseInt($("#e-days").value||"0"),org=$("#e-org").value.trim();
-  if(!name||!city||!start||!goal||goal<1||!days||days<1)return toast("أكمل الحقول الأساسية بقيم صحيحة","err");
+  if(!name||!city||!start||!goal||goal<1||!days||days<1){
+    markMissing([["e-name",!name],["e-city",!city],["e-start",!start],["e-goal",!goal||goal<1],["e-days",!days||days<1]]);
+    return toast("أكمل الحقول المميّزة بالأحمر بقيم صحيحة","err");
+  }
   const upd={name,city,startDate:start,goal,days,org:org||null};
   if(r.timeFrom||editTimesTouched){ // لا نغيّر أوقات الحملات القديمة (نص حر) إلا إذا لمسها المستخدم
     const tF=$("#e-time-from").value,tT=$("#e-time-to").value;
@@ -821,9 +897,14 @@ async function saveEdit(id){
   const lg=(r.logos||[null,null,null]).slice(0,3);while(lg.length<3)lg.push(null);
   editLogos.forEach((d,i)=>{if(d)lg[i]=d;});
   upd.logos=lg;
-  const sp=(r.sponsors||[]).slice(0,6);
+  const lgn=(r.logoNames||[null,null,null]).slice(0,3);while(lgn.length<3)lgn.push(null);
+  [1,2,3].forEach((n,i)=>{const v=$("#e-logo"+n+"-name").value.trim();lgn[i]=v||null;});
+  upd.logoNames=lgn;
+  const sp=(r.sponsors||[]).slice(0,6),spn0=(r.sponsorNames||[]).slice(0,6);
   editSp.forEach((d,i)=>{if(d)sp[i]=d;});
-  upd.sponsors=sp.filter(Boolean);
+  const spPairs=sp.map((img,i)=>img?{img,name:($("#e-sp"+i+"-name").value.trim()||spn0[i]||null)}:null).filter(Boolean);
+  upd.sponsors=spPairs.map(s=>s.img);
+  upd.sponsorNames=spPairs.map(s=>s.name);
   let cert=r.cert||null;
   const img=editCertAr||(cert&&cert.img)||null;
   if(editCertEn&&!img)return toast("أضف التصميم العربي أولاً لتفعيل الشهادة","err");
@@ -836,7 +917,7 @@ async function saveEdit(id){
     db.doc(META_DOC).set({names:firebase.firestore.FieldValue.arrayUnion(name),
                           cities:firebase.firestore.FieldValue.arrayUnion(city)},{merge:true}).catch(()=>{});
     toast("حُفظت التعديلات ✓");closeModal();
-  }catch(e){toast("تعذر الحفظ: "+(e.code||e.message),"err");}
+  }catch(e){toast(friendlyErr(e),"err");}
   $("#e-save").disabled=false;
 }
 
@@ -844,13 +925,13 @@ async function saveEdit(id){
 async function renderDonor(id){
   $("#view").innerHTML=`<div class="donor-wrap"><div class="donor-card" id="d-card"><div class="empty">جارِ التحميل…</div></div></div>`;
   let camp=null;
-  try{await ensureFB();}catch(e){$("#d-card").innerHTML=`<div class="empty">تحقق من الاتصال بالإنترنت ثم أعد فتح الرابط</div>`;return;}
+  try{await ensureFB();}catch(e){$("#d-card").innerHTML=`<div class="empty">${NET_ERR}</div>`;return;}
   unsub=cDoc(id).onSnapshot(s=>{
     if(!s.exists){$("#d-card").innerHTML=`<div class="empty">الحملة غير موجودة</div>`;return;}
     const first=!camp;camp=s.data();curCamp=camp;curCampId=id;
     if(first)drawDonorForm(id,camp);
     else{const el=$("#d-live");if(el)el.textContent=camp.total||0;}
-  },()=>{$("#d-card").innerHTML=`<div class="empty">تعذر الاتصال — أعد المحاولة</div>`;});
+  },()=>{$("#d-card").innerHTML=`<div class="empty">${NET_ERR}</div>`;});
 }
 let selBT=null,curCamp=null,curCampId=null;
 function drawDonorForm(id,c){
@@ -863,8 +944,9 @@ function drawDonorForm(id,c){
   }
   selBT=null;
   const dlogo=(c.logos&&(c.logos[2]||c.logos[0]||c.logos[1]))||c.logo;
+  const dlogoAlt=c.org||(c.logoNames&&(c.logoNames[2]||c.logoNames[0]||c.logoNames[1]))||"شعار الجهة المنظمة";
   $("#d-card").innerHTML=`
-    ${dlogo?`<img class="org-logo" src="${dlogo}" alt="">`:`<div class="mark">🩸</div>`}
+    ${dlogo?`<img class="org-logo" src="${dlogo}" alt="${esc(dlogoAlt)}">`:`<div class="mark">🩸</div>`}
     ${c.org?`<div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px">${esc(c.org)}</div>`:""}
     <h1>${esc(c.name)}</h1>
     <p class="sub">${esc(c.city)} · ${esc(c.times||"")}</p>
@@ -907,7 +989,7 @@ async function registerDonation(id){
       ${certBlock}
       <button class="btn soft" style="margin-top:16px;width:100%" onclick="location.reload()">تسجيل متبرع آخر</button>
       <div class="credit">فكرة وإعداد: حسن العاقول</div>`;
-  }catch(e){toast("تعذر التسجيل: "+(e.code||e.message),"err");btn.disabled=false;btn.textContent="🩸 تبرعت بالدم";}
+  }catch(e){toast(friendlyErr(e),"err");btn.disabled=false;btn.textContent="🩸 تبرعت بالدم";}
 }
 
 /* إصدار شهادة الشكر PDF باسم المتبرع فوق التصميم المرفق */
@@ -1043,11 +1125,12 @@ async function saveScrCfg(){
   try{
     await cDoc(window._scrId).update({scrCfg:{skin:scrTheme,tint:scrTint||null,font:scrFont||null}});
     toast("حُفظ شكل الشاشة لهذه الحملة ✓");
-  }catch(e){toast("تعذر الحفظ: "+(e.code||e.message),"err");}
+  }catch(e){toast(friendlyErr(e),"err");}
   if(btn)btn.disabled=false;
 }
 function toggleScrLang(){
   scrLang=scrLang==="ar"?"en":"ar";localStorage.setItem("dc_scr_lang",scrLang);
+  document.documentElement.lang=scrLang; // يطابق لغة النطق التي يستخدمها قارئ الشاشة مع اللغة المعروضة فعلياً
   if(window._scrC&&window._scrId){drawScreen(window._scrId,window._scrC);updateScreen(window._scrC,window._scrC.total||0);}
 }
 async function renderScreen(id){
@@ -1078,7 +1161,7 @@ async function renderScreen(id){
   }catch(e){
     const cached=localStorage.getItem(cacheKey);
     if(cached)build(JSON.parse(cached));
-    else $("#scr").innerHTML=`<div class="center-load" style="color:#fff">تحقق من الاتصال بالإنترنت</div>`;
+    else $("#scr").innerHTML=`<div class="center-load" style="color:#fff">${NET_ERR}</div>`;
   }
   timers.push(setInterval(()=>{ // تبديل العبارة كل 10 دقائق (فحص كل 20 ثانية)
     const el=$("#phrase");if(!el)return;
@@ -1186,12 +1269,14 @@ function bagSVG(){return `
 function drawScreen(id,c){
   const L=SCR_T[scrLang];
   const lgs=c.logos||(c.logo?[c.logo]:[]);
+  const lgn=c.logoNames||[];
   const logoBar=(lgs[0]||lgs[1]||lgs[2])?`<div class="logo-bar">
-      <div class="lg">${lgs[0]?`<img src="${lgs[0]}" alt="">`:""}</div>
-      <div class="lg">${lgs[2]?`<img src="${lgs[2]}" alt="">`:""}</div>
-      <div class="lg">${lgs[1]?`<img src="${lgs[1]}" alt="">`:""}</div>
+      <div class="lg">${lgs[0]?`<img src="${lgs[0]}" alt="${esc(lgn[0]||"")}">`:""}</div>
+      <div class="lg">${lgs[2]?`<img src="${lgs[2]}" alt="${esc(lgn[2]||"")}">`:""}</div>
+      <div class="lg">${lgs[1]?`<img src="${lgs[1]}" alt="${esc(lgn[1]||"")}">`:""}</div>
     </div>`:"";
-  const sponsors=(c.sponsors&&c.sponsors.length)?`<div class="sponsor-bar">${c.sponsors.map(s=>`<img src="${s}" alt="">`).join("")}</div>`:"";
+  const spn=c.sponsorNames||[];
+  const sponsors=(c.sponsors&&c.sponsors.length)?`<div class="sponsor-bar">${c.sponsors.map((s,i)=>`<img src="${s}" alt="${esc(spn[i]||"")}">`).join("")}</div>`:"";
   const tF=scrLang==="en"?timeEn(c.timeFrom):c.timeFrom,tT=scrLang==="en"?timeEn(c.timeTo):c.timeTo;
   const timesLine=c.timeFrom?`<div class="scr-times">
       <div class="scr-time-pill">
@@ -1239,7 +1324,7 @@ function drawScreen(id,c){
       <button class="scr-lang" id="scr-save" onclick="saveScrCfg()">💾 حفظ</button>
     </div>`;
   $("#phrase").dataset.p=phraseFor(c,scrLang);
-  drawQR($("#scr-qr-box"),baseURL()+"#/d/"+id,110);
+  drawQR($("#scr-qr-box"),baseURL()+"#/d/"+id,window.innerWidth<=760?84:110); // على الجوال يصغَّر بدل إخفائه — يبقى المسار الوحيد للتسجيل ظاهراً
   applyTheme();
 }
 function updateScreen(c,prevTotal){
@@ -1314,8 +1399,8 @@ async function renderStats(){
       const sel=$("#st-name"),cur=sel.value;
       sel.innerHTML=`<option value="">كل الحملات</option>`+names.map(n=>`<option ${n===cur?"selected":""}>${esc(n)}</option>`).join("");
       drawStats();
-    },()=>{$("#st-box").innerHTML=`<div class="empty">تعذر الاتصال</div>`;});
-  }catch(e){$("#st-box").innerHTML=`<div class="empty">تحقق من الاتصال بالإنترنت</div>`;}
+    },()=>{$("#st-box").innerHTML=`<div class="empty">${NET_ERR}</div>`;});
+  }catch(e){$("#st-box").innerHTML=`<div class="empty">${NET_ERR}</div>`;}
 }
 function drawStats(){
   let rows=window._srows||[];
@@ -1382,7 +1467,7 @@ function showDays(id){
       <button class="btn sm soft" onclick="exportLogPDF('${id}')">🖨️ السجل الزمني PDF</button>
       <button class="btn sm ghost" onclick="closeModal()">إغلاق</button>
     </div>`;
-  $("#modal-bg").classList.add("open");
+  openModal();
 }
 
 /* ===== السجل الزمني للتسجيلات (وقت كل تبرع وفصيلته لكل يوم) + تصدير Excel وPDF ===== */
@@ -1459,7 +1544,7 @@ function showCertNames(id){
       <button class="btn sm soft" onclick="exportCertPDF('${id}')">🖨️ تصدير PDF</button>
       <button class="btn sm ghost" onclick="closeModal()">إغلاق</button>
     </div>`;
-  $("#modal-bg").classList.add("open");
+  openModal();
 }
 async function exportCertXLSX(id){
   const r=(window._srows||window._rows||[]).find(x=>x.id===id);if(!r)return;
