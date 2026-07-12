@@ -344,6 +344,7 @@ ar:{
  u_role_changed:"تم تغيير الصلاحية ✓", u_deleted:"تم حذف المستخدم", u_pass_changed:"تم تغيير كلمة المرور ✓",
  u_not_authorized:"هذه الصفحة للمدير فقط", u_last_admin:"يجب بقاء مدير واحد على الأقل", u_no_self_delete:"لا يمكنك حذف حسابك الحالي",
  u_new_pass:"كلمة المرور الجديدة", u_reset_for:"تغيير كلمة مرور: {u}", u_del_q:"حذف المستخدم \"{u}\"؟",
+ u_rename:"تغيير اسم المستخدم", u_rename_for:"تغيير اسم المستخدم: {u}", u_new_username:"اسم المستخدم الجديد", u_username_changed:"تم تغيير اسم المستخدم ✓",
  acct_current:"المستخدم الحالي", acct_new_pass:"كلمة مرور جديدة (اتركها فارغة لعدم التغيير)",
  nav_movement2:"حركة المخزون", nav_products:"إدارة المنتجات", nav_import:"استيراد من Excel", nav_activity:"سجل النشاط", side_collapse:"طي/توسيع القائمة",
  products_sub:"تعريف الأصناف وتعديلها وحذفها", p_add:"+ إضافة منتج", p_empty:"لا توجد منتجات بعد", p_catalog:"القائمة المعتمدة", p_catalog_hint:"الأصناف المعتمدة وكمياتها لكل وحدة", p_added:"تمت الإضافة ✓",
@@ -508,6 +509,7 @@ en:{
  u_role_changed:"Role changed ✓", u_deleted:"User deleted", u_pass_changed:"Password changed ✓",
  u_not_authorized:"This page is for admins only", u_last_admin:"At least one admin must remain", u_no_self_delete:"You can't delete your own account",
  u_new_pass:"New password", u_reset_for:"Change password: {u}", u_del_q:"Delete user \"{u}\"?",
+ u_rename:"Change username", u_rename_for:"Change username: {u}", u_new_username:"New username", u_username_changed:"Username changed ✓",
  acct_current:"Current user", acct_new_pass:"New password (leave empty to keep)",
  nav_movement2:"Stock movement", nav_products:"Product management", nav_import:"Import from Excel", nav_activity:"Activity log", side_collapse:"Collapse / expand",
  products_sub:"Define, edit, and delete items", p_add:"+ Add product", p_empty:"No products yet", p_catalog:"Approved list", p_catalog_hint:"Approved items and their per-unit quantities", p_added:"Added ✓",
@@ -1834,6 +1836,7 @@ pages.users=()=>{
     <td><span class="tag ${u.role==="admin"?"ok":"info"}">${t(u.role==="admin"?"role_admin":"role_user")}</span></td>
     <td><div class="row-actions">
       <button class="icon-btn" title="${t(u.role==="admin"?"u_make_user":"u_make_admin")}" onclick="App.setRole('${jsq(u.u)}')">${u.role==="admin"?"⬇️":"⬆️"}</button>
+      <button class="icon-btn" title="${t("u_rename")}" onclick="App.renameUser('${jsq(u.u)}')">✏️</button>
       <button class="icon-btn" title="${t("u_reset")}" onclick="App.resetUserPass('${jsq(u.u)}')">🔑</button>
       <button class="icon-btn danger" title="${t("u_delete")}" onclick="App.delUser('${jsq(u.u)}')">🗑</button>
     </div></td></tr>`).join("")}
@@ -1860,6 +1863,20 @@ function resetUserPass(u){
   modal(t("u_reset_for",{u:u}),`<div class="field"><label>${t("u_new_pass")}</label><input id="rp-pass" type="text"></div>`,
     `<button class="btn" id="rp-save">${t("btn_save")}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
   $("rp-save").onclick=()=>{ const np=$("rp-pass").value; if(!np)return toast(t("u_need"),"err"); usr.p=np; save(); closeModal(); toast(t("u_pass_changed"),"ok"); };
+}
+function renameUser(u){
+  if(!isAdmin())return toast(t("u_not_authorized"),"err");
+  const usr=(DB.settings.users||[]).find(x=>x.u===u); if(!usr)return;
+  modal(t("u_rename_for",{u:u}),`<div class="field"><label>${t("u_new_username")}</label><input id="ru-user" value="${esc(u)}"></div>`,
+    `<button class="btn" id="ru-save">${t("btn_save")}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
+  $("ru-save").onclick=()=>{
+    const nu=$("ru-user").value.trim();
+    if(!nu)return toast(t("u_need"),"err");
+    if(nu!==u&&(DB.settings.users||[]).some(x=>x.u===nu))return toast(t("u_exists"),"err");
+    usr.u=nu;
+    if(u===curUser()&&currentUser){ currentUser.u=nu; sessionStorage.setItem("inv_user",nu); }
+    save(); closeModal(); toast(t("u_username_changed"),"ok"); go("users");
+  };
 }
 function delUser(u){
   if(!isAdmin())return toast(t("u_not_authorized"),"err");
@@ -2286,8 +2303,8 @@ const GUIDE=[
   ar:{t:"الإعدادات والمزامنة بين الأجهزة",s:["من «الإعدادات» غيّر كلمة مرورك وأيام التنبيه قبل الانتهاء، وأضف مختبرات خاصة تظهر في الاستقبال والصرف.","أضف «الموردين المعتمدين» (اسم/تواصل/تسجيل SFDA/الحالة) — يظهرون في حقل المورّد بالاستقبال.","للمدير: النسخ الاحتياطي والاستعادة، و«تصفير المخزون» (يحتفظ بالأصناف والقوائم ويصفّر الكميات، مع تنزيل نسخة احتياطية أولاً).","لتفعيل المزامنة بين الأجهزة: أنشئ مشروع Firebase وفعّل Firestore، والصق إعداد firebaseConfig مع معرّف مساحة موحّد على كل الأجهزة."]},
   en:{t:"Settings & multi-device sync",s:["In “Settings” change your password and alert days, and add custom labs shown in receive/dispense.","Add “Approved suppliers” (name/contact/SFDA reg/status) — they appear in the supplier field on Receiving.","For admins: backup & restore, and “Zero inventory” (keeps items and lists, resets quantities, downloading a backup first).","To enable multi-device sync: create a Firebase project, enable Firestore, and paste the firebaseConfig with one shared Workspace ID on every device."]}},
  {ic:"👥",cls:"g-pink",
-  ar:{t:"إدارة المستخدمين (للمدير)",s:["من «إدارة المستخدمين» (تظهر للمدير فقط) أضف حساباً جديداً باسم مستخدم وكلمة مرور وصلاحية.","الصلاحيات: «مستخدم» للعمل اليومي، و«مدير» لإدارة الحسابات والإعدادات والنسخ الاحتياطي.","ترقية حساب من «مستخدم» إلى «مدير» (أو العكس) تتم عبر المدير فقط بزر الترقية.","يمكن للمدير تغيير كلمة مرور أي مستخدم أو حذفه، مع بقاء مدير واحد على الأقل."]},
-  en:{t:"User management (admin)",s:["In “User management” (visible to admins only) add a new account with a username, password, and role.","Roles: “User” for daily work, “Admin” to manage accounts, settings, and backups.","Promoting an account from “User” to “Admin” (or back) is done by an admin only, via the promote button.","An admin can change any user’s password or delete them, while keeping at least one admin."]}},
+  ar:{t:"إدارة المستخدمين (للمدير)",s:["من «إدارة المستخدمين» (تظهر للمدير فقط) أضف حساباً جديداً باسم مستخدم وكلمة مرور وصلاحية.","الصلاحيات: «مستخدم» للعمل اليومي، و«مدير» لإدارة الحسابات والإعدادات والنسخ الاحتياطي.","ترقية حساب من «مستخدم» إلى «مدير» (أو العكس) تتم عبر المدير فقط بزر الترقية.","يمكن للمدير تغيير اسم مستخدم أي حساب (زر ✏️) أو كلمة مروره (زر 🔑) أو حذفه، مع بقاء مدير واحد على الأقل — واسم المستخدم يجب أن يكون فريداً."]},
+  en:{t:"User management (admin)",s:["In “User management” (visible to admins only) add a new account with a username, password, and role.","Roles: “User” for daily work, “Admin” to manage accounts, settings, and backups.","Promoting an account from “User” to “Admin” (or back) is done by an admin only, via the promote button.","An admin can rename any account’s username (✏️ button), change its password (🔑), or delete it, while keeping at least one admin — usernames must stay unique."]}},
 ];
 function openGuide(){
   const body=`<p class="guide-intro">${esc(t("guide_intro"))}</p>`+GUIDE.map((g,i)=>{const G=LANG==="en"?g.en:g.ar;
@@ -2305,7 +2322,7 @@ return {init,login,logout,go,toggleSide,toggleLang,closeModal,
   toggleLots,editItem,delItem,addLot,adjustLot,delLot,disposeLot,releaseQC,recallLot,
   exportCSV,setRepRange,setRepEmp,repPreset,saveSettings,addLab,delLab,backup,restore,reseed,wipe,zeroStock,toggleOrder,doTrace,
   addTempUnit,delTempUnit,logTemp,addSupplier,delSupplier,
-  addUser,setRole,resetUserPass,delUser,
+  addUser,setRole,resetUserPass,renameUser,delUser,
   addProduct,addCatItem,delCatItem,importTemplate,importFile,importRows,toggleCollapse,
   connectSync,disconnectSync,unlockSync,openGuide,guideToggle};
 })();
