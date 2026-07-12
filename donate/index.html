@@ -1060,15 +1060,12 @@ const timeEn=t=>String(t||"").replace("صباحاً","AM").replace("ظهراً",
 /* هويات ألوان شاشة العرض — الكيس والدم يبقيان بالأحمر، تتغير الخلفية فقط */
 /* الهويتان المعتمدتان فقط (سداسيات مضيئة + زجاج ذهبي) — الهويات اللونية القديمة أُلغيت */
 const SKINS=[["neon-blue","أزرق مضيء","linear-gradient(135deg,#eafdff 0%,#4fc7e8 45%,#0a3247 100%)"],["gold-glass","ذهبي فاخر","linear-gradient(135deg,#fff6dd 0%,#e8c05a 45%,#8a6d1d 100%)"]];
-let scrTheme=localStorage.getItem("dc_scr_theme")||"neon-blue";
-if(scrTheme!=="neon-blue"&&scrTheme!=="gold-glass")scrTheme="neon-blue"; // الهويات القديمة أُلغيت — نرجع للافتراضي
-/* تلوين حر للهوية الحالية: يغيّر تدرج الخلفية والمربعات وشرائح الأيام مع بقاء تصميم الهوية */
+/* الهوية/التلوين/لون الخط حالة عرض حيّة فقط (معاينة) — لا تُحفظ على الجهاز، بل داخل الحملة نفسها عبر saveScrCfg().
+   هذا يمنع تسرّب آخر هوية عُوينت لحملة إلى حملة أخرى لم تُحفَظ لها هوية بعد (كل حملة جديدة تبدأ بالافتراضي دائماً) */
+let scrTheme="neon-blue";
 const HEXOK=v=>/^#[0-9a-fA-F]{6}$/.test(v||"");
-let scrTint=localStorage.getItem("dc_scr_tint")||"";
-if(!HEXOK(scrTint))scrTint="";
-/* لون الخط المستقل */
-let scrFont=localStorage.getItem("dc_scr_font")||"";
-if(!HEXOK(scrFont))scrFont="";
+let scrTint="";
+let scrFont="";
 function hexRGB(h){h=String(h).replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return [parseInt(h.slice(0,2),16)||0,parseInt(h.slice(2,4),16)||0,parseInt(h.slice(4,6),16)||0];}
 function mixC(h,t,toWhite,alpha){
   const a=hexRGB(h),b=toWhite?[255,255,255]:[0,0,0];
@@ -1119,9 +1116,9 @@ function applyTheme(){
   if(ov)ov.style.background=mixC(scrTheme,.82,false,.95);
 }
 function setTheme(c){
-  scrTheme=c;localStorage.setItem("dc_scr_theme",c);
-  scrTint="";localStorage.removeItem("dc_scr_tint"); // اختيار الهوية يعيد ألوانها الأصلية
-  scrFont="";localStorage.removeItem("dc_scr_font");
+  scrTheme=c;
+  scrTint=""; // اختيار الهوية يعيد ألوانها الأصلية
+  scrFont="";
   const ti=$("#sw-tint");if(ti)ti.value=c==="gold-glass"?"#c9a23a":"#1f97c2";
   const fo=$("#sw-font");if(fo)fo.value="#ffffff";
   applyTheme();
@@ -1129,11 +1126,11 @@ function setTheme(c){
 }
 function setTint(c){
   if(!HEXOK(c))return;
-  scrTint=c;localStorage.setItem("dc_scr_tint",c);applyTheme();
+  scrTint=c;applyTheme();
 }
 function setFont(c){
   if(!HEXOK(c))return;
-  scrFont=c;localStorage.setItem("dc_scr_font",c);applyTheme();
+  scrFont=c;applyTheme();
 }
 /* حفظ شكل الشاشة (الهوية + اللون + لون الخط) مع الحملة في السحابة — يثبت على كل الشاشات */
 async function saveScrCfg(){
@@ -1159,12 +1156,18 @@ async function renderScreen(id){
   const build=c=>{
     window._scrC=c;
     localStorage.setItem(cacheKey,JSON.stringify(c));
-    if(!built&&c.scrCfg){ // الشكل المحفوظ مع الحملة يسبق إعدادات الجهاز
-      if(c.scrCfg.skin==="neon-blue"||c.scrCfg.skin==="gold-glass")scrTheme=c.scrCfg.skin;
-      scrTint=HEXOK(c.scrCfg.tint)?c.scrCfg.tint:"";
-      scrFont=HEXOK(c.scrCfg.font)?c.scrCfg.font:"";
+    if(!built){
+      // شكل الشاشة يُقرأ دائماً من الحملة نفسها لا من الجهاز: الشكل المحفوظ معها (إن وُجد) وإلا الافتراضي —
+      // بلا هذا، معاينة هوية في حملة دون حفظها كانت تتسرّب لتظهر كأنها "الأصلية" في حملة أخرى لم تُحفظ لها هوية بعد
+      if(c.scrCfg){
+        scrTheme=(c.scrCfg.skin==="neon-blue"||c.scrCfg.skin==="gold-glass")?c.scrCfg.skin:"neon-blue";
+        scrTint=HEXOK(c.scrCfg.tint)?c.scrCfg.tint:"";
+        scrFont=HEXOK(c.scrCfg.font)?c.scrCfg.font:"";
+      }else{
+        scrTheme="neon-blue";scrTint="";scrFont="";
+      }
+      drawScreen(id,c);built=true;
     }
-    if(!built){drawScreen(id,c);built=true;}
     updateScreen(c,lastTotal);
     tickClock();
     if(lastTotal!==null&&(c.total||0)>lastTotal)celebrate((c.total||0)-lastTotal);
