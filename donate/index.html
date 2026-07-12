@@ -172,7 +172,7 @@
   .scr-lang{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:20px;padding:6px 16px;font-weight:700;font-size:14px;cursor:pointer}
   .scr-lang:hover{background:rgba(255,255,255,.28)}
   .scr-theme{display:flex;gap:7px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:5px 12px}
-  .sw{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.75);cursor:pointer;padding:0}
+  .sw{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.75);cursor:pointer;padding:0}
   .sw.sel{box-shadow:0 0 0 3px #fff}
   .sw-custom{width:26px;height:26px;border:none;background:none;cursor:pointer;padding:0}
   .day-chip.now{color:var(--scr-deep,#800f2f)}
@@ -183,13 +183,11 @@
 
   /* ===== هويتان كاملتا التصميم (طبق الأصل عن الصورتين المرجعيتين): أزرق مضيء (داكن مستقبلي) وذهبي فاخر (زجاجي فاتح) ===== */
   .sw-skin{border-radius:8px}
-  /* ثُماني مقصوص الزوايا (flat على 4 جهات + قص قطري بالزوايا) بطبقتين متداخلتين — طبق الأصل عن الصورة
-     المرجعية: القص الخارجي أكبر (إطار رفيع)، والقص الداخلي أصغر (التعبئة الزجاجية تبدو أقرب لمستطيل).
+  /* بطاقة زجاجية مستديرة الزوايا وبداخلها شارة ثمانية الأضلاع عمودية بإطار معدني — طبق المرجع
      ملاحظة: box-shadow لا يتبع الحواف المائلة لـ clip-path، لذا الإطار هنا طبقتان مقصوصتان فعلياً
      (خارجية = لون الإطار، داخلية مُزاحة بالبكسل = التعبئة) بدل ظل داخلي واحد */
-  /* بطاقة زجاجية مستديرة الزوايا وبداخلها شارة سداسية عمودية بإطار معدني — طبق المرجع */
   .screen.skin-neonblue .type-tile,.screen.skin-goldglass .type-tile{
-    --hx:polygon(50% 0,100% 26%,100% 74%,50% 100%,0 74%,0 26%);
+    --hx:polygon(25% 0,75% 0,100% 25%,100% 75%,75% 100%,25% 100%,0 75%,0 25%);
     border-radius:20px;border:none;padding:0;clip-path:none;position:relative
   }
   .screen.skin-neonblue .tile-in,.screen.skin-goldglass .tile-in{
@@ -214,16 +212,16 @@
   .screen.skin-neonblue .type-tile .tc{color:#ffcf4d}
   .screen.skin-neonblue .type-tile .tl,.screen.skin-neonblue .type-tile .ts{color:#eaffff}
   .screen.skin-goldglass .type-tile .tl,.screen.skin-goldglass .type-tile .ts{color:#16213a}
-  .screen.skin-goldglass .type-tile .tc{color:#8a6d1d}
+  .screen.skin-goldglass .type-tile .tc{color:#6b5013}
   .screen.skin-neonblue .tile-ic,.screen.skin-goldglass .tile-ic{display:block;position:absolute;inset-inline-start:12px;top:50%;transform:translateY(-50%);font-size:clamp(9px,1.3vh,14px);opacity:.85;z-index:2}
   .screen.skin-neonblue .tile-ic{color:#8be9ff}
   .screen.skin-goldglass .tile-ic{color:#b8902e}
   /* شارة اليوم بنفس شكل الثُماني المزدوج بدل الدائرة */
   .screen.skin-neonblue .day-chip,.screen.skin-goldglass .day-chip{
-    --hx:polygon(50% 0,100% 27%,100% 73%,50% 100%,0 73%,0 27%);
+    --hx:polygon(25% 0,75% 0,100% 25%,100% 75%,75% 100%,25% 100%,0 75%,0 25%);
     width:var(--chip);min-width:var(--chip);border-radius:0;border:none;clip-path:var(--hx)
   }
-  .day-in{font-size:clamp(8px,1.05vh,11px);line-height:1.15}
+  .day-in{font-size:clamp(9px,1.2vh,12px);line-height:1.15}
   .screen.skin-neonblue .day-in,.screen.skin-goldglass .day-in{
     position:absolute;inset:4px;clip-path:var(--hx)
   }
@@ -256,7 +254,7 @@
   .screen.skin-goldglass .scr-lang{color:#16213a}
   .screen.skin-goldglass .scr-credit{display:inline-block;background:rgba(255,255,255,.65);border:1px solid rgba(184,144,46,.5);border-radius:20px;padding:5px 18px;margin:.6vh auto 0}
   .screen.skin-goldglass .scr-credit,.screen.skin-goldglass .scr-title h1,.screen.skin-goldglass .scr-title p,.screen.skin-goldglass .bag-side .pct,.screen.skin-goldglass .bag-side .of{text-shadow:none;color:#16213a}
-  .screen.skin-goldglass .bag-side .pct{color:#8a6d1d}
+  .screen.skin-goldglass .bag-side .pct{color:#6b5013}
   /* موجات خلفية زخرفية خفيفة تحاكي الصورتين المرجعيتين */
   .screen.skin-neonblue::before,.screen.skin-goldglass::before{
     content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background-repeat:repeat;background-size:480px 320px
@@ -280,9 +278,9 @@
   .screen.skin-neonblue .scr-clock,.screen.skin-goldglass .scr-clock{background:none;border:none;padding:0;display:inline-flex;align-items:center;gap:3px;letter-spacing:1px}
   .screen.skin-neonblue .scr-clock b,.screen.skin-goldglass .scr-clock b{border-radius:7px;padding:1px 9px;display:inline-block}
   .screen.skin-neonblue .scr-clock b{background:rgba(0,0,0,.55);border:1px solid rgba(72,219,255,.55);color:#8be9ff;text-shadow:0 0 6px rgba(72,219,255,.7)}
-  .screen.skin-goldglass .scr-clock b{background:#fdf8ea;border:1px solid rgba(184,144,46,.55);color:#8a6d1d;box-shadow:inset 0 1px 3px rgba(140,110,40,.25)}
+  .screen.skin-goldglass .scr-clock b{background:#fdf8ea;border:1px solid rgba(184,144,46,.55);color:#6b5013;box-shadow:inset 0 1px 3px rgba(140,110,40,.25)}
   .screen.skin-neonblue .scr-clock i{color:#8be9ff}
-  .screen.skin-goldglass .scr-clock i{color:#8a6d1d}
+  .screen.skin-goldglass .scr-clock i{color:#3a2c08}
   .screen.skin-neonblue .scr-timebar,.screen.skin-goldglass .scr-timebar{height:9px;border-radius:6px}
   .screen.skin-neonblue .scr-timebar-fill{background:linear-gradient(90deg,#2fb6d9,#8be9ff);box-shadow:0 0 10px rgba(72,219,255,.7)}
   /* النسبة: حلقة كبيرة تحتضن النص في الذهبي، ورقم متوهج بلا حلقة في الأزرق مثل المرجع */
@@ -327,10 +325,14 @@
   /* إطار معدني خارجي للساعة */
   .screen.skin-goldglass .scr-clock{background:linear-gradient(160deg,#f2dc9e,#b8902e);padding:3px 6px;border-radius:10px;border:none}
   .screen.skin-goldglass .scr-clock b{background:#fbf6e8}
-  .screen.skin-goldglass .scr-clock i{color:#5c4a12}
+  .screen.skin-goldglass .scr-clock i{color:#3a2c08}
   .screen.skin-neonblue .scr-clock{background:rgba(0,0,0,.4);border:1px solid rgba(72,219,255,.45);padding:3px 6px;border-radius:10px}
   .screen.skin-neonblue .scr-clock b{background:#06141b;border:1px solid rgba(72,219,255,.35)}
   .screen.skin-goldglass .scr-timebar-fill{box-shadow:0 0 10px rgba(212,175,55,.8)}
+  /* حامل رمز الاستجابة بلون معدني ذهبي بدل الكحلي المستعار من الهوية الأخرى، مع تباين نص كافٍ */
+  .screen.skin-goldglass .scr-qr{background:linear-gradient(160deg,#f2dc9e,#b8902e)}
+  .screen.skin-goldglass .scr-qr .cap{color:#3a2c08}
+  .screen.skin-goldglass .scr-qr::after{background:#b8902e}
   .screen.skin-goldglass::after{opacity:.72}
   .screen.skin-neonblue::after{opacity:.75}
   @media(max-width:760px){
@@ -456,7 +458,7 @@ window.addEventListener("hashchange",route);
 /* ================= هيكل الإدارة ================= */
 function shell(inner,active){
   return `<div class="topbar">
-    <div class="brand"><div class="mk">🩸</div><div><div class="t1">حملات التبرع بالدم</div><div class="t2">بنك الدم — دمام</div></div></div>
+    <div class="brand"><div class="mk" aria-hidden="true">🩸</div><div><div class="t1">حملات التبرع بالدم</div><div class="t2">بنك الدم — دمام</div></div></div>
     <div class="spacer"></div>
     <div class="top-tabs">
       <button class="top-tab ${active==="admin"?"active":""}" onclick="location.hash='#/'">الحملات</button>
@@ -477,13 +479,13 @@ async function renderAdmin(){
     </div>
     <div class="panel"><div class="panel-h"><h3>➕ حملة جديدة</h3><div class="hint">كل الحقول تُحفظ وتتزامن بين الأجهزة</div></div>
       <div class="panel-b"><div class="form-grid">
-        <div><label class="req">اسم الحملة</label><input id="f-name" list="dl-names" placeholder="مثال: حملة عطاء"><datalist id="dl-names"></datalist></div>
-        <div><label class="req">المدينة</label><input id="f-city" list="dl-cities" placeholder="الدمام"><datalist id="dl-cities"></datalist></div>
-        <div><label class="req">تاريخ البداية</label><input id="f-start" type="date" onclick="try{this.showPicker()}catch(e){}"></div>
-        <div><label class="req">مدة الحملة (أيام)</label><input id="f-days" type="number" min="1" max="14" value="1"></div>
-        <div><label class="req">وقت البداية</label><select id="f-time-from"></select></div>
-        <div><label class="req">وقت النهاية</label><select id="f-time-to"></select></div>
-        <div><label class="req">العدد المتوقع (الهدف)</label><input id="f-goal" type="number" min="1" placeholder="200"></div>
+        <div><label class="req">اسم الحملة</label><input id="f-name" list="dl-names" placeholder="مثال: حملة عطاء" required><datalist id="dl-names"></datalist></div>
+        <div><label class="req">المدينة</label><input id="f-city" list="dl-cities" placeholder="مثال: الدمام" required><datalist id="dl-cities"></datalist></div>
+        <div><label class="req">تاريخ البداية</label><input id="f-start" type="date" required onclick="try{this.showPicker()}catch(e){}"></div>
+        <div><label class="req">مدة الحملة (أيام)</label><input id="f-days" type="number" min="1" max="14" value="1" required></div>
+        <div><label class="req">وقت البداية</label><select id="f-time-from" required></select></div>
+        <div><label class="req">وقت النهاية</label><select id="f-time-to" required></select></div>
+        <div><label class="req">العدد المتوقع (الهدف)</label><input id="f-goal" type="number" min="1" placeholder="200" required></div>
         <div><label>الجهة المنظمة (التمبلت)</label><input id="f-org" placeholder="اسم الجهة يظهر للمتبرع"></div>
         <div><label>شعار 1 — يمين أعلى الشاشة (PNG)</label><input id="f-logo1" type="file" accept="image/png,image/*"></div>
         <div><label>شعار 2 — يسار أعلى الشاشة (PNG)</label><input id="f-logo2" type="file" accept="image/png,image/*"></div>
@@ -503,7 +505,7 @@ async function renderAdmin(){
             🏅 شهادة شكر لكل المسجلين في التبرع (اختياري)
           </label>
           <div id="cert-opts" style="display:none;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px">
-            <div><label class="req">التصميم العربي — أساسي (PDF/TIF/صورة)</label><input id="f-cert" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
+            <div><label class="req">التصميم العربي — أساسي (PDF/TIF/صورة)</label><input id="f-cert" type="file" accept="application/pdf,image/*,.tif,.tiff" required></div>
             <div><label>التصميم الإنجليزي — إضافي (PDF/TIF/صورة)</label><input id="f-cert-en" type="file" accept="application/pdf,image/*,.tif,.tiff"><img class="logo-prev" id="f-cert-en-prev" style="margin-top:8px;width:120px;height:auto"></div>
             <div class="full"><label>موضع اسم المتبرع — اضغط على التصميم في المكان الذي تريد الاسم فيه</label>
               <div class="cert-pick" id="f-cert-pick"><img id="f-cert-prev" alt=""><div class="marker" id="f-cert-marker">📍 الاسم هنا</div></div>
@@ -736,6 +738,21 @@ async function showLinks(id,name){
   drawQR($("#qr-modal"),dURL,190);
 }
 function closeModal(){$("#modal-bg").classList.remove("open");}
+/* تأكيد بمظهر التطبيق بدل confirm() الأصلي — يناسب واجهة كشك التبرع المصمَّمة بصرياً */
+function confirmDialog(msg,okLabel){
+  return new Promise(resolve=>{
+    $("#modal-box").style.maxWidth="380px";
+    $("#modal-box").innerHTML=`<p style="margin:0 0 18px;font-size:15px">${esc(msg)}</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn sm" id="cf-ok">${esc(okLabel||"تأكيد")}</button>
+        <button class="btn sm ghost" id="cf-cancel">إلغاء</button>
+      </div>`;
+    $("#modal-bg").classList.add("open");
+    const done=v=>{closeModal();resolve(v);};
+    $("#cf-ok").onclick=()=>done(true);
+    $("#cf-cancel").onclick=()=>done(false);
+  });
+}
 
 /* ===== تعديل حملة منشورة: كل الخانات متاحة (الاسم، المدينة، التاريخ، الأوقات، الجهة، الشعارات، الرعاة، الشهادة، الهدف، الأيام) ===== */
 let editSp=[],editLogos=[],editCertAr=null,editCertEn=null,editNX=.5,editNY=.55,editTimesTouched=false;
@@ -851,22 +868,25 @@ function drawDonorForm(id,c){
   selBT=null;
   const dlogo=(c.logos&&(c.logos[2]||c.logos[0]||c.logos[1]))||c.logo;
   $("#d-card").innerHTML=`
-    ${dlogo?`<img class="org-logo" src="${dlogo}" alt="">`:`<div class="mark">🩸</div>`}
+    ${dlogo?`<img class="org-logo" src="${dlogo}" alt="شعار الجهة المنظمة">`:`<div class="mark" aria-hidden="true">🩸</div>`}
     ${c.org?`<div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px">${esc(c.org)}</div>`:""}
     <h1>${esc(c.name)}</h1>
     <p class="sub">${esc(c.city)} · ${esc(c.times||"")}</p>
     <div style="font-weight:700;font-size:15px;margin-bottom:4px">اختر فصيلة دمك:</div>
     <div class="bt-grid">${BT.map(b=>`<button class="bt-btn" id="bt-${b.k}" onclick="pickBT('${b.k}')">${b.l}</button>`).join("")}</div>
-    <button class="donate-btn" id="d-go" disabled onclick="registerDonation('${id}')">🩸 تبرعت بالدم</button>
+    <button class="donate-btn" id="d-go" disabled onclick="registerDonation('${id}')"><span aria-hidden="true">🩸</span> تبرعت بالدم</button>
     <div class="thanks-num" style="margin-top:14px">عدد المتبرعين حتى الآن: <b id="d-live">${c.total||0}</b></div>
     <div class="credit">فكرة وإعداد: حسن العاقول</div>`;
 }
 function pickBT(k){selBT=k;BT.forEach(b=>$("#bt-"+b.k).classList.toggle("sel",b.k===k));$("#d-go").disabled=false;}
 async function registerDonation(id){
   if(!selBT)return;
-  const btn=$("#d-go");btn.disabled=true;btn.textContent="جارِ التسجيل…";
   const guard="dc_done_"+id+"_"+dkey(new Date());
-  if(localStorage.getItem(guard)&&!confirm("سبق التسجيل من هذا الجهاز اليوم — تسجيل متبرع آخر؟")){btn.disabled=false;btn.textContent="🩸 تبرعت بالدم";return;}
+  if(localStorage.getItem(guard)){
+    const go=await confirmDialog("سبق التسجيل من هذا الجهاز اليوم — تسجيل متبرع آخر؟","تسجيل متبرع آخر");
+    if(!go)return;
+  }
+  const btn=$("#d-go");btn.disabled=true;btn.textContent="جارِ التسجيل…";
   const dk=dkey(new Date()),u={total:inc(1),phraseIdx:inc(1)};
   u["counts."+selBT]=inc(1);u["daily."+dk+".total"]=inc(1);u["daily."+dk+"."+selBT]=inc(1);
   try{
@@ -885,14 +905,14 @@ async function registerDonation(id){
         <button class="btn" style="width:100%" onclick="makeCert()">إصدار الشهادة PDF</button>
       </div>`:"";
     $("#d-card").innerHTML=`
-      <div class="thanks-emoji">🎉</div><h1>شكراً لعطائك!</h1>
+      <div class="thanks-emoji" aria-hidden="true">🎉</div><h1>شكراً لعطائك!</h1>
       <p class="sub">تم تسجيل تبرعك بفصيلة <b style="direction:ltr">${lbl}</b></p>
       <div class="thanks-phrase">${esc(phraseFor(curCamp))}</div>
       <div class="thanks-num">أنت ضمن <b id="d-live">${(curCamp&&curCamp.total)||1}</b> متبرعاً في هذه الحملة</div>
       ${certBlock}
       <button class="btn soft" style="margin-top:16px;width:100%" onclick="location.reload()">تسجيل متبرع آخر</button>
       <div class="credit">فكرة وإعداد: حسن العاقول</div>`;
-  }catch(e){toast("تعذر التسجيل: "+(e.code||e.message),"err");btn.disabled=false;btn.textContent="🩸 تبرعت بالدم";}
+  }catch(e){console.error(e);toast("تعذر التسجيل — تحقق من اتصالك بالإنترنت وحاول مرة أخرى","err");btn.disabled=false;btn.textContent="🩸 تبرعت بالدم";}
 }
 
 /* إصدار شهادة الشكر PDF باسم المتبرع فوق التصميم المرفق */
@@ -1108,11 +1128,11 @@ function drawScreen(id,c){
   const L=SCR_T[scrLang];
   const lgs=c.logos||(c.logo?[c.logo]:[]);
   const logoBar=(lgs[0]||lgs[1]||lgs[2])?`<div class="logo-bar">
-      <div class="lg">${lgs[0]?`<img src="${lgs[0]}" alt="">`:""}</div>
-      <div class="lg">${lgs[2]?`<img src="${lgs[2]}" alt="">`:""}</div>
-      <div class="lg">${lgs[1]?`<img src="${lgs[1]}" alt="">`:""}</div>
+      <div class="lg">${lgs[0]?`<img src="${lgs[0]}" alt="شعار الحملة">`:""}</div>
+      <div class="lg">${lgs[2]?`<img src="${lgs[2]}" alt="شعار الحملة">`:""}</div>
+      <div class="lg">${lgs[1]?`<img src="${lgs[1]}" alt="شعار الحملة">`:""}</div>
     </div>`:"";
-  const sponsors=(c.sponsors&&c.sponsors.length)?`<div class="sponsor-bar">${c.sponsors.map(s=>`<img src="${s}" alt="">`).join("")}</div>`:"";
+  const sponsors=(c.sponsors&&c.sponsors.length)?`<div class="sponsor-bar">${c.sponsors.map(s=>`<img src="${s}" alt="شعار جهة راعية">`).join("")}</div>`:"";
   const tF=scrLang==="en"?timeEn(c.timeFrom):c.timeFrom,tT=scrLang==="en"?timeEn(c.timeTo):c.timeTo;
   const timesLine=c.timeFrom?`<div class="scr-times">
       <div class="scr-time-pill">
@@ -1125,6 +1145,7 @@ function drawScreen(id,c){
     </div>`
                             :(c.times?`<div class="scr-times">${esc(c.times)}</div>`:"");
   $("#scr").setAttribute("dir",scrLang==="en"?"ltr":"rtl");
+  $("#scr").setAttribute("lang",scrLang==="en"?"en":"ar");
   $("#scr").innerHTML=`
     ${logoBar}
     <div class="scr-head">
@@ -1140,7 +1161,7 @@ function drawScreen(id,c){
           <div class="of"><b id="tot">0</b> ${L.of} <b>${c.goal}</b> ${L.donors}</div>
         </div>
       </div>
-      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div><span class="tile-ic">(🧑)</span></div>`).join("")}</div>
+      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div><span class="tile-ic" aria-hidden="true">(🧑)</span></div>`).join("")}</div>
     </div>
     <div class="scr-foot">
       <div class="phrase-box" id="phrase" data-p="">${esc(phraseFor(c,scrLang))}</div>
@@ -1149,7 +1170,7 @@ function drawScreen(id,c){
     ${sponsors}
     <div class="scr-credit">${L.credit}</div>
     <div class="scr-tools">
-      <button class="scr-lang" onclick="toggleScrLang()">🌐 ${L.btn}</button>
+      <button class="scr-lang" onclick="toggleScrLang()"><span aria-hidden="true">🌐</span> ${L.btn}</button>
       <div class="scr-theme" id="sw-row">
         ${THEMES.map(t=>`<button class="sw ${scrTheme===t[0]?"sel":""}" data-c="${t[0]}" style="background:${t[0]}" title="${t[1]}" onclick="setTheme('${t[0]}')"></button>`).join("")}
         <input type="color" class="sw-custom" value="${/^#[0-9a-fA-F]{6}$/.test(scrTheme)?scrTheme:"#d90429"}" title="لون مخصص" oninput="setTheme(this.value)">
@@ -1180,7 +1201,7 @@ function updateScreen(c,prevTotal){
   const old=$("#ended-ovl");if(old)old.remove();
   if(c.status!=="active"){
     $("#scr").insertAdjacentHTML("beforeend",`<div class="scr-ended" id="ended-ovl">
-      <div style="font-size:64px">🏆</div><h2>${L.ended}</h2>
+      <div style="font-size:64px" aria-hidden="true">🏆</div><h2>${L.ended}</h2>
       <p style="font-size:clamp(16px,2.2vw,26px)">${L.endedSub(total,c.goal,pct)}</p>
       <div class="scr-credit">${L.credit}</div></div>`);
     applyTheme();
