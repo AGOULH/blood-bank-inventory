@@ -757,9 +757,10 @@ function renderList(rows){
         <button class="btn sm ghost" onclick="location.hash='#/s/${r.id}'">🖥️ شاشة العرض</button>
         <button class="btn sm ghost" onclick="showEdit('${r.id}')">✏️ تعديل</button>
         ${r.status==="active"
-          ?`<button class="btn sm ghost" onclick="archiveCampaign('${r.id}')">📦 أرشفة</button>`
+          ?`<button class="btn sm ghost" onclick="archiveCampaign('${r.id}')">📦 أرشفة</button>
+            <button class="btn sm danger" onclick="deleteCampaign('${r.id}')">🗑️ حذف</button>`
           :`<button class="btn sm ghost" onclick="unarchiveCampaign('${r.id}')">↩️ إعادة تفعيل</button>
-            <button class="btn sm danger" onclick="deleteCampaign('${r.id}')">حذف</button>`}
+            <button class="btn sm danger" onclick="deleteCampaign('${r.id}')">🗑️ حذف</button>`}
       </div></td></tr>`;
   };
   $("#list-box").innerHTML=rows.length?`
@@ -1426,7 +1427,8 @@ function drawStats(){
             <td>${r.status==="active"?`<span class="tag ok">نشطة</span>`:`<span class="tag mut">مؤرشفة</span>`}</td>
             <td><div class="row-actions"><button class="btn sm soft" onclick="showDays('${r.id}')">📅 إحصائية الأيام</button>
             <button class="btn sm ghost" onclick="exportCampPDF('${r.id}')">🖨️ PDF</button>
-            ${r.cert?`<button class="btn sm ghost" onclick="showCertNames('${r.id}')">📜 أسماء الشهادات</button>`:""}</div></td></tr>`;}).join("")}
+            ${r.cert?`<button class="btn sm ghost" onclick="showCertNames('${r.id}')">📜 أسماء الشهادات</button>`:""}
+            ${r.status!=="active"?`<button class="btn sm danger" onclick="deleteCampaign('${r.id}')">🗑️ حذف</button>`:""}</div></td></tr>`;}).join("")}
           </tbody></table></div>
       </div></div>`;
   }).join("");
