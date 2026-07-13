@@ -152,13 +152,15 @@
   .logo-bar .lg{flex:1;display:flex;justify-content:center}
   .logo-bar .lg:first-child{justify-content:flex-start}
   .logo-bar .lg:last-child{justify-content:flex-end}
-  /* شعارات المنظمين بنفس مقاس شعارات الرعاة ومقاس مربع الأيام — كل شعار له مقياس مستقل قابل للتحكم (--lg-a/b/c/sp) */
-  .logo-bar img{height:calc(var(--chip) * 1);max-width:26vw;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
-  .logo-bar .lg:nth-child(1) img{height:calc(var(--chip) * var(--lg-a,1))}
-  .logo-bar .lg:nth-child(2) img{height:calc(var(--chip) * var(--lg-b,1))}
-  .logo-bar .lg:nth-child(3) img{height:calc(var(--chip) * var(--lg-c,1))}
+  /* شعارات المنظمين بنفس مقاس شعارات الرعاة ومقاس مربع الأيام — يبقى ارتفاع الصف ثابتاً (var(--chip))
+     والتكبير/التحريك يتمّان بـ transform وحده (لا تغيير في height) حتى لا يضغط بقية التصميم؛ ينمو كل شعار
+     من نقطة ثابتة (transform-origin) نحو الفراغ الأقرب له بدل أن يتمدد فوق العناصر المجاورة */
+  .logo-bar img,.sponsor-bar img{height:var(--chip);max-width:26vw;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35));transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
+  .sponsor-bar img{max-width:15vw}
+  .screen.tools-editable .logo-bar img,.screen.tools-editable .sponsor-bar img{cursor:grab;touch-action:none}
+  .screen.tools-editable .logo-bar img:hover,.screen.tools-editable .sponsor-bar img:hover{outline:2px dashed rgba(255,255,255,.6);outline-offset:3px}
+  .screen.tools-editable .logo-bar img:active,.screen.tools-editable .sponsor-bar img:active{cursor:grabbing}
   .sponsor-bar{display:flex;align-items:center;justify-content:space-around;width:100%;gap:1.5vw;padding:2px 0;flex:none}
-  .sponsor-bar img{height:calc(var(--chip) * var(--lg-sp,1));max-width:15vw;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
   /* أداة تحديد مكان الاسم على الشهادة */
   .cert-pick{position:relative;max-width:440px;cursor:crosshair;display:none}
   .cert-pick img{width:100%;display:block;border:1px solid var(--line);border-radius:8px}
@@ -1070,16 +1072,52 @@ let scrTheme="neon-blue";
 const HEXOK=v=>/^#[0-9a-fA-F]{6}$/.test(v||"");
 let scrTint="";
 let scrFont="";
-/* مقياس حجم كل شعار مستقلاً (a=يمين، b=وسط، c=يسار، sp=شعارات الرعاة أسفل الشاشة) — c/sp أكبر افتراضياً لوضوحهما، وقابل للتحكم من أزرار الشاشة */
-let scrLogoScale={a:1,b:1,c:1.4,sp:1.3};
+/* مقياس/موضع كل شعار مستقلاً (a=يمين، b=وسط، c=يسار، sp=شعارات الرعاة أسفل الشاشة) — c/sp أكبر افتراضياً لوضوحهما.
+   التكبير والتحريك يُطبَّقان بـ transform على الشعار نفسه فقط (لا تغيير في height) فلا يضغطان بقية التصميم؛
+   كل شعار ثابت من زاويته البعيدة عن المنتصف (transform-origin بالقالب) فينمو نحو الفراغ لا فوق العناصر المجاورة */
+let scrLogoScale={a:1,b:1,c:1.2,sp:1.15};
+let scrLogoPos={a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},sp:{x:0,y:0}};
 function applyLogoScale(){
   const scr=$("#scr");if(!scr)return;
-  scr.style.setProperty("--lg-a",scrLogoScale.a||1);
-  scr.style.setProperty("--lg-b",scrLogoScale.b||1);
-  scr.style.setProperty("--lg-c",scrLogoScale.c||1);
-  scr.style.setProperty("--lg-sp",scrLogoScale.sp||1);
+  scr.querySelectorAll("img[data-lg]").forEach(img=>{
+    const k=img.dataset.lg,s=(scrLogoScale[k]||1),p=scrLogoPos[k]||{x:0,y:0};
+    img.style.setProperty("--lg-s",s);
+    img.style.setProperty("--lg-x",(p.x||0)+"px");
+    img.style.setProperty("--lg-y",(p.y||0)+"px");
+  });
 }
 function setLogoScale(k,v){scrLogoScale[k]=parseFloat(v)||1;applyLogoScale();}
+/* سحب الشعارات لتحريكها — يعمل فقط وقت ظهور لوحة الأدوات (scrToolsVisible)، فيختفي مع إخفاء الأدوات */
+function attachLogoDrag(){
+  const scr=$("#scr");if(!scr)return;
+  scr.querySelectorAll("img[data-lg]").forEach(img=>{
+    img.onpointerdown=e=>{
+      if(!scrToolsVisible)return;
+      e.preventDefault();
+      const k=img.dataset.lg,startX=e.clientX,startY=e.clientY;
+      const base=Object.assign({x:0,y:0},scrLogoPos[k]);
+      const move=ev=>{
+        scrLogoPos[k]={x:base.x+(ev.clientX-startX),y:base.y+(ev.clientY-startY)};
+        applyLogoScale();
+      };
+      const up=()=>{document.removeEventListener("pointermove",move);document.removeEventListener("pointerup",up);};
+      document.addEventListener("pointermove",move);
+      document.addEventListener("pointerup",up);
+    };
+  });
+}
+/* إظهار/إخفاء كل أزرار التحكم (اللغة، الألوان، مقاس الشعارات، التحريك) دفعة واحدة لعرض نظيف أمام الجمهور — يُحفظ على هذا الجهاز فقط */
+let scrToolsVisible=localStorage.getItem("dc_scr_tools_hidden")!=="1";
+function applyToolsVisibility(){
+  const p=$("#scr-tools-panel");if(p)p.style.display=scrToolsVisible?"flex":"none";
+  const btn=$("#scr-tools-btn");if(btn)btn.textContent=scrToolsVisible?"🙈 إخفاء الأدوات":"🛠️ إظهار الأدوات";
+  const scr=$("#scr");if(scr)scr.classList.toggle("tools-editable",scrToolsVisible);
+}
+function toggleScrTools(){
+  scrToolsVisible=!scrToolsVisible;
+  localStorage.setItem("dc_scr_tools_hidden",scrToolsVisible?"0":"1");
+  applyToolsVisibility();
+}
 function hexRGB(h){h=String(h).replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return [parseInt(h.slice(0,2),16)||0,parseInt(h.slice(2,4),16)||0,parseInt(h.slice(4,6),16)||0];}
 function mixC(h,t,toWhite,alpha){
   const a=hexRGB(h),b=toWhite?[255,255,255]:[0,0,0];
@@ -1151,7 +1189,7 @@ async function saveScrCfg(){
   if(!window._scrId)return;
   const btn=$("#scr-save");if(btn)btn.disabled=true;
   try{
-    await cDoc(window._scrId).update({scrCfg:{skin:scrTheme,tint:scrTint||null,font:scrFont||null,logoScale:scrLogoScale}});
+    await cDoc(window._scrId).update({scrCfg:{skin:scrTheme,tint:scrTint||null,font:scrFont||null,logoScale:scrLogoScale,logoPos:scrLogoPos}});
     toast("حُفظ شكل الشاشة لهذه الحملة ✓");
   }catch(e){toast(friendlyErr(e),"err");}
   if(btn)btn.disabled=false;
@@ -1177,9 +1215,12 @@ async function renderScreen(id){
         scrTheme=(c.scrCfg.skin==="neon-blue"||c.scrCfg.skin==="gold-glass")?c.scrCfg.skin:"neon-blue";
         scrTint=HEXOK(c.scrCfg.tint)?c.scrCfg.tint:"";
         scrFont=HEXOK(c.scrCfg.font)?c.scrCfg.font:"";
-        scrLogoScale=Object.assign({a:1,b:1,c:1.4,sp:1.3},c.scrCfg.logoScale||{});
+        scrLogoScale=Object.assign({a:1,b:1,c:1.2,sp:1.15},c.scrCfg.logoScale||{});
+        scrLogoPos=Object.assign({a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},sp:{x:0,y:0}},c.scrCfg.logoPos||{});
       }else{
-        scrTheme="neon-blue";scrTint="";scrFont="";scrLogoScale={a:1,b:1,c:1.4,sp:1.3};
+        scrTheme="neon-blue";scrTint="";scrFont="";
+        scrLogoScale={a:1,b:1,c:1.2,sp:1.15};
+        scrLogoPos={a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},sp:{x:0,y:0}};
       }
       drawScreen(id,c);built=true;
     }
@@ -1306,12 +1347,12 @@ function drawScreen(id,c){
   const lgs=c.logos||(c.logo?[c.logo]:[]);
   const lgn=c.logoNames||[];
   const logoBar=(lgs[0]||lgs[1]||lgs[2])?`<div class="logo-bar">
-      <div class="lg">${lgs[0]?`<img src="${lgs[0]}" alt="${esc(lgn[0]||"")}">`:""}</div>
-      <div class="lg">${lgs[2]?`<img src="${lgs[2]}" alt="${esc(lgn[2]||"")}">`:""}</div>
-      <div class="lg">${lgs[1]?`<img src="${lgs[1]}" alt="${esc(lgn[1]||"")}">`:""}</div>
+      <div class="lg">${lgs[0]?`<img src="${lgs[0]}" alt="${esc(lgn[0]||"")}" data-lg="a" style="transform-origin:left bottom">`:""}</div>
+      <div class="lg">${lgs[2]?`<img src="${lgs[2]}" alt="${esc(lgn[2]||"")}" data-lg="b" style="transform-origin:center bottom">`:""}</div>
+      <div class="lg">${lgs[1]?`<img src="${lgs[1]}" alt="${esc(lgn[1]||"")}" data-lg="c" style="transform-origin:right bottom">`:""}</div>
     </div>`:"";
   const spn=c.sponsorNames||[];
-  const sponsors=(c.sponsors&&c.sponsors.length)?`<div class="sponsor-bar">${c.sponsors.map((s,i)=>`<img src="${s}" alt="${esc(spn[i]||"")}">`).join("")}</div>`:"";
+  const sponsors=(c.sponsors&&c.sponsors.length)?`<div class="sponsor-bar">${c.sponsors.map((s,i)=>`<img src="${s}" alt="${esc(spn[i]||"")}" data-lg="sp" style="transform-origin:center">`).join("")}</div>`:"";
   const tF=scrLang==="en"?timeEn(c.timeFrom):c.timeFrom,tT=scrLang==="en"?timeEn(c.timeTo):c.timeTo;
   const timesLine=c.timeFrom?`<div class="scr-times">
       <div class="scr-time-pill">
@@ -1347,30 +1388,36 @@ function drawScreen(id,c){
     ${sponsors}
     <div class="scr-credit">${L.credit}</div>
     <div class="scr-tools">
-      <button class="scr-lang" onclick="toggleScrLang()"><span aria-hidden="true">🌐</span> ${L.btn}</button>
-      <div class="scr-theme" id="sw-row">
-        ${SKINS.map(s=>`<button class="sw sw-skin ${scrTheme===s[0]?"sel":""}" data-c="${s[0]}" style="background:${s[2]}" title="${s[1]}" onclick="setTheme('${s[0]}')"></button>`).join("")}
-        <span style="font-size:11px;opacity:.85">لون</span>
-        <input type="color" class="sw-custom" id="sw-tint" value="${scrTint||(scrTheme==="gold-glass"?"#c9a23a":"#1f97c2")}" title="لون الهوية" oninput="setTint(this.value)">
-        <span style="font-size:11px;opacity:.85">خط</span>
-        <input type="color" class="sw-custom" id="sw-font" value="${scrFont||"#ffffff"}" title="لون الخط" oninput="setFont(this.value)">
+      <button class="scr-lang" id="scr-tools-btn" onclick="toggleScrTools()">${scrToolsVisible?"🙈 إخفاء الأدوات":"🛠️ إظهار الأدوات"}</button>
+      <div id="scr-tools-panel" style="display:${scrToolsVisible?"flex":"none"};gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="scr-lang" onclick="toggleScrLang()"><span aria-hidden="true">🌐</span> ${L.btn}</button>
+        <div class="scr-theme" id="sw-row">
+          ${SKINS.map(s=>`<button class="sw sw-skin ${scrTheme===s[0]?"sel":""}" data-c="${s[0]}" style="background:${s[2]}" title="${s[1]}" onclick="setTheme('${s[0]}')"></button>`).join("")}
+          <span style="font-size:11px;opacity:.85">لون</span>
+          <input type="color" class="sw-custom" id="sw-tint" value="${scrTint||(scrTheme==="gold-glass"?"#c9a23a":"#1f97c2")}" title="لون الهوية" oninput="setTint(this.value)">
+          <span style="font-size:11px;opacity:.85">خط</span>
+          <input type="color" class="sw-custom" id="sw-font" value="${scrFont||"#ffffff"}" title="لون الخط" oninput="setFont(this.value)">
+        </div>
+        <div class="scr-theme" id="logo-size-row">
+          <span style="font-size:11px;opacity:.85">🖼️ يمين</span>
+          <input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale.a||1}" oninput="setLogoScale('a',this.value)" style="width:64px" title="مقاس شعار اليمين">
+          <span style="font-size:11px;opacity:.85">وسط</span>
+          <input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale.b||1}" oninput="setLogoScale('b',this.value)" style="width:64px" title="مقاس شعار الوسط">
+          <span style="font-size:11px;opacity:.85">يسار</span>
+          <input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale.c||1}" oninput="setLogoScale('c',this.value)" style="width:64px" title="مقاس شعار اليسار">
+          <span style="font-size:11px;opacity:.85">رعاة</span>
+          <input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale.sp||1}" oninput="setLogoScale('sp',this.value)" style="width:64px" title="مقاس شعارات الرعاة">
+          <span style="font-size:11px;opacity:.85">✥ اسحب أي شعار لتحريكه</span>
+        </div>
+        <button class="scr-lang" id="scr-save" onclick="saveScrCfg()">💾 حفظ</button>
       </div>
-      <div class="scr-theme" id="logo-size-row">
-        <span style="font-size:11px;opacity:.85">🖼️ يمين</span>
-        <input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale.a||1}" oninput="setLogoScale('a',this.value)" style="width:64px" title="مقاس شعار اليمين">
-        <span style="font-size:11px;opacity:.85">وسط</span>
-        <input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale.b||1}" oninput="setLogoScale('b',this.value)" style="width:64px" title="مقاس شعار الوسط">
-        <span style="font-size:11px;opacity:.85">يسار</span>
-        <input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale.c||1}" oninput="setLogoScale('c',this.value)" style="width:64px" title="مقاس شعار اليسار">
-        <span style="font-size:11px;opacity:.85">رعاة</span>
-        <input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale.sp||1}" oninput="setLogoScale('sp',this.value)" style="width:64px" title="مقاس شعارات الرعاة">
-      </div>
-      <button class="scr-lang" id="scr-save" onclick="saveScrCfg()">💾 حفظ</button>
     </div>`;
   $("#phrase").dataset.p=phraseFor(c,scrLang);
   drawQR($("#scr-qr-box"),baseURL()+"#/d/"+id,window.innerWidth<=760?84:110); // على الجوال يصغَّر بدل إخفائه — يبقى المسار الوحيد للتسجيل ظاهراً
   applyTheme();
   applyLogoScale();
+  applyToolsVisibility();
+  attachLogoDrag();
 }
 function updateScreen(c,prevTotal){
   const L=SCR_T[scrLang];
