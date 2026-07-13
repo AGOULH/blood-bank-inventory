@@ -111,7 +111,7 @@
 
   /* ===== display screen (ألوان تناسب كيس الدم) — كل المحتوى يظهر في شاشة واحدة بدون تمرير ===== */
   .screen{--chip:clamp(48px,7.6vh,86px);height:100vh;height:100dvh;background:radial-gradient(1400px 800px at 70% -10%,#d90429 0%,#800f2f 45%,#3d0814 100%);color:#fff;display:flex;flex-direction:column;padding:1.6vh 3vw;overflow:hidden;position:relative;box-sizing:border-box}
-  .scr-head{display:flex;align-items:center;gap:18px;flex-wrap:wrap;flex:none}
+  .scr-head{display:flex;align-items:center;gap:18px;flex-wrap:wrap;flex:none;margin-top:2.4vh}
   .scr-logo{height:9vh;max-height:90px;min-height:52px;object-fit:contain;background:#fff;border-radius:14px;padding:6px}
   .scr-title h1{margin:0;font-size:clamp(18px,3vh,38px);font-weight:800;line-height:1.2}
   .scr-title p{margin:2px 0 0;font-size:clamp(11px,1.7vh,17px);opacity:.85}
@@ -250,7 +250,7 @@
   .screen.skin-neonblue .scr-qr .cap,.screen.skin-goldglass .scr-qr .cap{color:#fff}
   .screen.skin-neonblue .scr-qr::after,.screen.skin-goldglass .scr-qr::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);width:46%;height:10px;background:#1c2f45;clip-path:polygon(12% 0,88% 0,100% 100%,0 100%);border-radius:0 0 4px 4px}
   .screen.skin-goldglass{background:var(--sk-bg,radial-gradient(1400px 800px at 70% -10%,#f3ebd4 0%,#c9a23a 45%,#33290e 100%));color:#fff}
-  .screen.skin-goldglass .scr-title p{color:rgba(255,255,255,.9);text-shadow:0 1px 3px rgba(0,0,0,.8),0 0 2px rgba(0,0,0,.8)}
+  .screen.skin-goldglass .scr-title p{color:var(--sk-font,#fff);text-shadow:0 1px 3px rgba(0,0,0,.8),0 0 2px rgba(0,0,0,.8)}
   .screen.skin-goldglass .scr-clock{background:rgba(255,255,255,.75);border:1px solid rgba(184,144,46,.6);color:#8a6d1d;text-shadow:none}
   .screen.skin-goldglass .scr-timebar{background:rgba(0,0,0,.25)}
   .screen.skin-goldglass .scr-timebar-fill{background:var(--sk-bar,linear-gradient(90deg,#d4af37,#f5d67d))}
