@@ -160,7 +160,7 @@
   .logo-bar img,.sponsor-bar img{height:var(--chip);max-width:26vw;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35));transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
   .sponsor-bar img{max-width:15vw}
   /* اسم الحملة/المدينة، الأيام الثلاثة معاً، وشريط الساعة تُحرَّك بنفس آلية الشعارات (transform فقط، بلا تغيير في مساحتها المحجوزة) */
-  .scr-title,.scr-days,.scr-times{transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
+  .scr-title,.scr-days,.scr-times,.scr-types,.pct-wrap,.bag-svg{transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
   .screen.tools-editable [data-lg]{cursor:grab;touch-action:none}
   .screen.tools-editable [data-lg]:hover{outline:2px dashed rgba(255,255,255,.6);outline-offset:3px}
   .screen.tools-editable [data-lg]:active{cursor:grabbing}
@@ -1080,8 +1080,10 @@ let scrFont="";
    وعناصر بلا تكبير (title=اسم الحملة+المدينة، days=مربعات الأيام الثلاثة معاً، time=شريط الساعة وبداية/نهاية الحملة).
    التكبير والتحريك يُطبَّقان بـ transform على العنصر نفسه فقط (لا تغيير في height/width) فلا يضغطان بقية التصميم؛
    كل شعار ثابت من زاويته البعيدة عن المنتصف (transform-origin بالقالب) فينمو نحو الفراغ لا فوق العناصر المجاورة */
-const LG_SCALE_DEF=()=>({a:1,b:1,c:1.2,sp:1.15,title:1,days:1,time:1});
-const LG_POS_DEF=()=>({a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},sp:{x:0,y:0},title:{x:0,y:0},days:{x:0,y:0},time:{x:0,y:0}});
+const LG_SCALE_DEF=()=>({a:1,b:1,c:1.2,sp:1.15,title:1,days:1,time:1,types:1,pct:1,bag:1});
+const LG_POS_DEF=()=>({a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},sp:{x:0,y:0},title:{x:0,y:0},days:{x:0,y:0},time:{x:0,y:0},types:{x:0,y:0},pct:{x:0,y:0},bag:{x:0,y:0}});
+const LG_LABELS_LOGOS=[["a","يمين"],["b","وسط"],["c","يسار"],["sp","رعاة"]];
+const LG_LABELS_ELEMS=[["title","العنوان"],["days","الأيام"],["time","الوقت"],["types","المربعات"],["pct","النسبة"],["bag","الكيس"]];
 let scrLogoScale=LG_SCALE_DEF();
 let scrLogoPos=LG_POS_DEF();
 function applyLogoScale(){
@@ -1285,7 +1287,7 @@ function tickClock(){
    ملصق بوجه لطيف بدون كلام، أنبوب ملفوف أسفله. مساحة الدم من y=100 إلى y=384 (ارتفاع 284) */
 const BAG_H=284;
 function bagSVG(){return `
-  <svg class="bag-svg" id="bag-svg" viewBox="0 0 340 545" width="340" height="545" xmlns="http://www.w3.org/2000/svg">
+  <svg class="bag-svg" id="bag-svg" data-lg="bag" viewBox="0 0 340 545" width="340" height="545" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="bloodGrad" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#c1121f"/><stop offset=".55" stop-color="#8e1220"/><stop offset="1" stop-color="#5c0a12"/>
@@ -1382,11 +1384,11 @@ function drawScreen(id,c){
       <div class="bag-area" id="bag-area">
         ${bagSVG()}
         <div class="bag-side">
-          <div class="pct-wrap" id="pct-wrap"><div class="pct-ring" id="pct-ring"></div><div class="pct" id="pct">0%</div></div>
+          <div class="pct-wrap" id="pct-wrap" data-lg="pct"><div class="pct-ring" id="pct-ring"></div><div class="pct" id="pct">0%</div></div>
           <div class="of"><b id="tot">0</b> ${L.of} <b>${c.goal}</b> ${L.donors}</div>
         </div>
       </div>
-      <div class="scr-types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div></div>`).join("")}</div>
+      <div class="scr-types" data-lg="types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div></div>`).join("")}</div>
     </div>
     <div class="scr-foot">
       <div class="phrase-box" id="phrase" data-p="">${esc(phraseFor(c,scrLang))}</div>
@@ -1406,15 +1408,13 @@ function drawScreen(id,c){
           <input type="color" class="sw-custom" id="sw-font" value="${scrFont||"#ffffff"}" title="لون الخط" oninput="setFont(this.value)">
         </div>
         <div class="scr-theme" id="logo-size-row">
-          <span style="font-size:11px;opacity:.85">🖼️ يمين</span>
-          <input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale.a||1}" oninput="setLogoScale('a',this.value)" style="width:64px" title="مقاس شعار اليمين">
-          <span style="font-size:11px;opacity:.85">وسط</span>
-          <input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale.b||1}" oninput="setLogoScale('b',this.value)" style="width:64px" title="مقاس شعار الوسط">
-          <span style="font-size:11px;opacity:.85">يسار</span>
-          <input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale.c||1}" oninput="setLogoScale('c',this.value)" style="width:64px" title="مقاس شعار اليسار">
-          <span style="font-size:11px;opacity:.85">رعاة</span>
-          <input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale.sp||1}" oninput="setLogoScale('sp',this.value)" style="width:64px" title="مقاس شعارات الرعاة">
-          <span style="font-size:11px;opacity:.85">✥ اسحب أي شعار لتحريكه</span>
+          <span style="font-size:11px;opacity:.85">🖼️ شعارات:</span>
+          ${LG_LABELS_LOGOS.map(([k,lbl])=>`<span style="font-size:11px;opacity:.85">${lbl}</span><input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale[k]||1}" oninput="setLogoScale('${k}',this.value)" style="width:60px" title="مقاس ${lbl}">`).join("")}
+        </div>
+        <div class="scr-theme" id="elem-size-row">
+          <span style="font-size:11px;opacity:.85">📐 مقاس:</span>
+          ${LG_LABELS_ELEMS.map(([k,lbl])=>`<span style="font-size:11px;opacity:.85">${lbl}</span><input type="range" min="0.5" max="2.5" step="0.1" value="${scrLogoScale[k]||1}" oninput="setLogoScale('${k}',this.value)" style="width:60px" title="مقاس ${lbl}">`).join("")}
+          <span style="font-size:11px;opacity:.85">✥ اسحب أي عنصر لتحريكه</span>
         </div>
         <button class="scr-lang" id="scr-save" onclick="saveScrCfg()">💾 حفظ</button>
       </div>
