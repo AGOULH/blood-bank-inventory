@@ -113,7 +113,7 @@
   .screen{--chip:clamp(48px,7.6vh,86px);height:100vh;height:100dvh;background:radial-gradient(1400px 800px at 70% -10%,#d90429 0%,#800f2f 45%,#3d0814 100%);color:#fff;display:flex;flex-direction:column;padding:1.6vh 3vw;overflow:hidden;position:relative;box-sizing:border-box}
   /* صفّا العنوان وشريط الوقت يتبعان نفس تقسيم صف الجسم (منطقة فارغة بعرض منطقة الكيس + منطقة مرنة بعرض شبكة المربعات)
      فيقع اسم الحملة/الأيام/شريط الوقت في المنتصف فوق شبكة مربعات الفصائل تماماً بدل التصاقها بالشعار العلوي */
-  .scr-zone-b{flex:none;max-width:44%}
+  .scr-zone-b{flex:0 0 44%}
   .scr-zone-a{flex:1;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;min-width:0}
   .scr-head{display:flex;align-items:center;gap:18px;flex-wrap:wrap;flex:none;margin-top:4.2vh}
   .scr-logo{height:9vh;max-height:90px;min-height:52px;object-fit:contain;background:#fff;border-radius:14px;padding:6px}
@@ -212,7 +212,7 @@
   .screen.skin-neonblue .tile-in>*,.screen.skin-goldglass .tile-in>*{position:relative;z-index:1}
   .screen.skin-neonblue .type-tile .tl,.screen.skin-goldglass .type-tile .tl{font-size:clamp(16px,3.5vh,40px)}
   .screen.skin-neonblue .type-tile .tc,.screen.skin-goldglass .type-tile .tc{font-size:clamp(18px,3.5vh,39px)}
-  .screen.skin-neonblue .type-tile .ts,.screen.skin-goldglass .type-tile .ts{font-size:clamp(10px,1.45vh,15px)}
+  .screen.skin-neonblue .type-tile .ts,.screen.skin-goldglass .type-tile .ts{font-size:clamp(9px,1.15vh,12px);letter-spacing:-.2px}
   .screen.skin-neonblue .scr-types,.screen.skin-goldglass .scr-types{gap:1.6vh 1.4vw}
   .screen.skin-neonblue .type-tile{background:var(--sk-tile-bg,rgba(12,44,56,.42));border:1px solid var(--sk-border-soft,rgba(120,220,255,.22));box-shadow:inset 0 0 22px rgba(72,219,255,.08),0 10px 26px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
   .screen.skin-neonblue .tile-in{background:var(--sk-tile,linear-gradient(160deg,rgba(155,238,255,.95),rgba(63,169,201,.8) 55%,rgba(28,87,112,.95)));filter:drop-shadow(0 0 10px rgba(72,219,255,.45))}
