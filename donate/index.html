@@ -160,7 +160,7 @@
   .logo-bar img,.sponsor-bar img{height:var(--chip);max-width:26vw;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35));transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
   .sponsor-bar img{max-width:15vw}
   /* اسم الحملة/المدينة، الأيام الثلاثة معاً، وشريط الساعة تُحرَّك بنفس آلية الشعارات (transform فقط، بلا تغيير في مساحتها المحجوزة) */
-  .scr-title,.scr-days,.scr-times,.scr-types,.pct-wrap,.bag-svg{transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
+  .scr-title,.scr-days,.scr-times,.scr-types,.bag-side,.bag-svg{transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
   .screen.tools-editable [data-lg]{cursor:grab;touch-action:none}
   .screen.tools-editable [data-lg]:hover{outline:2px dashed rgba(255,255,255,.6);outline-offset:3px}
   .screen.tools-editable [data-lg]:active{cursor:grabbing}
@@ -1386,8 +1386,8 @@ function drawScreen(id,c){
     <div class="scr-body">
       <div class="bag-area" id="bag-area">
         ${bagSVG()}
-        <div class="bag-side">
-          <div class="pct-wrap" id="pct-wrap" data-lg="pct"><div class="pct-ring" id="pct-ring"></div><div class="pct" id="pct">0%</div></div>
+        <div class="bag-side" data-lg="pct">
+          <div class="pct-wrap" id="pct-wrap"><div class="pct-ring" id="pct-ring"></div><div class="pct" id="pct">0%</div></div>
           <div class="of"><b id="tot">0</b> ${L.of} <b>${c.goal}</b> ${L.donors}</div>
         </div>
       </div>
