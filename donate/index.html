@@ -159,9 +159,11 @@
      من نقطة ثابتة (transform-origin) نحو الفراغ الأقرب له بدل أن يتمدد فوق العناصر المجاورة */
   .logo-bar img,.sponsor-bar img{height:var(--chip);max-width:26vw;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35));transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
   .sponsor-bar img{max-width:15vw}
-  .screen.tools-editable .logo-bar img,.screen.tools-editable .sponsor-bar img{cursor:grab;touch-action:none}
-  .screen.tools-editable .logo-bar img:hover,.screen.tools-editable .sponsor-bar img:hover{outline:2px dashed rgba(255,255,255,.6);outline-offset:3px}
-  .screen.tools-editable .logo-bar img:active,.screen.tools-editable .sponsor-bar img:active{cursor:grabbing}
+  /* اسم الحملة/المدينة، الأيام الثلاثة معاً، وشريط الساعة تُحرَّك بنفس آلية الشعارات (transform فقط، بلا تغيير في مساحتها المحجوزة) */
+  .scr-title,.scr-days,.scr-times{transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
+  .screen.tools-editable [data-lg]{cursor:grab;touch-action:none}
+  .screen.tools-editable [data-lg]:hover{outline:2px dashed rgba(255,255,255,.6);outline-offset:3px}
+  .screen.tools-editable [data-lg]:active{cursor:grabbing}
   .sponsor-bar{display:flex;align-items:center;justify-content:space-around;width:100%;gap:1.5vw;padding:2px 0;flex:none}
   /* أداة تحديد مكان الاسم على الشهادة */
   .cert-pick{position:relative;max-width:440px;cursor:crosshair;display:none}
@@ -1074,29 +1076,32 @@ let scrTheme="neon-blue";
 const HEXOK=v=>/^#[0-9a-fA-F]{6}$/.test(v||"");
 let scrTint="";
 let scrFont="";
-/* مقياس/موضع كل شعار مستقلاً (a=يمين، b=وسط، c=يسار، sp=شعارات الرعاة أسفل الشاشة) — c/sp أكبر افتراضياً لوضوحهما.
-   التكبير والتحريك يُطبَّقان بـ transform على الشعار نفسه فقط (لا تغيير في height) فلا يضغطان بقية التصميم؛
+/* مقياس/موضع كل عنصر قابل للتحريك مستقلاً — شعارات (a=يمين، b=وسط، c=يسار، sp=رعاة، c/sp أكبر افتراضياً لوضوحها)
+   وعناصر بلا تكبير (title=اسم الحملة+المدينة، days=مربعات الأيام الثلاثة معاً، time=شريط الساعة وبداية/نهاية الحملة).
+   التكبير والتحريك يُطبَّقان بـ transform على العنصر نفسه فقط (لا تغيير في height/width) فلا يضغطان بقية التصميم؛
    كل شعار ثابت من زاويته البعيدة عن المنتصف (transform-origin بالقالب) فينمو نحو الفراغ لا فوق العناصر المجاورة */
-let scrLogoScale={a:1,b:1,c:1.2,sp:1.15};
-let scrLogoPos={a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},sp:{x:0,y:0}};
+const LG_SCALE_DEF=()=>({a:1,b:1,c:1.2,sp:1.15,title:1,days:1,time:1});
+const LG_POS_DEF=()=>({a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},sp:{x:0,y:0},title:{x:0,y:0},days:{x:0,y:0},time:{x:0,y:0}});
+let scrLogoScale=LG_SCALE_DEF();
+let scrLogoPos=LG_POS_DEF();
 function applyLogoScale(){
   const scr=$("#scr");if(!scr)return;
-  scr.querySelectorAll("img[data-lg]").forEach(img=>{
-    const k=img.dataset.lg,s=(scrLogoScale[k]||1),p=scrLogoPos[k]||{x:0,y:0};
-    img.style.setProperty("--lg-s",s);
-    img.style.setProperty("--lg-x",(p.x||0)+"px");
-    img.style.setProperty("--lg-y",(p.y||0)+"px");
+  scr.querySelectorAll("[data-lg]").forEach(el=>{
+    const k=el.dataset.lg,s=(scrLogoScale[k]||1),p=scrLogoPos[k]||{x:0,y:0};
+    el.style.setProperty("--lg-s",s);
+    el.style.setProperty("--lg-x",(p.x||0)+"px");
+    el.style.setProperty("--lg-y",(p.y||0)+"px");
   });
 }
 function setLogoScale(k,v){scrLogoScale[k]=parseFloat(v)||1;applyLogoScale();}
-/* سحب الشعارات لتحريكها — يعمل فقط وقت ظهور لوحة الأدوات (scrToolsVisible)، فيختفي مع إخفاء الأدوات */
+/* سحب العناصر لتحريكها — يعمل فقط وقت ظهور لوحة الأدوات (scrToolsVisible)، فيختفي مع إخفاء الأدوات */
 function attachLogoDrag(){
   const scr=$("#scr");if(!scr)return;
-  scr.querySelectorAll("img[data-lg]").forEach(img=>{
-    img.onpointerdown=e=>{
+  scr.querySelectorAll("[data-lg]").forEach(el=>{
+    el.onpointerdown=e=>{
       if(!scrToolsVisible)return;
       e.preventDefault();
-      const k=img.dataset.lg,startX=e.clientX,startY=e.clientY;
+      const k=el.dataset.lg,startX=e.clientX,startY=e.clientY;
       const base=Object.assign({x:0,y:0},scrLogoPos[k]);
       const move=ev=>{
         scrLogoPos[k]={x:base.x+(ev.clientX-startX),y:base.y+(ev.clientY-startY)};
@@ -1217,12 +1222,12 @@ async function renderScreen(id){
         scrTheme=(c.scrCfg.skin==="neon-blue"||c.scrCfg.skin==="gold-glass")?c.scrCfg.skin:"neon-blue";
         scrTint=HEXOK(c.scrCfg.tint)?c.scrCfg.tint:"";
         scrFont=HEXOK(c.scrCfg.font)?c.scrCfg.font:"";
-        scrLogoScale=Object.assign({a:1,b:1,c:1.2,sp:1.15},c.scrCfg.logoScale||{});
-        scrLogoPos=Object.assign({a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},sp:{x:0,y:0}},c.scrCfg.logoPos||{});
+        scrLogoScale=Object.assign(LG_SCALE_DEF(),c.scrCfg.logoScale||{});
+        scrLogoPos=Object.assign(LG_POS_DEF(),c.scrCfg.logoPos||{});
       }else{
         scrTheme="neon-blue";scrTint="";scrFont="";
-        scrLogoScale={a:1,b:1,c:1.2,sp:1.15};
-        scrLogoPos={a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},sp:{x:0,y:0}};
+        scrLogoScale=LG_SCALE_DEF();
+        scrLogoPos=LG_POS_DEF();
       }
       drawScreen(id,c);built=true;
     }
@@ -1356,7 +1361,7 @@ function drawScreen(id,c){
   const spn=c.sponsorNames||[];
   const sponsors=(c.sponsors&&c.sponsors.length)?`<div class="sponsor-bar">${c.sponsors.map((s,i)=>`<img src="${s}" alt="${esc(spn[i]||"")}" data-lg="sp" style="transform-origin:center">`).join("")}</div>`:"";
   const tF=scrLang==="en"?timeEn(c.timeFrom):c.timeFrom,tT=scrLang==="en"?timeEn(c.timeTo):c.timeTo;
-  const timesLine=c.timeFrom?`<div class="scr-times">
+  const timesLine=c.timeFrom?`<div class="scr-times" data-lg="time">
       <div class="scr-time-pill">
         <div class="scr-time-row">
           <span class="scr-clock" id="scr-clock" dir="ltr">--:--:--</span>
@@ -1365,14 +1370,14 @@ function drawScreen(id,c){
         <div class="scr-timebar"><div class="scr-timebar-fill" id="scr-timebar"></div></div>
       </div>
     </div>`
-                            :(c.times?`<div class="scr-times">${esc(c.times)}</div>`:"");
+                            :(c.times?`<div class="scr-times" data-lg="time">${esc(c.times)}</div>`:"");
   $("#scr").setAttribute("dir",scrLang==="en"?"ltr":"rtl");
   $("#scr").innerHTML=`
     ${logoBar}
     <div class="scr-head">
-      <div class="scr-title"><h1>${esc(c.name)}</h1><p>${c.org?esc(c.org)+" · ":""}${esc(c.city)}</p></div>
+      <div class="scr-title" data-lg="title"><h1>${esc(c.name)}</h1><p>${c.org?esc(c.org)+" · ":""}${esc(c.city)}</p></div>
     </div>
-    <div class="scr-timerow"><div class="scr-days" id="scr-days"></div>${timesLine}</div>
+    <div class="scr-timerow"><div class="scr-days" id="scr-days" data-lg="days"></div>${timesLine}</div>
     <div class="scr-body">
       <div class="bag-area" id="bag-area">
         ${bagSVG()}
