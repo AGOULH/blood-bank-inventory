@@ -519,7 +519,10 @@ function route(){
   const h=location.hash||"#/";
   let m;
   if((m=h.match(/^#\/d\/([\w-]+)/)))return renderDonor(m[1]);
-  if((m=h.match(/^#\/s\/([\w-]+)/))){document.documentElement.lang=scrLang;return renderScreen(m[1]);}
+  /* رابط الشاشة العادي (يُشارَك/يُطبَع/يُعرض على البروجكتر) نظيف كلياً بلا أي أدوات تحكم مهما كان الجهاز؛
+     لوحة الأدوات (السحب/التلوين/المقاسات) تظهر فقط عبر مسار /edit المنفصل الذي يفتحه المنظم من لوحة الإدارة —
+     فلا يعود ظهورها مرهوناً بذاكرة كل جهاز على حدة، ولا يراها أي متبرع أو زائر يفتح رابط الشاشة نفسه */
+  if((m=h.match(/^#\/s\/([\w-]+)(\/edit)?/))){document.documentElement.lang=scrLang;return renderScreen(m[1],!!m[2]);}
   if(h.startsWith("#/stats"))return renderStats();
   return renderAdmin();
 }
@@ -778,7 +781,7 @@ function renderList(rows){
       <td>${r.status==="active"?`<span class="tag ok">نشطة</span>`:`<span class="tag mut">مؤرشفة</span>`}</td>
       <td><div class="row-actions">
         <button class="btn sm soft" onclick="showLinks('${r.id}','${esc(r.name).replace(/'/g,"\\'")}')">🔗 الروابط والباركود</button>
-        <button class="btn sm ghost" onclick="location.hash='#/s/${r.id}'">🖥️ شاشة العرض</button>
+        <button class="btn sm ghost" onclick="location.hash='#/s/${r.id}/edit'">🛠️ تخصيص الشاشة</button>
         <button class="btn sm ghost" onclick="showEdit('${r.id}')">✏️ تعديل</button>
         ${r.status==="active"
           ?`<button class="btn sm ghost" onclick="archiveCampaign('${r.id}')">📦 أرشفة</button>
@@ -1146,7 +1149,7 @@ window.addEventListener("resize",()=>{
   if(!$("#scr")||!window._scrId)return;
   applyLogoScale();
   const m=isMobileScr();
-  if(m!==_scrWasMobile){_scrWasMobile=m;renderScrTools(window._scrId);}
+  if(m!==_scrWasMobile){_scrWasMobile=m;if(window._scrEdit)renderScrTools(window._scrId);}
 });
 /* إظهار/إخفاء كل أزرار التحكم (اللغة، الألوان، مقاس الشعارات، التحريك) دفعة واحدة لعرض نظيف أمام الجمهور — يُحفظ على هذا الجهاز فقط */
 let scrToolsVisible=localStorage.getItem("dc_scr_tools_hidden")!=="1";
@@ -1241,8 +1244,9 @@ function toggleScrLang(){
   document.documentElement.lang=scrLang; // يطابق لغة النطق التي يستخدمها قارئ الشاشة مع اللغة المعروضة فعلياً
   if(window._scrC&&window._scrId){drawScreen(window._scrId,window._scrC);updateScreen(window._scrC,window._scrC.total||0);}
 }
-async function renderScreen(id){
+async function renderScreen(id,edit){
   window._scrId=id;
+  window._scrEdit=!!edit;
   document.documentElement.style.overflow="hidden";document.body.style.overflow="hidden"; // كل شيء يظهر في شاشة واحدة بدون تمرير
   $("#view").innerHTML=`<div class="screen" id="scr"><div class="center-load" style="min-height:80vh;color:#fff">جارِ التحميل…</div></div><div id="scr-tools-host"></div>`;
   const cacheKey="dc_cache_"+id;
@@ -1463,13 +1467,16 @@ function drawScreen(id,c){
     </div>
     ${sponsors}
     <div class="scr-credit">${L.credit}</div>`;
-  renderScrTools(id);
+  // لوحة الأدوات (السحب/الألوان/المقاسات/الحفظ) تُرسم فقط في مسار /edit؛ رابط الشاشة العادي (يُشارَك/يُعرض
+  // للجمهور) يحصل فقط على زر لغة صغير — ميزة تخص الجمهور نفسه لا إعدادات إدارية يجب إخفاؤها عنه
+  const toolsHost=$("#scr-tools-host");
+  if(window._scrEdit)renderScrTools(id);
+  else if(toolsHost)toolsHost.innerHTML=`<button class="scr-tools-btn" onclick="toggleScrLang()">🌐 ${L.btn}</button>`;
   $("#phrase").dataset.p=phraseFor(c,scrLang);
   drawQR($("#scr-qr-box"),baseURL()+"#/d/"+id,window.innerWidth<=760?84:110); // على الجوال يصغَّر بدل إخفائه — يبقى المسار الوحيد للتسجيل ظاهراً
   applyTheme();
   applyLogoScale();
-  applyToolsVisibility();
-  attachLogoDrag();
+  if(window._scrEdit){applyToolsVisibility();attachLogoDrag();}
 }
 function updateScreen(c,prevTotal){
   const L=SCR_T[scrLang];
