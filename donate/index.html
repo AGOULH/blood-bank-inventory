@@ -377,7 +377,12 @@
     .bag-area{max-width:100%;width:100%;height:auto;flex:0 0 auto;justify-content:center}
     .scr-body{flex-direction:column;gap:2vh;align-items:stretch}
     .bag-svg{height:32vh;max-height:32vh}
-    .scr-types{grid-template-columns:repeat(4,1fr);width:100%}
+    /* grid-template-rows:1fr (القاعدة الأصلية) يحتاج ارتفاعاً محدداً ليقسمه؛ بما أن .screen/.scr-body صارا
+       بلا ارتفاع محدد هنا (auto بحسب المحتوى) ينهار الصف. الاعتماد على محتوى المربع لتحديد ارتفاعه (auto)
+       لا يكفي أيضاً لأن محتوى الهويتين (tile-in) موضوع position:absolute أي خارج تدفق الصفحة فلا يُحتسب في
+       ارتفاع أبيه — لذا يُشتق ارتفاع المربع من عرضه المعروف أصلاً عبر aspect-ratio بدل الاعتماد على محتواه */
+    .scr-types{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,auto);width:100%}
+    .type-tile{height:auto;aspect-ratio:1/.82}
     .scr-foot{flex-direction:column}
     .scr-qr{padding:6px 6px 4px}
   }
