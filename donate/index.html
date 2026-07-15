@@ -369,9 +369,13 @@
   .screen.skin-goldglass::after{opacity:.72}
   .screen.skin-neonblue::after{opacity:.75}
   @media(max-width:760px){
-    .scr-body{flex-direction:column;gap:2vh}
-    .bag-svg{height:32vh}
-    .scr-types{grid-template-columns:repeat(4,1fr);width:100%}
+    /* .bag-area و.scr-types كانا height:100% وهو صحيح فقط عندما .scr-body صفّ (desktop)؛ بعد قلب الاتجاه
+       لعمود هنا يعني height:100% أن كل عنصر يطلب كامل ارتفاع .scr-body، فيطغى الكيس على مربعات الفصائل
+       ويتسبب هذا بتراكب حقيقي مع بقية الشاشة — لذا الكيس يأخذ ارتفاعه من محتواه فقط والمربعات تأخذ الباقي */
+    .scr-body{flex-direction:column;gap:2vh;align-items:stretch}
+    .bag-area{max-width:100%;width:100%;height:auto;flex:0 0 auto;justify-content:center}
+    .bag-svg{height:32vh;max-height:32vh}
+    .scr-types{flex:1 1 auto;height:auto;min-height:0;grid-template-columns:repeat(4,1fr);width:100%}
     .scr-foot{flex-direction:column}
     .scr-qr{padding:6px 6px 4px}
   }
