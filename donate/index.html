@@ -369,13 +369,15 @@
   .screen.skin-goldglass::after{opacity:.72}
   .screen.skin-neonblue::after{opacity:.75}
   @media(max-width:760px){
-    /* .bag-area و.scr-types كانا height:100% وهو صحيح فقط عندما .scr-body صفّ (desktop)؛ بعد قلب الاتجاه
-       لعمود هنا يعني height:100% أن كل عنصر يطلب كامل ارتفاع .scr-body، فيطغى الكيس على مربعات الفصائل
-       ويتسبب هذا بتراكب حقيقي مع بقية الشاشة — لذا الكيس يأخذ ارتفاعه من محتواه فقط والمربعات تأخذ الباقي */
-    .scr-body{flex-direction:column;gap:2vh;align-items:stretch}
+    /* التصميم الأصلي "شاشة واحدة بلا تمرير" مبني لعرض العرض الكبير (بروجكتر/ديسك توب) حيث المقاسات مُختبرة
+       يدوياً. على عرض ضيق، إجبار كل المحتوى داخل 100dvh بالضبط ينتج نفس التراكب دائماً (الكيس/الدائرة تطلب
+       ارتفاعها الحقيقي بوحدات vh بغض النظر عن المساحة المتاحة فعلياً) بغض النظر عن حجم النافذة بالضبط —
+       لذا نعامل عرض الجوال كصفحة عادية: الطول يتحدد بمحتواه، وتُفعَّل صفحة تمرير عادية بدل القص/التراكب */
+    .screen{height:auto;min-height:100vh;min-height:100dvh;overflow:visible;padding-bottom:4vh}
     .bag-area{max-width:100%;width:100%;height:auto;flex:0 0 auto;justify-content:center}
+    .scr-body{flex-direction:column;gap:2vh;align-items:stretch}
     .bag-svg{height:32vh;max-height:32vh}
-    .scr-types{flex:1 1 auto;height:auto;min-height:0;grid-template-columns:repeat(4,1fr);width:100%}
+    .scr-types{grid-template-columns:repeat(4,1fr);width:100%}
     .scr-foot{flex-direction:column}
     .scr-qr{padding:6px 6px 4px}
   }
@@ -1142,12 +1144,21 @@ function attachLogoDrag(){
     };
   });
 }
+/* قفل التمرير (بلا سكرول) مقصور على عرض الشاشة الكبيرة (بروجكتر/ديسك توب) حيث التصميم "شاشة واحدة" مضبوط
+   يدوياً؛ على عرض الجوال تُعامَل الشاشة كصفحة عادية قابلة للتمرير (يحدّد طولها محتواها) بدل إجبارها على
+   الارتفاع الكامل بالضبط، لأن هذا الإجبار هو ما كان يسبب التراكب أياً كان الجهاز أو حجم النافذة */
+function applyScrScrollLock(){
+  const lock=!isMobileScr();
+  document.documentElement.style.overflow=lock?"hidden":"";
+  document.body.style.overflow=lock?"hidden":"";
+}
 /* عند عبور العتبة بين وضعي الجوال/الشاشة الكبيرة (تدوير الجوال، أو تصغير نافذة الديسك توب) تُعاد لوحة
-   الأدوات وتموضع العناصر لتعكس إعدادات السياق الجديد فوراً بدل بقائها على قيم السياق السابق */
+   الأدوات وتموضع العناصر وقفل التمرير لتعكس إعدادات السياق الجديد فوراً بدل بقائها على قيم السياق السابق */
 let _scrWasMobile=null;
 window.addEventListener("resize",()=>{
   if(!$("#scr")||!window._scrId)return;
   applyLogoScale();
+  applyScrScrollLock();
   const m=isMobileScr();
   if(m!==_scrWasMobile){_scrWasMobile=m;if(window._scrEdit)renderScrTools(window._scrId);}
 });
@@ -1247,7 +1258,7 @@ function toggleScrLang(){
 async function renderScreen(id,edit){
   window._scrId=id;
   window._scrEdit=!!edit;
-  document.documentElement.style.overflow="hidden";document.body.style.overflow="hidden"; // كل شيء يظهر في شاشة واحدة بدون تمرير
+  applyScrScrollLock();
   $("#view").innerHTML=`<div class="screen" id="scr"><div class="center-load" style="min-height:80vh;color:#fff">جارِ التحميل…</div></div><div id="scr-tools-host"></div>`;
   const cacheKey="dc_cache_"+id;
   let built=false,lastTotal=null;
