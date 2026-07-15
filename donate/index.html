@@ -109,8 +109,14 @@
   .thanks-num{font-size:15px;color:var(--muted)}
   .thanks-num b{color:var(--blood);font-size:22px}
 
-  /* ===== display screen (ألوان تناسب كيس الدم) — كل المحتوى يظهر في شاشة واحدة بدون تمرير ===== */
-  .screen{--chip:clamp(48px,7.6vh,86px);height:100vh;height:100dvh;background:radial-gradient(1400px 800px at 70% -10%,#d90429 0%,#800f2f 45%,#3d0814 100%);color:#fff;display:flex;flex-direction:column;padding:1.6vh 3vw;overflow:hidden;position:relative;box-sizing:border-box}
+  /* ===== display screen (ألوان تناسب كيس الدم) ===== */
+  /* الهدف الأصلي "شاشة واحدة بلا تمرير" يتحقق طالما وحدات vh تكفي محتواها الحقيقي (بروجكتر/ديسك توب بمقاس
+     معقول) — لكن height:100dvh + overflow:hidden الصارمين بلا أي حد أدنى كانا يجبران .bag-area/.scr-types
+     (height:100%) على الانضغاط الفعلي حتى الاختفاء (لوحظ حتى على نافذة ديسك توب عادية 800×600 قصيرة الارتفاع)
+     بدل مجرد فقدان الشاشة الواحدة. الحل: min-height بدل height + overflow-y:auto كشبكة أمان، ولكل من
+     .bag-area/.scr-types حد أدنى حقيقي (بالأسفل) فلا ينضغطان أبداً لما دون قراءة معقولة — فإن لم تتسع
+     المساحة threshold يكبر ارتفاع .screen نفسه وتظهر شريط تمرير طبيعي بدل التراكب/الانضغاط غير المفهوم */
+  .screen{--chip:clamp(48px,7.6vh,86px);min-height:100vh;min-height:100dvh;background:radial-gradient(1400px 800px at 70% -10%,#d90429 0%,#800f2f 45%,#3d0814 100%);color:#fff;display:flex;flex-direction:column;padding:1.6vh 3vw;overflow-x:hidden;overflow-y:auto;position:relative;box-sizing:border-box}
   /* العنوان وشريط الأيام/الوقت يتوسطان كامل عرض الشاشة (بلا تقسيم أعمدة اصطناعي كان يفرض التفافاً غير مرغوب) */
   .scr-head{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;flex:none;margin-top:1.4vh}
   .scr-logo{height:9vh;max-height:90px;min-height:52px;object-fit:contain;background:#fff;border-radius:14px;padding:6px}
@@ -124,7 +130,7 @@
   .day-chip b{display:block;font-size:clamp(13px,1.9vh,19px)}
   .day-chip.now{background:#fff;color:#800f2f}
   .scr-body{flex:1 1 auto;display:flex;align-items:center;gap:2.4vw;margin-top:.8vh;min-height:0}
-  .bag-area{flex:none;height:100%;display:flex;align-items:center;gap:2vw;max-width:44%}
+  .bag-area{flex:none;height:100%;min-height:170px;display:flex;align-items:center;gap:2vw;max-width:44%}
   .bag-svg{height:100%;max-height:100%;width:auto;filter:drop-shadow(0 12px 30px rgba(0,0,0,.4))}
   #blood-g{transition:transform 1.5s cubic-bezier(.22,1,.36,1)}
   .bag-side .pct{font-size:clamp(30px,7vh,84px);font-weight:800;line-height:1;text-shadow:0 4px 18px rgba(0,0,0,.35)}
@@ -132,8 +138,8 @@
   .bag-side .of b{font-size:clamp(16px,2.8vh,30px)}
   .drop-fall{animation:dropFall 1.15s cubic-bezier(.45,0,.9,.55) forwards}
   @keyframes dropFall{0%{transform:translateY(0) scale(.85);opacity:0}12%{opacity:1}80%{opacity:1}100%{transform:translateY(258px) scale(1.02);opacity:0}}
-  .scr-types{flex:1;height:100%;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:1vh 1.2vw;min-width:0}
-  .type-tile{background:linear-gradient(160deg,var(--tile-g1,rgba(255,255,255,.16)),var(--tile-g2,rgba(255,255,255,.06)) 65%);border:1px solid rgba(255,255,255,.22);border-radius:16px;text-align:center;backdrop-filter:blur(4px);min-height:0;position:relative}
+  .scr-types{flex:1;height:100%;min-height:170px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:1vh 1.2vw;min-width:0}
+  .type-tile{background:linear-gradient(160deg,var(--tile-g1,rgba(255,255,255,.16)),var(--tile-g2,rgba(255,255,255,.06)) 65%);border:1px solid rgba(255,255,255,.22);border-radius:16px;text-align:center;backdrop-filter:blur(4px);min-height:60px;position:relative}
   .tile-in{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:4px 8px;gap:2px}
   .type-tile .tl{font-size:clamp(13px,2.6vh,26px);font-weight:800;direction:ltr}
   .type-tile .tc{font-size:clamp(18px,3.3vh,38px);font-weight:800;line-height:1.05;margin:1px 0}
@@ -369,11 +375,9 @@
   .screen.skin-goldglass::after{opacity:.72}
   .screen.skin-neonblue::after{opacity:.75}
   @media(max-width:760px){
-    /* التصميم الأصلي "شاشة واحدة بلا تمرير" مبني لعرض العرض الكبير (بروجكتر/ديسك توب) حيث المقاسات مُختبرة
-       يدوياً. على عرض ضيق، إجبار كل المحتوى داخل 100dvh بالضبط ينتج نفس التراكب دائماً (الكيس/الدائرة تطلب
-       ارتفاعها الحقيقي بوحدات vh بغض النظر عن المساحة المتاحة فعلياً) بغض النظر عن حجم النافذة بالضبط —
-       لذا نعامل عرض الجوال كصفحة عادية: الطول يتحدد بمحتواه، وتُفعَّل صفحة تمرير عادية بدل القص/التراكب */
-    .screen{height:auto;min-height:100vh;min-height:100dvh;overflow:visible;padding-bottom:4vh}
+    /* .screen صار min-height/overflow-y:auto عالمياً في القاعدة أعلاه (وليس هنا فقط) — الخاص بالجوال هنا
+       هو قلب اتجاه .scr-body لعمود، وجعل الكيس بلا حد أدنى صارم لأن محتواه (32vh) أصلاً أكبر منه بكثير */
+    .screen{padding-bottom:4vh}
     .bag-area{max-width:100%;width:100%;height:auto;flex:0 0 auto;justify-content:center}
     .scr-body{flex-direction:column;gap:2vh;align-items:stretch}
     .bag-svg{height:32vh;max-height:32vh}
@@ -1149,21 +1153,15 @@ function attachLogoDrag(){
     };
   });
 }
-/* قفل التمرير (بلا سكرول) مقصور على عرض الشاشة الكبيرة (بروجكتر/ديسك توب) حيث التصميم "شاشة واحدة" مضبوط
-   يدوياً؛ على عرض الجوال تُعامَل الشاشة كصفحة عادية قابلة للتمرير (يحدّد طولها محتواها) بدل إجبارها على
-   الارتفاع الكامل بالضبط، لأن هذا الإجبار هو ما كان يسبب التراكب أياً كان الجهاز أو حجم النافذة */
-function applyScrScrollLock(){
-  const lock=!isMobileScr();
-  document.documentElement.style.overflow=lock?"hidden":"";
-  document.body.style.overflow=lock?"hidden":"";
-}
+/* لا قفل للتمرير: overflow يبقى على الافتراضي (route() يعيد ضبطه لكل صفحة) — .screen نفسه min-height
+   بدل height صارم، فلا يظهر شريط تمرير أصلاً طالما اتسعت الشاشة لمحتواها، ويظهر تلقائياً بلا تراكب/انضغاط
+   حين لا تتسع (بروجكتر/جوال بأي مقاس) */
 /* عند عبور العتبة بين وضعي الجوال/الشاشة الكبيرة (تدوير الجوال، أو تصغير نافذة الديسك توب) تُعاد لوحة
-   الأدوات وتموضع العناصر وقفل التمرير لتعكس إعدادات السياق الجديد فوراً بدل بقائها على قيم السياق السابق */
+   الأدوات وتموضع العناصر لتعكس إعدادات السياق الجديد فوراً بدل بقائها على قيم السياق السابق */
 let _scrWasMobile=null;
 window.addEventListener("resize",()=>{
   if(!$("#scr")||!window._scrId)return;
   applyLogoScale();
-  applyScrScrollLock();
   const m=isMobileScr();
   if(m!==_scrWasMobile){_scrWasMobile=m;if(window._scrEdit)renderScrTools(window._scrId);}
 });
@@ -1263,7 +1261,6 @@ function toggleScrLang(){
 async function renderScreen(id,edit){
   window._scrId=id;
   window._scrEdit=!!edit;
-  applyScrScrollLock();
   $("#view").innerHTML=`<div class="screen" id="scr"><div class="center-load" style="min-height:80vh;color:#fff">جارِ التحميل…</div></div><div id="scr-tools-host"></div>`;
   const cacheKey="dc_cache_"+id;
   let built=false,lastTotal=null;
