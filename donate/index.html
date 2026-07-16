@@ -389,8 +389,10 @@
   .screen.skin-bloodbags .scr-clock b{background:#fff6f6;color:var(--sk-font,#7a0c12)}
   .screen.skin-bloodbags .scr-clock i{color:var(--sk-font,#7a0c12)}
   .screen.skin-bloodbags .scr-timebar-fill{background:var(--sk-bar,linear-gradient(90deg,#7a0c12,#e5484d));box-shadow:0 0 10px rgba(193,18,31,.7)}
-  .screen.skin-bloodbags .pct-ring{--ring-c:var(--sk-ring,#c1121f);--ring-track:var(--sk-track,rgba(193,18,31,.2));--ring-hole:var(--sk-hole,rgba(255,255,255,.94))}
-  .screen.skin-bloodbags .bag-side .pct{color:var(--sk-font,#c1121f)}
+  /* خلفية دائرة النسبة والرقم داخلها مربوطان بلون الكيس نفسه (جسمه الأبيض شبه الشفاف ولون الدم داخله)
+     بدل صيغتَي --sk-hole/--sk-font العامتين، حتى تتطابق دائماً مع الكيس المجاور لها بصرياً */
+  .screen.skin-bloodbags .pct-ring{--ring-c:var(--sk-ring,#c1121f);--ring-track:var(--sk-track,rgba(193,18,31,.2));--ring-hole:rgba(255,255,255,.72)}
+  .screen.skin-bloodbags .bag-side .pct{color:#c1121f}
   .screen.skin-bloodbags .type-tile .tc{color:var(--sk-font,#c1121f)}
   .screen.skin-bloodbags .scr-qr{background:var(--sk-deep,#5c0d13)}
   .screen.skin-bloodbags .scr-qr::after{background:#5c0d13}
