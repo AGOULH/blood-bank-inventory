@@ -230,7 +230,7 @@
   .screen.skin-neonblue .type-tile .tl,.screen.skin-goldglass .type-tile .tl,.screen.skin-bloodbags .type-tile .tl{font-size:clamp(16px,3.5vh,40px)}
   .screen.skin-neonblue .type-tile .tc,.screen.skin-goldglass .type-tile .tc,.screen.skin-bloodbags .type-tile .tc{font-size:clamp(18px,3.5vh,39px)}
   .screen.skin-neonblue .type-tile .ts,.screen.skin-goldglass .type-tile .ts,.screen.skin-bloodbags .type-tile .ts{font-size:clamp(9px,1.15vh,12px);letter-spacing:-.2px}
-  .screen.skin-neonblue .scr-types,.screen.skin-goldglass .scr-types,.screen.skin-bloodbags .scr-types{gap:1.6vh 1.4vw}
+  .screen.skin-neonblue .scr-types,.screen.skin-goldglass .scr-types,.screen.skin-bloodbags .scr-types{gap:1.6vh 1.4vw;min-height:220px}
   .screen.skin-neonblue .type-tile{background:var(--sk-tile-bg,rgba(12,44,56,.42));border:1px solid var(--sk-border-soft,rgba(120,220,255,.22));box-shadow:inset 0 0 22px rgba(72,219,255,.08),0 10px 26px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
   .screen.skin-neonblue .tile-in{background:var(--sk-tile,linear-gradient(160deg,rgba(155,238,255,.95),rgba(63,169,201,.8) 55%,rgba(28,87,112,.95)));filter:drop-shadow(0 0 10px rgba(72,219,255,.45))}
   .screen.skin-neonblue .tile-in::before{background:var(--sk-tile-in,linear-gradient(165deg,rgba(14,52,66,.94),rgba(5,22,30,.96)))}
@@ -412,13 +412,19 @@
   /* بطاقة الملصق الأبيض في المنتصف — تحلّ محل الشارة الثمانية المقصوصة، وتحمل الفصيلة والعدد */
   .screen.skin-bloodbags .tile-in{
     position:absolute;inset:auto;top:50%;left:50%;transform:translate(-50%,-50%);
-    height:auto;width:76%;aspect-ratio:auto;clip-path:none;
+    height:auto;width:88%;aspect-ratio:auto;clip-path:none;
     background:linear-gradient(165deg,#ffffff 0%,#fdf1f1 100%);
     border:1px solid rgba(122,12,18,.25);border-radius:8px;box-shadow:0 3px 10px rgba(74,9,16,.2);
-    padding:6% 4%
+    padding:4% 3%
   }
   .screen.skin-bloodbags .tile-in::before{content:none}
   .screen.skin-bloodbags .type-tile .tl,.screen.skin-bloodbags .type-tile .ts{color:var(--sk-font,#5c0d13)}
+  /* أعداد/حروف أصغر قليلاً هنا (بخلاف الهويتين الأخريين ذواتي البطاقة الثابتة النسبة) لأن بطاقة الملصق
+     ارتفاعها تلقائي بحسب المحتوى — بلا هذا الهامش يفيض مجموع الأسطر الثلاثة عن ارتفاع الكيس الفعلي
+     فيقصّه clip-path الكيس، وأول ما يختفي هو آخر سطر (كلمة "متبرعاً") */
+  .screen.skin-bloodbags .type-tile .tl{font-size:clamp(13px,3vh,32px)}
+  .screen.skin-bloodbags .type-tile .tc{font-size:clamp(15px,2.9vh,30px)}
+  .screen.skin-bloodbags .type-tile .ts{font-size:clamp(9px,1.05vh,12px);opacity:1}
   @media(max-width:760px){
     /* .screen صار min-height/overflow-y:auto عالمياً في القاعدة أعلاه (وليس هنا فقط) — الخاص بالجوال هنا
        هو قلب اتجاه .scr-body لعمود، وجعل الكيس بلا حد أدنى صارم لأن محتواه (32vh) أصلاً أكبر منه بكثير */
@@ -1240,7 +1246,7 @@ function applyTheme(){
     if(scrFont)scr.style.setProperty("--sk-font",scrFont);else scr.style.removeProperty("--sk-font");
     if(scrTint){ // نفس التدرج المميز باللون المختار — يسري على كل عناصر الهوية
       const t=scrTint,S=(k,v)=>scr.style.setProperty(k,v);
-      S("--sk-bg",`radial-gradient(1400px 800px at 70% -10%, ${mixC(t,.78,true)} 0%, ${t} 45%, ${mixC(t,.82,false)} 100%)`);
+      S("--sk-bg",`radial-gradient(1400px 800px at 70% -10%, ${mixC(t,.78,true)} 0%, ${t} 45%, ${mixC(t,.5,false)} 100%)`);
       S("--sk-tile",`linear-gradient(160deg, ${mixC(t,.62,true)}, ${mixC(t,.15,true)} 55%, ${mixC(t,.35,false)})`);
       S("--sk-tile-in",`linear-gradient(165deg, ${mixC(t,.68,false,.94)}, ${mixC(t,.84,false,.96)})`);
       S("--sk-tile-bg",mixC(t,.55,false,.42));
