@@ -394,38 +394,60 @@
   .screen.skin-bloodbags .type-tile .tc{color:var(--sk-font,#c1121f)}
   .screen.skin-bloodbags .scr-qr{background:var(--sk-deep,#5c0d13)}
   .screen.skin-bloodbags .scr-qr::after{background:#5c0d13}
-  /* جسم الكيس: .type-tile نفسه هو الشكل المقصوص (بدل الشارة الثمانية) — أفقيّاً مسطّح الزوايا أعلى وأسفل
-     ليقرأ ككيس لا كمعيّن، ومملوء بتدرّج أحمر يحاكي الدم بدل الزجاج الشفاف */
+  /* جسم الكيس: مستطيل حقيقي مستدير الزوايا (لا مقصوص) بدل الشارة الثمانية — أقرب لصورة كيس دم فعلي،
+     ومملوء بتدرّج أحمر يحاكي الدم مع بريق علوي خفيف يوحي بلمعان الكيس البلاستيكي */
   .screen.skin-bloodbags .type-tile{
-    --hx:polygon(18% 0,82% 0,100% 9%,100% 91%,82% 100%,18% 100%,0 91%,0 9%);
-    clip-path:var(--hx);background:var(--sk-tile,linear-gradient(165deg,#e5484d 0%,#c1121f 45%,#6b0f16 100%));
-    border:1px solid var(--sk-border,rgba(122,12,18,.5));box-shadow:inset 0 0 18px rgba(0,0,0,.18),0 8px 20px rgba(74,9,16,.35);backdrop-filter:none
+    clip-path:none;border-radius:8px 8px 16px 16px;overflow:visible;
+    background:var(--sk-tile,linear-gradient(165deg,#e5484d 0%,#c1121f 45%,#6b0f16 100%));
+    border:2px solid var(--sk-border,#7a0c12);
+    box-shadow:inset 0 14px 18px -6px rgba(255,255,255,.28),inset 0 0 20px rgba(0,0,0,.2),0 8px 20px rgba(74,9,16,.35);
+    backdrop-filter:none
   }
-  /* لسان التعليق أعلى الكيس وأنبوب صغير أسفله — عنصرا ::before/::after على .type-tile نفسه فلا يقصّهما clip-path */
+  /* منفذان (لا لسان واحد) أعلى الكيس — طبقتا خلفية كل منهما نصف عرض العنصر الوهمي مع فجوة بينهما،
+     وأنبوب واحد أسفله يخرج نحو الأنبوب الواصل بين الأكياس والكيس الرئيسي (.scr-flow) */
   .screen.skin-bloodbags .type-tile::before{
-    content:"";position:absolute;top:-6%;left:50%;transform:translateX(-50%);
-    width:22%;height:10%;background:#f6dde0;border:1px solid var(--sk-border,rgba(122,12,18,.5));border-radius:3px 3px 0 0;z-index:2
+    content:"";position:absolute;top:-10%;left:50%;transform:translateX(-50%);
+    width:48%;height:13%;z-index:2;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3));
+    background:
+      linear-gradient(180deg,#eef2f6,#c7ced6) left/44% 100% no-repeat,
+      linear-gradient(180deg,#eef2f6,#c7ced6) right/44% 100% no-repeat;
+    border-radius:2px 2px 0 0
   }
   .screen.skin-bloodbags .type-tile::after{
-    content:"";position:absolute;bottom:-8%;left:50%;transform:translateX(-50%);
-    width:5%;height:11%;background:#f6dde0;border:1px solid var(--sk-border,rgba(122,12,18,.5));border-radius:0 0 3px 3px;z-index:2
+    content:"";position:absolute;bottom:-15%;left:50%;transform:translateX(-50%);
+    width:11%;height:17%;background:linear-gradient(180deg,#eef2f6,#c7ced6);
+    border-radius:0 0 4px 4px;box-shadow:0 2px 4px rgba(0,0,0,.25);z-index:2
   }
-  /* بطاقة الملصق الأبيض في المنتصف — تحلّ محل الشارة الثمانية المقصوصة، وتحمل الفصيلة والعدد */
+  /* بطاقة الملصق الأبيض — أضيق من ذي قبل كي تبقى حواف الكيس الحمراء ظاهرة (كانت 88% تكاد تغطي الكيس بالكامل
+     فيبدو بطاقة باهتة لا كيس دم)، مزاحة قليلاً لأسفل عن مركز الكيس لتفسح مكاناً للمنفذين أعلاه */
   .screen.skin-bloodbags .tile-in{
-    position:absolute;inset:auto;top:50%;left:50%;transform:translate(-50%,-50%);
-    height:auto;width:88%;aspect-ratio:auto;clip-path:none;
+    position:absolute;inset:auto;top:54%;left:50%;transform:translate(-50%,-50%);
+    height:auto;width:68%;aspect-ratio:auto;clip-path:none;
     background:linear-gradient(165deg,#ffffff 0%,#fdf1f1 100%);
-    border:1px solid rgba(122,12,18,.25);border-radius:8px;box-shadow:0 3px 10px rgba(74,9,16,.2);
-    padding:4% 3%
+    border:1px solid rgba(122,12,18,.25);border-radius:6px;box-shadow:0 3px 10px rgba(74,9,16,.25);
+    padding:5% 4%
   }
   .screen.skin-bloodbags .tile-in::before{content:none}
   .screen.skin-bloodbags .type-tile .tl,.screen.skin-bloodbags .type-tile .ts{color:var(--sk-font,#5c0d13)}
+  .screen.skin-bloodbags .type-tile .tl::before{content:"🩸";font-size:.65em;margin-inline-end:2px;vertical-align:2%}
   /* أعداد/حروف أصغر قليلاً هنا (بخلاف الهويتين الأخريين ذواتي البطاقة الثابتة النسبة) لأن بطاقة الملصق
      ارتفاعها تلقائي بحسب المحتوى — بلا هذا الهامش يفيض مجموع الأسطر الثلاثة عن ارتفاع الكيس الفعلي
-     فيقصّه clip-path الكيس، وأول ما يختفي هو آخر سطر (كلمة "متبرعاً") */
+     فتُقصّ، وأول ما يختفي هو آخر سطر (كلمة "متبرعاً") */
   .screen.skin-bloodbags .type-tile .tl{font-size:clamp(13px,3vh,32px)}
   .screen.skin-bloodbags .type-tile .tc{font-size:clamp(15px,2.9vh,30px)}
   .screen.skin-bloodbags .type-tile .ts{font-size:clamp(9px,1.05vh,12px);opacity:1}
+  /* أنبوب واصل مرئي بين شبكة الأكياس والكيس الرئيسي — يوحي بأن التعبئة قادمة من هذه الأكياس، بلا حاجة
+     لرسم خط لكل كيس على حدة (كان هشاً مع سحب/تحريك العناصر وتغيّر المقاسات) */
+  .scr-flow{display:none}
+  .screen.skin-bloodbags .scr-flow{
+    display:block;flex:none;align-self:center;width:clamp(22px,3.2vw,46px);height:62%;min-height:90px;
+    border-radius:10px;border:1px solid rgba(122,12,18,.5);
+    background:repeating-linear-gradient(180deg,#c1121f 0 10px,#7a0c12 10px 20px);
+    background-size:100% 20px;animation:bbFlow 1s linear infinite;
+    box-shadow:0 0 10px rgba(193,18,31,.5),inset 0 1px 4px rgba(0,0,0,.35)
+  }
+  @keyframes bbFlow{from{background-position:0 0}to{background-position:0 20px}}
+  @media(max-width:760px){.screen.skin-bloodbags .scr-flow{display:none}}
   @media(max-width:760px){
     /* .screen صار min-height/overflow-y:auto عالمياً في القاعدة أعلاه (وليس هنا فقط) — الخاص بالجوال هنا
        هو قلب اتجاه .scr-body لعمود، وجعل الكيس بلا حد أدنى صارم لأن محتواه (32vh) أصلاً أكبر منه بكثير */
@@ -1524,6 +1546,7 @@ function drawScreen(id,c){
           <div class="of"><b id="tot">0</b> ${L.of} <b>${c.goal}</b> ${L.donors}</div>
         </div>
       </div>
+      <div class="scr-flow"></div>
       <div class="scr-types" data-lg="types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div></div>`).join("")}</div>
     </div>
     <div class="scr-foot">
