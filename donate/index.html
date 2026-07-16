@@ -394,24 +394,28 @@
   .screen.skin-bloodbags .type-tile .tc{color:var(--sk-font,#c1121f)}
   .screen.skin-bloodbags .scr-qr{background:var(--sk-deep,#5c0d13)}
   .screen.skin-bloodbags .scr-qr::after{background:#5c0d13}
-  /* جسم الكيس: مستطيل حقيقي مستدير الزوايا (لا مقصوص) بدل الشارة الثمانية — أقرب لصورة كيس دم فعلي،
-     ومملوء بتدرّج أحمر يحاكي الدم مع بريق علوي خفيف يوحي بلمعان الكيس البلاستيكي */
+  /* جسم الكيس: طبق الأصل عن صورة المرجع — كيس مستدير الزوايا ينتفخ ويتقوّس عند القاعدة (لا مستطيل صريح)،
+     مع بريق علوي لامع أعلى اليسار يحاكي لمعان البلاستيك، وحافة داكنة أسفله توحي بعمق السائل */
   .screen.skin-bloodbags .type-tile{
-    clip-path:none;border-radius:8px 8px 16px 16px;overflow:visible;
-    background:var(--sk-tile,linear-gradient(165deg,#e5484d 0%,#c1121f 45%,#6b0f16 100%));
+    clip-path:none;border-radius:16% 16% 42% 42%/9% 9% 26% 26%;overflow:visible;
+    background:
+      radial-gradient(120% 65% at 18% 10%,rgba(255,255,255,.4),transparent 55%),
+      var(--sk-tile,linear-gradient(165deg,#e5484d 0%,#c1121f 45%,#6b0f16 100%));
     border:2px solid var(--sk-border,#7a0c12);
-    box-shadow:inset 0 14px 18px -6px rgba(255,255,255,.28),inset 0 0 20px rgba(0,0,0,.2),0 8px 20px rgba(74,9,16,.35);
+    box-shadow:inset 0 0 22px rgba(0,0,0,.22),0 8px 20px rgba(74,9,16,.35);
     backdrop-filter:none
   }
-  /* منفذان (لا لسان واحد) أعلى الكيس — طبقتا خلفية كل منهما نصف عرض العنصر الوهمي مع فجوة بينهما،
+  /* ثلاثة منافذ مضلّعة (لا لسان واحد) أعلى الكيس فوق طوق رمادي — طبقات خلفية متعددة تحاكي شكل المرجع،
      وأنبوب واحد أسفله يخرج نحو الأنبوب الواصل بين الأكياس والكيس الرئيسي (.scr-flow) */
   .screen.skin-bloodbags .type-tile::before{
-    content:"";position:absolute;top:-10%;left:50%;transform:translateX(-50%);
-    width:48%;height:13%;z-index:2;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3));
+    content:"";position:absolute;top:-15%;left:50%;transform:translateX(-50%);
+    width:58%;height:20%;z-index:2;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3));
     background:
-      linear-gradient(180deg,#eef2f6,#c7ced6) left/44% 100% no-repeat,
-      linear-gradient(180deg,#eef2f6,#c7ced6) right/44% 100% no-repeat;
-    border-radius:2px 2px 0 0
+      repeating-linear-gradient(180deg,#eef2f6 0 12%,#aab2ba 12% 22%) 6% 0/15% 68% no-repeat,
+      repeating-linear-gradient(180deg,#eef2f6 0 12%,#aab2ba 12% 22%) 42% 0/16% 68% no-repeat,
+      repeating-linear-gradient(180deg,#eef2f6 0 12%,#aab2ba 12% 22%) 79% 0/15% 68% no-repeat,
+      linear-gradient(180deg,#eef2f6,#c7ced6) 0 100%/100% 50% no-repeat;
+    border-radius:4px 4px 0 0
   }
   .screen.skin-bloodbags .type-tile::after{
     content:"";position:absolute;bottom:-15%;left:50%;transform:translateX(-50%);
@@ -419,9 +423,9 @@
     border-radius:0 0 4px 4px;box-shadow:0 2px 4px rgba(0,0,0,.25);z-index:2
   }
   /* بطاقة الملصق الأبيض — أضيق من ذي قبل كي تبقى حواف الكيس الحمراء ظاهرة (كانت 88% تكاد تغطي الكيس بالكامل
-     فيبدو بطاقة باهتة لا كيس دم)، مزاحة قليلاً لأسفل عن مركز الكيس لتفسح مكاناً للمنفذين أعلاه */
+     فيبدو بطاقة باهتة لا كيس دم)، مزاحة قليلاً لأسفل عن مركز الكيس لتفسح مكاناً للمنافذ أعلاه */
   .screen.skin-bloodbags .tile-in{
-    position:absolute;inset:auto;top:54%;left:50%;transform:translate(-50%,-50%);
+    position:absolute;inset:auto;top:56%;left:50%;transform:translate(-50%,-50%);
     height:auto;width:68%;aspect-ratio:auto;clip-path:none;
     background:linear-gradient(165deg,#ffffff 0%,#fdf1f1 100%);
     border:1px solid rgba(122,12,18,.25);border-radius:6px;box-shadow:0 3px 10px rgba(74,9,16,.25);
@@ -430,9 +434,15 @@
   .screen.skin-bloodbags .tile-in::before{content:none}
   .screen.skin-bloodbags .type-tile .tl,.screen.skin-bloodbags .type-tile .ts{color:var(--sk-font,#5c0d13)}
   .screen.skin-bloodbags .type-tile .tl::before{content:"🩸";font-size:.65em;margin-inline-end:2px;vertical-align:2%}
+  /* خط باركود زخرفي رفيع بين الفصيلة والعدد — يحاكي ملصق المرجع بلا استهلاك ارتفاع يُذكر */
+  .bc{display:none}
+  .screen.skin-bloodbags .bc{
+    display:block;width:72%;height:5px;margin:3px auto;opacity:.65;
+    background:repeating-linear-gradient(90deg,#2b2b2b 0 1.5px,transparent 1.5px 3px,#2b2b2b 3px 5px,transparent 5px 8px)
+  }
   /* أعداد/حروف أصغر قليلاً هنا (بخلاف الهويتين الأخريين ذواتي البطاقة الثابتة النسبة) لأن بطاقة الملصق
-     ارتفاعها تلقائي بحسب المحتوى — بلا هذا الهامش يفيض مجموع الأسطر الثلاثة عن ارتفاع الكيس الفعلي
-     فتُقصّ، وأول ما يختفي هو آخر سطر (كلمة "متبرعاً") */
+     ارتفاعها تلقائي بحسب المحتوى — بلا هذا الهامش يفيض مجموع الأسطر عن ارتفاع الكيس الفعلي فتُقصّ،
+     وأول ما يختفي هو آخر سطر (كلمة "متبرعاً") */
   .screen.skin-bloodbags .type-tile .tl{font-size:clamp(13px,3vh,32px)}
   .screen.skin-bloodbags .type-tile .tc{font-size:clamp(15px,2.9vh,30px)}
   .screen.skin-bloodbags .type-tile .ts{font-size:clamp(9px,1.05vh,12px);opacity:1}
@@ -1547,7 +1557,7 @@ function drawScreen(id,c){
         </div>
       </div>
       <div class="scr-flow"></div>
-      <div class="scr-types" data-lg="types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div></div>`).join("")}</div>
+      <div class="scr-types" data-lg="types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="bc"></div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div></div>`).join("")}</div>
     </div>
     <div class="scr-foot">
       <div class="phrase-box" id="phrase" data-p="">${esc(phraseFor(c,scrLang))}</div>
