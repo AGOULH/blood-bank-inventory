@@ -264,6 +264,7 @@
   .su-info{flex:1;min-width:0}
   .su-info b{display:block;color:#fff;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .su-info span{color:rgba(255,255,255,.5);font-size:11px}
+  .side-credit{text-align:center;font-size:10.5px;color:rgba(255,255,255,.35);padding:6px 4px 2px}
   .avatar{width:34px;height:34px;border-radius:50%;background:var(--green-bright);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex:none}
   .side.collapsed{width:68px}
   .side.collapsed .lbl-t{display:none}
@@ -956,7 +957,7 @@ function renderSidebar(){
     <div class="nav-scroll">${items}</div>
     <div class="side-foot"><div class="side-user" onclick="App.go('settings')" title="${t("nav_settings")}">
       <div class="avatar">${esc(av)}</div><div class="su-info"><b>${esc(uname)}</b><span>${esc(role)}</span></div>
-    </div></div>`;
+    </div><div class="side-credit lbl-t">${t("credit_line")}</div></div>`;
   $("side").classList.toggle("collapsed", localStorage.getItem("inv_collapsed")==="1");
   $("side").querySelectorAll(".nav-item").forEach(b=>b.onclick=()=>go(b.dataset.route));
 }
