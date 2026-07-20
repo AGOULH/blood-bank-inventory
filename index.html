@@ -49,12 +49,9 @@
   .login-err{color:var(--danger);font-size:13px;min-height:18px;margin-top:6px}
 
   #app{display:none;min-height:100vh}
-  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 18px}
-  .brand{display:flex;align-items:center;gap:11px;min-width:0}
-  .brand .mk{width:40px;height:40px;border-radius:11px;background:var(--crimson);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
-  .brand .t1{font-weight:800;font-size:15px;white-space:nowrap}
-  .brand .t2{color:var(--muted);font-size:12px;white-space:nowrap}
-  .brand .t3{color:var(--muted);font-size:10.5px;font-weight:700;white-space:nowrap;opacity:.75}
+  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:14px 18px;min-height:140px;box-sizing:border-box}
+  .top-logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;pointer-events:none}
+  .top-logo img{height:110px;width:auto;max-width:280px;object-fit:contain}
   .topbar .spacer{flex:1}
   .date-chip{font-size:12px;color:var(--muted);text-align:end;line-height:1.35}
   .date-chip b{color:var(--ink);font-weight:700}
@@ -62,7 +59,7 @@
   .lang-btn:hover{background:#f5f6f8}
 
   .layout{display:flex;align-items:flex-start}
-  .side{width:235px;flex:none;padding:16px 12px;position:sticky;top:61px;height:calc(100vh - 61px);overflow:auto;border-inline-end:1px solid var(--line);background:#fff}
+  .side{width:235px;flex:none;padding:16px 12px;position:sticky;top:141px;height:calc(100vh - 141px);overflow:auto;border-inline-end:1px solid var(--line);background:#fff}
   .nav-group{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.04em;padding:10px 10px 6px;text-transform:uppercase}
   .nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:start;border:none;background:none;padding:10px 11px;border-radius:10px;color:var(--ink);font-size:14px;font-weight:600;margin-bottom:2px;transition:background .15s var(--ease),color .15s var(--ease)}
   .nav-item .ic{width:22px;text-align:center;font-size:16px;flex:none}
@@ -178,7 +175,9 @@
   .menu-toggle{display:none;border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 10px;font-size:17px}
 
   @media(max-width:760px){
-    .side{position:fixed;inset-inline-start:0;top:61px;transition:.2s;box-shadow:-6px 0 24px rgba(0,0,0,.12);z-index:40}
+    .topbar{min-height:85px;padding:10px 14px}
+    .top-logo img{height:64px;max-width:160px}
+    .side{position:fixed;inset-inline-start:0;top:86px;transition:.2s;box-shadow:-6px 0 24px rgba(0,0,0,.12);z-index:40}
     .main{padding:16px 14px}
     .menu-toggle{display:inline-flex!important}
     .date-chip{display:none}
@@ -207,7 +206,7 @@
   .bar-fill{background:linear-gradient(90deg,var(--crimson-dark),var(--green-bright))}
   #login{background:radial-gradient(1200px 600px at 75% -10%,#1f9a55 0%,#0e7a3f 38%,#075a2e 100%)}
   .login-logo{display:flex;justify-content:center;margin-bottom:16px}
-  .moh-logo-img{height:66px;width:auto;max-width:270px;object-fit:contain}
+  .moh-logo-img{height:150px;width:auto;max-width:270px;object-fit:contain}
   .moh-lock{display:inline-flex;align-items:center;gap:11px}
   .moh-emblem{width:46px;height:46px;flex:none} .moh-emblem svg{width:100%;height:100%}
   .moh-words{display:flex;flex-direction:column;line-height:1.12;text-align:start}
@@ -216,7 +215,6 @@
   .login-card h1{color:var(--crimson-dark)}
   .login-sys{color:var(--crimson);font-weight:700;font-size:14px;margin:2px 0 0}
   .login-min{color:var(--muted);font-size:12.5px;margin:8px 0 0}
-  .brand .mk{background:transparent;padding:0;display:flex;align-items:center} .brand .mk svg{width:24px;height:24px} .brand-logo-img{height:34px;width:auto;display:block}
   .kpi{display:flex;align-items:center;gap:14px}
   .kpi-body{flex:1;min-width:0}
   .kpi-ic{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:23px;color:#fff;flex:none}
@@ -289,9 +287,7 @@
   <div class="login-card">
     <button class="lang-pill" data-i18n-lang onclick="App.toggleLang()">English</button>
     <div class="login-logo"><img src="moh-logo.png" alt="وزارة الصحة - Ministry of Health" class="moh-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"><span class="moh-lock" style="display:none"><span class="moh-emblem"><svg viewBox="0 0 64 64" fill="none" stroke="var(--gold)" stroke-width="3.4" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M32 58 V31"/><path d="M32 31 C25 27 19 27 14 31"/><path d="M32 31 C39 27 45 27 50 31"/><path d="M32 31 C27 24 22 21 17 19"/><path d="M32 31 C37 24 42 21 47 19"/><path d="M32 31 C31 23 31 17 32 12"/></svg></span><span class="moh-words"><b>وزارة الصحة</b><i>Ministry of Health</i></span></span></div>
-    <h1 data-i18n="org">بنك الدم المركزي بالدمام</h1>
     <p class="login-sys" data-i18n="sys_name">نظام إدارة مخزون المحاليل الطبية</p>
-    <p class="login-min" data-i18n="ministry_line">وزارة الصحة — المملكة العربية السعودية</p>
     <p class="login-min" data-i18n="credit_line">فكرة وإعداد: حسن العاقول</p>
     <div class="field"><label data-i18n="login_user">اسم المستخدم</label><input id="lg-user" autocomplete="username" data-i18n-ph="login_user"></div>
     <div class="field"><label data-i18n="login_pass">كلمة المرور</label><input id="lg-pass" type="password" autocomplete="current-password" data-i18n-ph="login_pass"></div>
@@ -303,10 +299,7 @@
 <div id="app">
   <div class="topbar">
     <button class="menu-toggle" onclick="App.toggleSide()">☰</button>
-    <div class="brand"><div class="mk"><img src="moh-logo.png" alt="" class="brand-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><svg style="display:none" viewBox="0 0 64 64" fill="none" stroke="var(--gold)" stroke-width="3.6" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M32 58 V31"/><path d="M32 31 C25 27 19 27 14 31"/><path d="M32 31 C39 27 45 27 50 31"/><path d="M32 31 C27 24 22 21 17 19"/><path d="M32 31 C37 24 42 21 47 19"/><path d="M32 31 C31 23 31 17 32 12"/></svg></div>
-      <div><div class="t1" data-i18n="bank_short">بنك الدم المركزي بالدمام</div>
-      <div class="t2" data-i18n="topbar_sub">وزارة الصحة</div>
-      <div class="t3" data-i18n="credit_line">فكرة وإعداد: حسن العاقول</div></div></div>
+    <div class="top-logo"><img src="moh-logo.png" alt=""></div>
     <div class="spacer"></div>
     <div class="date-chip" id="dateChip"></div>
     <button class="btn soft sm" onclick="App.scan()" data-i18n="scan_btn" title="مسح">📷 مسح</button>
@@ -333,7 +326,7 @@ ar:{
  app_title:"إدارة مخزون المحاليل الطبية", org:"بنك الدم المركزي بالدمام",
  login_user:"اسم المستخدم", login_pass:"كلمة المرور", login_btn:"تسجيل الدخول",
  login_err:"اسم المستخدم أو كلمة المرور غير صحيحة", logout:"خروج",
- bank_short:"بنك الدم المركزي بالدمام", topbar_sub:"وزارة الصحة", sys_name:"نظام إدارة مخزون المحاليل الطبية",
+ sys_name:"نظام إدارة مخزون المحاليل الطبية",
  ministry_line:"وزارة الصحة — المملكة العربية السعودية", credit_line:"فكرة وإعداد: حسن العاقول", guide_btn:"دليل المستخدم", guide_title:"دليل استخدام النظام",
  guide_intro:"مرحباً بك في نظام بنك الدم المركزي بالدمام. اختر القسم الذي تريد معرفة المزيد عنه:", steps_word:"خطوات",
  cat_title:"إضافة من القائمة المعتمدة", cat_group:"المجموعة", cat_pick_group:"— اختر المجموعة —",
@@ -500,7 +493,7 @@ en:{
  app_title:"Medical Solutions Inventory", org:"Central Blood Bank — Dammam",
  login_user:"Username", login_pass:"Password", login_btn:"Sign in",
  login_err:"Invalid username or password", logout:"Logout",
- bank_short:"Central Blood Bank — Dammam", topbar_sub:"Ministry of Health", sys_name:"Medical Solutions Inventory System",
+ sys_name:"Medical Solutions Inventory System",
  ministry_line:"Ministry of Health — Kingdom of Saudi Arabia", credit_line:"Idea & Preparation: Hasan Alagoul", guide_btn:"User guide", guide_title:"System user guide",
  guide_intro:"Welcome to the Central Blood Bank – Dammam system. Choose a section to learn more:", steps_word:"steps",
  cat_title:"Add from the approved list", cat_group:"Group", cat_pick_group:"— Select group —",
