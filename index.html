@@ -54,6 +54,7 @@
   .brand .mk{width:40px;height:40px;border-radius:11px;background:var(--crimson);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
   .brand .t1{font-weight:800;font-size:15px;white-space:nowrap}
   .brand .t2{color:var(--muted);font-size:12px;white-space:nowrap}
+  .brand .t3{color:var(--muted);font-size:10.5px;font-weight:700;white-space:nowrap;opacity:.75}
   .topbar .spacer{flex:1}
   .date-chip{font-size:12px;color:var(--muted);text-align:end;line-height:1.35}
   .date-chip b{color:var(--ink);font-weight:700}
@@ -264,7 +265,7 @@
   .su-info{flex:1;min-width:0}
   .su-info b{display:block;color:#fff;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .su-info span{color:rgba(255,255,255,.5);font-size:11px}
-  .side-credit{text-align:center;font-size:10.5px;color:rgba(255,255,255,.35);padding:6px 4px 2px}
+  .side-credit{text-align:center;font-size:12.5px;font-weight:700;color:rgba(255,255,255,.6);padding:8px 4px 4px}
   .avatar{width:34px;height:34px;border-radius:50%;background:var(--green-bright);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex:none}
   .side.collapsed{width:68px}
   .side.collapsed .lbl-t{display:none}
@@ -304,7 +305,8 @@
     <button class="menu-toggle" onclick="App.toggleSide()">☰</button>
     <div class="brand"><div class="mk"><img src="moh-logo.png" alt="" class="brand-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><svg style="display:none" viewBox="0 0 64 64" fill="none" stroke="var(--gold)" stroke-width="3.6" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M32 58 V31"/><path d="M32 31 C25 27 19 27 14 31"/><path d="M32 31 C39 27 45 27 50 31"/><path d="M32 31 C27 24 22 21 17 19"/><path d="M32 31 C37 24 42 21 47 19"/><path d="M32 31 C31 23 31 17 32 12"/></svg></div>
       <div><div class="t1" data-i18n="bank_short">بنك الدم المركزي بالدمام</div>
-      <div class="t2" data-i18n="topbar_sub">وزارة الصحة</div></div></div>
+      <div class="t2" data-i18n="topbar_sub">وزارة الصحة</div>
+      <div class="t3" data-i18n="credit_line">فكرة وإعداد: حسن العاقول</div></div></div>
     <div class="spacer"></div>
     <div class="date-chip" id="dateChip"></div>
     <button class="btn soft sm" onclick="App.scan()" data-i18n="scan_btn" title="مسح">📷 مسح</button>
