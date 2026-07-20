@@ -49,9 +49,9 @@
   .login-err{color:var(--danger);font-size:13px;min-height:18px;margin-top:6px}
 
   #app{display:none;min-height:100vh}
-  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:14px 18px;min-height:140px;box-sizing:border-box}
+  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:14px 18px;min-height:200px;box-sizing:border-box}
   .top-logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;pointer-events:none}
-  .top-logo img{height:110px;width:auto;max-width:280px;object-fit:contain}
+  .top-logo img{width:420px;height:auto;max-width:60vw;object-fit:contain}
   .topbar .spacer{flex:1}
   .date-chip{font-size:12px;color:var(--muted);text-align:end;line-height:1.35}
   .date-chip b{color:var(--ink);font-weight:700}
@@ -59,7 +59,7 @@
   .lang-btn:hover{background:#f5f6f8}
 
   .layout{display:flex;align-items:flex-start}
-  .side{width:235px;flex:none;padding:16px 12px;position:sticky;top:141px;height:calc(100vh - 141px);overflow:auto;border-inline-end:1px solid var(--line);background:#fff}
+  .side{width:235px;flex:none;padding:16px 12px;position:sticky;top:201px;height:calc(100vh - 201px);overflow:auto;border-inline-end:1px solid var(--line);background:#fff}
   .nav-group{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.04em;padding:10px 10px 6px;text-transform:uppercase}
   .nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:start;border:none;background:none;padding:10px 11px;border-radius:10px;color:var(--ink);font-size:14px;font-weight:600;margin-bottom:2px;transition:background .15s var(--ease),color .15s var(--ease)}
   .nav-item .ic{width:22px;text-align:center;font-size:16px;flex:none}
@@ -175,9 +175,9 @@
   .menu-toggle{display:none;border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 10px;font-size:17px}
 
   @media(max-width:760px){
-    .topbar{min-height:85px;padding:10px 14px}
-    .top-logo img{height:64px;max-width:160px}
-    .side{position:fixed;inset-inline-start:0;top:86px;transition:.2s;box-shadow:-6px 0 24px rgba(0,0,0,.12);z-index:40}
+    .topbar{min-height:105px;padding:10px 14px}
+    .top-logo img{width:220px;height:auto;max-width:70vw}
+    .side{position:fixed;inset-inline-start:0;top:106px;transition:.2s;box-shadow:-6px 0 24px rgba(0,0,0,.12);z-index:40}
     .main{padding:16px 14px}
     .menu-toggle{display:inline-flex!important}
     .date-chip{display:none}
@@ -206,7 +206,7 @@
   .bar-fill{background:linear-gradient(90deg,var(--crimson-dark),var(--green-bright))}
   #login{background:radial-gradient(1200px 600px at 75% -10%,#1f9a55 0%,#0e7a3f 38%,#075a2e 100%)}
   .login-logo{display:flex;justify-content:center;margin-bottom:16px}
-  .moh-logo-img{height:150px;width:auto;max-width:270px;object-fit:contain}
+  .moh-logo-img{width:290px;height:auto;max-width:100%;object-fit:contain}
   .moh-lock{display:inline-flex;align-items:center;gap:11px}
   .moh-emblem{width:46px;height:46px;flex:none} .moh-emblem svg{width:100%;height:100%}
   .moh-words{display:flex;flex-direction:column;line-height:1.12;text-align:start}
