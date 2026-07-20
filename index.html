@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Hasan Alagoul - حسن العاقول">
 <title>إدارة مخزون المحاليل الطبية</title>
 <style>
   :root{
@@ -289,6 +290,7 @@
     <h1 data-i18n="org">بنك الدم المركزي بالدمام</h1>
     <p class="login-sys" data-i18n="sys_name">نظام إدارة مخزون المحاليل الطبية</p>
     <p class="login-min" data-i18n="ministry_line">وزارة الصحة — المملكة العربية السعودية</p>
+    <p class="login-min" data-i18n="credit_line">فكرة وإعداد: حسن العاقول</p>
     <div class="field"><label data-i18n="login_user">اسم المستخدم</label><input id="lg-user" autocomplete="username" data-i18n-ph="login_user"></div>
     <div class="field"><label data-i18n="login_pass">كلمة المرور</label><input id="lg-pass" type="password" autocomplete="current-password" data-i18n-ph="login_pass"></div>
     <button class="btn full" data-i18n="login_btn" onclick="App.login()">تسجيل الدخول</button>
@@ -319,6 +321,7 @@
 <div id="toast"></div>
 
 <script>
+/* © Hasan Alagoul - حسن العاقول — فكرة وإعداد وتطوير نظام إدارة مخزون المحاليل الطبية (بنك الدم المركزي بالدمام). جميع الحقوق محفوظة. */
 "use strict";
 const App = (() => {
 /* ===================== i18n ===================== */
@@ -328,7 +331,7 @@ ar:{
  login_user:"اسم المستخدم", login_pass:"كلمة المرور", login_btn:"تسجيل الدخول",
  login_err:"اسم المستخدم أو كلمة المرور غير صحيحة", logout:"خروج",
  bank_short:"بنك الدم المركزي بالدمام", topbar_sub:"وزارة الصحة", sys_name:"نظام إدارة مخزون المحاليل الطبية",
- ministry_line:"وزارة الصحة — المملكة العربية السعودية", guide_btn:"دليل المستخدم", guide_title:"دليل استخدام النظام",
+ ministry_line:"وزارة الصحة — المملكة العربية السعودية", credit_line:"فكرة وإعداد: حسن العاقول", guide_btn:"دليل المستخدم", guide_title:"دليل استخدام النظام",
  guide_intro:"مرحباً بك في نظام بنك الدم المركزي بالدمام. اختر القسم الذي تريد معرفة المزيد عنه:", steps_word:"خطوات",
  cat_title:"إضافة من القائمة المعتمدة", cat_group:"المجموعة", cat_pick_group:"— اختر المجموعة —",
  cat_item:"الصنف", cat_pick_item:"— اختر الصنف —", cat_kits:"عدد الوحدات (كت/علبة)",
@@ -413,7 +416,7 @@ ar:{
  dis_alert_newlot:"🆕 تنبيه: سيتم فتح تشغيلة جديدة لأول مرة: {lots}",
  tip_dispose:"إتلاف التشغيلة", dispose_title:"إتلاف تشغيلة", dispose_info:"إتلاف {name} — التشغيلة {lot} — الكمية الحالية {q}", dispose_reason:"سبب الإتلاف", dispose_pick_reason:"— اختر السبب —", dispose_r_expired:"منتهية الصلاحية", dispose_r_rejected:"مرفوضة بالفحص", dispose_r_damaged:"تالفة/مكسورة", dispose_r_other:"أخرى", dispose_by:"المسؤول عن الإتلاف", dispose_date:"تاريخ الإتلاف", dispose_need_reason:"اختر سبب الإتلاف", dispose_txn_note:"إتلاف ({reason})", btn_dispose_confirm:"تأكيد الإتلاف", ok_disposed:"تم تسجيل الإتلاف وإخراج الكمية من المخزون ✓", lst_disposed:"متلف", f_dispose:"إتلاف", fn_disposal:"تقرير_الإتلاف", rep_disposal_t:"🚮 تقرير الإتلاف", rep_disposal_s:"المنتهي والمرفوض المُتلَف",
  scan_btn:"📷 مسح", scan_title:"مسح الباركود", scan_hint:"امسح الكود بالماسح أو الكاميرا، أو أدخله يدوياً ثم اضغط Enter", scan_ph:"امسح أو أدخل الكود…", scan_camera:"تشغيل الكاميرا", scan_view:"عرض في المخزون", scan_not_found:"الكود «{code}» غير مسجّل في النظام", scan_receive_new:"استقبال جديد بهذا الكود", scan_cam_err:"تعذّر تشغيل الكاميرا", btn_close:"إغلاق",
- l2l_title:"نموذج التحقق من التشغيلة", l2l_item:"الكاشف / الكرت", l2l_group:"الجهاز / المجموعة", l2l_dept:"القسم المستلِم", l2l_newlot:"التشغيلة المصروفة (الجديدة)", l2l_verif:"التحقق من التشغيلة (Lot-to-Lot)", l2l_prevlot:"التشغيلة السابقة", l2l_prevlot_pick:"— اختر التشغيلة السابقة —", l2l_match:"مطابقة / مقبولة", l2l_nomatch:"غير مطابقة", l2l_sig_issuer:"موظف الصرف", l2l_sig_dept:"القسم المستلِم", l2l_sig_qc:"مسؤول الجودة (QC)", l2l_name_sig:"الاسم والتوقيع", l2l_footer:"نموذج معتمد لتوثيق التحقق من التشغيلة وتسليمها — بنك الدم المركزي بالدمام", l2l_dispense_note:"هذا الصنف ضمن قائمة Lot-to-Lot — سيُطبع نموذج التحقق والتسليم بعد تأكيد الصرف.", l2l_popup:"اسمح بالنوافذ المنبثقة لطباعة النموذج",
+ l2l_title:"نموذج التحقق من التشغيلة", l2l_item:"الكاشف / الكرت", l2l_group:"الجهاز / المجموعة", l2l_dept:"القسم المستلِم", l2l_newlot:"التشغيلة المصروفة (الجديدة)", l2l_verif:"التحقق من التشغيلة (Lot-to-Lot)", l2l_prevlot:"التشغيلة السابقة", l2l_prevlot_pick:"— اختر التشغيلة السابقة —", l2l_match:"مطابقة / مقبولة", l2l_nomatch:"غير مطابقة", l2l_sig_issuer:"موظف الصرف", l2l_sig_dept:"القسم المستلِم", l2l_sig_qc:"مسؤول الجودة (QC)", l2l_name_sig:"الاسم والتوقيع", l2l_footer:"نموذج معتمد لتوثيق التحقق من التشغيلة وتسليمها — بنك الدم المركزي بالدمام · فكرة وإعداد: حسن العاقول", l2l_dispense_note:"هذا الصنف ضمن قائمة Lot-to-Lot — سيُطبع نموذج التحقق والتسليم بعد تأكيد الصرف.", l2l_popup:"اسمح بالنوافذ المنبثقة لطباعة النموذج",
  qc_required_lbl:"فحص الجودة (QC)", qc_required_hint:"يتطلب اعتماد QC قبل الصرف", qc_quarantined_note:"محجوزة بانتظار اعتماد QC", ok_receive_qc:"تم الاستلام — التشغيلة محجوزة بانتظار اعتماد QC", tip_qc_release:"اعتماد QC", qc_release_title:"اعتماد فحص الجودة (QC)", qc_result:"نتيجة الفحص", qc_pass:"مقبولة — إطلاق للاستخدام", qc_fail:"فاشلة — حجب", qc_by:"نفّذ الفحص", qc_date:"تاريخ الفحص", qc_note:"ملاحظة (مقارنة التشغيلات)", qc_note_ph:"مثال: مطابقة مع التشغيلة السابقة", qc_party:"فحص QC", qc_released_note:"اعتماد QC — أُطلقت للاستخدام", qc_failed_note:"فشل QC — محجوبة", ok_qc_released:"تم اعتماد التشغيلة — متاحة للصرف ✓", ok_qc_failed:"سُجّل فشل QC — التشغيلة محجوبة", lst_quarantine:"تحت الفحص (QC)", lst_qc_failed:"فشل QC",
  lst_recalled:"مستدعاة", tip_recall:"استدعاء التشغيلة", recall_title:"استدعاء تشغيلة", recall_info:"استدعاء {name} — التشغيلة {lot} — المتبقي {q}", recall_impact:"أثر الاستدعاء: صُرفت سابقاً في {n} عملية بإجمالي {q}", recall_reason:"سبب الاستدعاء", recall_reason_ph:"مثال: سحب الشركة المصنّعة / عيب", recall_ref:"المرجع (NCMDR)", recall_by:"المسؤول", recall_need_reason:"أدخل سبب الاستدعاء", recall_party:"استدعاء", recall_txn_note:"استدعاء: {reason}", btn_recall_confirm:"تأكيد الاستدعاء وحجر المتبقي", ok_recalled:"تم الاستدعاء — حُجز المتبقي ✓", rep_recall_t:"🚩 تقرير الاستدعاء", rep_recall_s:"التشغيلات المستدعاة وأثرها", fn_recall:"تقرير_الاستدعاء",
  nav_temp:"سجل الحرارة", temp_title:"سجل درجات الحرارة (سلسلة التبريد)", temp_sub:"تسجيل يومي لحرارة الثلاجات/الفريزرات مع تنبيه التجاوز", temp_units_h:"وحدات التخزين", temp_unit_name:"اسم الوحدة (ثلاجة/فريزر)", temp_min:"أدنى (°م)", temp_max:"أعلى (°م)", temp_add_unit:"+ إضافة وحدة", temp_no_units:"لا توجد وحدات — أضف ثلاجة/فريزر أولاً", temp_log_h:"تسجيل قراءة", temp_unit:"الوحدة", temp_reading:"القراءة (°م)", temp_date:"التاريخ", temp_by:"بواسطة", btn_temp_log:"💾 تسجيل القراءة", temp_history_h:"السجل", temp_th_range:"المدى المسموح", temp_in_range:"ضمن المدى", temp_excursion:"تجاوز!", temp_no_logs:"لا توجد قراءات بعد", temp_need:"اختر الوحدة وأدخل القراءة", ok_temp_logged:"تم تسجيل القراءة ✓", ok_temp_excursion:"⚠️ تنبيه: القراءة خارج المدى المسموح!", temp_del_unit_q:"حذف الوحدة «{n}»؟ (تبقى القراءات السابقة)", fn_temp:"سجل_الحرارة", temp_unit_need:"أدخل اسم الوحدة والمدى الصحيح",
@@ -466,7 +469,7 @@ ar:{
  set_data:"بيانات تجريبية وتفريغ النظام", btn_reseed:"🧪 إعادة تحميل بيانات العينة", btn_wipe:"🗑 تفريغ كل البيانات",
  btn_zero_stock:"🔄 تصفير المخزون (الاحتفاظ بالأصناف)", btn_zero_confirm:"تصفير المخزون", ok_zeroed:"تم تصفير المخزون — كل الكميات الآن صفر، والأصناف والقوائم محفوظة ✓", zero_q:"سيتم تصفير كل الكميات والتشغيلات والحركات، مع الاحتفاظ بقائمة الأصناف والقوائم المعتمدة. تُنزَّل نسخة احتياطية تلقائياً أولاً. متابعة؟",
  data_note:"عند بدء الاستخدام الفعلي، فرّغ بيانات العينة وأدخل بياناتك الحقيقية.",
- version_line:"الإصدار 1.1 · ملف واحد بدون اعتماد خارجي · يعمل دون إنترنت",
+ version_line:"الإصدار 1.1 · ملف واحد بدون اعتماد خارجي · يعمل دون إنترنت · فكرة وإعداد: حسن العاقول",
  confirm_title:"تأكيد", btn_confirm:"تأكيد", btn_cancel:"إلغاء", btn_save:"حفظ", btn_add:"إضافة",
  edit_item:"تعديل الصنف", err_code_name:"الكود والاسم مطلوبان", err_code_used:"الكود مستخدم لصنف آخر", ok_edited:"تم التعديل ✓",
  del_item_q:"حذف الصنف \"{name}\" وكل تشغيلاته وحركاته؟", btn_del_item:"حذف الصنف", ok_deleted:"تم الحذف",
@@ -495,7 +498,7 @@ en:{
  login_user:"Username", login_pass:"Password", login_btn:"Sign in",
  login_err:"Invalid username or password", logout:"Logout",
  bank_short:"Central Blood Bank — Dammam", topbar_sub:"Ministry of Health", sys_name:"Medical Solutions Inventory System",
- ministry_line:"Ministry of Health — Kingdom of Saudi Arabia", guide_btn:"User guide", guide_title:"System user guide",
+ ministry_line:"Ministry of Health — Kingdom of Saudi Arabia", credit_line:"Idea & Preparation: Hasan Alagoul", guide_btn:"User guide", guide_title:"System user guide",
  guide_intro:"Welcome to the Central Blood Bank – Dammam system. Choose a section to learn more:", steps_word:"steps",
  cat_title:"Add from the approved list", cat_group:"Group", cat_pick_group:"— Select group —",
  cat_item:"Item", cat_pick_item:"— Select item —", cat_kits:"Number of units (kit/box)",
@@ -580,7 +583,7 @@ en:{
  dis_alert_newlot:"🆕 Note: a new lot will be opened for the first time: {lots}",
  tip_dispose:"Dispose lot", dispose_title:"Dispose lot", dispose_info:"Dispose {name} — lot {lot} — current qty {q}", dispose_reason:"Disposal reason", dispose_pick_reason:"— Select reason —", dispose_r_expired:"Expired", dispose_r_rejected:"Rejected at inspection", dispose_r_damaged:"Damaged/broken", dispose_r_other:"Other", dispose_by:"Responsible person", dispose_date:"Disposal date", dispose_need_reason:"Select a disposal reason", dispose_txn_note:"Disposed ({reason})", btn_dispose_confirm:"Confirm disposal", ok_disposed:"Disposal recorded and stock removed ✓", lst_disposed:"Disposed", f_dispose:"Disposal", fn_disposal:"disposal_report", rep_disposal_t:"🚮 Disposal report", rep_disposal_s:"Disposed expired & rejected",
  scan_btn:"📷 Scan", scan_title:"Scan barcode", scan_hint:"Scan with a reader or camera, or type the code and press Enter", scan_ph:"Scan or enter the code…", scan_camera:"Use camera", scan_view:"View in inventory", scan_not_found:"Code \"{code}\" is not registered", scan_receive_new:"Receive new with this code", scan_cam_err:"Couldn't start the camera", btn_close:"Close",
- l2l_title:"Lot-to-Lot Verification Form", l2l_item:"Reagent / Card", l2l_group:"Device / Group", l2l_dept:"Receiving department", l2l_newlot:"Issued lot (new)", l2l_verif:"Lot-to-Lot verification", l2l_prevlot:"Previous lot", l2l_prevlot_pick:"— Select previous lot —", l2l_match:"Match / Accepted", l2l_nomatch:"No match", l2l_sig_issuer:"Issuing staff", l2l_sig_dept:"Receiving department", l2l_sig_qc:"QC officer", l2l_name_sig:"Name & signature", l2l_footer:"Approved form documenting lot-to-lot verification and issuance — Central Blood Bank, Dammam", l2l_dispense_note:"This item is on the Lot-to-Lot list — a verification & issue form will print after confirming the dispense.", l2l_popup:"Allow pop-ups to print the form",
+ l2l_title:"Lot-to-Lot Verification Form", l2l_item:"Reagent / Card", l2l_group:"Device / Group", l2l_dept:"Receiving department", l2l_newlot:"Issued lot (new)", l2l_verif:"Lot-to-Lot verification", l2l_prevlot:"Previous lot", l2l_prevlot_pick:"— Select previous lot —", l2l_match:"Match / Accepted", l2l_nomatch:"No match", l2l_sig_issuer:"Issuing staff", l2l_sig_dept:"Receiving department", l2l_sig_qc:"QC officer", l2l_name_sig:"Name & signature", l2l_footer:"Approved form documenting lot-to-lot verification and issuance — Central Blood Bank, Dammam · Idea & Preparation: Hasan Alagoul", l2l_dispense_note:"This item is on the Lot-to-Lot list — a verification & issue form will print after confirming the dispense.", l2l_popup:"Allow pop-ups to print the form",
  qc_required_lbl:"QC check", qc_required_hint:"Requires QC release before dispensing", qc_quarantined_note:"Quarantined pending QC release", ok_receive_qc:"Received — lot quarantined pending QC release", tip_qc_release:"QC release", qc_release_title:"QC release", qc_result:"QC result", qc_pass:"Pass — release for use", qc_fail:"Fail — block", qc_by:"Performed by", qc_date:"QC date", qc_note:"Note (lot-to-lot)", qc_note_ph:"e.g., matches previous lot", qc_party:"QC", qc_released_note:"QC released for use", qc_failed_note:"QC failed — blocked", ok_qc_released:"Lot released — available for dispensing ✓", ok_qc_failed:"QC failed recorded — lot blocked", lst_quarantine:"Quarantine (QC)", lst_qc_failed:"QC failed",
  lst_recalled:"Recalled", tip_recall:"Recall lot", recall_title:"Recall lot", recall_info:"Recall {name} — lot {lot} — remaining {q}", recall_impact:"Recall impact: previously dispensed in {n} ops, total {q}", recall_reason:"Recall reason", recall_reason_ph:"e.g., manufacturer recall / defect", recall_ref:"Reference (NCMDR)", recall_by:"By", recall_need_reason:"Enter the recall reason", recall_party:"Recall", recall_txn_note:"Recall: {reason}", btn_recall_confirm:"Confirm recall & quarantine", ok_recalled:"Recalled — remaining quarantined ✓", rep_recall_t:"🚩 Recall report", rep_recall_s:"Recalled lots & impact", fn_recall:"recall_report",
  nav_temp:"Temperature log", temp_title:"Temperature log (cold chain)", temp_sub:"Daily fridge/freezer temperatures with excursion alerts", temp_units_h:"Storage units", temp_unit_name:"Unit name (fridge/freezer)", temp_min:"Min (°C)", temp_max:"Max (°C)", temp_add_unit:"+ Add unit", temp_no_units:"No units — add a fridge/freezer first", temp_log_h:"Log a reading", temp_unit:"Unit", temp_reading:"Reading (°C)", temp_date:"Date", temp_by:"By", btn_temp_log:"💾 Log reading", temp_history_h:"History", temp_th_range:"Allowed range", temp_in_range:"In range", temp_excursion:"Excursion!", temp_no_logs:"No readings yet", temp_need:"Select a unit and enter a reading", ok_temp_logged:"Reading logged ✓", ok_temp_excursion:"⚠️ Alert: reading out of allowed range!", temp_del_unit_q:"Delete unit \"{n}\"? (past readings kept)", fn_temp:"temperature_log", temp_unit_need:"Enter unit name and a valid range",
@@ -633,7 +636,7 @@ en:{
  set_data:"Sample data & reset", btn_reseed:"🧪 Reload sample data", btn_wipe:"🗑 Wipe all data",
  btn_zero_stock:"🔄 Zero inventory (keep items)", btn_zero_confirm:"Zero inventory", ok_zeroed:"Inventory zeroed — all quantities are now zero; items and lists kept ✓", zero_q:"All quantities, lots, and movements will be reset to zero, while keeping the item list and approved lists. A backup will be downloaded first. Continue?",
  data_note:"Before real use, wipe the sample data and enter your real data.",
- version_line:"Version 1.1 · single self-contained file · works offline",
+ version_line:"Version 1.1 · single self-contained file · works offline · Idea & Preparation: Hasan Alagoul",
  confirm_title:"Confirm", btn_confirm:"Confirm", btn_cancel:"Cancel", btn_save:"Save", btn_add:"Add",
  edit_item:"Edit item", err_code_name:"Code and name are required", err_code_used:"Code already used by another item", ok_edited:"Updated ✓",
  del_item_q:"Delete item \"{name}\" with all its lots and movements?", btn_del_item:"Delete item", ok_deleted:"Deleted",
