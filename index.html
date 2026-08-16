@@ -22,7 +22,7 @@
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{font-family:"Segoe UI","Tajawal","Noto Sans Arabic",Tahoma,Arial,sans-serif;
-    background:var(--bg);color:var(--ink);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+    background:var(--bg);color:var(--ink);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
   button{font-family:inherit;cursor:pointer}
   input,select,textarea{font-family:inherit;font-size:15px}
   a{color:var(--crimson)}
@@ -33,14 +33,14 @@
   .login-card{background:#fff;width:100%;max-width:380px;border-radius:18px;padding:30px 26px;box-shadow:0 20px 50px rgba(0,0,0,.25);text-align:center;position:relative;animation:fadeUp .4s var(--ease)}
   .lang-pill{position:absolute;top:14px;inset-inline-end:14px;border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--ink)}
   .login-mark{width:62px;height:62px;border-radius:16px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:var(--crimson-soft);color:var(--crimson);font-size:30px}
-  .login-card h1{font-size:19px;margin:0 0 4px}
-  .login-card p{color:var(--muted);font-size:13px;margin:0 0 22px}
+  .login-card h1{font-size:19px;margin:0 0 4px;text-wrap:balance}
+  .login-card p{color:var(--muted);font-size:13px;margin:0 0 22px;text-wrap:pretty}
   .field{text-align:start;margin-bottom:14px}
   .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
   .field input,.field select,.field textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}
   .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--crimson);box-shadow:0 0 0 3px var(--crimson-soft)}
   .btn{border:none;border-radius:var(--r-sm);padding:11px 16px;font-weight:700;font-size:15px;background:linear-gradient(135deg,var(--green-bright) 0%,var(--crimson) 55%,var(--crimson-dark) 100%);color:#fff;box-shadow:0 3px 10px rgba(18,122,62,.3);transition:filter .18s var(--ease),transform .15s var(--ease),box-shadow .18s var(--ease)}
-  .btn:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 8px 20px rgba(18,122,62,.4)} .btn:active{transform:translateY(0);box-shadow:0 2px 6px rgba(18,122,62,.25)}
+  .btn:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 8px 20px rgba(18,122,62,.4)} .btn:active{transform:translateY(0) scale(.96);box-shadow:0 2px 6px rgba(18,122,62,.25)}
   .btn.full{width:100%}
   .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none} .btn.ghost:hover{background:#f7f8fa;box-shadow:0 4px 12px rgba(16,24,40,.08)}
   .btn.soft{background:var(--crimson-soft);color:var(--crimson);box-shadow:none} .btn.soft:hover{box-shadow:0 4px 12px rgba(18,122,62,.15)}
@@ -54,7 +54,7 @@
   .top-logo img{width:420px;height:auto;max-width:60vw;object-fit:contain}
   .topbar .spacer{flex:1}
   .date-chip{font-size:12px;color:var(--muted);text-align:end;line-height:1.35}
-  .date-chip b{color:var(--ink);font-weight:700}
+  .date-chip b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
   .lang-btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 11px;font-size:13px;font-weight:700;color:var(--ink);transition:background .15s var(--ease)}
   .lang-btn:hover{background:#f5f6f8}
 
@@ -69,8 +69,8 @@
 
   .main{flex:1;min-width:0;padding:22px 26px}
   .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
-  .page-head h2{margin:0;font-size:21px}
-  .page-head p{margin:2px 0 0;color:var(--muted);font-size:13px}
+  .page-head h2{margin:0;font-size:21px;text-wrap:balance}
+  .page-head p{margin:2px 0 0;color:var(--muted);font-size:13px;text-wrap:pretty}
   .head-actions{display:flex;gap:8px;flex-wrap:wrap}
 
   .grid{display:grid;gap:14px}
@@ -79,7 +79,7 @@
   .kpi:before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--green-bright),var(--crimson-dark))}
   .kpi:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
   .kpi .lbl{color:var(--muted);font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px}
-  .kpi .val{font-size:28px;font-weight:800;margin-top:6px;letter-spacing:-.5px}
+  .kpi .val{font-size:28px;font-weight:800;margin-top:6px;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
   .kpi .sub{font-size:12px;color:var(--muted);margin-top:2px}
   .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
   .dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.danger{background:var(--danger)} .dot.info{background:var(--info)}
@@ -87,8 +87,8 @@
   .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-md);margin-bottom:16px;transition:box-shadow .2s var(--ease);position:relative;overflow:hidden}
   .panel:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green-bright),var(--crimson-dark))}
   .panel-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
-  .panel-h h3{margin:0;font-size:15px}
-  .panel-h .hint{color:var(--muted);font-size:12px;font-weight:500}
+  .panel-h h3{margin:0;font-size:15px;text-wrap:balance}
+  .panel-h .hint{color:var(--muted);font-size:12px;font-weight:500;text-wrap:pretty}
   .panel-b{padding:16px}
   .two-col{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
   @media(max-width:1000px){.two-col{grid-template-columns:1fr}}
@@ -106,7 +106,7 @@
   th{background:#fafbfc;color:var(--muted);font-weight:700;font-size:12.5px;position:sticky;top:0}
   tbody tr{transition:background .15s var(--ease)}
   tbody tr:hover{background:#fafbfc}
-  td.num,th.num{text-align:center}
+  td.num,th.num{text-align:center;font-variant-numeric:tabular-nums}
   .tag{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:700}
   .tag.ok{background:var(--ok-soft);color:var(--ok)}
   .tag.warn{background:var(--warn-soft);color:var(--warn)}
@@ -143,7 +143,7 @@
   .bar-row .bl{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .bar-track{background:#eef0f3;border-radius:8px;height:22px;overflow:hidden}
   .bar-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--crimson),#c93350);min-width:2px;transition:width .5s}
-  .bar-val{font-size:13px;font-weight:700;text-align:end}
+  .bar-val{font-size:13px;font-weight:700;text-align:end;font-variant-numeric:tabular-nums}
   .donut-wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
   .legend{display:flex;flex-direction:column;gap:7px;font-size:13px}
   .legend .li{display:flex;align-items:center;gap:8px}
@@ -158,12 +158,12 @@
   .modal-bg{position:fixed;inset:0;background:rgba(16,24,40,.45);display:none;align-items:center;justify-content:center;z-index:200;padding:18px;overflow-y:auto;animation:bgIn .18s var(--ease)}
   .modal{background:#fff;border-radius:16px;width:100%;max-width:560px;box-shadow:0 24px 60px rgba(0,0,0,.3);max-height:92vh;overflow:auto;animation:fadeUp .22s var(--ease)}
   .modal-h{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
-  .modal-h h3{margin:0;font-size:17px}
+  .modal-h h3{margin:0;font-size:17px;text-wrap:balance}
   .modal-h .x{border:none;background:none;font-size:22px;color:var(--muted);cursor:pointer;line-height:1}
   .modal-b{padding:18px}
   .modal-f{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-start}
 
-  #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:300;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease);z-index:300;box-shadow:0 10px 30px rgba(0,0,0,.25)}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   #toast.ok{background:var(--ok)} #toast.err{background:var(--danger)}
 
@@ -175,6 +175,7 @@
   .menu-toggle{display:none;border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 10px;font-size:17px}
 
   @media(max-width:760px){
+    input,select,textarea{font-size:16px}
     .topbar{min-height:105px;padding:10px 14px}
     .top-logo img{width:220px;height:auto;max-width:70vw}
     .side{position:fixed;inset-inline-start:0;top:106px;transition:.2s;box-shadow:-6px 0 24px rgba(0,0,0,.12);z-index:40}
@@ -194,10 +195,13 @@
     .tag{border:1px solid #999;-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .print-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
   }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  }
 
   /* === Ministry of Health identity === */
   .side{background:var(--sidebar);border-inline-end:1px solid var(--sidebar-line)}
-  .nav-group{color:rgba(255,255,255,.45)}
+  .nav-group{color:rgba(255,255,255,.56)}
   .nav-item{color:rgba(255,255,255,.85)}
   .nav-item .ic{color:rgba(255,255,255,.7)}
   .nav-item:hover{background:rgba(255,255,255,.07)}
@@ -225,7 +229,7 @@
   .fab-guide{position:fixed;bottom:20px;left:20px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--crimson),var(--crimson-dark));color:#fff;border:none;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 24px rgba(0,0,0,.28);z-index:35;transition:transform .2s var(--ease),box-shadow .2s var(--ease),filter .2s var(--ease)}
   .fab-guide:hover{filter:brightness(1.08);transform:translateY(-2px) scale(1.05);box-shadow:0 12px 30px rgba(0,0,0,.32)}
   .fab-guide svg{width:26px;height:26px}
-  .guide-intro{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+  .guide-intro{color:var(--muted);font-size:13.5px;margin:0 0 14px;text-wrap:pretty}
   .gcard{border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden;transition:box-shadow .2s var(--ease)}
   .gcard:hover{box-shadow:var(--shadow)}
   .gcard-h{display:flex;align-items:center;gap:12px;padding:13px 15px;cursor:pointer;transition:background .15s var(--ease)}
@@ -2307,8 +2311,8 @@ function unlockSync(){
 /* ===== User guide ===== */
 const GUIDE=[
  {ic:"📖",cls:"g-purple",
-  ar:{t:"نظرة عامة على النظام",s:["سجّل الدخول باسم المستخدم وكلمة المرور (افتراضياً admin / 1234، ويمكن تغييرهما من الإعدادات).","تنقّل بين الأقسام من القائمة الجانبية: لوحة التحكم، المخزون، الاستقبال، الصرف، إعادة الطلب، سجل الحرارة، الباركود، إدارة المنتجات، التقارير، تتبع التشغيلة، الإعدادات، إدارة المستخدمين.","بدّل لغة الواجهة (عربي/إنجليزي) من زر اللغة بالأعلى — تعمل كل البيانات والتقارير باللغتين.","تُحفظ البيانات تلقائياً على الجهاز، ويمكن تفعيل المزامنة بين الأجهزة من الإعدادات.","بطاقات لوحة التحكم الثمانية (الأصناف، الكمية، قرب الانتهاء، المنتهية، المخزون المنخفض، النافد، المرفوضة، حركات اليوم) بأيقونات ملوّنة توضّح كل مؤشر بلمحة."]},
-  en:{t:"System overview",s:["Sign in with your username and password (default admin / 1234, changeable in Settings).","Use the side menu to move between sections: Dashboard, Inventory, Receive, Dispense, Reorder, Temperature, Barcode, Products, Reports, Lot trace, Settings, Users.","Switch the interface language (Arabic/English) from the top button — all data and reports work in both.","Data is saved automatically on the device; multi-device sync can be enabled in Settings.","The 8 dashboard KPI cards (items, quantity, expiring soon, expired, low stock, out of stock, rejected, today's movements) use colored icons for at-a-glance recognition."]}},
+  ar:{t:"نظرة عامة على النظام",s:["سجّل الدخول باسم المستخدم وكلمة المرور (افتراضياً admin / 1234، ويمكن تغييرهما من الإعدادات).","تنقّل بين الأقسام من القائمة الجانبية: لوحة التحكم، المخزون، الاستقبال، الصرف، إعادة الطلب، سجل الحرارة، الباركود، إدارة المنتجات، التقارير، تتبع التشغيلة، الإعدادات، إدارة المستخدمين.","بدّل لغة الواجهة (عربي/إنجليزي) من زر اللغة بالأعلى — تعمل كل البيانات والتقارير باللغتين.","تُحفظ البيانات تلقائياً على الجهاز، ويمكن تفعيل المزامنة بين الأجهزة من الإعدادات.","بطاقات لوحة التحكم الثمانية (الأصناف، الكمية، قرب الانتهاء، المنتهية، المخزون المنخفض، النافد، المرفوضة، حركات اليوم) بأيقونات ملوّنة توضّح كل مؤشر بلمحة.","الواجهة محسّنة لسهولة القراءة والوصول: أرقام ثابتة العرض في البطاقات والجداول لا تهتز عند التحديث، تباين ألوان أوضح لعناوين القائمة الجانبية، حقول الإدخال لا تكبّر الشاشة عند اللمس على الجوال، وتُحترَم إعدادات «تقليل الحركة» من نظام التشغيل لمن يفضّل ذلك."]},
+  en:{t:"System overview",s:["Sign in with your username and password (default admin / 1234, changeable in Settings).","Use the side menu to move between sections: Dashboard, Inventory, Receive, Dispense, Reorder, Temperature, Barcode, Products, Reports, Lot trace, Settings, Users.","Switch the interface language (Arabic/English) from the top button — all data and reports work in both.","Data is saved automatically on the device; multi-device sync can be enabled in Settings.","The 8 dashboard KPI cards (items, quantity, expiring soon, expired, low stock, out of stock, rejected, today's movements) use colored icons for at-a-glance recognition.","The interface is tuned for readability and accessibility: fixed-width numbers in cards and tables so they don't shift on update, clearer contrast on sidebar section labels, form fields that no longer zoom the page on mobile taps, and full respect for the OS-level “reduce motion” preference."]}},
  {ic:"📥",cls:"g-green",
   ar:{t:"استقبال المحاليل والفحص",s:["للأصناف المعتمدة: استخدم «إضافة من القائمة المعتمدة» ← اختر المجموعة ثم الصنف، وأدخل عدد الكتات/العلب فتُحسب الكمية تلقائياً. أو أدخل الكود يدوياً فتُعبّأ بياناته.","أدخل رقم التشغيلة وتاريخ الانتهاء والكمية، واختر المورّد (من الموردين المعتمدين)، والمختبر المستلِم، ونتيجة الفحص (مقبول/مرفوض).","التشغيلة المرفوضة لا تُحتسب ولا تُصرف. فعّل خيار «يتطلب فحص QC» إن كانت تحتاج اعتماد جودة قبل الاستخدام — تُحجَز ولا يمكن صرفها حتى اعتمادها.","احفظ الاستلام (مع إمكانية طباعة الباركود)."]},
   en:{t:"Receiving & inspection",s:["For approved items use “Add from the approved list” ← pick group then item, enter the number of kits/boxes (quantity auto-calculated). Or type the code manually to auto-fill.","Enter lot number, expiry, and quantity; choose the supplier (from approved suppliers), the receiving lab, and the inspection result (Accepted/Rejected).","Rejected lots are excluded and cannot be dispensed. Tick “Requires QC” if the lot needs quality release before use — it is quarantined and cannot be dispensed until released.","Save the receipt (you can print the barcode)."]}},
