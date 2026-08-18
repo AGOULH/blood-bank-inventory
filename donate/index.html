@@ -11,11 +11,17 @@
   :root{
     --crimson:#006c35; --crimson-dark:#004c25; --crimson-soft:#e6f0eb;
     --green-bright:#16a34a; --gold:#b8902e; --blood:#b52440;
-    --ink:#1f2530; --muted:#6b7280; --line:#e6e8ec; --bg:#f4f5f7;
+    --ink:#1f2530; --muted:#646b78; --line:#e6e8ec; --bg:#f4f5f7;
     --card:#ffffff; --ok:#1f7a4d; --ok-soft:#e6f4ec; --warn:#8c5800;
     --warn-soft:#fff4e0; --danger:#c0392b; --danger-soft:#fdecea;
     --info:#1f5f9e; --info-soft:#e8f1fb; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
+    --ease:cubic-bezier(.2,.7,.3,1); --ease-spring:cubic-bezier(.16,1,.3,1);
     --r:14px; --r-sm:10px;
+    /* هوية صفحة تسجيل المتبرع: تتبع هوية شاشة العرض المختارة للحملة (scrCfg) — هذه القيم الافتراضية
+       تبقى نفس اللون الأحمر القديم لأي حملة لم تُخصَّص لها هوية شاشة بعد (drawDonorForm يبدّلها فقط
+       عند وجود scrCfg على وثيقة الحملة، فلا تغيير على الحملات القديمة/غير المهيّأة) */
+    --dw-bg:radial-gradient(1200px 600px at 70% -10%,#b52440 0%,var(--crimson) 35%,var(--crimson-dark) 100%);
+    --dw-accent:var(--blood); --dw-accent-soft:#fdecef; --dw-accent-glow:rgba(181,36,64,.35);
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
@@ -25,7 +31,7 @@
   input,select,textarea{font-family:inherit;font-size:15px}
   a{color:var(--crimson)}
 
-  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 18px}
+  .topbar{background:rgba(255,255,255,.78);backdrop-filter:blur(18px) saturate(180%);-webkit-backdrop-filter:blur(18px) saturate(180%);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 18px}
   .brand{display:flex;align-items:center;gap:11px;min-width:0}
   .brand .mk{width:40px;height:40px;border-radius:11px;background:var(--crimson);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
   .brand .t1{font-weight:800;font-size:15px;white-space:nowrap}
@@ -40,18 +46,20 @@
 
   .main{max-width:1080px;margin:0 auto;padding:22px 20px 60px}
   .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
-  .page-head h2{margin:0;font-size:21px}
+  .page-head h2{margin:0;font-size:21px;letter-spacing:-.3px;text-wrap:balance}
   .page-head p{margin:2px 0 0;color:var(--muted);font-size:13px}
 
   .grid{display:grid;gap:14px}
   .kpis{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:16px}
-  .kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .kpi::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--green-bright),var(--crimson-dark))}
   .kpi .lbl{color:var(--muted);font-size:13px;font-weight:600}
-  .kpi .val{font-size:28px;font-weight:800;margin-top:6px;letter-spacing:-.5px}
+  .kpi .val{font-size:28px;font-weight:800;margin-top:6px;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
 
-  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:16px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:16px;position:relative;overflow:hidden}
+  .panel::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green-bright),var(--crimson-dark))}
   .panel-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
-  .panel-h h3{margin:0;font-size:15px}
+  .panel-h h3{margin:0;font-size:15px;text-wrap:balance}
   .panel-h .hint{color:var(--muted);font-size:12px;font-weight:500}
   .panel-b{padding:16px}
 
@@ -62,8 +70,8 @@
   .form-grid .full{grid-column:1/-1}
   .req:after{content:" *";color:var(--danger)}
 
-  .btn{border:none;border-radius:var(--r-sm);padding:11px 16px;font-weight:700;font-size:15px;background:var(--crimson);color:#fff;transition:filter .15s,transform .02s}
-  .btn:hover{filter:brightness(1.06)} .btn:active{transform:translateY(1px)}
+  .btn{border:none;border-radius:var(--r-sm);padding:11px 16px;font-weight:700;font-size:15px;background:var(--crimson);color:#fff;transition:filter .15s var(--ease),transform .12s var(--ease-spring)}
+  .btn:hover{filter:brightness(1.06)} .btn:active{transform:scale(.96);transition-duration:.05s}
   .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)} .btn.ghost:hover{background:#f7f8fa}
   .btn.soft{background:var(--crimson-soft);color:var(--crimson)}
   .btn.danger{background:var(--danger)}
@@ -81,34 +89,45 @@
   .tag.danger{background:var(--danger-soft);color:var(--danger)}
   .tag.info{background:var(--info-soft);color:var(--info)}
   .tag.mut{background:#eef0f3;color:var(--muted)}
-  .row-actions{display:flex;gap:6px;flex-wrap:wrap}
+  .row-actions{display:flex;gap:8px;flex-wrap:wrap}
 
   .logo-prev{width:64px;height:64px;border-radius:12px;border:1px solid var(--line);object-fit:contain;background:#fff;display:none}
 
   /* ===== modal ===== */
-  .modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:60;padding:16px}
-  .modal-bg.open{display:flex}
-  .modal{background:#fff;border-radius:16px;max-width:440px;width:100%;padding:24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-  .modal h3{margin:0 0 10px}
+  @keyframes modalBgIn{from{opacity:0}to{opacity:1}}
+  @keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  .modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.4);backdrop-filter:blur(6px) saturate(140%);-webkit-backdrop-filter:blur(6px) saturate(140%);display:none;align-items:center;justify-content:center;z-index:60;padding:16px}
+  .modal-bg.open{display:flex;animation:modalBgIn .15s var(--ease)}
+  .modal{background:#fff;border-radius:16px;max-width:440px;width:100%;padding:24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:modalIn .28s var(--ease-spring)}
+  .modal h3{margin:0 0 10px;letter-spacing:-.2px;text-wrap:balance}
   .modal .qr-box{display:flex;justify-content:center;margin:14px 0}
   .modal .lnk{font-size:12px;direction:ltr;word-break:break-all;background:#f4f5f7;border-radius:8px;padding:8px;margin:8px 0;font-family:monospace}
 
   /* ===== donor page ===== */
-  .donor-wrap{min-height:100vh;background:radial-gradient(1200px 600px at 70% -10%,#b52440 0%,var(--crimson) 35%,var(--crimson-dark) 100%);display:flex;align-items:center;justify-content:center;padding:20px}
-  .donor-card{background:#fff;width:100%;max-width:430px;border-radius:20px;padding:28px 24px;box-shadow:0 20px 50px rgba(0,0,0,.25);text-align:center}
-  .donor-card .org-logo{max-width:110px;max-height:110px;object-fit:contain;margin:0 auto 6px;display:block}
-  .donor-card .mark{width:64px;height:64px;border-radius:16px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:var(--crimson-soft);font-size:32px}
-  .donor-card h1{font-size:20px;margin:0 0 2px}
+  .donor-wrap{min-height:100vh;background:var(--dw-bg);display:flex;align-items:center;justify-content:center;padding:20px;position:relative}
+  .donor-wrap::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+    background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.16) 1.5px,transparent 0);background-size:28px 28px}
+  .donor-card{position:relative;z-index:1;overflow:hidden;background:#fff;width:100%;max-width:430px;border-radius:20px;padding:28px 24px;
+    box-shadow:0 1px 2px rgba(0,0,0,.05),0 10px 24px rgba(0,0,0,.12),0 30px 60px -14px rgba(0,0,0,.35);text-align:center}
+  .donor-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--dw-accent),var(--dw-accent-soft))}
+  .donor-card .org-logo{max-width:110px;max-height:110px;object-fit:contain;margin:0 auto 6px;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.1))}
+  .donor-card .mark{width:64px;height:64px;border-radius:18px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,#fff 0%,var(--dw-accent-soft) 100%);box-shadow:0 10px 22px -6px var(--dw-accent-glow);font-size:32px}
+  .donor-card h1{font-size:20px;margin:0 0 2px;letter-spacing:-.2px;text-wrap:balance}
   .donor-card .sub{color:var(--muted);font-size:13px;margin:0 0 18px}
   .bt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 0 18px}
-  .bt-btn{border:2px solid var(--line);background:#fff;border-radius:14px;padding:13px 4px;font-size:19px;font-weight:800;color:var(--ink);direction:ltr}
-  .bt-btn.sel{border-color:var(--blood);background:#fdecef;color:var(--blood)}
-  .donate-btn{width:100%;border:none;border-radius:14px;padding:15px;font-size:18px;font-weight:800;background:var(--blood);color:#fff}
+  .bt-btn{border:2px solid var(--line);background:#fff;border-radius:14px;padding:13px 4px;font-size:19px;font-weight:800;color:var(--ink);direction:ltr;transition:border-color .15s var(--ease),background .15s var(--ease),transform .12s var(--ease-spring)}
+  .bt-btn:active{transform:scale(.96);transition-duration:.05s}
+  .bt-btn.sel{border-color:var(--dw-accent);background:var(--dw-accent-soft);color:var(--dw-accent)}
+  .bt-btn::before{content:"🩸";display:block;font-size:11px;opacity:.3;margin-bottom:3px;transition:opacity .15s var(--ease)}
+  .bt-btn.sel::before{opacity:.85}
+  .donate-btn{width:100%;border:none;border-radius:14px;padding:15px;font-size:18px;font-weight:800;background:var(--dw-accent);color:#fff;transition:transform .12s var(--ease-spring),filter .15s var(--ease)}
+  .donate-btn:active:not(:disabled){transform:scale(.96);transition-duration:.05s}
   .donate-btn:disabled{opacity:.5}
   .thanks-emoji{font-size:56px;margin:6px 0}
   .thanks-phrase{background:var(--crimson-soft);color:var(--crimson);border-radius:12px;padding:14px;font-weight:700;margin:14px 0;font-size:15px}
   .thanks-num{font-size:15px;color:var(--muted)}
-  .thanks-num b{color:var(--blood);font-size:22px}
+  .thanks-num b{color:var(--dw-accent);font-size:22px;font-variant-numeric:tabular-nums}
 
   /* ===== display screen (ألوان تناسب كيس الدم) ===== */
   /* الهدف الأصلي "شاشة واحدة بلا تمرير" يتحقق طالما وحدات vh تكفي محتواها الحقيقي (بروجكتر/ديسك توب بمقاس
@@ -495,6 +514,20 @@
   .toast.err{background:var(--danger)}
   .empty{color:var(--muted);text-align:center;padding:26px;font-size:14px}
   .center-load{min-height:100vh;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+
+  @media(prefers-reduced-motion:reduce){
+    .modal-bg,.modal,.donor-wrap *{animation-duration:.01ms!important;animation-iteration-count:1!important}
+    .btn,.bt-btn{transition-duration:.01ms!important}
+  }
+  @media(prefers-reduced-transparency:reduce){
+    .topbar{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none}
+    .modal-bg{background:rgba(15,23,42,.6);backdrop-filter:none;-webkit-backdrop-filter:none}
+  }
+  @media(prefers-contrast:more){
+    .topbar{border-bottom:2px solid var(--ink)}
+    .modal{border:2px solid var(--ink)}
+    .btn,.bt-btn{outline:1px solid currentColor}
+  }
 </style>
 </head>
 <body>
@@ -946,16 +979,29 @@ async function showLinks(id,name){
 }
 let _modalLastFocus=null;
 function _modalEsc(e){if(e.key==="Escape")closeModal();}
-/* يفتح النافذة المنبثقة مع نقل التركيز إليها وإغلاقها بمفتاح Esc — يستدعى بعد تعبئة modal-box */
+function _modalTab(e){
+  if(e.key!=="Tab")return;
+  const items=[...$("#modal-box").querySelectorAll('input,select,textarea,button,[href],[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);
+  if(!items.length)return;
+  const first=items[0], last=items[items.length-1];
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+}
+/* يفتح النافذة المنبثقة مع نقل التركيز إليها، حصر Tab داخلها، وإغلاقها بمفتاح Esc — يستدعى بعد تعبئة modal-box */
 function openModal(){
   _modalLastFocus=document.activeElement;
   $("#modal-bg").classList.add("open");
-  $("#modal-box").focus();
+  const view=$("#view"); if(view) view.inert=true;
+  const focusable=$("#modal-box").querySelector('input,select,textarea,button,[href],[tabindex]:not([tabindex="-1"])');
+  (focusable||$("#modal-box")).focus();
   document.addEventListener("keydown",_modalEsc);
+  document.addEventListener("keydown",_modalTab);
 }
 function closeModal(){
   $("#modal-bg").classList.remove("open");
+  const view=$("#view"); if(view) view.inert=false;
   document.removeEventListener("keydown",_modalEsc);
+  document.removeEventListener("keydown",_modalTab);
   if(_modalLastFocus&&_modalLastFocus.focus){try{_modalLastFocus.focus();}catch(e){}}
   _modalLastFocus=null;
 }
@@ -1089,7 +1135,25 @@ async function renderDonor(id){
   },()=>{$("#d-card").innerHTML=`<div class="empty">${NET_ERR}</div>`;});
 }
 let selBT=null,curCamp=null,curCampId=null;
+/* لون افتراضي بلا تخصيص يدوي، لكل هوية شاشة عرض — نفس ألوان setTheme() */
+const SKIN_TINT_DEFAULT={"neon-blue":"#1f97c2","gold-glass":"#c9a23a","blood-bags":"#c1121f","national":"#1565c0"};
+/* تطبيق نفس هوية شاشة العرض المختارة للحملة (scrCfg) على صفحة تسجيل المتبرع — بلا هذا تبقى الصفحة
+   بلون أحمر ثابت لا علاقة له بالهوية المختارة، رغم أنها نقطة التواصل الفعلية مع المتبرع. حملة بلا
+   scrCfg محفوظ (لم تُخصَّص هويتها بعد) تبقى باللون الأحمر الافتراضي القديم دون أي تغيير */
+function applyDonorIdentity(c){
+  const root=document.documentElement.style;
+  if(c.scrCfg&&c.scrCfg.skin){
+    const tint=HEXOK(c.scrCfg.tint)?c.scrCfg.tint:(SKIN_TINT_DEFAULT[c.scrCfg.skin]||"#b52440");
+    root.setProperty("--dw-bg",`radial-gradient(1200px 600px at 70% -10%, ${mixC(tint,.78,true)} 0%, ${tint} 45%, ${mixC(tint,.5,false)} 100%)`);
+    root.setProperty("--dw-accent",tint);
+    root.setProperty("--dw-accent-soft",mixC(tint,.92,true));
+    root.setProperty("--dw-accent-glow",mixC(tint,0,false,.35));
+  }else{
+    root.removeProperty("--dw-bg");root.removeProperty("--dw-accent");root.removeProperty("--dw-accent-soft");root.removeProperty("--dw-accent-glow");
+  }
+}
 function drawDonorForm(id,c){
+  applyDonorIdentity(c);
   if(c.status!=="active"){
     $("#d-card").innerHTML=`<div class="mark" aria-hidden="true">🩸</div><h1>${esc(c.name)}</h1>
       <p class="sub">${esc(c.city)}</p>
@@ -1105,13 +1169,13 @@ function drawDonorForm(id,c){
     ${c.org?`<div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px">${esc(c.org)}</div>`:""}
     <h1>${esc(c.name)}</h1>
     <p class="sub">${esc(c.city)} · ${esc(c.times||"")}</p>
-    <div style="font-weight:700;font-size:15px;margin-bottom:4px">اختر فصيلة دمك:</div>
-    <div class="bt-grid">${BT.map(b=>`<button class="bt-btn" id="bt-${b.k}" onclick="pickBT('${b.k}')">${b.l}</button>`).join("")}</div>
+    <div style="font-weight:700;font-size:15px;margin-bottom:4px" id="bt-label">اختر فصيلة دمك:</div>
+    <div class="bt-grid" role="radiogroup" aria-labelledby="bt-label">${BT.map(b=>`<button type="button" class="bt-btn" id="bt-${b.k}" role="radio" aria-checked="false" onclick="pickBT('${b.k}')">${b.l}</button>`).join("")}</div>
     <button class="donate-btn" id="d-go" disabled onclick="registerDonation('${id}')"><span aria-hidden="true">🩸</span> تبرعت بالدم</button>
     <div class="thanks-num" style="margin-top:14px">عدد المتبرعين حتى الآن: <b id="d-live">${c.total||0}</b></div>
     <div class="credit">فكرة وإعداد: حسن العاقول</div>`;
 }
-function pickBT(k){selBT=k;BT.forEach(b=>$("#bt-"+b.k).classList.toggle("sel",b.k===k));$("#d-go").disabled=false;}
+function pickBT(k){selBT=k;BT.forEach(b=>{const sel=b.k===k;const el=$("#bt-"+b.k);el.classList.toggle("sel",sel);el.setAttribute("aria-checked",sel?"true":"false");});$("#d-go").disabled=false;}
 async function registerDonation(id){
   if(!selBT)return;
   const guard="dc_done_"+id+"_"+dkey(new Date());

@@ -10,13 +10,14 @@
     --crimson:#127a3e; --crimson-dark:#0c5e30; --crimson-soft:#e7f4ec;
     --green-bright:#16a34a; --gold:#b8902e;
     --sidebar:#0a2c1a; --sidebar-line:rgba(255,255,255,.08); --sidebar-active:rgba(255,255,255,.10);
-    --ink:#1f2530; --muted:#6b7280; --line:#e6e8ec; --bg:#f4f5f7;
+    --ink:#1f2530; --muted:#646b78; --line:#e6e8ec; --bg:#f4f5f7;
     --card:#ffffff; --ok:#1f7a4d; --ok-soft:#e6f4ec; --warn:#b06f00;
     --warn-soft:#fff4e0; --yellow:#f4c430; --danger:#c0392b; --danger-soft:#fdecea;
     --info:#1f5f9e; --info-soft:#e8f1fb; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
     --shadow-md:0 4px 14px rgba(16,24,40,.1),0 1.5px 4px rgba(16,24,40,.07);
     --shadow-lg:0 14px 34px rgba(16,24,40,.18),0 3px 10px rgba(16,24,40,.1);
     --ease:cubic-bezier(.2,.7,.3,1);
+    --ease-spring:cubic-bezier(.16,1,.3,1);
     --r:14px; --r-sm:10px;
   }
   *{box-sizing:border-box}
@@ -33,14 +34,14 @@
   .login-card{background:#fff;width:100%;max-width:380px;border-radius:18px;padding:30px 26px;box-shadow:0 20px 50px rgba(0,0,0,.25);text-align:center;position:relative;animation:fadeUp .4s var(--ease)}
   .lang-pill{position:absolute;top:14px;inset-inline-end:14px;border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--ink)}
   .login-mark{width:62px;height:62px;border-radius:16px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:var(--crimson-soft);color:var(--crimson);font-size:30px}
-  .login-card h1{font-size:19px;margin:0 0 4px;text-wrap:balance}
+  .login-card h1{font-size:19px;margin:0 0 4px;letter-spacing:-.2px;text-wrap:balance}
   .login-card p{color:var(--muted);font-size:13px;margin:0 0 22px;text-wrap:pretty}
   .field{text-align:start;margin-bottom:14px}
   .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
   .field input,.field select,.field textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}
   .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--crimson);box-shadow:0 0 0 3px var(--crimson-soft)}
-  .btn{border:none;border-radius:var(--r-sm);padding:11px 16px;font-weight:700;font-size:15px;background:linear-gradient(135deg,var(--green-bright) 0%,var(--crimson) 55%,var(--crimson-dark) 100%);color:#fff;box-shadow:0 3px 10px rgba(18,122,62,.3);transition:filter .18s var(--ease),transform .15s var(--ease),box-shadow .18s var(--ease)}
-  .btn:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 8px 20px rgba(18,122,62,.4)} .btn:active{transform:translateY(0) scale(.96);box-shadow:0 2px 6px rgba(18,122,62,.25)}
+  .btn{border:none;border-radius:var(--r-sm);padding:11px 16px;font-weight:700;font-size:15px;background:linear-gradient(135deg,var(--green-bright) 0%,var(--crimson) 55%,var(--crimson-dark) 100%);color:#fff;box-shadow:0 3px 10px rgba(18,122,62,.3);transition:filter .18s var(--ease),transform .12s var(--ease-spring),box-shadow .18s var(--ease)}
+  .btn:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 8px 20px rgba(18,122,62,.4)} .btn:active{transform:translateY(0) scale(.96);box-shadow:0 2px 6px rgba(18,122,62,.25);transition-duration:.05s}
   .btn.full{width:100%}
   .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none} .btn.ghost:hover{background:#f7f8fa;box-shadow:0 4px 12px rgba(16,24,40,.08)}
   .btn.soft{background:var(--crimson-soft);color:var(--crimson);box-shadow:none} .btn.soft:hover{box-shadow:0 4px 12px rgba(18,122,62,.15)}
@@ -49,7 +50,7 @@
   .login-err{color:var(--danger);font-size:13px;min-height:18px;margin-top:6px}
 
   #app{display:none;min-height:100vh}
-  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:14px 18px;min-height:200px;box-sizing:border-box}
+  .topbar{background:rgba(255,255,255,.78);backdrop-filter:blur(18px) saturate(180%);-webkit-backdrop-filter:blur(18px) saturate(180%);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:14px 18px;min-height:200px;box-sizing:border-box}
   .top-logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;pointer-events:none}
   .top-logo img{width:420px;height:auto;max-width:60vw;object-fit:contain}
   .topbar .spacer{flex:1}
@@ -61,15 +62,16 @@
   .layout{display:flex;align-items:flex-start}
   .side{width:235px;flex:none;padding:16px 12px;position:sticky;top:201px;height:calc(100vh - 201px);overflow:auto;border-inline-end:1px solid var(--line);background:#fff}
   .nav-group{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.04em;padding:10px 10px 6px;text-transform:uppercase}
-  .nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:start;border:none;background:none;padding:10px 11px;border-radius:10px;color:var(--ink);font-size:14px;font-weight:600;margin-bottom:2px;transition:background .15s var(--ease),color .15s var(--ease)}
+  .nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:start;border:none;background:none;padding:10px 11px;border-radius:10px;color:var(--ink);font-size:14px;font-weight:600;margin-bottom:2px;transition:background .15s var(--ease),color .15s var(--ease),transform .1s var(--ease-spring)}
   .nav-item .ic{width:22px;text-align:center;font-size:16px;flex:none}
   .nav-item:hover{background:#f5f6f8}
+  .nav-item:active{transform:scale(.96);transition-duration:.05s}
   .nav-item.active{background:var(--crimson-soft);color:var(--crimson)}
   .nav-item.active .ic{color:var(--crimson)}
 
   .main{flex:1;min-width:0;padding:22px 26px}
   .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
-  .page-head h2{margin:0;font-size:21px;text-wrap:balance}
+  .page-head h2{margin:0;font-size:21px;letter-spacing:-.3px;text-wrap:balance}
   .page-head p{margin:2px 0 0;color:var(--muted);font-size:13px;text-wrap:pretty}
   .head-actions{display:flex;gap:8px;flex-wrap:wrap}
 
@@ -114,9 +116,10 @@
   .tag.info{background:var(--info-soft);color:var(--info)}
   .tag.mut{background:#eef0f3;color:var(--muted)}
   .mono{font-family:monospace}
-  .row-actions{display:flex;gap:6px;justify-content:flex-start}
-  .icon-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 8px;font-size:13px;color:var(--ink);transition:background .15s var(--ease),transform .15s var(--ease),box-shadow .15s var(--ease)}
+  .row-actions{display:flex;gap:8px;justify-content:flex-start}
+  .icon-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 8px;font-size:13px;color:var(--ink);transition:background .15s var(--ease),transform .12s var(--ease-spring),box-shadow .15s var(--ease)}
   .icon-btn:hover{background:#f5f6f8;transform:translateY(-1px);box-shadow:0 3px 8px rgba(16,24,40,.1)}
+  .icon-btn:active{transform:translateY(0) scale(.96);transition-duration:.05s}
   .icon-btn.danger{color:var(--danger);border-color:#f3c9c4}
 
   .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
@@ -127,6 +130,7 @@
   .seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;background:#fff}
   .seg button{border:none;background:none;padding:9px 13px;font-size:13px;font-weight:600;color:var(--muted);transition:background .15s var(--ease),color .15s var(--ease)}
   .seg button:hover:not(.active){background:#f5f6f8}
+  .seg button:active{transform:scale(.96);transition-duration:.05s}
   .seg button.active{background:var(--crimson);color:#fff}
 
   .empty{text-align:center;padding:42px 20px;color:var(--muted)}
@@ -155,16 +159,17 @@
   .label-card .lc-code{font-family:monospace;letter-spacing:2px;margin-top:6px;font-size:14px}
 
   @keyframes bgIn{from{opacity:0}to{opacity:1}}
-  .modal-bg{position:fixed;inset:0;background:rgba(16,24,40,.45);display:none;align-items:center;justify-content:center;z-index:200;padding:18px;overflow-y:auto;animation:bgIn .18s var(--ease)}
-  .modal{background:#fff;border-radius:16px;width:100%;max-width:560px;box-shadow:0 24px 60px rgba(0,0,0,.3);max-height:92vh;overflow:auto;animation:fadeUp .22s var(--ease)}
+  @keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  .modal-bg{position:fixed;inset:0;background:rgba(16,24,40,.4);backdrop-filter:blur(6px) saturate(140%);-webkit-backdrop-filter:blur(6px) saturate(140%);display:none;align-items:center;justify-content:center;z-index:200;padding:18px;overflow-y:auto;animation:bgIn .15s var(--ease)}
+  .modal{background:#fff;border-radius:16px;width:100%;max-width:560px;box-shadow:0 24px 60px rgba(0,0,0,.3);max-height:92vh;overflow:auto;animation:modalIn .28s var(--ease-spring)}
   .modal-h{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
-  .modal-h h3{margin:0;font-size:17px;text-wrap:balance}
+  .modal-h h3{margin:0;font-size:17px;letter-spacing:-.2px;text-wrap:balance}
   .modal-h .x{border:none;background:none;font-size:22px;color:var(--muted);cursor:pointer;line-height:1}
   .modal-b{padding:18px}
   .modal-f{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-start}
 
-  #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease);z-index:300;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px) scale(.94);background:var(--ink);color:#fff;padding:11px 18px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .22s var(--ease),transform .3s var(--ease-spring);z-index:300;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
   #toast.ok{background:var(--ok)} #toast.err{background:var(--danger)}
 
   .help-box{background:var(--info-soft);border:1px solid #cfe0f3;border-radius:var(--r-sm);padding:12px 14px;font-size:13px;color:#284b6e}
@@ -173,6 +178,7 @@
   .stat-line{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:4px}
   hr.sep{border:none;border-top:1px solid var(--line);margin:16px 0}
   .menu-toggle{display:none;border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 10px;font-size:17px}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
   @media(max-width:760px){
     input,select,textarea{font-size:16px}
@@ -197,6 +203,15 @@
   }
   @media(prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  }
+  @media(prefers-reduced-transparency:reduce){
+    .topbar{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none}
+    .modal-bg{background:rgba(16,24,40,.6);backdrop-filter:none;-webkit-backdrop-filter:none}
+  }
+  @media(prefers-contrast:more){
+    .topbar{border-bottom:2px solid var(--ink)}
+    .modal{border:2px solid var(--ink)}
+    .btn,.icon-btn,.nav-item.active{outline:1px solid currentColor}
   }
 
   /* === Ministry of Health identity === */
@@ -302,7 +317,8 @@
 
 <div id="app">
   <div class="topbar">
-    <button class="menu-toggle" onclick="App.toggleSide()">☰</button>
+    <h1 class="sr-only" data-i18n="app_title">إدارة مخزون المحاليل الطبية</h1>
+    <button class="menu-toggle" onclick="App.toggleSide()" aria-label="فتح القائمة الجانبية" data-i18n-aria="menu_toggle_label">☰</button>
     <div class="top-logo"><img src="moh-logo.png" alt=""></div>
     <div class="spacer"></div>
     <div class="date-chip" id="dateChip"></div>
@@ -314,10 +330,10 @@
     <nav class="side" id="side"></nav>
     <main class="main" id="view"></main>
   </div>
-  <button class="fab-guide" title="دليل المستخدم" onclick="App.openGuide()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></button>
+  <button class="fab-guide" title="دليل المستخدم" aria-label="دليل المستخدم" onclick="App.openGuide()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></button>
 </div>
 
-<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal" tabindex="-1"></div></div>
 <div id="toast"></div>
 
 <script>
@@ -327,7 +343,7 @@ const App = (() => {
 /* ===================== i18n ===================== */
 const I18N = {
 ar:{
- app_title:"إدارة مخزون المحاليل الطبية", org:"بنك الدم المركزي بالدمام",
+ app_title:"إدارة مخزون المحاليل الطبية", org:"بنك الدم المركزي بالدمام", menu_toggle_label:"فتح القائمة الجانبية",
  login_user:"اسم المستخدم", login_pass:"كلمة المرور", login_btn:"تسجيل الدخول",
  login_err:"اسم المستخدم أو كلمة المرور غير صحيحة", logout:"خروج",
  sys_name:"نظام إدارة مخزون المحاليل الطبية",
@@ -386,7 +402,7 @@ ar:{
  no_results_t:"لا توجد نتائج", no_results_s:"جرّب تعديل البحث أو الفلتر",
  th_code:"الكود", th_name:"اسم المحلول", th_man:"الشركة", th_cat:"التصنيف", th_qty:"الكمية المتاحة",
  th_unit:"الوحدة", th_lots:"التشغيلات", th_status:"الحالة", th_actions:"إجراءات",
- tip_view_lots:"عرض/إضافة تشغيلة", tip_barcode:"باركود", tip_edit:"تعديل الصنف", tip_delete:"حذف الصنف",
+ tip_view_lots:"عرض/إضافة تشغيلة", tip_barcode:"باركود", tip_edit:"تعديل الصنف", tip_delete:"حذف الصنف", tip_adjust:"تعديل الكمية",
  shown_items:"عدد الأصناف الظاهرة: {n}", total_qty:"إجمالي الكمية المتاحة: {q}",
  lots_h:"التشغيلات ({n})", btn_add_lot:"+ إضافة تشغيلة", no_lots:"لا توجد تشغيلات",
  th_lot:"التشغيلة", th_exp:"الانتهاء", th_received:"المستلم", th_remaining:"المتبقي", th_supplier:"المورد",
@@ -494,7 +510,7 @@ ar:{
  col_inspection:"الفحص", col_received_date:"تاريخ الاستلام", days_left:"الأيام المتبقية",
 },
 en:{
- app_title:"Medical Solutions Inventory", org:"Central Blood Bank — Dammam",
+ app_title:"Medical Solutions Inventory", org:"Central Blood Bank — Dammam", menu_toggle_label:"Open side menu",
  login_user:"Username", login_pass:"Password", login_btn:"Sign in",
  login_err:"Invalid username or password", logout:"Logout",
  sys_name:"Medical Solutions Inventory System",
@@ -553,7 +569,7 @@ en:{
  no_results_t:"No results", no_results_s:"Try adjusting the search or filter",
  th_code:"Code", th_name:"Solution", th_man:"Manufacturer", th_cat:"Category", th_qty:"Available qty",
  th_unit:"Unit", th_lots:"Lots", th_status:"Status", th_actions:"Actions",
- tip_view_lots:"View / add lot", tip_barcode:"Barcode", tip_edit:"Edit item", tip_delete:"Delete item",
+ tip_view_lots:"View / add lot", tip_barcode:"Barcode", tip_edit:"Edit item", tip_delete:"Delete item", tip_adjust:"Adjust quantity",
  shown_items:"Items shown: {n}", total_qty:"Total available: {q}",
  lots_h:"Lots ({n})", btn_add_lot:"+ Add lot", no_lots:"No lots",
  th_lot:"Lot", th_exp:"Expiry", th_received:"Received", th_remaining:"Remaining", th_supplier:"Supplier",
@@ -876,6 +892,7 @@ function applyStaticI18n(){
   document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.getAttribute("data-i18n")));
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.setAttribute("placeholder",t(el.getAttribute("data-i18n-ph"))));
   document.querySelectorAll("[data-i18n-lang]").forEach(el=>el.textContent= LANG==="ar"?"English":"العربية");
+  document.querySelectorAll("[data-i18n-aria]").forEach(el=>el.setAttribute("aria-label",t(el.getAttribute("data-i18n-aria"))));
 }
 function toggleLang(){
   LANG = LANG==="ar"?"en":"ar"; localStorage.setItem("inv_lang",LANG);
@@ -952,9 +969,9 @@ function renderSidebar(){
   const items=NAVS.filter(n=>n.admin?isSuperAdmin():hasPerm(n.r)).map(n=>`<button class="nav-item" data-route="${n.r}" title="${t(n.k)}"><span class="ic">${svg(ICON[n.i])}</span><span class="lbl-t">${t(n.k)}</span></button>`).join("");
   const uname=curUser(), role=t(isSuperAdmin()?"role_superadmin":currentUser&&currentUser.role==="admin"?"role_admin":"role_user"), av=(uname||"?").trim().charAt(0).toUpperCase();
   $("side").innerHTML=`
-    <div class="side-top"><button class="side-toggle" onclick="App.toggleCollapse()" title="${t("side_collapse")}">${svg(ICON.panel)}</button></div>
+    <div class="side-top"><button class="side-toggle" onclick="App.toggleCollapse()" title="${t("side_collapse")}" aria-label="${t("side_collapse")}">${svg(ICON.panel)}</button></div>
     <div class="nav-scroll">${items}</div>
-    <div class="side-foot"><div class="side-user" onclick="App.go('settings')" title="${t("nav_settings")}">
+    <div class="side-foot"><div class="side-user" role="button" tabindex="0" onclick="App.go('settings')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.go('settings')}" title="${t("nav_settings")}" aria-label="${t("nav_settings")+" — "+esc(uname)}">
       <div class="avatar">${esc(av)}</div><div class="su-info"><b>${esc(uname)}</b><span>${esc(role)}</span></div>
     </div><div class="side-credit lbl-t">${t("credit_line")}</div></div>`;
   $("side").classList.toggle("collapsed", localStorage.getItem("inv_collapsed")==="1");
@@ -980,13 +997,35 @@ window.addEventListener("hashchange",()=>{ go(location.hash.replace("#","")||"da
 let toastT;
 function toast(msg,type){ const el=$("toast"); el.textContent=msg; el.className="show "+(type||"");
   clearTimeout(toastT); toastT=setTimeout(()=>el.className=el.className.replace("show","").trim(),2600); }
+let modalLastFocus=null;
 function modal(title,body,footer){
-  $("modal").innerHTML=`<div class="modal-h"><h3>${esc(title)}</h3><button class="x" onclick="App.closeModal()">×</button></div><div class="modal-b">${body}</div>`+(footer?`<div class="modal-f">${footer}</div>`:"");
+  modalLastFocus=document.activeElement;
+  $("modal").setAttribute("role","dialog");
+  $("modal").setAttribute("aria-modal","true");
+  $("modal").setAttribute("aria-labelledby","modal-title");
+  $("modal").innerHTML=`<div class="modal-h"><h3 id="modal-title">${esc(title)}</h3><button class="x" onclick="App.closeModal()" aria-label="${t("btn_close")}">×</button></div><div class="modal-b">${body}</div>`+(footer?`<div class="modal-f">${footer}</div>`:"");
   $("modalBg").style.display="flex";
   document.body.style.overflow="hidden";
+  const appEl=$("app"); if(appEl) appEl.inert=true;
+  const focusable=$("modal").querySelector('input,select,textarea,button,[href],[tabindex]:not([tabindex="-1"])');
+  (focusable||$("modal")).focus({preventScroll:true});
 }
-function closeModal(){ try{stopScanCam();}catch(e){} $("modalBg").style.display="none"; $("modal").innerHTML=""; document.body.style.overflow=""; }
+function closeModal(){
+  try{stopScanCam();}catch(e){}
+  $("modalBg").style.display="none"; $("modal").innerHTML=""; document.body.style.overflow="";
+  const appEl=$("app"); if(appEl) appEl.inert=false;
+  if(modalLastFocus&&document.contains(modalLastFocus)) modalLastFocus.focus({preventScroll:true});
+  modalLastFocus=null;
+}
 $("modalBg").addEventListener("click",e=>{ if(e.target.id==="modalBg") closeModal(); });
+$("modalBg").addEventListener("keydown",e=>{
+  if(e.key!=="Tab") return;
+  const items=[...$("modal").querySelectorAll('input,select,textarea,button,[href],[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);
+  if(!items.length) return;
+  const first=items[0], last=items[items.length-1];
+  if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+});
 function confirmAction(msg,onYes,yesLabel){
   modal(t("confirm_title"),`<p style="margin:0">${esc(msg)}</p>`,
     `<button class="btn danger" id="cf-yes">${esc(yesLabel||t("btn_confirm"))}</button><button class="btn ghost" onclick="App.closeModal()">${t("btn_cancel")}</button>`);
@@ -1127,10 +1166,10 @@ function renderInv(){
       <td class="num"><b>${num(availQtyOf(it.code))}</b></td><td>${esc(labelOf(UNITS,it.unit))}</td>
       <td class="num">${num(active.length)}</td><td><span class="tag ${st.cls}">${t(st.key)}</span></td>
       <td><div class="row-actions">
-        <button class="icon-btn" title="${t("tip_view_lots")}" onclick="App.toggleLots('${jsq(it.code)}')">👁</button>
-        <button class="icon-btn" title="${t("tip_barcode")}" onclick="App.go('barcode');setTimeout(()=>App.pickBarcode('${jsq(it.code)}'),60)">🏷️</button>
-        <button class="icon-btn" title="${t("tip_edit")}" onclick="App.editItem('${it.id}')">✏️</button>
-        <button class="icon-btn danger" title="${t("tip_delete")}" onclick="App.delItem('${it.id}')">🗑</button>
+        <button class="icon-btn" title="${t("tip_view_lots")}" aria-label="${t("tip_view_lots")}" onclick="App.toggleLots('${jsq(it.code)}')">👁</button>
+        <button class="icon-btn" title="${t("tip_barcode")}" aria-label="${t("tip_barcode")}" onclick="App.go('barcode');setTimeout(()=>App.pickBarcode('${jsq(it.code)}'),60)">🏷️</button>
+        <button class="icon-btn" title="${t("tip_edit")}" aria-label="${t("tip_edit")}" onclick="App.editItem('${it.id}')">✏️</button>
+        <button class="icon-btn danger" title="${t("tip_delete")}" aria-label="${t("tip_delete")}" onclick="App.delItem('${it.id}')">🗑</button>
       </div></td></tr>
       <tr id="lots-${esc(it.code)}" style="display:none"><td colspan="9" style="padding:0">${lotsTable(it.code)}</td></tr>`;});
   h+=`</tbody></table></div><div class="stat-line"><span>${t("shown_items",{n:num(rows.length)})}</span><span>${t("total_qty",{q:num(rows.reduce((s,it)=>s+availQtyOf(it.code),0))})}</span></div>`;
@@ -1143,7 +1182,7 @@ function lotsTable(code){
   h+=`<table style="font-size:13px"><thead><tr><th>${t("th_lot")}</th><th>${t("th_exp")}</th><th class="num">${t("th_received")}</th><th class="num">${t("th_remaining")}</th><th>${t("th_lab")}</th><th>${t("th_supplier")}</th><th>${t("th_status")}</th><th></th></tr></thead><tbody>`;
   lots.forEach(l=>{const st=lotStatus(l);
     h+=`<tr><td class="mono">${esc(l.lot||"—")}</td><td>${fmtG(l.expiry)}</td><td class="num">${num(l.qtyReceived)}</td><td class="num"><b>${num(l.qtyRemaining)}</b></td><td>${esc(labelOf(labs(),l.lab))}</td><td>${esc(l.supplier||"—")}</td><td><span class="tag ${st.cls}">${lotStatusText(st)}</span></td>
-      <td><div class="row-actions"><button class="icon-btn" title="⚖️" onclick="App.adjustLot('${l.id}')">⚖️</button>${l.qc==="pending"?`<button class="icon-btn" title="${t("tip_qc_release")}" onclick="App.releaseQC('${l.id}')">✅</button>`:""}${(l.qtyRemaining>0&&!l.disposed&&!l.recalled)?`<button class="icon-btn danger" title="${t("tip_recall")}" onclick="App.recallLot('${l.id}')">🚩</button>`:""}${(l.qtyRemaining>0&&!l.disposed)?`<button class="icon-btn danger" title="${t("tip_dispose")}" onclick="App.disposeLot('${l.id}')">🚮</button>`:""}<button class="icon-btn danger" title="${t("act_delete")}" onclick="App.delLot('${l.id}')">🗑</button></div></td></tr>`;});
+      <td><div class="row-actions"><button class="icon-btn" title="${t("tip_adjust")}" aria-label="${t("tip_adjust")}" onclick="App.adjustLot('${l.id}')">⚖️</button>${l.qc==="pending"?`<button class="icon-btn" title="${t("tip_qc_release")}" aria-label="${t("tip_qc_release")}" onclick="App.releaseQC('${l.id}')">✅</button>`:""}${(l.qtyRemaining>0&&!l.disposed&&!l.recalled)?`<button class="icon-btn danger" title="${t("tip_recall")}" aria-label="${t("tip_recall")}" onclick="App.recallLot('${l.id}')">🚩</button>`:""}${(l.qtyRemaining>0&&!l.disposed)?`<button class="icon-btn danger" title="${t("tip_dispose")}" aria-label="${t("tip_dispose")}" onclick="App.disposeLot('${l.id}')">🚮</button>`:""}<button class="icon-btn danger" title="${t("act_delete")}" aria-label="${t("act_delete")}" onclick="App.delLot('${l.id}')">🗑</button></div></td></tr>`;});
   h+=`</tbody></table></div>`; return h;
 }
 function toggleLots(code){ const r=$("lots-"+code); if(r) r.style.display=r.style.display==="none"?"":"none"; }
@@ -1737,7 +1776,7 @@ pages.temp=()=>{
       :`<div class="empty"><div class="em-ic">🌡️</div><h4>${t("temp_no_units")}</h4></div>`}
     </div></div>
     <div class="panel"><div class="panel-h"><h3>${t("temp_units_h")}</h3></div><div class="panel-b">
-      <div style="margin-bottom:10px">${units.length?units.map(u=>`<span class="tag mut" style="margin:0 4px 6px 0">${esc(u.name)} (${num(u.min)}–${num(u.max)}°) <button class="icon-btn danger" style="padding:0 6px;margin-inline-start:4px" onclick="App.delTempUnit('${jsq(u.id)}')">×</button></span>`).join(""):`<span class="muted" style="font-size:13px">${t("temp_no_units")}</span>`}</div>
+      <div style="margin-bottom:10px">${units.length?units.map(u=>`<span class="tag mut" style="margin:0 4px 6px 0">${esc(u.name)} (${num(u.min)}–${num(u.max)}°) <button class="icon-btn danger" style="padding:0 6px;margin-inline-start:4px" title="${t("act_delete")}" aria-label="${t("act_delete")+" "+esc(u.name)}" onclick="App.delTempUnit('${jsq(u.id)}')">×</button></span>`).join(""):`<span class="muted" style="font-size:13px">${t("temp_no_units")}</span>`}</div>
       <div class="form-grid"><div><label>${t("temp_unit_name")}</label><input id="tu-name"></div><div><label>${t("temp_min")}</label><input id="tu-min" type="number" step="0.1" min="-200" max="200" value="2"></div><div><label>${t("temp_max")}</label><input id="tu-max" type="number" step="0.1" min="-200" max="200" value="8"></div></div>
       <div style="margin-top:10px"><button class="btn soft" onclick="App.addTempUnit()">${t("temp_add_unit")}</button></div>
     </div></div>
@@ -1776,14 +1815,14 @@ pages.settings=()=>{
     <div class="muted" style="font-size:12px;font-weight:700;margin-bottom:6px">${t("labs_default")}</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">${DEFAULT_LABS.map(l=>`<span class="tag mut">${esc(lbl(l))}</span>`).join("")}</div>
     <div class="muted" style="font-size:12px;font-weight:700;margin-bottom:6px">${t("labs_custom")}</div>
-    <div id="customLabs" style="margin-bottom:12px">${custom.length?custom.map(l=>`<span class="tag info" style="margin:0 4px 6px 0">${esc(lbl(l))} <button class="icon-btn danger" style="padding:0 6px;margin-inline-start:4px" onclick="App.delLab('${l.k}')">×</button></span>`).join(""):`<span class="muted" style="font-size:13px">${t("no_custom_labs")}</span>`}</div>
+    <div id="customLabs" style="margin-bottom:12px">${custom.length?custom.map(l=>`<span class="tag info" style="margin:0 4px 6px 0">${esc(lbl(l))} <button class="icon-btn danger" style="padding:0 6px;margin-inline-start:4px" title="${t("act_delete")}" aria-label="${t("act_delete")+" "+esc(lbl(l))}" onclick="App.delLab('${l.k}')">×</button></span>`).join(""):`<span class="muted" style="font-size:13px">${t("no_custom_labs")}</span>`}</div>
     <div class="form-grid"><div><label>${t("f_lab_ar")}</label><input id="lab-ar"></div><div><label>${t("f_lab_en")}</label><input id="lab-en"></div></div>
     <div style="margin-top:10px"><button class="btn soft" onclick="App.addLab()">${t("btn_add_lab")}</button></div>
   </div></div>
 
   <div class="panel"><div class="panel-h"><h3>${t("set_suppliers")}</h3><span class="hint">${t("set_suppliers_hint")}</span></div><div class="panel-b">
     ${(DB.settings.suppliers||[]).length?`<div class="tbl-wrap"><table><thead><tr><th>${t("sup_name")}</th><th>${t("sup_contact")}</th><th>${t("sup_reg")}</th><th>${t("sup_status")}</th><th></th></tr></thead><tbody>
-    ${(DB.settings.suppliers||[]).map(s=>`<tr><td><b>${esc(s.name)}</b></td><td>${esc(s.contact||"—")}</td><td>${esc(s.reg||"—")}</td><td><span class="tag ${s.status==="approved"?"ok":"warn"}">${t(s.status==="approved"?"sup_approved":"sup_pending")}</span></td><td><button class="icon-btn danger" onclick="App.delSupplier('${jsq(s.id)}')">🗑</button></td></tr>`).join("")}
+    ${(DB.settings.suppliers||[]).map(s=>`<tr><td><b>${esc(s.name)}</b></td><td>${esc(s.contact||"—")}</td><td>${esc(s.reg||"—")}</td><td><span class="tag ${s.status==="approved"?"ok":"warn"}">${t(s.status==="approved"?"sup_approved":"sup_pending")}</span></td><td><button class="icon-btn danger" title="${t("act_delete")}" aria-label="${t("act_delete")+" "+esc(s.name)}" onclick="App.delSupplier('${jsq(s.id)}')">🗑</button></td></tr>`).join("")}
     </tbody></table></div>`:`<div class="muted" style="font-size:13px;margin-bottom:10px">${t("no_suppliers")}</div>`}
     <hr class="sep">
     <div class="form-grid"><div><label class="req">${t("sup_name")}</label><input id="sup-name"></div><div><label>${t("sup_contact")}</label><input id="sup-contact"></div><div><label>${t("sup_reg")}</label><input id="sup-reg"></div><div><label>${t("sup_status")}</label><select id="sup-status"><option value="approved">${t("sup_approved")}</option><option value="pending">${t("sup_pending")}</option></select></div></div>
@@ -1865,11 +1904,11 @@ pages.users=()=>{
     <td><span class="tag ${sup?"ok":u.role==="admin"?"info":"mut"}">${roleLabelOf(u)}</span></td>
     <td style="white-space:normal;max-width:280px">${esc(permsLabelOf(u))}</td>
     <td><div class="row-actions">
-      ${sup?"":`<button class="icon-btn" title="${t(u.role==="admin"?"u_make_user":"u_make_admin")}" onclick="App.setRole('${jsq(u.u)}')">${u.role==="admin"?"⬇️":"⬆️"}</button>
-      <button class="icon-btn" title="${t("u_edit_perms")}" onclick="App.editPerms('${jsq(u.u)}')">🛡️</button>`}
-      <button class="icon-btn" title="${t("u_rename")}" onclick="App.renameUser('${jsq(u.u)}')">✏️</button>
-      <button class="icon-btn" title="${t("u_reset")}" onclick="App.resetUserPass('${jsq(u.u)}')">🔑</button>
-      ${sup?"":`<button class="icon-btn danger" title="${t("u_delete")}" onclick="App.delUser('${jsq(u.u)}')">🗑</button>`}
+      ${sup?"":`<button class="icon-btn" title="${t(u.role==="admin"?"u_make_user":"u_make_admin")}" aria-label="${t(u.role==="admin"?"u_make_user":"u_make_admin")}" onclick="App.setRole('${jsq(u.u)}')">${u.role==="admin"?"⬇️":"⬆️"}</button>
+      <button class="icon-btn" title="${t("u_edit_perms")}" aria-label="${t("u_edit_perms")}" onclick="App.editPerms('${jsq(u.u)}')">🛡️</button>`}
+      <button class="icon-btn" title="${t("u_rename")}" aria-label="${t("u_rename")}" onclick="App.renameUser('${jsq(u.u)}')">✏️</button>
+      <button class="icon-btn" title="${t("u_reset")}" aria-label="${t("u_reset")}" onclick="App.resetUserPass('${jsq(u.u)}')">🔑</button>
+      ${sup?"":`<button class="icon-btn danger" title="${t("u_delete")}" aria-label="${t("u_delete")}" onclick="App.delUser('${jsq(u.u)}')">🗑</button>`}
     </div></td></tr>`;}).join("")}
   </tbody></table></div></div></div>`;
 };
@@ -1938,12 +1977,12 @@ pages.products=()=>{
     <div class="head-actions"><button class="btn soft" onclick="App.addProduct()">${t("p_add")}</button></div></div>
   <div class="panel"><div class="panel-b">
     ${items.length?`<div class="tbl-wrap"><table><thead><tr><th>${t("th_code")}</th><th>${t("th_name")}</th><th>${t("f_man")}</th><th>${t("f_cat")}</th><th>${t("f_unit")}</th><th class="num">${t("f_min")}</th><th class="num">${t("th_avail")}</th><th>${t("u_th_actions")}</th></tr></thead><tbody>
-    ${items.map(it=>`<tr><td><span class="tag mut mono">${esc(it.code)}</span></td><td><b>${esc(it.name)}</b></td><td>${esc(it.manufacturer||"—")}</td><td>${esc(labelOf(CATS,it.category))}</td><td>${esc(labelOf(UNITS,it.unit))}</td><td class="num">${num(it.minQty||0)}</td><td class="num">${num(availQtyOf(it.code))}</td><td><div class="row-actions"><button class="icon-btn" title="${t("act_edit")}" onclick="App.editItem('${it.id}')">✏️</button><button class="icon-btn danger" title="${t("act_delete")}" onclick="App.delItem('${it.id}')">🗑</button></div></td></tr>`).join("")}
+    ${items.map(it=>`<tr><td><span class="tag mut mono">${esc(it.code)}</span></td><td><b>${esc(it.name)}</b></td><td>${esc(it.manufacturer||"—")}</td><td>${esc(labelOf(CATS,it.category))}</td><td>${esc(labelOf(UNITS,it.unit))}</td><td class="num">${num(it.minQty||0)}</td><td class="num">${num(availQtyOf(it.code))}</td><td><div class="row-actions"><button class="icon-btn" title="${t("act_edit")}" aria-label="${t("act_edit")}" onclick="App.editItem('${it.id}')">✏️</button><button class="icon-btn danger" title="${t("act_delete")}" aria-label="${t("act_delete")}" onclick="App.delItem('${it.id}')">🗑</button></div></td></tr>`).join("")}
     </tbody></table></div>`:`<div class="empty"><div class="em-ic">📦</div><h4>${t("p_empty")}</h4><button class="btn" style="margin-top:12px" onclick="App.addProduct()">${t("p_add")}</button></div>`}
   </div></div>
   <div class="panel"><div class="panel-h"><h3>${t("p_catalog")}</h3><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="hint">${t("p_catalog_hint")}</span><button class="btn sm soft" onclick="App.addCatItem()">${t("cat_add_btn")}</button></div></div><div class="panel-b">
     ${CATALOG.map(g=>`<div style="margin-bottom:12px"><b style="font-size:13px;color:var(--crimson-dark)">${esc(lbl(g))}</b>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px">${catItemsOf(g.g).map(it=>`<span class="tag ${it.custom?"info":"mut"}" title="${it.per?("1 "+lbl(CAT_KITS[it.kit]||{ar:"",en:""})+" = "+it.per+" "+labelOf(UNITS,it.u)):esc(labelOf(UNITS,it.u))}">${esc(it.n)}${it.custom?` <button class="icon-btn danger" style="padding:0 5px;margin-inline-start:3px" onclick="App.delCatItem('${jsq(it.code)}')">×</button>`:""}</span>`).join("")}</div></div>`).join("")}
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px">${catItemsOf(g.g).map(it=>`<span class="tag ${it.custom?"info":"mut"}" title="${it.per?("1 "+lbl(CAT_KITS[it.kit]||{ar:"",en:""})+" = "+it.per+" "+labelOf(UNITS,it.u)):esc(labelOf(UNITS,it.u))}">${esc(it.n)}${it.custom?` <button class="icon-btn danger" style="padding:0 5px;margin-inline-start:3px" title="${t("act_delete")}" aria-label="${t("act_delete")+" "+esc(it.n)}" onclick="App.delCatItem('${jsq(it.code)}')">×</button>`:""}</span>`).join("")}</div></div>`).join("")}
   </div></div>`;
 };
 function addCatItem(){
@@ -2311,8 +2350,8 @@ function unlockSync(){
 /* ===== User guide ===== */
 const GUIDE=[
  {ic:"📖",cls:"g-purple",
-  ar:{t:"نظرة عامة على النظام",s:["سجّل الدخول باسم المستخدم وكلمة المرور (افتراضياً admin / 1234، ويمكن تغييرهما من الإعدادات).","تنقّل بين الأقسام من القائمة الجانبية: لوحة التحكم، المخزون، الاستقبال، الصرف، إعادة الطلب، سجل الحرارة، الباركود، إدارة المنتجات، التقارير، تتبع التشغيلة، الإعدادات، إدارة المستخدمين.","بدّل لغة الواجهة (عربي/إنجليزي) من زر اللغة بالأعلى — تعمل كل البيانات والتقارير باللغتين.","تُحفظ البيانات تلقائياً على الجهاز، ويمكن تفعيل المزامنة بين الأجهزة من الإعدادات.","بطاقات لوحة التحكم الثمانية (الأصناف، الكمية، قرب الانتهاء، المنتهية، المخزون المنخفض، النافد، المرفوضة، حركات اليوم) بأيقونات ملوّنة توضّح كل مؤشر بلمحة.","الواجهة محسّنة لسهولة القراءة والوصول: أرقام ثابتة العرض في البطاقات والجداول لا تهتز عند التحديث، تباين ألوان أوضح لعناوين القائمة الجانبية، حقول الإدخال لا تكبّر الشاشة عند اللمس على الجوال، وتُحترَم إعدادات «تقليل الحركة» من نظام التشغيل لمن يفضّل ذلك."]},
-  en:{t:"System overview",s:["Sign in with your username and password (default admin / 1234, changeable in Settings).","Use the side menu to move between sections: Dashboard, Inventory, Receive, Dispense, Reorder, Temperature, Barcode, Products, Reports, Lot trace, Settings, Users.","Switch the interface language (Arabic/English) from the top button — all data and reports work in both.","Data is saved automatically on the device; multi-device sync can be enabled in Settings.","The 8 dashboard KPI cards (items, quantity, expiring soon, expired, low stock, out of stock, rejected, today's movements) use colored icons for at-a-glance recognition.","The interface is tuned for readability and accessibility: fixed-width numbers in cards and tables so they don't shift on update, clearer contrast on sidebar section labels, form fields that no longer zoom the page on mobile taps, and full respect for the OS-level “reduce motion” preference."]}},
+  ar:{t:"نظرة عامة على النظام",s:["سجّل الدخول باسم المستخدم وكلمة المرور (افتراضياً admin / 1234، ويمكن تغييرهما من الإعدادات).","تنقّل بين الأقسام من القائمة الجانبية: لوحة التحكم، المخزون، الاستقبال، الصرف، إعادة الطلب، سجل الحرارة، الباركود، إدارة المنتجات، التقارير، تتبع التشغيلة، الإعدادات، إدارة المستخدمين.","بدّل لغة الواجهة (عربي/إنجليزي) من زر اللغة بالأعلى — تعمل كل البيانات والتقارير باللغتين.","تُحفظ البيانات تلقائياً على الجهاز، ويمكن تفعيل المزامنة بين الأجهزة من الإعدادات.","بطاقات لوحة التحكم الثمانية (الأصناف، الكمية، قرب الانتهاء، المنتهية، المخزون المنخفض، النافد، المرفوضة، حركات اليوم) بأيقونات ملوّنة توضّح كل مؤشر بلمحة.","الواجهة محسّنة لسهولة القراءة والوصول: أرقام ثابتة العرض في البطاقات والجداول لا تهتز عند التحديث، تباين ألوان أوضح لعناوين القائمة الجانبية، حقول الإدخال لا تكبّر الشاشة عند اللمس على الجوال، وتُحترَم إعدادات «تقليل الحركة» من نظام التشغيل لمن يفضّل ذلك.","لمسة حركية أهدأ وأكثر طبيعية: الأزرار والبطاقات تستجيب فور الضغط عليها، النوافذ المنبثقة تظهر بحركة ظهور ناعمة بدل القفزة المفاجئة، والشريط العلوي شبه شفاف يكشف المحتوى خلفه أثناء التمرير — مع دعم كامل لإعدادات «تقليل الشفافية» و«زيادة التباين» من نظام التشغيل.","دعم أوسع للوحة المفاتيح وقارئات الشاشة: كل أزرار الأيقونات (عرض، تعديل، حذف، اعتماد، استدعاء...) لها وصف مسموع واضح، النوافذ المنبثقة تحصر التنقّل بالتاب داخلها وتُعيد التركيز لمكانه عند الإغلاق (Esc أو ×)، وبطاقات الدليل وزر الملف الشخصي بالقائمة الجانبية تُفتح أيضاً بالإدخال (Enter/Space) لمن يتنقّل بلوحة المفاتيح فقط."]},
+  en:{t:"System overview",s:["Sign in with your username and password (default admin / 1234, changeable in Settings).","Use the side menu to move between sections: Dashboard, Inventory, Receive, Dispense, Reorder, Temperature, Barcode, Products, Reports, Lot trace, Settings, Users.","Switch the interface language (Arabic/English) from the top button — all data and reports work in both.","Data is saved automatically on the device; multi-device sync can be enabled in Settings.","The 8 dashboard KPI cards (items, quantity, expiring soon, expired, low stock, out of stock, rejected, today's movements) use colored icons for at-a-glance recognition.","The interface is tuned for readability and accessibility: fixed-width numbers in cards and tables so they don't shift on update, clearer contrast on sidebar section labels, form fields that no longer zoom the page on mobile taps, and full respect for the OS-level “reduce motion” preference.","A calmer, more natural feel to the motion: buttons and cards respond the instant you press them, dialogs materialize in with a soft settle instead of an abrupt pop, and the top bar is subtly translucent so content is visible scrolling beneath it — with full support for the OS “reduce transparency” and “increase contrast” settings.","Broader keyboard and screen-reader support: every icon-only button (view, edit, delete, release, recall…) now has a clear spoken label, dialogs trap Tab navigation inside them and return focus to where you were on close (Esc or ×), and the guide cards and sidebar profile button also open with Enter/Space for keyboard-only navigation."]}},
  {ic:"📥",cls:"g-green",
   ar:{t:"استقبال المحاليل والفحص",s:["للأصناف المعتمدة: استخدم «إضافة من القائمة المعتمدة» ← اختر المجموعة ثم الصنف، وأدخل عدد الكتات/العلب فتُحسب الكمية تلقائياً. أو أدخل الكود يدوياً فتُعبّأ بياناته.","أدخل رقم التشغيلة وتاريخ الانتهاء والكمية، واختر المورّد (من الموردين المعتمدين)، والمختبر المستلِم، ونتيجة الفحص (مقبول/مرفوض).","التشغيلة المرفوضة لا تُحتسب ولا تُصرف. فعّل خيار «يتطلب فحص QC» إن كانت تحتاج اعتماد جودة قبل الاستخدام — تُحجَز ولا يمكن صرفها حتى اعتمادها.","احفظ الاستلام (مع إمكانية طباعة الباركود)."]},
   en:{t:"Receiving & inspection",s:["For approved items use “Add from the approved list” ← pick group then item, enter the number of kits/boxes (quantity auto-calculated). Or type the code manually to auto-fill.","Enter lot number, expiry, and quantity; choose the supplier (from approved suppliers), the receiving lab, and the inspection result (Accepted/Rejected).","Rejected lots are excluded and cannot be dispensed. Tick “Requires QC” if the lot needs quality release before use — it is quarantined and cannot be dispensed until released.","Save the receipt (you can print the barcode)."]}},
@@ -2352,11 +2391,11 @@ const GUIDE=[
 ];
 function openGuide(){
   const body=`<p class="guide-intro">${esc(t("guide_intro"))}</p>`+GUIDE.map((g,i)=>{const G=LANG==="en"?g.en:g.ar;
-    return `<div class="gcard ${g.cls}" id="gc-${i}"><div class="gcard-h" onclick="App.guideToggle(${i})"><div class="gcard-ic">${g.ic}</div><div class="gcard-t"><b><span class="gcard-num">${i+1}</span>${esc(G.t)}</b><span>${G.s.length} ${t("steps_word")}</span></div><div class="gcard-ch">‹</div></div><div class="gcard-b"><ol>${G.s.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div></div>`;
+    return `<div class="gcard ${g.cls}" id="gc-${i}"><div class="gcard-h" role="button" tabindex="0" aria-expanded="false" aria-controls="gcb-${i}" onclick="App.guideToggle(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.guideToggle(${i})}"><div class="gcard-ic">${g.ic}</div><div class="gcard-t"><b><span class="gcard-num">${i+1}</span>${esc(G.t)}</b><span>${G.s.length} ${t("steps_word")}</span></div><div class="gcard-ch">‹</div></div><div class="gcard-b" id="gcb-${i}"><ol>${G.s.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div></div>`;
   }).join("");
   modal(t("guide_title"),body);
 }
-function guideToggle(i){ const c=$("gc-"+i); if(c) c.classList.toggle("open"); }
+function guideToggle(i){ const c=$("gc-"+i); if(!c) return; const open=c.classList.toggle("open"); const h=c.querySelector(".gcard-h"); if(h) h.setAttribute("aria-expanded", open?"true":"false"); }
 
 /* expose */
 return {init,login,logout,go,toggleSide,toggleLang,closeModal,
