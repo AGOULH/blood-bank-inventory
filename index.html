@@ -11,7 +11,7 @@
     --green-bright:#16a34a; --gold:#b8902e;
     --sidebar:#0a2c1a; --sidebar-line:rgba(255,255,255,.08); --sidebar-active:rgba(255,255,255,.10);
     --ink:#1f2530; --muted:#646b78; --line:#e6e8ec; --bg:#f4f5f7;
-    --card:#ffffff; --ok:#1f7a4d; --ok-soft:#e6f4ec; --warn:#b06f00;
+    --card:#ffffff; --ok:#1f7a4d; --ok-soft:#e6f4ec; --warn:#965e00;
     --warn-soft:#fff4e0; --yellow:#f4c430; --danger:#c0392b; --danger-soft:#fdecea;
     --info:#1f5f9e; --info-soft:#e8f1fb; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
     --shadow-md:0 4px 14px rgba(16,24,40,.1),0 1.5px 4px rgba(16,24,40,.07);
@@ -298,6 +298,10 @@
     .side.collapsed .su-info{display:block}
     .side.collapsed .nav-item{justify-content:flex-start;padding:10px 11px}
   }
+
+  /* === Keyboard focus (visible on all backgrounds, ignored for mouse clicks) === */
+  :focus-visible{outline:none;box-shadow:0 0 0 2px #fff,0 0 0 4px var(--crimson)}
+  .seg button:focus-visible,.gcard-h:focus-visible{outline:none;box-shadow:inset 0 0 0 2px var(--crimson)}
 </style>
 </head>
 <body>
@@ -1416,6 +1420,7 @@ function printL2LForm(it,usedDetail,qty,lab,date,prevLot,knownNewLot){
     .cmnt th{text-align:center}
     .cmnt td{height:58px;vertical-align:top;padding:4px}
     textarea{width:100%;height:50px;border:none;outline:none;resize:none;font-family:inherit;font-size:11px}
+    input:focus,textarea:focus,select:focus{outline:none!important;border-bottom-color:#127a3e!important;background:#eef7f1!important}
     .sig-tbl .sh{height:36px;vertical-align:bottom}
     .pbtn{display:block;margin:0 auto 12px;padding:9px 34px;background:#127a3e;color:#fff;border:none;border-radius:7px;font-size:14px;font-weight:bold;cursor:pointer}
     .footer{font-size:10px;color:#666;text-align:center;margin-top:8px;border-top:1px solid #ccc;padding-top:5px}
