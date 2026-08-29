@@ -941,8 +941,22 @@ const ICON={
  panel:'<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/>',
  reorder:'<path d="M3 2v6h6"/><path d="M21 12A9 9 0 0 0 6 5.3L3 8"/><path d="M21 22v-6h-6"/><path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"/>',
  trace:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/><path d="M11 8v3l2 1"/>',
- temp:'<path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>'
+ temp:'<path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>',
+ search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+ lock:'<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+ check:'<path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/>',
+ package:'<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><polyline points="3.29 7 12 12 20.71 7"/><path d="m7.5 4.27 9 5.15"/>',
+ ban:'<circle cx="12" cy="12" r="10"/><path d="M4.929 4.929 19.07 19.071"/>',
+ clipboard:'<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>',
+ trenddown:'<path d="M16 17h6v-6"/><path d="m22 17-8.5-8.5-5 5L2 7"/>',
+ hourglass:'<path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>',
+ book:'<path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/>',
+ arrDown:'<path d="M12 17V3"/><path d="m6 11 6 6 6-6"/><path d="M19 21H5"/>',
+ arrUp:'<path d="m18 9-6-6-6 6"/><path d="M12 3v14"/><path d="M5 21h14"/>',
+ trash:'<path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+ settings:'<path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/>'
 };
+function svgIcon(name,size,sw){ return `<svg viewBox="0 0 24 24" width="${size||20}" height="${size||20}" fill="none" stroke="currentColor" stroke-width="${sw||2}" stroke-linecap="round" stroke-linejoin="round">${ICON[name]||""}</svg>`; }
 const KPI_ICON={
  out:'<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h8v10l6 18a4 4 0 0 1-4 5H18a4 4 0 0 1-4-5l6-18Z" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2" stroke-dasharray="3.2 3.2"/><rect x="18" y="5" width="12" height="3" rx="1" fill="#94a3b8"/><circle cx="36" cy="14" r="9" fill="#ef4444" stroke="#fff" stroke-width="2"/><rect x="31" y="12.6" width="10" height="2.8" rx="1.4" fill="#fff"/></svg>',
  low:'<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h8v10l6 18a4 4 0 0 1-4 5H18a4 4 0 0 1-4-5l6-18Z" fill="#fff7e0" stroke="#f97316" stroke-width="2"/><path d="M15.6 29h16.8l1.6 4.7a4 4 0 0 1-3.8 5.3H17.8a4 4 0 0 1-3.8-5.3Z" fill="#fbbf24"/><rect x="18" y="5" width="12" height="3" rx="1" fill="#f97316"/><circle cx="36" cy="14" r="9" fill="#f97316" stroke="#fff" stroke-width="2"/><path d="M36 10.5v6m0 0-2.6-2.6M36 16.5l2.6-2.6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>',
@@ -969,11 +983,10 @@ const NAVS=[
  {r:"log",i:"log",k:"nav_activity"}
 ];
 function renderSidebar(){
-  const svg=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
-  const items=NAVS.filter(n=>n.admin?isSuperAdmin():hasPerm(n.r)).map(n=>`<button class="nav-item" data-route="${n.r}" title="${t(n.k)}"><span class="ic">${svg(ICON[n.i])}</span><span class="lbl-t">${t(n.k)}</span></button>`).join("");
+  const items=NAVS.filter(n=>n.admin?isSuperAdmin():hasPerm(n.r)).map(n=>`<button class="nav-item" data-route="${n.r}" title="${t(n.k)}"><span class="ic">${svgIcon(n.i)}</span><span class="lbl-t">${t(n.k)}</span></button>`).join("");
   const uname=curUser(), role=t(isSuperAdmin()?"role_superadmin":currentUser&&currentUser.role==="admin"?"role_admin":"role_user"), av=(uname||"?").trim().charAt(0).toUpperCase();
   $("side").innerHTML=`
-    <div class="side-top"><button class="side-toggle" onclick="App.toggleCollapse()" title="${t("side_collapse")}" aria-label="${t("side_collapse")}">${svg(ICON.panel)}</button></div>
+    <div class="side-top"><button class="side-toggle" onclick="App.toggleCollapse()" title="${t("side_collapse")}" aria-label="${t("side_collapse")}">${svgIcon("panel")}</button></div>
     <div class="nav-scroll">${items}</div>
     <div class="side-foot"><div class="side-user" role="button" tabindex="0" onclick="App.go('settings')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.go('settings')}" title="${t("nav_settings")}" aria-label="${t("nav_settings")+" — "+esc(uname)}">
       <div class="avatar">${esc(av)}</div><div class="su-info"><b>${esc(uname)}</b><span>${esc(role)}</span></div>
@@ -984,7 +997,7 @@ function renderSidebar(){
 function toggleCollapse(){ const c=localStorage.getItem("inv_collapsed")==="1"; localStorage.setItem("inv_collapsed",c?"0":"1"); $("side").classList.toggle("collapsed",!c); }
 
 const afterRender={};
-function lockedHtml(){ return `<div class="panel"><div class="panel-b"><div class="empty"><div class="em-ic">🔒</div><h4>${t("u_not_authorized")}</h4></div></div></div>`; }
+function lockedHtml(){ return `<div class="panel"><div class="panel-b"><div class="empty"><div class="em-ic">${svgIcon("lock",36,1.5)}</div><h4>${t("u_not_authorized")}</h4></div></div></div>`; }
 function go(route,pushHistory){
   if(pushHistory!==false) location.hash=route;
   document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.route===route));
@@ -1057,11 +1070,11 @@ pages.dashboard=()=>{
   const maxC=cons.length?Math.max(...cons.map(c=>c[1])):1;
 
   const alerts=[];
-  expired.forEach(l=>{const it=items.find(i=>i.code===l.code);alerts.push({cls:"danger",ic:"⛔",ti:`${it?it.name:l.code} — ${t("lot_label")} ${l.lot||"—"}`,s:t("alert_expired_s",{n:Math.abs(daysTo(l.expiry)),q:num(l.qtyRemaining)})});});
-  rejected.forEach(l=>{const it=items.find(i=>i.code===l.code);alerts.push({cls:"danger",ic:"🚫",ti:`${it?it.name:l.code} — ${t("lot_label")} ${l.lot||"—"}`,s:t("alert_rejected_s",{q:num(l.qtyRemaining)})});});
-  outStock.forEach(it=>alerts.push({cls:"danger",ic:"📦",ti:it.name,s:t("alert_out_s",{m:num(it.minQty||0)})}));
-  near.forEach(l=>{const it=items.find(i=>i.code===l.code);alerts.push({cls:"warn",ic:"⏳",ti:`${it?it.name:l.code} — ${t("lot_label")} ${l.lot||"—"}`,s:t("alert_near_s",{n:daysTo(l.expiry),d:fmtG(l.expiry)})});});
-  low.forEach(it=>alerts.push({cls:"warn",ic:"📉",ti:it.name,s:t("alert_low_s",{q:num(availQtyOf(it.code)),u:labelOf(UNITS,it.unit),m:num(it.minQty)})}));
+  expired.forEach(l=>{const it=items.find(i=>i.code===l.code);alerts.push({cls:"danger",ic:svgIcon("ban",18),ti:`${it?it.name:l.code} — ${t("lot_label")} ${l.lot||"—"}`,s:t("alert_expired_s",{n:Math.abs(daysTo(l.expiry)),q:num(l.qtyRemaining)})});});
+  rejected.forEach(l=>{const it=items.find(i=>i.code===l.code);alerts.push({cls:"danger",ic:svgIcon("clipboard",18),ti:`${it?it.name:l.code} — ${t("lot_label")} ${l.lot||"—"}`,s:t("alert_rejected_s",{q:num(l.qtyRemaining)})});});
+  outStock.forEach(it=>alerts.push({cls:"danger",ic:svgIcon("package",18),ti:it.name,s:t("alert_out_s",{m:num(it.minQty||0)})}));
+  near.forEach(l=>{const it=items.find(i=>i.code===l.code);alerts.push({cls:"warn",ic:svgIcon("hourglass",18),ti:`${it?it.name:l.code} — ${t("lot_label")} ${l.lot||"—"}`,s:t("alert_near_s",{n:daysTo(l.expiry),d:fmtG(l.expiry)})});});
+  low.forEach(it=>alerts.push({cls:"warn",ic:svgIcon("trenddown",18),ti:it.name,s:t("alert_low_s",{q:num(availQtyOf(it.code)),u:labelOf(UNITS,it.unit),m:num(it.minQty)})}));
   alerts.sort((a,b)=>(a.cls==="danger"?0:1)-(b.cls==="danger"?0:1));
 
   const okC=DB.lots.filter(l=>l.qtyRemaining>0&&!isRej(l)&&(!l.expiry||daysTo(l.expiry)>DB.settings.warnDays)).length;
@@ -1093,7 +1106,7 @@ pages.dashboard=()=>{
 
   <div class="panel"><div class="panel-h"><h3>${t("panel_alerts")}</h3><span class="hint">${t("alerts_count",{n:alerts.length})}</span></div><div class="panel-b">
     ${alerts.length? alerts.slice(0,12).map(a=>`<div class="alert-item"><div class="a-ic" style="background:var(--${a.cls}-soft);color:var(--${a.cls})">${a.ic}</div><div class="a-tx"><b>${esc(a.ti)}</b><span>${esc(a.s)}</span></div></div>`).join("")
-    :`<div class="empty"><div class="em-ic">✅</div><h4>${t("all_good_t")}</h4><p>${t("all_good_s")}</p></div>`}
+    :`<div class="empty"><div class="em-ic">${svgIcon("check",36,1.5)}</div><h4>${t("all_good_t")}</h4><p>${t("all_good_s")}</p></div>`}
   </div></div>`;
 };
 function donut(data){
@@ -1159,8 +1172,8 @@ function matchGroup(it){
 function renderInv(){
   const s=invSearch.trim().toLowerCase();
   let rows=DB.items.filter(it=>{const hit=!s||[it.name,it.code,it.manufacturer,labelOf(CATS,it.category)].some(v=>String(v||"").toLowerCase().includes(s));return hit&&matchFilter(it)&&matchGroup(it);}).sort((a,b)=>a.name.localeCompare(b.name,"ar"));
-  if(!DB.items.length){ $("invBody").innerHTML=`<div class="empty"><div class="em-ic">📦</div><h4>${t("inv_empty_t")}</h4><p>${t("inv_empty_s")}</p><button class="btn" style="margin-top:10px" onclick="App.go('receive')">${t("btn_receive_solution")}</button></div>`; return; }
-  if(!rows.length){ $("invBody").innerHTML=`<div class="empty"><div class="em-ic">🔍</div><h4>${t("no_results_t")}</h4><p>${t("no_results_s")}</p></div>`; return; }
+  if(!DB.items.length){ $("invBody").innerHTML=`<div class="empty"><div class="em-ic">${svgIcon("package",36,1.5)}</div><h4>${t("inv_empty_t")}</h4><p>${t("inv_empty_s")}</p><button class="btn" style="margin-top:10px" onclick="App.go('receive')">${t("btn_receive_solution")}</button></div>`; return; }
+  if(!rows.length){ $("invBody").innerHTML=`<div class="empty"><div class="em-ic">${svgIcon("search",36,1.5)}</div><h4>${t("no_results_t")}</h4><p>${t("no_results_s")}</p></div>`; return; }
   let h=`<div class="tbl-wrap"><table><thead><tr><th>${t("th_code")}</th><th>${t("th_name")}</th><th>${t("th_man")}</th><th>${t("th_cat")}</th><th class="num">${t("th_qty")}</th><th>${t("th_unit")}</th><th class="num">${t("th_lots")}</th><th>${t("th_status")}</th><th>${t("th_actions")}</th></tr></thead><tbody>`;
   rows.forEach(it=>{const st=itemStatus(it); const active=availLots(it.code); const rej=rejectedQtyOf(it.code);
     h+=`<tr>
@@ -1306,7 +1319,7 @@ pages.dispense=()=>{
     <div class="full"><label>${t("f_note")}</label><input id="ds-note" placeholder="${t("f_dis_note_ph")}"></div>
   </div><div id="ds-info" style="margin-top:14px"></div><hr class="sep">
   <button class="btn" onclick="App.doDispense()">${t("btn_confirm_dispense")}</button>`
-  :`<div class="empty"><div class="em-ic">📭</div><h4>${t("dis_empty_t")}</h4><p>${t("dis_empty_s")}</p><button class="btn" style="margin-top:10px" onclick="App.go('receive')">${t("btn_receive_solution")}</button></div>`}
+  :`<div class="empty"><div class="em-ic">${svgIcon("package",36,1.5)}</div><h4>${t("dis_empty_t")}</h4><p>${t("dis_empty_s")}</p><button class="btn" style="margin-top:10px" onclick="App.go('receive')">${t("btn_receive_solution")}</button></div>`}
   </div></div>`;
 };
 function dispenseGroupChange(){
@@ -1648,7 +1661,7 @@ afterRender.log=()=>{
 function renderLog(){
   const s=logSearch.trim().toLowerCase();
   let rows=DB.txns.filter(x=>(logType==="all"||x.type===logType)&&(!s||[x.code,x.party,x.note,x.lot,labelOf(labs(),x.lab)].some(v=>String(v||"").toLowerCase().includes(s)))).sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(b.id>a.id?1:-1));
-  if(!rows.length){ $("logBody").innerHTML=`<div class="empty"><div class="em-ic">📜</div><h4>${t("log_empty")}</h4></div>`; return; }
+  if(!rows.length){ $("logBody").innerHTML=`<div class="empty"><div class="em-ic">${svgIcon("log",36,1.5)}</div><h4>${t("log_empty")}</h4></div>`; return; }
   const meta={in:{cls:"ok",i:"📥"},out:{cls:"danger",i:"📤"},adjust:{cls:"info",i:"⚖️"},dispose:{cls:"danger",i:"🚮"}};
   const tt={in:t("f_in"),out:t("f_out"),adjust:t("f_adjust"),dispose:t("f_dispose")};
   let h=`<div class="tbl-wrap"><table><thead><tr><th>${t("th_date")}</th><th>${t("th_type")}</th><th>${t("th_code")}</th><th>${t("th_name")}</th><th>${t("th_lot")}</th><th class="num">${t("th_qty")}</th><th>${t("th_lab")}</th><th>${t("th_party")}</th><th>${t("th_inspection")}</th><th>${t("th_user")}</th><th>${t("th_notes")}</th></tr></thead><tbody>`;
@@ -1728,7 +1741,7 @@ pages.reorder=()=>{ const low=reorderList(); return `
   <div class="panel"><div class="panel-h"><h3>${t("reorder_title")}</h3><span class="hint">${low.length?t("reorder_count",{n:num(low.length)}):""}</span></div><div class="panel-b">
   ${low.length?`<div class="tbl-wrap"><table><thead><tr><th>${t("th_code")}</th><th>${t("th_name")}</th><th class="num">${t("reorder_th_current")}</th><th class="num">${t("reorder_th_min")}</th><th class="num">${t("reorder_th_suggest")}</th><th>${t("reorder_th_last")}</th><th>${t("reorder_status")}</th><th class="no-print"></th></tr></thead><tbody>
   ${low.map(r=>`<tr><td><span class="tag mut mono">${esc(r.it.code)}</span></td><td><b>${esc(r.it.name)}</b></td><td class="num"><b style="color:var(--danger)">${num(r.q)}</b></td><td class="num">${num(r.m)}</td><td class="num"><b>${num(r.suggest)}</b> ${esc(labelOf(UNITS,r.it.unit))}</td><td>${esc(r.supplier||"—")}</td><td>${r.ord?`<span class="tag mut">${t("reorder_ordered_on",{d:fmtG(r.ord.date)})}</span>`:(r.tier==="expiry"?`<span class="tag warn">${t("reorder_expiry")} · ${fmtG(r.soonest)}</span>`:`<span class="tag ${({out:"danger",below:"warn",near:"info"})[r.tier]}">${t(({out:"reorder_out",below:"reorder_below",near:"reorder_near"})[r.tier])}</span>`)}</td><td class="no-print"><button class="btn sm ${r.ord?"ghost":"soft"}" onclick="App.toggleOrder('${jsq(r.it.code)}')">${r.ord?t("reorder_unmark"):t("reorder_mark")}</button></td></tr>`).join("")}
-  </tbody></table></div>`:`<div class="empty"><div class="em-ic">✅</div><h4>${t("reorder_none")}</h4></div>`}
+  </tbody></table></div>`:`<div class="empty"><div class="em-ic">${svgIcon("check",36,1.5)}</div><h4>${t("reorder_none")}</h4></div>`}
   </div></div>`; };
 function toggleOrder(code){ const o=DB.settings.orders||(DB.settings.orders={}); if(o[code]) delete o[code]; else o[code]={date:todayISO(),by:curUser()}; save(); toast(o[code]?t("ok_ordered"):t("ok_edited"),"ok"); go("reorder"); }
 
@@ -1745,20 +1758,20 @@ afterRender.trace=()=>{ const inp=$("trace-input"); if(inp) inp.addEventListener
 function doTrace(){ const inp=$("trace-input"); traceQ=inp?inp.value.trim():""; renderTrace(); }
 function renderTrace(){
   const box=$("traceResult"); if(!box)return; const q=traceQ.trim();
-  if(!q){ box.innerHTML=`<div class="empty"><div class="em-ic">🔎</div><h4>${t("trace_enter")}</h4></div>`; return; }
+  if(!q){ box.innerHTML=`<div class="empty"><div class="em-ic">${svgIcon("search",36,1.5)}</div><h4>${t("trace_enter")}</h4></div>`; return; }
   const ql=q.toLowerCase();
   const lots=DB.lots.filter(l=>String(l.lot||"").toLowerCase()===ql);
   const moves=DB.txns.filter(x=>String(x.lot||"").toLowerCase().split(/,\s*/).map(s=>s.trim()).includes(ql));
-  if(!lots.length&&!moves.length){ box.innerHTML=`<div class="empty"><div class="em-ic">🚫</div><h4>${t("trace_not_found")}</h4></div>`; return; }
+  if(!lots.length&&!moves.length){ box.innerHTML=`<div class="empty"><div class="em-ic">${svgIcon("ban",36,1.5)}</div><h4>${t("trace_not_found")}</h4></div>`; return; }
   const recv=lots.reduce((s,l)=>s+(+l.qtyReceived||0),0), rem=lots.reduce((s,l)=>s+(+l.qtyRemaining||0),0);
   const disp=moves.filter(x=>x.type==="out").reduce((s,x)=>s+(+x.qty||0),0), destroyed=moves.filter(x=>x.type==="dispose").reduce((s,x)=>s+(+x.qty||0),0);
   const meta={in:{cls:"ok",i:"📥"},out:{cls:"danger",i:"📤"},adjust:{cls:"info",i:"⚖️"},dispose:{cls:"danger",i:"🚮"}};
   const tt={in:t("f_in"),out:t("f_out"),adjust:t("f_adjust"),dispose:t("f_dispose")};
   let h=`<div class="grid kpis" style="margin:6px 0 14px">
-    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("trace_sum_recv")}</div><div class="val">${num(recv)}</div></div><div class="kpi-ic green">📥</div></div>
-    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("trace_sum_disp")}</div><div class="val">${num(disp)}</div></div><div class="kpi-ic blue">📤</div></div>
-    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("trace_sum_destroyed")}</div><div class="val">${num(destroyed)}</div></div><div class="kpi-ic red">🚮</div></div>
-    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("trace_sum_rem")}</div><div class="val">${num(rem)}</div></div><div class="kpi-ic greend">🧊</div></div></div>`;
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("trace_sum_recv")}</div><div class="val">${num(recv)}</div></div><div class="kpi-ic green">${svgIcon("arrDown",24)}</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("trace_sum_disp")}</div><div class="val">${num(disp)}</div></div><div class="kpi-ic blue">${svgIcon("arrUp",24)}</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("trace_sum_destroyed")}</div><div class="val">${num(destroyed)}</div></div><div class="kpi-ic red">${svgIcon("trash",24)}</div></div>
+    <div class="kpi"><div class="kpi-body"><div class="lbl">${t("trace_sum_rem")}</div><div class="val">${num(rem)}</div></div><div class="kpi-ic greend">${svgIcon("package",24)}</div></div></div>`;
   h+=`<div class="panel"><div class="panel-h"><h3>${t("trace_lots_h")}</h3></div><div class="panel-b"><div class="tbl-wrap"><table><thead><tr><th>${t("th_name")}</th><th>${t("th_code")}</th><th>${t("th_exp")}</th><th class="num">${t("th_received")}</th><th class="num">${t("th_remaining")}</th><th>${t("th_lab")}</th><th>${t("th_supplier")}</th><th>${t("th_status")}</th></tr></thead><tbody>${lots.length?lots.map(l=>{const it=DB.items.find(i=>i.code===l.code);const st=lotStatus(l);return `<tr><td><b>${esc(it?it.name:l.code)}</b></td><td class="mono">${esc(l.code)}</td><td>${fmtG(l.expiry)}</td><td class="num">${num(l.qtyReceived)}</td><td class="num"><b>${num(l.qtyRemaining)}</b></td><td>${esc(labelOf(labs(),l.lab))}</td><td>${esc(l.supplier||"—")}</td><td><span class="tag ${st.cls}">${lotStatusText(st)}</span></td></tr>`;}).join(""):`<tr><td colspan="8" class="muted" style="text-align:center">—</td></tr>`}</tbody></table></div></div></div>`;
   h+=`<div class="panel"><div class="panel-h"><h3>${t("trace_moves_h")}</h3><span class="hint">${t("moves_count",{n:num(moves.length)})}</span></div><div class="panel-b"><div class="tbl-wrap"><table><thead><tr><th>${t("th_date")}</th><th>${t("th_type")}</th><th class="num">${t("th_qty")}</th><th>${t("th_lab")}</th><th>${t("th_party")}</th><th>${t("th_user")}</th><th>${t("th_notes")}</th></tr></thead><tbody>${moves.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(x=>{const m=meta[x.type]||meta.adjust;return `<tr><td>${fmtG(x.date)}</td><td><span class="tag ${m.cls}">${m.i} ${tt[x.type]||x.type}</span></td><td class="num"><b>${(x.type==="out"||x.type==="dispose")?"−":"+"}${num(x.qty)}</b></td><td>${esc(labelOf(labs(),x.lab))}</td><td>${esc(x.party||"—")}</td><td>${esc(x.user||"—")}</td><td>${esc(x.note||"—")}</td></tr>`;}).join("")}</tbody></table></div></div></div>`;
   box.innerHTML=h;
@@ -1778,7 +1791,7 @@ pages.temp=()=>{
         <div><label class="req">${t("temp_reading")}</label><input id="tp-val" type="number" step="0.1" min="-200" max="200"></div>
         <div><label>${t("temp_date")}</label><input id="tp-date" type="date" value="${todayISO()}"></div>
       </div><div style="margin-top:12px"><button class="btn" onclick="App.logTemp()">${t("btn_temp_log")}</button></div>`
-      :`<div class="empty"><div class="em-ic">🌡️</div><h4>${t("temp_no_units")}</h4></div>`}
+      :`<div class="empty"><div class="em-ic">${svgIcon("temp",36,1.5)}</div><h4>${t("temp_no_units")}</h4></div>`}
     </div></div>
     <div class="panel"><div class="panel-h"><h3>${t("temp_units_h")}</h3></div><div class="panel-b">
       <div style="margin-bottom:10px">${units.length?units.map(u=>`<span class="tag mut" style="margin:0 4px 6px 0">${esc(u.name)} (${num(u.min)}–${num(u.max)}°) <button class="icon-btn danger" style="padding:0 6px;margin-inline-start:4px" title="${t("act_delete")}" aria-label="${t("act_delete")+" "+esc(u.name)}" onclick="App.delTempUnit('${jsq(u.id)}')">×</button></span>`).join(""):`<span class="muted" style="font-size:13px">${t("temp_no_units")}</span>`}</div>
@@ -1789,7 +1802,7 @@ pages.temp=()=>{
   <div class="panel"><div class="panel-h"><h3>${t("temp_history_h")}</h3><span class="hint">${num(logs.length)}</span></div><div class="panel-b">
   ${logs.length?`<div class="tbl-wrap"><table><thead><tr><th>${t("temp_date")}</th><th>${t("temp_unit")}</th><th class="num">${t("temp_reading")}</th><th>${t("temp_th_range")}</th><th>${t("temp_by")}</th><th>${t("th_status")}</th></tr></thead><tbody>
   ${logs.map(g=>{const exc=(g.val<g.min||g.val>g.max);return `<tr><td>${fmtG(g.date)}</td><td>${esc(g.unitName||"—")}</td><td class="num"><b>${num(g.val)}°</b></td><td>${num(g.min)}–${num(g.max)}°</td><td>${esc(g.by||"—")}</td><td><span class="tag ${exc?"danger":"ok"}">${exc?t("temp_excursion"):t("temp_in_range")}</span></td></tr>`;}).join("")}
-  </tbody></table></div>`:`<div class="empty"><div class="em-ic">📋</div><h4>${t("temp_no_logs")}</h4></div>`}
+  </tbody></table></div>`:`<div class="empty"><div class="em-ic">${svgIcon("clipboard",36,1.5)}</div><h4>${t("temp_no_logs")}</h4></div>`}
   </div></div>`;
 };
 function addTempUnit(){ const name=$("tu-name").value.trim(); let mn=+$("tu-min").value, mx=+$("tu-max").value;
@@ -1891,7 +1904,7 @@ const permChecks=(cls,checked)=>NAVS.filter(n=>!n.admin).map(n=>`<label style="d
 function roleLabelOf(u){ return u.role==="superadmin"?t("role_superadmin"):t(u.role==="admin"?"role_admin":"role_user"); }
 function permsLabelOf(u){ if(u.role==="superadmin")return t("perms_all"); const p=u.perms||[]; if(!p.length)return t("perms_none"); return p.map(r=>{const n=NAVS.find(x=>x.r===r); return n?t(n.k):r;}).join("، "); }
 pages.users=()=>{
-  if(!isSuperAdmin()) return `<div class="page-head"><div><h2>${t("users_title")}</h2></div></div><div class="panel"><div class="panel-b"><div class="empty"><div class="em-ic">🔒</div><h4>${t("u_not_authorized")}</h4></div></div></div>`;
+  if(!isSuperAdmin()) return `<div class="page-head"><div><h2>${t("users_title")}</h2></div></div><div class="panel"><div class="panel-b"><div class="empty"><div class="em-ic">${svgIcon("lock",36,1.5)}</div><h4>${t("u_not_authorized")}</h4></div></div></div>`;
   const users=DB.settings.users||[];
   return `
   <div class="page-head"><div><h2>${t("users_title")}</h2><p>${t("users_sub")}</p></div></div>
@@ -1983,7 +1996,7 @@ pages.products=()=>{
   <div class="panel"><div class="panel-b">
     ${items.length?`<div class="tbl-wrap"><table><thead><tr><th>${t("th_code")}</th><th>${t("th_name")}</th><th>${t("f_man")}</th><th>${t("f_cat")}</th><th>${t("f_unit")}</th><th class="num">${t("f_min")}</th><th class="num">${t("th_avail")}</th><th>${t("u_th_actions")}</th></tr></thead><tbody>
     ${items.map(it=>`<tr><td><span class="tag mut mono">${esc(it.code)}</span></td><td><b>${esc(it.name)}</b></td><td>${esc(it.manufacturer||"—")}</td><td>${esc(labelOf(CATS,it.category))}</td><td>${esc(labelOf(UNITS,it.unit))}</td><td class="num">${num(it.minQty||0)}</td><td class="num">${num(availQtyOf(it.code))}</td><td><div class="row-actions"><button class="icon-btn" title="${t("act_edit")}" aria-label="${t("act_edit")}" onclick="App.editItem('${it.id}')">✏️</button><button class="icon-btn danger" title="${t("act_delete")}" aria-label="${t("act_delete")}" onclick="App.delItem('${it.id}')">🗑</button></div></td></tr>`).join("")}
-    </tbody></table></div>`:`<div class="empty"><div class="em-ic">📦</div><h4>${t("p_empty")}</h4><button class="btn" style="margin-top:12px" onclick="App.addProduct()">${t("p_add")}</button></div>`}
+    </tbody></table></div>`:`<div class="empty"><div class="em-ic">${svgIcon("package",36,1.5)}</div><h4>${t("p_empty")}</h4><button class="btn" style="margin-top:12px" onclick="App.addProduct()">${t("p_add")}</button></div>`}
   </div></div>
   <div class="panel"><div class="panel-h"><h3>${t("p_catalog")}</h3><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="hint">${t("p_catalog_hint")}</span><button class="btn sm soft" onclick="App.addCatItem()">${t("cat_add_btn")}</button></div></div><div class="panel-b">
     ${CATALOG.map(g=>`<div style="margin-bottom:12px"><b style="font-size:13px;color:var(--crimson-dark)">${esc(lbl(g))}</b>
@@ -2354,43 +2367,43 @@ function unlockSync(){
 
 /* ===== User guide ===== */
 const GUIDE=[
- {ic:"📖",cls:"g-purple",
+ {ic:svgIcon("book",22),cls:"g-purple",
   ar:{t:"نظرة عامة على النظام",s:["سجّل الدخول باسم المستخدم وكلمة المرور (افتراضياً admin / 1234، ويمكن تغييرهما من الإعدادات).","تنقّل بين الأقسام من القائمة الجانبية: لوحة التحكم، المخزون، الاستقبال، الصرف، إعادة الطلب، سجل الحرارة، الباركود، إدارة المنتجات، التقارير، تتبع التشغيلة، الإعدادات، إدارة المستخدمين.","بدّل لغة الواجهة (عربي/إنجليزي) من زر اللغة بالأعلى — تعمل كل البيانات والتقارير باللغتين.","تُحفظ البيانات تلقائياً على الجهاز، ويمكن تفعيل المزامنة بين الأجهزة من الإعدادات.","بطاقات لوحة التحكم الثمانية (الأصناف، الكمية، قرب الانتهاء، المنتهية، المخزون المنخفض، النافد، المرفوضة، حركات اليوم) بأيقونات ملوّنة توضّح كل مؤشر بلمحة.","الواجهة محسّنة لسهولة القراءة والوصول: أرقام ثابتة العرض في البطاقات والجداول لا تهتز عند التحديث، تباين ألوان أوضح لعناوين القائمة الجانبية، حقول الإدخال لا تكبّر الشاشة عند اللمس على الجوال، وتُحترَم إعدادات «تقليل الحركة» من نظام التشغيل لمن يفضّل ذلك.","لمسة حركية أهدأ وأكثر طبيعية: الأزرار والبطاقات تستجيب فور الضغط عليها، النوافذ المنبثقة تظهر بحركة ظهور ناعمة بدل القفزة المفاجئة، والشريط العلوي شبه شفاف يكشف المحتوى خلفه أثناء التمرير — مع دعم كامل لإعدادات «تقليل الشفافية» و«زيادة التباين» من نظام التشغيل.","دعم أوسع للوحة المفاتيح وقارئات الشاشة: كل أزرار الأيقونات (عرض، تعديل، حذف، اعتماد، استدعاء...) لها وصف مسموع واضح، النوافذ المنبثقة تحصر التنقّل بالتاب داخلها وتُعيد التركيز لمكانه عند الإغلاق (Esc أو ×)، وبطاقات الدليل وزر الملف الشخصي بالقائمة الجانبية تُفتح أيضاً بالإدخال (Enter/Space) لمن يتنقّل بلوحة المفاتيح فقط."]},
   en:{t:"System overview",s:["Sign in with your username and password (default admin / 1234, changeable in Settings).","Use the side menu to move between sections: Dashboard, Inventory, Receive, Dispense, Reorder, Temperature, Barcode, Products, Reports, Lot trace, Settings, Users.","Switch the interface language (Arabic/English) from the top button — all data and reports work in both.","Data is saved automatically on the device; multi-device sync can be enabled in Settings.","The 8 dashboard KPI cards (items, quantity, expiring soon, expired, low stock, out of stock, rejected, today's movements) use colored icons for at-a-glance recognition.","The interface is tuned for readability and accessibility: fixed-width numbers in cards and tables so they don't shift on update, clearer contrast on sidebar section labels, form fields that no longer zoom the page on mobile taps, and full respect for the OS-level “reduce motion” preference.","A calmer, more natural feel to the motion: buttons and cards respond the instant you press them, dialogs materialize in with a soft settle instead of an abrupt pop, and the top bar is subtly translucent so content is visible scrolling beneath it — with full support for the OS “reduce transparency” and “increase contrast” settings.","Broader keyboard and screen-reader support: every icon-only button (view, edit, delete, release, recall…) now has a clear spoken label, dialogs trap Tab navigation inside them and return focus to where you were on close (Esc or ×), and the guide cards and sidebar profile button also open with Enter/Space for keyboard-only navigation."]}},
- {ic:"📥",cls:"g-green",
+ {ic:svgIcon("receive",22),cls:"g-green",
   ar:{t:"استقبال المحاليل والفحص",s:["للأصناف المعتمدة: استخدم «إضافة من القائمة المعتمدة» ← اختر المجموعة ثم الصنف، وأدخل عدد الكتات/العلب فتُحسب الكمية تلقائياً. أو أدخل الكود يدوياً فتُعبّأ بياناته.","أدخل رقم التشغيلة وتاريخ الانتهاء والكمية، واختر المورّد (من الموردين المعتمدين)، والمختبر المستلِم، ونتيجة الفحص (مقبول/مرفوض).","التشغيلة المرفوضة لا تُحتسب ولا تُصرف. فعّل خيار «يتطلب فحص QC» إن كانت تحتاج اعتماد جودة قبل الاستخدام — تُحجَز ولا يمكن صرفها حتى اعتمادها.","احفظ الاستلام (مع إمكانية طباعة الباركود)."]},
   en:{t:"Receiving & inspection",s:["For approved items use “Add from the approved list” ← pick group then item, enter the number of kits/boxes (quantity auto-calculated). Or type the code manually to auto-fill.","Enter lot number, expiry, and quantity; choose the supplier (from approved suppliers), the receiving lab, and the inspection result (Accepted/Rejected).","Rejected lots are excluded and cannot be dispensed. Tick “Requires QC” if the lot needs quality release before use — it is quarantined and cannot be dispensed until released.","Save the receipt (you can print the barcode)."]}},
- {ic:"📋",cls:"g-orange",
+ {ic:svgIcon("clipboard",22),cls:"g-orange",
   ar:{t:"القوائم المعتمدة في الاستقبال",s:["قائمة التصنيف (٩): ١- محاليل، ٢- كروت، ٣- كنترولات، ٤- أكياس، ٥- اكسسوارات، ٦- مستلزمات تبرع، ٧- مستلزمات سحب، ٨- معقمات ومطهرات، ٩- أخرى.","قائمة الوحدة (٩): ١- كرتون، ٢- اختبار، ٣- زجاجة، ٤- علبة، ٥- طقم، ٦- أنبوب، ٧- قطعة، ٨- كيس، ٩- أخرى.","قائمة المختبر المستلِم (١٠): ١- وحدة التبرع، ٢- وحدة فصل أكياس الدم، ٣- وحدة مختبر الفيروسات، ٤- وحدة فحص الملاريا، ٥- وحدة النات، ٦- وحدة تجميع الصفائح، ٧- وحدة الجينوتايب، ٨- وحدة فصائل الدم وفحص الأنيميا المنجلية، ٩- وحدة المناعة الدموية، ١٠- المستودع.","تظهر هذه القوائم في شاشة الاستقبال (التصنيف/الوحدة/المختبر)، ويمكن للمدير إضافة مختبرات خاصة من «الإعدادات»."]},
   en:{t:"Approved lists in Receiving",s:["Classification list (9): 1- Reagent, 2- Cards, 3- QC, 4- Bags, 5- Accessories, 6- Donation supplies, 7- Blood collection supplies, 8- Disinfectants & Sanitizers, 9- Others.","Unit list (9): 1- Box, 2- Test, 3- Vial, 4- Pack, 5- Set, 6- Tube, 7- Piece, 8- Bag, 9- Other.","Receiving lab list (10): 1- Donation unit, 2- Component unit, 3- Virology unit, 4- Malaria test unit, 5- NAT unit, 6- Platelet pooling unit, 7- Genotype unit, 8- Blood Grouping & Sickle cell screening unit, 9- Immunohematology unit, 10- Store.","These lists appear on the Receive screen (classification/unit/lab); an admin can add custom labs from Settings."]}},
- {ic:"🧊",cls:"g-blue",
+ {ic:svgIcon("inventory",22),cls:"g-blue",
   ar:{t:"المخزون والتشغيلات",s:["افتح «المخزون» لرؤية كل الأصناف وكمياتها المتاحة وحالتها.","بالأعلى يظهر «ملخص المخزون حسب التصنيف» و«المخزون حسب الجهاز» (جدول لكل جهاز من القائمة المعتمدة بأصنافه الموجودة).","استخدم البحث والفلاتر (متوفر/تنبيه/منتهي/نافد)، واضغط 👁 لعرض التشغيلات، ✏️ تعديل الصنف، 🗑 حذفه.","إجراءات التشغيلة في جدولها: ⚖️ تعديل الكمية (جرد/تالف)، ✅ اعتماد فحص QC، 🚩 استدعاء، 🚮 إتلاف (مع السبب والمسؤول)."]},
   en:{t:"Inventory & lots",s:["Open “Inventory” to see all items, available quantities, and status.","At the top: “Summary by classification” and “Inventory by device” (a table per approved-list device with its in-stock items).","Use search and filters (In stock / Alert / Expired / Out); click 👁 to view lots, ✏️ to edit, 🗑 to delete.","Lot actions in its table: ⚖️ adjust quantity (count/damaged), ✅ QC release, 🚩 recall, 🚮 dispose (with reason & responsible)."]}},
- {ic:"📦",cls:"g-purple",
+ {ic:svgIcon("products",22),cls:"g-purple",
   ar:{t:"إدارة المنتجات والقائمة المعتمدة",s:["افتح «إدارة المنتجات» لتعريف الأصناف وتعديلها وحذفها (الكود، الاسم، الشركة، التصنيف، الوحدة، الحد الأدنى، ورقم نشرة الاستخدام IFU).","في لوحة «القائمة المعتمدة» تظهر كل الأصناف المعتمدة مجمّعة حسب المجموعة.","لإضافة صنف جديد للقائمة المعتمدة اضغط «+ إضافة صنف» ← اختر المجموعة وأدخل الاسم ونوع العبوة والوحدة والكمية لكل عبوة.","تظهر الأصناف المُضافة بلون مميّز مع زر حذف (×)، وتصبح متاحة فوراً ضمن «إضافة من القائمة المعتمدة» في شاشة الاستقبال."]},
   en:{t:"Products & approved list",s:["Open “Product management” to define, edit, and delete items (code, name, manufacturer, classification, unit, minimum, and IFU reference).","The “Approved list” panel shows all approved items grouped by group.","To add a new item to the approved list, click “+ Add item” ← choose the group and enter the name, pack type, unit, and quantity per pack.","Added items appear in a distinct color with a delete (×) button and become available immediately under “Add from the approved list” on the Receive screen."]}},
- {ic:"📤",cls:"g-cyan",
+ {ic:svgIcon("movement",22),cls:"g-cyan",
   ar:{t:"الصرف من المخزون",s:["افتح «صرف وإخراج» ثم اختر المجموعة (مثل Grifols/IH 1000/الملاريا) لتصفية قائمة الأصناف — تماماً كما في الاستقبال — ثم اختر الصنف من القائمة المُصفّاة؛ يظهر المتاح والتشغيلات حسب الأقرب انتهاءً (FIFO). التشغيلات المحجوزة (تحت فحص QC أو مستدعاة) لا تظهر للصرف.","أدخل الكمية المطلوبة واختر المختبر المستلِم. للأصناف التي لها تحويل كت/عبوة (مثل كواشف Alinity — 1 كت = 500 اختبار، أو REVEOS BAG — 1 علبة = 18 كيس)، يظهر تنبيه أصفر وحقل إضافي «عدد الكتات/العلب» — اكتب فيه عدد الكتات أو العلب المصروفة (مثلاً 2) وسيُحسب لك تلقائياً إجمالي الكمية بوحدة الاختبار/الكيس ويُملأ حقل الكمية المصروفة تلقائياً؛ يمكنك أيضاً تعديل الكمية يدوياً بعد ذلك إن لزم — الخصم من الرصيد يتم دائماً بوحدة الاختبار/الكيس وليس بعدد الكتات.","تظهر نافذة تأكيد بتوزيع الصرف وتنبيهات: وجود تشغيلة أقدم/منتهية الصلاحية، أو فتح تشغيلة جديدة لأول مرة. أكّد فتُسجَّل الحركة.","الكواشف والكروت ضمن قائمة Lot-to-Lot: يُطبع تلقائياً «نموذج التحقق من التشغيلة» فقط عند فتح تشغيلة جديدة لأول مرة (وليس مع كل عملية صرف من نفس التشغيلة الجارية) — حسب سياسة المختبرات. يشمل النموذج التاريخ (إنجليزي)، الطريقة (Method)، جدول مقارنة اللوت القديم والجديد (Positive/Negative/Reactive/Non-Reactive وفصائل الدم A/B/AB/O موجب وسالب)، والتشغيلة المصروفة والقسم المستلِم، وحقول VERSION (معبأة تلقائياً بـ 1) وDOCUMENT No. (معبأ تلقائياً بـ DCBB-073-V1 حسب متطلب الجودة QC) قابلة للتعديل عند الحاجة، وحقل اسم «Done by» فارغة تُعبّأ يدوياً (لا تُملأ تلقائياً باسم المستخدم المسجّل دخوله)، إضافة لحقول اسم Q.M Coordinator وB.B Medical Director."]},
   en:{t:"Dispensing (FIFO)",s:["Open “Dispense”, then pick the group (e.g. Grifols/IH 1000/Malaria) to filter the item list — same as on Receive — then select the item from the filtered list; available stock and earliest-expiring lots (FIFO) appear. Quarantined lots (QC pending or recalled) are hidden from dispensing.","Enter the required quantity and choose the receiving lab. For items with a kit/pack conversion (e.g. Alinity reagents — 1 kit = 500 tests, or REVEOS BAG — 1 box = 18 bags), a yellow reminder appears along with an extra “Number of kits/boxes” field — enter how many kits or boxes were dispensed (e.g. 2) and the total in test/bag units is calculated automatically and filled into the quantity field; you can still edit the quantity manually afterward if needed — stock is always deducted in test/bag units, never in kit count.","A confirmation dialog shows the allocation with alerts: an older/expired lot, or opening a new lot for the first time. Confirm to log the movement.","Reagents & cards on the Lot-to-Lot list: a “Lot-to-Lot Verification Form” prints automatically only when a new lot is opened for the first time (not on every dispense of an already-in-use lot) — per standard lab policy. It includes the date (English), Method, an old-vs-new lot comparison table (Positive/Negative/Reactive/Non-Reactive plus A/B/AB/O positive & negative blood groups), the issued lot, receiving department, VERSION / DOCUMENT No. fields pre-filled (1 / DCBB-073-V1 per QC requirement, still editable), and a blank “Done by” name field to fill in manually (not auto-filled with the logged-in user), alongside Q.M Coordinator / B.B Medical Director name fields."]}},
- {ic:"🔄",cls:"g-green",
+ {ic:svgIcon("reorder",22),cls:"g-green",
   ar:{t:"إعادة الطلب والتموين",s:["افتح «إعادة الطلب» — يجمع تلقائياً الأصناف التي تحتاج طلب شراء.","تظهر بثلاث حالات: «نفذ» (صفر متاح)، «تحت/قريب الحد الأدنى»، و«قرب الانتهاء» (تشغيلة قاربت انتهاء صلاحيتها — لطلب بديل قبل انتهائها).","تظهر الكمية المقترحة وآخر مورّد. اضغط «تحديد كمطلوب» لتتبّع ما طُلب، أو «تصدير طلب الشراء» للطباعة/Excel."]},
   en:{t:"Reorder & replenishment",s:["Open “Reorder” — it automatically gathers items that need a purchase order.","Three statuses: “Out” (zero available), “Below/Approaching minimum”, and “Near expiry” (a lot close to expiring — order a replacement before it expires).","Suggested quantity and last supplier are shown. Click “Mark as ordered” to track, or “Export purchase request” to print/Excel."]}},
- {ic:"🔎",cls:"g-pink",
+ {ic:svgIcon("trace",22),cls:"g-pink",
   ar:{t:"التتبّع والاستدعاء والإتلاف",s:["«تتبع التشغيلة»: ابحث برقم التشغيلة (Lot) لعرض سجلها الكامل — إجمالي المستلم/المصروف/المُتلَف/المتبقي، وأين ومتى صُرفت — للاستدعاء وسلامة المريض.","الاستدعاء 🚩 (من جدول التشغيلات): يحجز المتبقي تلقائياً، ويأخذ السبب ومرجع NCMDR، ويعرض أثر الاستدعاء.","الإتلاف 🚮: لإخراج المنتهي/المرفوض مع توثيق السبب والمسؤول والتاريخ. تقريرا الإتلاف والاستدعاء متاحان في «التقارير»."]},
   en:{t:"Trace, recall & disposal",s:["“Lot trace”: search by lot number for the full record — total received/dispensed/disposed/remaining, and where & when dispensed — for recalls and patient safety.","Recall 🚩 (from the lots table): auto-quarantines the remaining stock, takes the reason and NCMDR reference, and shows the recall impact.","Disposal 🚮: remove expired/rejected stock documenting reason, responsible person, and date. Disposal & recall reports are in “Reports”."]}},
- {ic:"🌡️",cls:"g-blue",
+ {ic:svgIcon("temp",22),cls:"g-blue",
   ar:{t:"سجل درجات الحرارة (سلسلة التبريد)",s:["افتح «سجل الحرارة» وعرّف وحدات التخزين (ثلاجة/فريزر) مع المدى المسموح (أدنى/أعلى °م).","سجّل القراءة اليومية لكل وحدة؛ يُكتشف أي تجاوز للمدى تلقائياً ويظهر تنبيه «تجاوز!».","يبقى السجل كاملاً للمراجعة ويمكن تصديره Excel — متطلب التوزيع الجيد (GDP) والاعتماد."]},
   en:{t:"Temperature log (cold chain)",s:["Open “Temperature log” and define storage units (fridge/freezer) with the allowed range (min/max °C).","Log the daily reading per unit; any out-of-range value is auto-flagged with an “Excursion!” alert.","The full log is kept for review and can be exported to Excel — a GDP / accreditation requirement."]}},
- {ic:"🏷️",cls:"g-cyan",
+ {ic:svgIcon("barcode",22),cls:"g-cyan",
   ar:{t:"الباركود: طباعة ومسح",s:["اطبع الملصقات: «طباعة الباركود» ← اختر صنفاً أو أدخل الكود، عدّل الاسم/التشغيلة/الانتهاء (Code 39) وعدد النسخ. يعمل دون اتصال.","للمسح السريع: اضغط زر «📷 مسح» بالأعلى — امسح بماسح USB/بلوتوث أو بالكاميرا (حيث تُدعم) أو أدخل الكود يدوياً ثم Enter.","بعد المسح ينتقل مباشرة للصنف مع أزرار سريعة: عرض في المخزون، استقبال، أو صرف."]},
   en:{t:"Barcode: print & scan",s:["Print labels: “Barcode printing” ← pick an item or enter the code, adjust name/lot/expiry (Code 39) and copies. Works offline.","Quick scan: press the “📷 Scan” button at the top — scan with a USB/Bluetooth reader or the camera (where supported), or type the code and press Enter.","After scanning it jumps straight to the item with quick actions: view in inventory, receive, or dispense."]}},
- {ic:"📊",cls:"g-pink",
+ {ic:svgIcon("reports",22),cls:"g-pink",
   ar:{t:"التقارير والتصدير",s:["افتح «التقارير» لرؤية التشغيلات المنتهية/القريبة والأكثر استهلاكاً، وتقرير الفترة وتقرير الموظفين.","صدّر أي تقرير بصيغة Excel/CSV: المخزون، الحركات، الانتهاء، الاستهلاك، استهلاك المختبرات، الإتلاف، الاستدعاء، الفترة، الموظفين.","استخدم «طباعة الصفحة» لطباعة تقرير جاهز."]},
   en:{t:"Reports & export",s:["Open “Reports” to see expired/near-expiry lots, most-consumed items, plus the period and employee reports.","Export any report as Excel/CSV: inventory, movements, expiry, consumption, lab usage, disposal, recall, period, employees.","Use “Print page” to print a ready report."]}},
- {ic:"⚙️",cls:"g-orange",
+ {ic:svgIcon("settings",22),cls:"g-orange",
   ar:{t:"الإعدادات والمزامنة بين الأجهزة",s:["من «الإعدادات» غيّر كلمة مرورك وأيام التنبيه قبل الانتهاء، وأضف مختبرات خاصة تظهر في الاستقبال والصرف.","أضف «الموردين المعتمدين» (اسم/تواصل/تسجيل SFDA/الحالة) — يظهرون في حقل المورّد بالاستقبال.","للمدير: النسخ الاحتياطي والاستعادة، و«تصفير المخزون» (يحتفظ بالأصناف والقوائم ويصفّر الكميات، مع تنزيل نسخة احتياطية أولاً).","لتفعيل المزامنة بين الأجهزة: أنشئ مشروع Firebase وفعّل Firestore، والصق إعداد firebaseConfig مع معرّف مساحة موحّد على كل الأجهزة."]},
   en:{t:"Settings & multi-device sync",s:["In “Settings” change your password and alert days, and add custom labs shown in receive/dispense.","Add “Approved suppliers” (name/contact/SFDA reg/status) — they appear in the supplier field on Receiving.","For admins: backup & restore, and “Zero inventory” (keeps items and lists, resets quantities, downloading a backup first).","To enable multi-device sync: create a Firebase project, enable Firestore, and paste the firebaseConfig with one shared Workspace ID on every device."]}},
- {ic:"👥",cls:"g-pink",
+ {ic:svgIcon("users",22),cls:"g-pink",
   ar:{t:"إدارة المستخدمين (للمدير العام)",s:["من «إدارة المستخدمين» (تظهر للمدير العام فقط) أضف حساباً جديداً باسم مستخدم وكلمة مرور وصلاحية.","عند الإضافة، اختر من قائمة الصفحات (لوحة التحكم، استقبال المحاليل، المخزون، حركة المخزون، إعادة الطلب...) الصفحات التي يسمح لهذا الحساب برؤيتها فقط.","الحساب الأساسي للنظام هو «مدير عام» بصلاحية كاملة على كل الصفحات وإدارة المستخدمين، ولا يمكن تقييده أو حذفه.","لأي حساب «مستخدم» أو «مدير» يمكن للمدير العام لاحقاً تعديل الصفحات المتاحة له بزر 🛡️، أو تغيير اسمه (✏️) أو كلمة مروره (🔑) أو حذفه — واسم المستخدم يجب أن يكون فريداً."]},
   en:{t:"User management (super admin)",s:["In “User management” (visible to the super admin only) add a new account with a username, password, and role.","When adding an account, choose from the page list (Dashboard, Receive solutions, Inventory, Stock movement, Reorder…) which pages that account is allowed to see.","The system's primary account is “Super Admin”, with full access to every page and to user management — it can't be restricted or deleted.","For any “User” or “Admin” account, the super admin can later edit its available pages (🛡️ button), rename it (✏️), change its password (🔑), or delete it — usernames must stay unique."]}},
 ];
