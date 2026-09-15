@@ -139,6 +139,10 @@
      .bag-area/.scr-types حد أدنى حقيقي (بالأسفل) فلا ينضغطان أبداً لما دون قراءة معقولة — فإن لم تتسع
      المساحة threshold يكبر ارتفاع .screen نفسه وتظهر شريط تمرير طبيعي بدل التراكب/الانضغاط غير المفهوم */
   .screen{--chip:clamp(48px,7.6vh,86px);min-height:100vh;min-height:100dvh;background:radial-gradient(1400px 800px at 70% -10%,#d90429 0%,#800f2f 45%,#3d0814 100%);color:#fff;display:flex;flex-direction:column;padding:1.6vh 3vw;overflow-x:hidden;overflow-y:auto;position:relative;box-sizing:border-box}
+  /* fitScreen() يُصغّر .screen ككل بـ transform ليبقى ضمن ارتفاع النافذة دون تمرير — الحاوية تُثبَّت على ارتفاع
+     النافذة وتُخفي الفائض المرئي فقط (شكلياً، بلا قصّ حقيقي لأن التصغير محسوب مسبقاً ليطابقها تماماً) */
+  #view.fit-view{height:100vh;height:100dvh;overflow:hidden;background:#210911}
+  #view.fit-view .screen{transform-origin:top center}
   /* العنوان وشريط الأيام/الوقت يتوسطان كامل عرض الشاشة (بلا تقسيم أعمدة اصطناعي كان يفرض التفافاً غير مرغوب) */
   .scr-head{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;flex:none;margin-top:1.4vh}
   .scr-logo{height:9vh;max-height:90px;min-height:52px;object-fit:contain;background:#fff;border-radius:14px;padding:6px}
@@ -673,6 +677,7 @@ function route(){
   clearPage();
   const mb=$("#modal-bg");if(mb)mb.classList.remove("open");
   document.documentElement.style.overflow="";document.body.style.overflow=""; // شاشة العرض تعيد تفعيله لمنع أي تمرير
+  const vEl=$("#view");if(vEl)vEl.classList.remove("fit-view"); // يعود fitScreen() ليضيفه فقط داخل صفحة الشاشة نفسها
   document.documentElement.lang="ar"; // شاشة العرض تضبطها بنفسها حسب scrLang
   const h=location.hash||"#/";
   let m;
@@ -1445,15 +1450,26 @@ function attachLogoDrag(){
     };
   });
 }
-/* لا قفل للتمرير: overflow يبقى على الافتراضي (route() يعيد ضبطه لكل صفحة) — .screen نفسه min-height
-   بدل height صارم، فلا يظهر شريط تمرير أصلاً طالما اتسعت الشاشة لمحتواها، ويظهر تلقائياً بلا تراكب/انضغاط
-   حين لا تتسع (بروجكتر/جوال بأي مقاس) */
+/* الشاشة الكبيرة (ديسك توب/بروجكتر) تُصغَّر ككل عبر transform:scale لتبقى ضمن ارتفاع النافذة دون أي تمرير —
+   بلا هذا كانت نوافذ قصيرة (متصفح غير ملء الشاشة) أو بروجكتر بنسبة عرض مختلفة يخفيان الجزء السفلي (الباركود
+   والرعاة) عن جمهور لا أحد يمرّر الصفحة له. الجوال يحتفظ بتخطيطه الطبيعي القابل للتمرير كالمعتاد (تجربة مألوفة
+   على الهاتف، ومساحته أصلاً لا تتسع لتصغير إضافي) */
+function fitScreen(){
+  const scr=$("#scr"),view=$("#view");
+  if(!scr||!view)return;
+  if(isMobileScr()){scr.style.transform="";view.classList.remove("fit-view");return;}
+  scr.style.transform=""; // قياس الارتفاع الطبيعي أولاً بلا أي تصغير سابق قد يشوّه القياس
+  const scale=Math.min(1,window.innerHeight/scr.scrollHeight);
+  view.classList.add("fit-view");
+  scr.style.transform=scale<1?`scale(${scale})`:"";
+}
 /* عند عبور العتبة بين وضعي الجوال/الشاشة الكبيرة (تدوير الجوال، أو تصغير نافذة الديسك توب) تُعاد لوحة
    الأدوات وتموضع العناصر لتعكس إعدادات السياق الجديد فوراً بدل بقائها على قيم السياق السابق */
 let _scrWasMobile=null;
 window.addEventListener("resize",()=>{
   if(!$("#scr")||!window._scrId)return;
   applyLogoScale();
+  fitScreen();
   const m=isMobileScr();
   if(m!==_scrWasMobile){_scrWasMobile=m;if(window._scrEdit)renderScrTools(window._scrId);}
 });
@@ -1583,6 +1599,7 @@ async function renderScreen(id,edit){
       drawScreen(id,c);built=true;
     }
     updateScreen(c,lastTotal);
+    fitScreen(); // بعد اكتمال المحتوى (رقائق الأيام...) حتى يقيس الارتفاع الفعلي النهائي لا قبل اكتماله
     tickClock();
     if(lastTotal!==null&&(c.total||0)>lastTotal)celebrate((c.total||0)-lastTotal);
     lastTotal=c.total||0;
