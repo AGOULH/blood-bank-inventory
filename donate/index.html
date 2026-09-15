@@ -215,8 +215,9 @@
   #scr-tools-host{position:fixed;inset:0;pointer-events:none;z-index:15}
   .scr-tools-btn{position:fixed;bottom:14px;right:14px;pointer-events:auto;z-index:21;background:rgba(20,22,30,.85);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:20px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35)}
   .scr-tools-btn:hover{background:rgba(40,42,52,.9)}
-  /* شفافية أكبر (بدل تعتيم شبه كامل) كي تبقى الشاشة الفعلية خلف اللوحة مرئية أثناء التعديل — الـ blur يحافظ على وضوح النصوص فوقها */
-  .scr-tools-panel{position:fixed;top:0;bottom:0;right:0;width:min(300px,86vw);pointer-events:auto;z-index:20;background:rgba(10,12,18,.38);backdrop-filter:blur(16px) saturate(130%);-webkit-backdrop-filter:blur(16px) saturate(130%);box-shadow:-10px 0 28px rgba(0,0,0,.4);padding:20px 16px 72px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;color:#fff;transform:translateX(105%);transition:transform .28s ease}
+  /* شفافية واضحة (لا تعتيم شبه كامل ولا تمويه ثقيل يحجب التفاصيل) كي تظهر الشاشة الفعلية خلف اللوحة بوضوح أثناء التعديل
+     text-shadow على اللوحة نفسها يورَّث لكل نص بداخلها فيبقى مقروءاً فوق أي خلفية فاتحة أو غامقة خلفه */
+  .scr-tools-panel{position:fixed;top:0;bottom:0;right:0;width:min(300px,86vw);pointer-events:auto;z-index:20;background:rgba(10,12,18,.2);backdrop-filter:blur(6px) saturate(140%);-webkit-backdrop-filter:blur(6px) saturate(140%);box-shadow:-10px 0 28px rgba(0,0,0,.4);padding:20px 16px 72px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 10px rgba(0,0,0,.6);transform:translateX(105%);transition:transform .28s ease}
   .scr-tools-panel.open{transform:translateX(0)}
   .tool-grp{display:flex;flex-direction:column;gap:8px}
   .tool-grp .tg-lbl{font-size:12px;font-weight:700;opacity:.8}
