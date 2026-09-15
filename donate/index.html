@@ -90,6 +90,8 @@
   .tag.info{background:var(--info-soft);color:var(--info)}
   .tag.mut{background:#eef0f3;color:var(--muted)}
   .row-actions{display:flex;gap:8px;flex-wrap:wrap}
+  /* على الجوال: خلية الإجراءات وحدها تلتف لعدة أسطر بدل تمديد الجدول كله أفقياً (th/td الأخرى تبقى nowrap ويمكن تمرير الجدول أفقياً عند الحاجة) */
+  @media(max-width:640px){.row-actions{white-space:normal;max-width:52vw}}
 
   .logo-prev{width:64px;height:64px;border-radius:12px;border:1px solid var(--line);object-fit:contain;background:#fff;display:none}
 
@@ -928,6 +930,8 @@ function renderList(rows){
         <button class="btn sm soft" onclick="showLinks('${r.id}','${esc(r.name).replace(/'/g,"\\'")}')">🔗 الروابط والباركود</button>
         <button class="btn sm ghost" onclick="location.hash='#/s/${r.id}/edit'">🛠️ تخصيص الشاشة</button>
         <button class="btn sm ghost" onclick="showEdit('${r.id}')">✏️ تعديل</button>
+        <button class="btn sm ghost" onclick="showRepublish('${r.id}')">🔁 إعادة نشر</button>
+        <button class="btn sm ghost" onclick="downloadCampaignLogos('${r.id}')">⬇️ الشعارات</button>
         ${r.status==="active"
           ?`<button class="btn sm ghost" onclick="archiveCampaign('${r.id}')">📦 أرشفة</button>
             <button class="btn sm danger" onclick="deleteCampaign('${r.id}')">🗑️ حذف</button>`
@@ -1120,6 +1124,89 @@ async function saveEdit(id){
     toast("حُفظت التعديلات ✓");closeModal();
   }catch(e){toast(friendlyErr(e),"err");}
   $("#e-save").disabled=false;
+}
+
+/* ===== إعادة نشر حملة سابقة: حملة جديدة مستقلة بنفس الشعارات/الرعاة/الشهادة/التصميم، بتاريخ ومدة وهدف جديد — الحملة الأصلية لا تتأثر ===== */
+function showRepublish(id){
+  const r=(window._rows||window._srows||[]).find(x=>x.id===id);if(!r)return;
+  const box=$("#modal-box");box.style.maxWidth="480px";
+  box.innerHTML=`<h3>🔁 إعادة نشر: ${esc(r.name)}</h3>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 12px">تُنشأ حملة جديدة مستقلة بنفس الشعارات والرعاة والشهادة وتصميم الشاشة، وتبدأ إحصاءاتها من الصفر — الحملة الأصلية تبقى كما هي دون تغيير.</p>
+    <div class="form-grid" style="text-align:start">
+      <div><label class="req" for="rp-name">اسم الحملة</label><input id="rp-name" value="${esc(r.name)}"></div>
+      <div><label class="req" for="rp-city">المدينة</label><input id="rp-city" value="${esc(r.city)}"></div>
+      <div><label class="req" for="rp-start">تاريخ البداية الجديد</label><input id="rp-start" type="date" onclick="try{this.showPicker()}catch(e){}"></div>
+      <div><label class="req" for="rp-days">مدة الحملة (أيام)</label><input id="rp-days" type="number" min="1" max="14" value="${r.days}"></div>
+      <div><label for="rp-time-from">وقت البداية</label><select id="rp-time-from"></select></div>
+      <div><label for="rp-time-to">وقت النهاية</label><select id="rp-time-to"></select></div>
+      <div><label class="req" for="rp-goal">العدد المتوقع (الهدف)</label><input id="rp-goal" type="number" min="1" value="${r.goal}"></div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:16px">
+      <button class="btn" id="rp-save" onclick="doRepublish('${id}')">إنشاء الحملة الجديدة</button>
+      <button class="btn ghost" onclick="closeModal()">إلغاء</button>
+    </div>`;
+  timeOptions($("#rp-time-from"),16);timeOptions($("#rp-time-to"),22);
+  if(r.timeFrom)$("#rp-time-from").value=r.timeFrom;
+  if(r.timeTo)$("#rp-time-to").value=r.timeTo;
+  $("#rp-start").value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  openModal();
+}
+async function doRepublish(id){
+  const r=(window._rows||window._srows||[]).find(x=>x.id===id);if(!r)return;
+  const name=$("#rp-name").value.trim(),city=$("#rp-city").value.trim(),start=$("#rp-start").value,
+        days=parseInt($("#rp-days").value||"0"),tFrom=$("#rp-time-from").value,tTo=$("#rp-time-to").value,
+        goal=parseInt($("#rp-goal").value||"0");
+  if(!name||!city||!start||!days||days<1||!goal||goal<1){
+    markMissing([["rp-name",!name],["rp-city",!city],["rp-start",!start],["rp-days",!days||days<1],["rp-goal",!goal||goal<1]]);
+    return toast("أكمل الحقول المميّزة بالأحمر","err");
+  }
+  const doc={
+    name,city,startDate:start,days,times:"من "+tFrom+" إلى "+tTo,timeFrom:tFrom,timeTo:tTo,goal,org:r.org||null,
+    logos:(r.logos||[null,null,null]).slice(),logoNames:(r.logoNames||[null,null,null]).slice(),
+    sponsors:(r.sponsors||[]).slice(),sponsorNames:(r.sponsorNames||[]).slice(),
+    cert:r.cert?Object.assign({},r.cert):null,
+    scrCfg:r.scrCfg?JSON.parse(JSON.stringify(r.scrCfg)):null,
+    status:"active",total:0,phraseIdx:0,daily:{}
+  };
+  if(JSON.stringify(doc).length>930000)return toast("حجم الشعارات/الشهادة يتجاوز الحد — قلّل حجم الملفات من الحملة الأصلية أولاً","err");
+  $("#rp-save").disabled=true;
+  try{
+    await ensureFB();
+    const counts={};BT.forEach(b=>counts[b.k]=0);doc.counts=counts;
+    doc.createdAt=firebase.firestore.FieldValue.serverTimestamp();
+    const id2=newId();
+    await cDoc(id2).set(doc);
+    db.doc(META_DOC).set({names:firebase.firestore.FieldValue.arrayUnion(name),
+                          cities:firebase.firestore.FieldValue.arrayUnion(city)},{merge:true}).catch(()=>{});
+    closeModal();
+    toast("أُعيد نشر الحملة ✓");
+    showLinks(id2,name);
+  }catch(e){toast(friendlyErr(e),"err");}
+  $("#rp-save").disabled=false;
+}
+
+/* ===== تنزيل الشعارات المحفوظة في حملة سابقة كملفات PNG (للاستخدام خارج التطبيق أو رفعها لحملة أخرى) ===== */
+function dataURLtoBlob(d){
+  const [meta,b64]=d.split(","),mime=meta.match(/:(.*?);/)[1];
+  const bin=atob(b64),arr=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+  return new Blob([arr],{type:mime});
+}
+function downloadDataURL(d,filename){
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(dataURLtoBlob(d));a.download=filename;
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+function downloadCampaignLogos(id){
+  const r=(window._rows||window._srows||[]).find(x=>x.id===id);if(!r)return;
+  const safe=(r.name||"حملة").replace(/[\\/:*?"<>|]/g,"-").trim()||"حملة";
+  const orgLabel=["يمين","يسار","وسط"];
+  let n=0;
+  (r.logos||[]).forEach((d,i)=>{if(d){downloadDataURL(d,`${safe}-شعار-${orgLabel[i]||i+1}.png`);n++;}});
+  (r.sponsors||[]).forEach((d,i)=>{if(d){downloadDataURL(d,`${safe}-راعي-${i+1}.png`);n++;}});
+  if(!n)return toast("لا توجد شعارات محفوظة لهذه الحملة","err");
+  toast(`تم تنزيل ${n} شعار ✓`);
 }
 
 /* ================= صفحة المتبرع ================= */
