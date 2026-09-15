@@ -1399,6 +1399,20 @@ function nudgePos(k,dx,dy){
   pos[k]={x:cur.x+dx,y:cur.y+dy};
   applyLogoScale();
 }
+/* استمرار الحركة مع استمرار الضغط على السهم: خطوة فورية عند الضغط، ثم تكرار كل 60ms بعد تأخير قصير (350ms)
+   حتى يتوقف السهم عن الحركة بمجرد رفع الإصبع/الماوس (لا يحتاج نقرات متكررة) */
+let _nudgeDelay=null,_nudgeTimer=null;
+function nudgeStart(k,dx,dy){
+  nudgePos(k,dx,dy);
+  nudgeStop();
+  _nudgeDelay=setTimeout(()=>{_nudgeTimer=setInterval(()=>nudgePos(k,dx,dy),60);},350);
+}
+function nudgeStop(){
+  clearTimeout(_nudgeDelay);clearInterval(_nudgeTimer);_nudgeDelay=null;_nudgeTimer=null;
+}
+document.addEventListener("pointerup",nudgeStop);
+document.addEventListener("pointercancel",nudgeStop);
+window.addEventListener("blur",nudgeStop);
 function resetAllPos(){
   const pos=curPos();
   Object.keys(pos).forEach(k=>{pos[k]={x:0,y:0};});
@@ -1681,10 +1695,10 @@ function bagSVG(){return `
 /* لوحة الأدوات تُرسم خارج #scr كلياً (وعاء مستقل ثابت الموضع) حتى لا يؤثر ظهورها/حجمها على تخطيط الشاشة نفسها بأي شكل.
    تُستدعى أيضاً وحدها (بلا إعادة رسم كامل الشاشة) عند عبور عتبة الجوال/الشاشة الكبيرة أثناء تصفّح لوحة الأدوات */
 const nudgeGrp=(k,lbl)=>`<span class="nudge-grp" role="group" aria-label="تحريك ${esc(lbl)}">
-  <button type="button" onclick="nudgePos('${k}',0,-6)" title="أعلى" aria-label="أعلى">▲</button>
-  <button type="button" onclick="nudgePos('${k}',0,6)" title="أسفل" aria-label="أسفل">▼</button>
-  <button type="button" onclick="nudgePos('${k}',-6,0)" title="يسار" aria-label="يسار">◀</button>
-  <button type="button" onclick="nudgePos('${k}',6,0)" title="يمين" aria-label="يمين">▶</button>
+  <button type="button" onpointerdown="nudgeStart('${k}',0,-6)" title="أعلى (اضغط باستمرار للتحريك المتواصل)" aria-label="أعلى">▲</button>
+  <button type="button" onpointerdown="nudgeStart('${k}',0,6)" title="أسفل (اضغط باستمرار للتحريك المتواصل)" aria-label="أسفل">▼</button>
+  <button type="button" onpointerdown="nudgeStart('${k}',-6,0)" title="يسار (اضغط باستمرار للتحريك المتواصل)" aria-label="يسار">◀</button>
+  <button type="button" onpointerdown="nudgeStart('${k}',6,0)" title="يمين (اضغط باستمرار للتحريك المتواصل)" aria-label="يمين">▶</button>
 </span>`;
 function renderScrTools(id){
   const L=SCR_T[scrLang],sc=curScale();
