@@ -1936,8 +1936,9 @@ function showDays(id){
   const logH=lg.length?`
     <div style="font-weight:700;font-size:14px;margin:14px 0 6px;text-align:start">⏱️ السجل الزمني للتسجيلات (${lg.length})</div>
     <div class="tbl-wrap" style="max-height:30vh;overflow:auto"><table style="font-size:12.5px">
-      <thead><tr><th>م</th><th>اليوم</th><th>التاريخ</th><th>وقت التسجيل</th><th>الفصيلة</th></tr></thead>
-      <tbody>${lg.map((o,i)=>`<tr><td>${i+1}</td><td>${o.day}</td><td>${o.date}</td><td><b>${o.t}</b></td><td style="direction:ltr">${esc(o.bt)}</td></tr>`).join("")}</tbody></table></div>`
+      <thead><tr><th>م</th><th>اليوم</th><th>التاريخ</th><th>وقت التسجيل</th><th>الفصيلة</th><th></th></tr></thead>
+      <tbody>${lg.map((o,i)=>`<tr><td>${i+1}</td><td>${o.day}</td><td>${o.date}</td><td><b>${o.t}</b></td><td style="direction:ltr">${esc(o.bt)}</td>
+        <td>${o.ref?`<button class="btn sm ghost" style="padding:3px 8px;font-size:11.5px" onclick="editLogEntry('${id}','${o.dk}','${o.ref}')">✏️ تصحيح</button>`:""}</td></tr>`).join("")}</tbody></table></div>`
     :`<div style="color:var(--muted);font-size:12.5px;margin-top:12px;text-align:start">⏱️ السجل الزمني يُسجَّل تلقائياً للتبرعات الجديدة (وقت التسجيل + الفصيلة)</div>`;
   const box=$("#modal-box");box.style.maxWidth="780px";
   box.innerHTML=`<h3>${esc(r.name)} — إحصائية الأيام</h3>
@@ -1961,9 +1962,55 @@ function logRows(r){
     const dk=dkeyOf(r.startDate,i-1),list=(((r.log||{})[dk])||[]).slice().sort((a,b)=>String(a.t).localeCompare(String(b.t)));
     const dt=new Date(r.startDate+"T00:00:00");dt.setDate(dt.getDate()+i-1);
     const ds=dt.toLocaleDateString("ar-SA-u-nu-latn",{day:"numeric",month:"short",year:"numeric"});
-    list.forEach(o=>out.push({day:dayOrd(i),date:ds,t:String(o.t||"").slice(0,5),bt:o.bt||""}));
+    list.forEach(o=>out.push({day:dayOrd(i),date:ds,t:String(o.t||"").slice(0,5),bt:o.bt||"",dk,ref:o.r||""}));
   }
   return out;
+}
+/* تصحيح فصيلة تسجيل أُدخل بالخطأ — يعدّل السجل الزمني نفسه ويصحّح مجاميع الفصائل (اليومية والكلية)
+   فينعكس التصحيح تلقائياً على كل التقارير (Excel/PDF) وإحصائية الأيام لأنها كلها تُقرأ من نفس الحقول */
+function editLogEntry(id,dk,ref){
+  const r=(window._srows||[]).find(x=>x.id===id);if(!r)return;
+  const cur=(((r.log||{})[dk])||[]).find(o=>o.r===ref);
+  if(!cur)return toast("تعذر إيجاد هذا التسجيل","err");
+  elogPick=(BT.find(b=>b.l===cur.bt)||{}).k||null;
+  const box=$("#modal-box");box.style.maxWidth="380px";
+  box.innerHTML=`<h3>تصحيح فصيلة التسجيل</h3>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 14px">التسجيل الساعة <b>${esc(String(cur.t||"").slice(0,5))}</b> — الفصيلة الحالية <b style="direction:ltr">${esc(cur.bt||"")}</b></p>
+    <div class="bt-grid" id="elog-bt" role="radiogroup">${BT.map(b=>`<button type="button" class="bt-btn ${b.k===elogPick?"sel":""}" onclick="pickELogBT('${b.k}')" data-k="${b.k}">${b.l}</button>`).join("")}</div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:16px">
+      <button class="btn sm" onclick="saveLogEdit('${id}','${dk}','${ref}')">💾 حفظ التصحيح</button>
+      <button class="btn sm ghost" onclick="closeModal()">إلغاء</button>
+    </div>`;
+  openModal();
+}
+let elogPick=null;
+function pickELogBT(k){elogPick=k;document.querySelectorAll("#elog-bt .bt-btn").forEach(el=>el.classList.toggle("sel",el.dataset.k===k));}
+async function saveLogEdit(id,dk,ref){
+  if(!elogPick)return toast("اختر الفصيلة الصحيحة أولاً","err");
+  const newKey=elogPick,newLbl=(BT.find(b=>b.k===newKey)||{}).l||"";
+  try{
+    await ensureFB();
+    const docRef=cDoc(id);
+    let changed=false;
+    await db.runTransaction(async tx=>{
+      const snap=await tx.get(docRef);
+      const data=snap.data()||{};
+      const list=(((data.log||{})[dk])||[]).slice();
+      const idx=list.findIndex(o=>o.r===ref);
+      if(idx<0)throw new Error("سجل غير موجود");
+      const oldLbl=list[idx].bt,oldKey=(BT.find(b=>b.l===oldLbl)||{}).k;
+      if(oldKey===newKey)return; // لا تغيير فعلي
+      changed=true;
+      list[idx]={...list[idx],bt:newLbl};
+      const u={};u["log."+dk]=list;
+      if(oldKey){u["counts."+oldKey]=inc(-1);u["daily."+dk+"."+oldKey]=inc(-1);}
+      u["counts."+newKey]=inc(1);u["daily."+dk+"."+newKey]=inc(1);
+      tx.update(docRef,u);
+    });
+    toast(changed?"تم تصحيح الفصيلة ✓":"لم يتغير شيء");
+    elogPick=null;
+    if(changed)showDays(id);else closeModal();
+  }catch(e){toast("تعذر حفظ التعديل — حاول مرة أخرى","err");}
 }
 async function exportLogXLSX(id){
   const r=(window._srows||window._rows||[]).find(x=>x.id===id);if(!r)return;
