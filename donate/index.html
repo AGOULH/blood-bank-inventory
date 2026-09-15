@@ -1938,7 +1938,8 @@ function showDays(id){
     <div class="tbl-wrap" style="max-height:30vh;overflow:auto"><table style="font-size:12.5px">
       <thead><tr><th>م</th><th>اليوم</th><th>التاريخ</th><th>وقت التسجيل</th><th>الفصيلة</th><th></th></tr></thead>
       <tbody>${lg.map((o,i)=>`<tr><td>${i+1}</td><td>${o.day}</td><td>${o.date}</td><td><b>${o.t}</b></td><td style="direction:ltr">${esc(o.bt)}</td>
-        <td>${o.ref?`<button class="btn sm ghost" style="padding:3px 8px;font-size:11.5px" onclick="editLogEntry('${id}','${o.dk}','${o.ref}')">✏️ تصحيح</button>`:""}</td></tr>`).join("")}</tbody></table></div>`
+        <td>${o.ref?`<div class="row-actions"><button class="btn sm ghost" style="padding:3px 8px;font-size:11.5px" onclick="editLogEntry('${id}','${o.dk}','${o.ref}')">✏️ تصحيح</button>
+          <button class="btn sm danger" style="padding:3px 8px;font-size:11.5px" onclick="deleteLogEntry('${id}','${o.dk}','${o.ref}')">🗑️ حذف</button></div>`:""}</td></tr>`).join("")}</tbody></table></div>`
     :`<div style="color:var(--muted);font-size:12.5px;margin-top:12px;text-align:start">⏱️ السجل الزمني يُسجَّل تلقائياً للتبرعات الجديدة (وقت التسجيل + الفصيلة)</div>`;
   const box=$("#modal-box");box.style.maxWidth="780px";
   box.innerHTML=`<h3>${esc(r.name)} — إحصائية الأيام</h3>
@@ -2011,6 +2012,43 @@ async function saveLogEdit(id,dk,ref){
     elogPick=null;
     if(changed)showDays(id);else closeModal();
   }catch(e){toast("تعذر حفظ التعديل — حاول مرة أخرى","err");}
+}
+/* حذف تسجيل مكرر بالخطأ (نفس المتبرع سُجِّل أكثر من مرة) — يحذف السطر من السجل الزمني ويخصمه من
+   مجموع الحملة ومجموع اليوم وعدّاد فصيلته، فتنعكس التصحيحات تلقائياً على كل التقارير */
+function deleteLogEntry(id,dk,ref){
+  const r=(window._srows||[]).find(x=>x.id===id);if(!r)return;
+  const cur=(((r.log||{})[dk])||[]).find(o=>o.r===ref);
+  if(!cur)return toast("تعذر إيجاد هذا التسجيل","err");
+  const box=$("#modal-box");box.style.maxWidth="380px";
+  box.innerHTML=`<h3>حذف هذا التسجيل؟</h3>
+    <p style="color:var(--muted);font-size:14px;margin:0 0 4px">تسجيل الساعة <b>${esc(String(cur.t||"").slice(0,5))}</b> بفصيلة <b style="direction:ltr">${esc(cur.bt||"")}</b> سيُحذف نهائياً ويُخصم من مجموع المتبرعين — يفيد عند تكرار تسجيل نفس المتبرع بالخطأ.</p>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+      <button class="btn danger" onclick="_deleteLogEntryConfirmed('${id}','${dk}','${ref}')">حذف التسجيل</button>
+      <button class="btn ghost" onclick="showDays('${id}')">تراجع</button>
+    </div>`;
+  openModal();
+}
+async function _deleteLogEntryConfirmed(id,dk,ref){
+  try{
+    await ensureFB();
+    const docRef=cDoc(id);
+    let found=false;
+    await db.runTransaction(async tx=>{
+      const snap=await tx.get(docRef);
+      const data=snap.data()||{};
+      const list=(((data.log||{})[dk])||[]).slice();
+      const idx=list.findIndex(o=>o.r===ref);
+      if(idx<0)return;
+      found=true;
+      const oldLbl=list[idx].bt,oldKey=(BT.find(b=>b.l===oldLbl)||{}).k;
+      list.splice(idx,1);
+      const u={};u["log."+dk]=list;u.total=inc(-1);u["daily."+dk+".total"]=inc(-1);
+      if(oldKey){u["counts."+oldKey]=inc(-1);u["daily."+dk+"."+oldKey]=inc(-1);}
+      tx.update(docRef,u);
+    });
+    toast(found?"حُذف التسجيل ✓":"تعذر إيجاد هذا التسجيل",found?undefined:"err");
+    showDays(id);
+  }catch(e){toast("تعذر حذف التسجيل — حاول مرة أخرى","err");}
 }
 async function exportLogXLSX(id){
   const r=(window._srows||window._rows||[]).find(x=>x.id===id);if(!r)return;
