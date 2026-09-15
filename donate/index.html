@@ -221,7 +221,12 @@
   .tool-grp .tg-lbl{font-size:12px;font-weight:700;opacity:.8}
   .tool-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
   .tool-row span{font-size:12.5px;opacity:.9;flex:none}
-  .tool-row input[type=range]{flex:1;width:auto}
+  .tool-row input[type=range]{flex:1;width:auto;min-width:0}
+  /* أسهم تحريك موضع كل عنصر بالنقر (يعمل بالماوس مئة بالمئة بخلاف السحب المباشر الذي قد لا يعمل على كل الأجهزة/المتصفحات) */
+  .nudge-grp{display:grid;grid-template-columns:repeat(4,18px);gap:2px;flex:none}
+  .nudge-grp button{width:18px;height:18px;padding:0;font-size:10px;line-height:1;border-radius:4px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;cursor:pointer}
+  .nudge-grp button:hover{background:rgba(255,255,255,.28)}
+  .nudge-grp button:active{background:rgba(255,255,255,.4)}
   .scr-lang{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:20px;padding:8px 16px;font-weight:700;font-size:14px;cursor:pointer;width:100%}
   .scr-lang:hover{background:rgba(255,255,255,.28)}
   .scr-theme{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
@@ -1388,6 +1393,17 @@ function applyLogoScale(){
   });
 }
 function setLogoScale(k,v){curScale()[k]=parseFloat(v)||1;applyLogoScale();}
+/* تحريك عنصر بالنقر على أسهم ◀▶▲▼ — بديل موثوق للسحب المباشر يعمل بالماوس (والّلمس) على كل المتصفحات دون استثناء */
+function nudgePos(k,dx,dy){
+  const pos=curPos(),cur=Object.assign({x:0,y:0},pos[k]);
+  pos[k]={x:cur.x+dx,y:cur.y+dy};
+  applyLogoScale();
+}
+function resetAllPos(){
+  const pos=curPos();
+  Object.keys(pos).forEach(k=>{pos[k]={x:0,y:0};});
+  applyLogoScale();
+}
 /* سحب العناصر لتحريكها — يعمل فقط وقت ظهور لوحة الأدوات (scrToolsVisible)، فيختفي مع إخفاء الأدوات */
 function attachLogoDrag(){
   const scr=$("#scr");if(!scr)return;
@@ -1664,6 +1680,12 @@ function bagSVG(){return `
   </svg>`;}
 /* لوحة الأدوات تُرسم خارج #scr كلياً (وعاء مستقل ثابت الموضع) حتى لا يؤثر ظهورها/حجمها على تخطيط الشاشة نفسها بأي شكل.
    تُستدعى أيضاً وحدها (بلا إعادة رسم كامل الشاشة) عند عبور عتبة الجوال/الشاشة الكبيرة أثناء تصفّح لوحة الأدوات */
+const nudgeGrp=(k,lbl)=>`<span class="nudge-grp" role="group" aria-label="تحريك ${esc(lbl)}">
+  <button type="button" onclick="nudgePos('${k}',0,-6)" title="أعلى" aria-label="أعلى">▲</button>
+  <button type="button" onclick="nudgePos('${k}',0,6)" title="أسفل" aria-label="أسفل">▼</button>
+  <button type="button" onclick="nudgePos('${k}',-6,0)" title="يسار" aria-label="يسار">◀</button>
+  <button type="button" onclick="nudgePos('${k}',6,0)" title="يمين" aria-label="يمين">▶</button>
+</span>`;
 function renderScrTools(id){
   const L=SCR_T[scrLang],sc=curScale();
   const toolsHost=$("#scr-tools-host");
@@ -1680,13 +1702,14 @@ function renderScrTools(id){
         <div class="tool-row"><span>خط</span><input type="color" class="sw-custom" id="sw-font" value="${scrFont||"#ffffff"}" title="لون الخط" oninput="setFont(this.value)"></div>
       </div>
       <div class="tool-grp" id="logo-size-row">
-        <div class="tg-lbl">🖼️ مقاس الشعارات</div>
-        ${LG_LABELS_LOGOS.map(([k,lbl])=>`<div class="tool-row"><span>${lbl}</span><input type="range" min="0.5" max="2.5" step="0.1" value="${sc[k]||1}" oninput="setLogoScale('${k}',this.value)" title="مقاس ${lbl}"></div>`).join("")}
+        <div class="tg-lbl">🖼️ مقاس وموضع الشعارات</div>
+        ${LG_LABELS_LOGOS.map(([k,lbl])=>`<div class="tool-row"><span>${lbl}</span><input type="range" min="0.5" max="2.5" step="0.1" value="${sc[k]||1}" oninput="setLogoScale('${k}',this.value)" title="مقاس ${lbl}">${nudgeGrp(k,lbl)}</div>`).join("")}
       </div>
       <div class="tool-grp" id="elem-size-row">
-        <div class="tg-lbl">📐 مقاس العناصر</div>
-        ${LG_LABELS_ELEMS.map(([k,lbl])=>`<div class="tool-row"><span>${lbl}</span><input type="range" min="0.5" max="2.5" step="0.1" value="${sc[k]||1}" oninput="setLogoScale('${k}',this.value)" title="مقاس ${lbl}"></div>`).join("")}
-        <div class="tg-lbl">✥ اسحب أي عنصر لتحريكه</div>
+        <div class="tg-lbl">📐 مقاس وموضع العناصر</div>
+        ${LG_LABELS_ELEMS.map(([k,lbl])=>`<div class="tool-row"><span>${lbl}</span><input type="range" min="0.5" max="2.5" step="0.1" value="${sc[k]||1}" oninput="setLogoScale('${k}',this.value)" title="مقاس ${lbl}">${nudgeGrp(k,lbl)}</div>`).join("")}
+        <div class="tg-lbl">✥ اسحب أي عنصر لتحريكه، أو استخدم الأسهم ◀▶▲▼ بجانبه</div>
+        <button class="scr-lang" style="padding:6px 10px;font-size:12px" onclick="resetAllPos()">↺ إعادة تعيين كل المواضع</button>
       </div>
       <button class="scr-lang" id="scr-save" onclick="saveScrCfg()">💾 حفظ</button>
     </div>`;
