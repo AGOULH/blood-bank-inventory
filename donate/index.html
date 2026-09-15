@@ -190,7 +190,9 @@
   .sponsor-bar img{max-width:15vw}
   /* اسم الحملة/المدينة، الأيام الثلاثة معاً، وشريط الساعة تُحرَّك بنفس آلية الشعارات (transform فقط، بلا تغيير في مساحتها المحجوزة) */
   .scr-title,.scr-days,.scr-times,.scr-types,.bag-side,.bag-svg{transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
-  .screen.tools-editable [data-lg]{cursor:grab;touch-action:none}
+  /* -webkit-user-drag/user-select يمنعان سحب الصور بآلية المتصفح الأصلية (شبح الصورة عند السحب بالماوس)
+     التي كانت تصطدم بمنطق السحب المخصّص في attachLogoDrag وتمنعه من العمل بالماوس (يعمل باللمس فقط بلا هذا المنع) */
+  .screen.tools-editable [data-lg]{cursor:grab;touch-action:none;-webkit-user-drag:none;user-drag:none;user-select:none;-webkit-user-select:none}
   .screen.tools-editable [data-lg]:hover{outline:2px dashed rgba(255,255,255,.6);outline-offset:3px}
   .screen.tools-editable [data-lg]:active{cursor:grabbing}
   .sponsor-bar{display:flex;align-items:center;justify-content:space-around;width:100%;gap:1.5vw;padding:2px 0;flex:none}
@@ -1694,12 +1696,12 @@ function drawScreen(id,c){
   const lgs=c.logos||(c.logo?[c.logo]:[]);
   const lgn=c.logoNames||[];
   const logoBar=(lgs[0]||lgs[1]||lgs[2])?`<div class="logo-bar">
-      <div class="lg">${lgs[0]?`<img src="${lgs[0]}" alt="${esc(lgn[0]||"")}" data-lg="a" style="transform-origin:left bottom">`:""}</div>
-      <div class="lg">${lgs[2]?`<img src="${lgs[2]}" alt="${esc(lgn[2]||"")}" data-lg="b" style="transform-origin:center bottom">`:""}</div>
-      <div class="lg">${lgs[1]?`<img src="${lgs[1]}" alt="${esc(lgn[1]||"")}" data-lg="c" style="transform-origin:right bottom">`:""}</div>
+      <div class="lg">${lgs[0]?`<img src="${lgs[0]}" alt="${esc(lgn[0]||"")}" data-lg="a" draggable="false" style="transform-origin:left bottom">`:""}</div>
+      <div class="lg">${lgs[2]?`<img src="${lgs[2]}" alt="${esc(lgn[2]||"")}" data-lg="b" draggable="false" style="transform-origin:center bottom">`:""}</div>
+      <div class="lg">${lgs[1]?`<img src="${lgs[1]}" alt="${esc(lgn[1]||"")}" data-lg="c" draggable="false" style="transform-origin:right bottom">`:""}</div>
     </div>`:"";
   const spn=c.sponsorNames||[];
-  const sponsors=(c.sponsors&&c.sponsors.length)?`<div class="sponsor-bar">${c.sponsors.map((s,i)=>`<img src="${s}" alt="${esc(spn[i]||"")}" data-lg="sp" style="transform-origin:center">`).join("")}</div>`:"";
+  const sponsors=(c.sponsors&&c.sponsors.length)?`<div class="sponsor-bar">${c.sponsors.map((s,i)=>`<img src="${s}" alt="${esc(spn[i]||"")}" data-lg="sp" draggable="false" style="transform-origin:center">`).join("")}</div>`:"";
   const tF=scrLang==="en"?timeEn(c.timeFrom):c.timeFrom,tT=scrLang==="en"?timeEn(c.timeTo):c.timeTo;
   const timesLine=c.timeFrom?`<div class="scr-times" data-lg="time">
       <div class="scr-time-pill">
