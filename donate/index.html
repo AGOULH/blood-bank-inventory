@@ -194,6 +194,8 @@
      التي كانت تصطدم بمنطق السحب المخصّص في attachLogoDrag وتمنعه من العمل بالماوس (يعمل باللمس فقط بلا هذا المنع) */
   .screen.tools-editable [data-lg]{cursor:grab;touch-action:none;-webkit-user-drag:none;user-drag:none;user-select:none;-webkit-user-select:none}
   .screen.tools-editable [data-lg]:hover{outline:2px dashed rgba(255,255,255,.6);outline-offset:3px}
+  /* تمييز أقوى (إطار أصفر متوهج) عند تمرير الماوس فوق صف التحكم المقابل في اللوحة، لا فوق العنصر نفسه */
+  [data-lg].lg-hl{outline:3px solid #ffd60a!important;outline-offset:4px;box-shadow:0 0 0 4px rgba(255,214,10,.25),0 0 26px 8px rgba(255,214,10,.6);position:relative;z-index:6}
   .screen.tools-editable [data-lg]:active{cursor:grabbing}
   .sponsor-bar{display:flex;align-items:center;justify-content:space-around;width:100%;gap:1.5vw;padding:2px 0;flex:none}
   /* أداة تحديد مكان الاسم على الشهادة */
@@ -217,7 +219,7 @@
   .scr-tools-btn:hover{background:rgba(40,42,52,.9)}
   /* شفافية واضحة (لا تعتيم شبه كامل ولا تمويه ثقيل يحجب التفاصيل) كي تظهر الشاشة الفعلية خلف اللوحة بوضوح أثناء التعديل
      text-shadow على اللوحة نفسها يورَّث لكل نص بداخلها فيبقى مقروءاً فوق أي خلفية فاتحة أو غامقة خلفه */
-  .scr-tools-panel{position:fixed;top:0;bottom:0;right:0;width:min(300px,86vw);pointer-events:auto;z-index:20;background:rgba(10,12,18,.2);backdrop-filter:blur(6px) saturate(140%);-webkit-backdrop-filter:blur(6px) saturate(140%);box-shadow:-10px 0 28px rgba(0,0,0,.4);padding:20px 16px 72px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 10px rgba(0,0,0,.6);transform:translateX(105%);transition:transform .28s ease}
+  .scr-tools-panel{position:fixed;top:0;bottom:0;right:0;width:min(300px,86vw);pointer-events:auto;z-index:20;background:rgba(10,12,18,.08);backdrop-filter:blur(2px) saturate(140%);-webkit-backdrop-filter:blur(2px) saturate(140%);box-shadow:-10px 0 28px rgba(0,0,0,.4);padding:20px 16px 72px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 10px rgba(0,0,0,.6);transform:translateX(105%);transition:transform .28s ease}
   .scr-tools-panel.open{transform:translateX(0)}
   .tool-grp{display:flex;flex-direction:column;gap:8px}
   .tool-grp .tg-lbl{font-size:12px;font-weight:700;opacity:.8}
@@ -1415,6 +1417,10 @@ function nudgeStop(){
 document.addEventListener("pointerup",nudgeStop);
 document.addEventListener("pointercancel",nudgeStop);
 window.addEventListener("blur",nudgeStop);
+/* تمييز العنصر على الشاشة عند تمرير الماوس فوق صف التحكم به في اللوحة — لمعرفة أي عنصر سيتأثر بالتعديل قبل تحريكه/تكبيره */
+function hlEl(k,on){
+  document.querySelectorAll('#scr [data-lg="'+k+'"]').forEach(el=>el.classList.toggle("lg-hl",on));
+}
 function resetAllPos(){
   const pos=curPos();
   Object.keys(pos).forEach(k=>{pos[k]={x:0,y:0};});
@@ -1719,11 +1725,11 @@ function renderScrTools(id){
       </div>
       <div class="tool-grp" id="logo-size-row">
         <div class="tg-lbl">🖼️ مقاس وموضع الشعارات</div>
-        ${LG_LABELS_LOGOS.map(([k,lbl])=>`<div class="tool-row"><span>${lbl}</span><input type="range" min="0.5" max="2.5" step="0.1" value="${sc[k]||1}" oninput="setLogoScale('${k}',this.value)" title="مقاس ${lbl}">${nudgeGrp(k,lbl)}</div>`).join("")}
+        ${LG_LABELS_LOGOS.map(([k,lbl])=>`<div class="tool-row" onmouseenter="hlEl('${k}',true)" onmouseleave="hlEl('${k}',false)"><span>${lbl}</span><input type="range" min="0.5" max="2.5" step="0.1" value="${sc[k]||1}" oninput="setLogoScale('${k}',this.value)" title="مقاس ${lbl}">${nudgeGrp(k,lbl)}</div>`).join("")}
       </div>
       <div class="tool-grp" id="elem-size-row">
         <div class="tg-lbl">📐 مقاس وموضع العناصر</div>
-        ${LG_LABELS_ELEMS.map(([k,lbl])=>`<div class="tool-row"><span>${lbl}</span><input type="range" min="0.5" max="2.5" step="0.1" value="${sc[k]||1}" oninput="setLogoScale('${k}',this.value)" title="مقاس ${lbl}">${nudgeGrp(k,lbl)}</div>`).join("")}
+        ${LG_LABELS_ELEMS.map(([k,lbl])=>`<div class="tool-row" onmouseenter="hlEl('${k}',true)" onmouseleave="hlEl('${k}',false)"><span>${lbl}</span><input type="range" min="0.5" max="2.5" step="0.1" value="${sc[k]||1}" oninput="setLogoScale('${k}',this.value)" title="مقاس ${lbl}">${nudgeGrp(k,lbl)}</div>`).join("")}
         <div class="tg-lbl">✥ اسحب أي عنصر لتحريكه، أو استخدم الأسهم ◀▶▲▼ بجانبه</div>
         <button class="scr-lang" style="padding:6px 10px;font-size:12px" onclick="resetAllPos()">↺ إعادة تعيين كل المواضع</button>
       </div>
