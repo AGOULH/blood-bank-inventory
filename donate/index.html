@@ -1641,7 +1641,7 @@ function tickClock(){
   const end=new Date(now);end.setHours(tT.h,tT.m,0,0);
   if(end<=start)end.setDate(end.getDate()+1);
   let remain,pct;
-  if(now<start){remain=start-now;pct=100;}
+  if(now<start){remain=0;pct=100;}
   else if(now>end){remain=0;pct=0;}
   else{remain=end-now;pct=Math.max(0,Math.min(100,Math.round((end-now)/(end-start)*100)));}
   const s=Math.max(0,Math.floor(remain/1000));
