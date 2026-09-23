@@ -20,6 +20,7 @@
 | `wa_settings/main` | `{pinHash,pinSalt,dailyLimit,gapMin,gapMax,eligDays,place,mapUrl,activeRun,tplId,daily:{dYYYYMMDD:n}}` |
 
 ### قواعد السلوك (لا تكسرها)
+- تعديل الرسائل بلا حفظ تلقائي: «💾 حفظ التعديل» (`waTplSave`) و«↩ تراجع» لآخر نص محفوظ (`waTplRevert`) و«استعادة النص الأصلي» للرسائل الأصلية؛ `WA.tplDirty` يمنع إعادة الرسم ويطلب حفظ/تجاهل عند الانتقال (`waTplLeave`).
 - «تم الإرسال» لا تُسجَّل إلا بزر التأكيد `waConfirm('sent')`؛ فتح الرابط يسجّل `opened` فقط.
 - نافذة واحدة `window.open(url,'wa_sender')`؛ wa.me على الجوال و `web.whatsapp.com/send` على الكمبيوتر؛ `encodeURIComponent`.
 - الحد اليومي (افتراضي 25) يُعدّ الإرسال المؤكد فقط؛ فاصل عشوائي gapMin–gapMax بعد كل نتيجة؛ النقر مطلوب لفتح كل محادثة (لا فتح تلقائي).
