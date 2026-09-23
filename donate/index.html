@@ -2897,14 +2897,14 @@ function waRefresh(kind){
   waRenderList();
   const tb=$("#wa-tab-b");if(!tb||tb.contains(document.activeElement))return;
   if(WA.tab==="runs"){const b=$("#wa-run-cur");if(b)b.innerHTML=waRunCurHTML();}
-  else if(WA.tab==="optout"||(WA.tab==="messages"&&kind==="tpl"))waRenderTab();
+  else if(WA.tab==="optout"||(WA.tab==="messages"&&kind==="tpl"&&!WA.tplDirty))waRenderTab();
 }
 function waTabsHTML(){
   const T=[["messages","msg","الرسائل"],["certificates","award","شهادات الشكر"],["runs","chart","الحملات والنتائج"],["optout","ban","لا ترسل"],["settings","sliders","الإعدادات"]];
   return `<div class="wa-tabs" role="tablist">${T.map(([k,i,l])=>`<button class="wa-tab" role="tab" aria-selected="${WA.tab===k}" onclick="waTab('${k}')" data-testid="wa-tab-${k}">${waI(i)}${l}</button>`).join("")}</div>
     <div class="wa-tab-b" id="wa-tab-b" role="tabpanel"></div>`;
 }
-function waTab(k){waTplFlush();WA.tab=k;$("#wa-tabs-card").innerHTML=waTabsHTML();waRenderTab();}
+async function waTab(k){if(!await waTplLeave())return;WA.tab=k;$("#wa-tabs-card").innerHTML=waTabsHTML();waRenderTab();}
 function waRenderTab(){
   const b=$("#wa-tab-b");if(!b)return;const k=WA.tab;
   b.innerHTML=k==="messages"?waTabMessages():k==="certificates"?waTabCert():k==="runs"?waTabRuns():k==="optout"?waTabOpt():waTabSettings();
@@ -2920,14 +2920,18 @@ function waTabMessages(){
     <div class="wa-tpls" role="group" aria-label="الرسائل المحفوظة">${T.map(t=>`<button class="wa-tpl" aria-pressed="${t.id===cur.id}" onclick="waPickTpl('${t.id}')" data-testid="wa-template-option" data-template-id="${t.id}">${esc(t.title)}<small>${esc(t.kind||"")}${t.modified?" · معدّلة":""}</small></button>`).join("")}</div>
     <div class="wa-box">
       <div class="wa-box-h"><p>محتوى الرسالة:</p><div class="wa-row">
-        <span class="wa-hint" id="wa-tpl-saved" aria-live="polite"></span>
         ${cur.modified?`<button class="wa-btn out" onclick="waTplRestore('${cur.id}')" data-testid="wa-template-restore">${waI("refresh")}استعادة النص الأصلي</button>`:""}
         ${!cur.isDefault?`<button class="wa-btn ghost" onclick="waTplDel('${cur.id}')" aria-label="حذف الرسالة" data-testid="wa-template-delete">${waI("trash")}</button>`:""}
       </div></div>
       ${!cur.isDefault?`<input class="wa-in" id="wa-tpl-title" value="${esc(cur.title)}" oninput="waTplEdit()" aria-label="عنوان الرسالة" data-testid="wa-template-title">`:""}
       <textarea class="wa-in" id="wa-tpl-body" rows="8" oninput="waTplEdit()" aria-label="محتوى الرسالة" data-testid="wa-template-editor">${esc(cur.content)}</textarea>
+      <div class="wa-row">
+        <button class="wa-btn red" id="wa-tpl-save" onclick="waTplSave()" disabled data-testid="wa-template-save">💾 حفظ التعديل</button>
+        <button class="wa-btn out" id="wa-tpl-revert" onclick="waTplRevert()" disabled data-testid="wa-template-revert">↩ تراجع عن التعديل</button>
+        <span class="wa-hint" id="wa-tpl-saved" aria-live="polite" data-testid="wa-template-status"></span>
+      </div>
       <div class="wa-row">${WA_VARS.map(v=>`<button class="wa-var" onclick="waInsVar('${v}')" data-testid="wa-var-${v}">{${v}}</button>`).join("")}</div>
-      <p class="wa-hint">انقر متغيراً لإدراجه عند المؤشر. صيغ النسخة القديمة <code>{اسم}</code> و <code>{فصيلة_الدم}</code> تعمل أيضاً. يُضاف سطر «${WA_OPTOUT}» تلقائياً في نهاية كل رسالة عند الإرسال.</p>
+      <p class="wa-hint">التعديل لا يُحفظ إلا بزر «حفظ التعديل»، والإرسال يستخدم آخر نص محفوظ. «تراجع» يعيد النص كما كان قبل تعديلك${cur.isDefault?"، و«استعادة النص الأصلي» يعيد نص الرسالة الأصلي من الموقع القديم":""}. انقر متغيراً لإدراجه عند المؤشر. صيغ النسخة القديمة <code>{اسم}</code> و <code>{فصيلة_الدم}</code> تعمل أيضاً. يُضاف سطر «${WA_OPTOUT}» تلقائياً في نهاية كل رسالة عند الإرسال.</p>
     </div>
     <div class="wa-box">
       <div class="wa-box-h"><p>👁️ معاينة حيّة</p>
@@ -2958,17 +2962,29 @@ function waInsVar(v){
   t.value=t.value.slice(0,s)+ins+t.value.slice(e);t.focus();t.selectionStart=t.selectionEnd=s+ins.length;
   waTplEdit();
 }
-function waTplEdit(){
-  waPreview();clearTimeout(WA.tplT);
-  const m=$("#wa-tpl-saved");if(m)m.textContent="…";
-  WA.tplT=setTimeout(waTplSave,700);
+/* لا حفظ تلقائي: التعديل يبقى مسودة إلى أن يضغط المستخدم «حفظ التعديل»، و«تراجع» يعيد آخر نص محفوظ */
+function waTplIsDirty(){
+  const b=$("#wa-tpl-body");if(!b)return false;
+  const cur=waCurTpl(),ti=$("#wa-tpl-title");
+  return b.value!==cur.content||(!!ti&&ti.value.trim()!==cur.title);
 }
-function waTplFlush(){if(WA&&WA.tplT){clearTimeout(WA.tplT);WA.tplT=null;waTplSave();}}
-/* يحفظ مرة واحدة بعد توقف الكتابة (بدل حفظ + تنبيه مع كل حرف في الأصل)؛ تعديل الرسالة الأصلية يُحفظ كنسخة معدّلة قابلة للاستعادة */
+function waTplEdit(){
+  waPreview();WA.tplDirty=waTplIsDirty();
+  const s=$("#wa-tpl-save"),r=$("#wa-tpl-revert"),m=$("#wa-tpl-saved");
+  if(s)s.disabled=!WA.tplDirty;if(r)r.disabled=!WA.tplDirty;
+  if(m)m.textContent=WA.tplDirty?"● تعديلات غير محفوظة":"";
+}
+function waTplRevert(){
+  const cur=waCurTpl(),b=$("#wa-tpl-body");if(!b)return;
+  b.value=cur.content;const ti=$("#wa-tpl-title");if(ti)ti.value=cur.title;
+  waTplEdit();toast("↩ رجع النص كما كان قبل التعديل");
+}
+/* تعديل رسالة أصلية يُحفظ كنسخة معدّلة (قابلة للاستعادة)؛ حفظها بنفس النص الأصلي يحذف النسخة المعدّلة */
 async function waTplSave(){
-  WA.tplT=null;
-  const body=$("#wa-tpl-body");if(!body)return;
-  const cur=waCurTpl(),ref=db.collection("wa_templates").doc(cur.id);
+  const body=$("#wa-tpl-body");if(!body)return false;
+  if(!body.value.trim()){markMissing([["wa-tpl-body",true]]);toast("نص الرسالة فارغ","err");return false;}
+  const cur=waCurTpl(),ref=db.collection("wa_templates").doc(cur.id),btn=$("#wa-tpl-save");
+  if(btn)btn.disabled=true;
   try{
     if(cur.isDefault){
       const orig=WA_TPL_DEF.find(t=>t.id===cur.id).content;
@@ -2977,11 +2993,20 @@ async function waTplSave(){
       const ti=$("#wa-tpl-title");
       await ref.set({content:body.value,title:(ti&&ti.value.trim())||cur.title},{merge:true});
     }
-    const m=$("#wa-tpl-saved");if(m)m.textContent="✓ تم حفظ التعديل";
-  }catch(e){toast(friendlyErr(e),"err");}
+    WA.tplDirty=false;toast("✓ تم حفظ التعديل");waRenderTab();
+    return true;
+  }catch(e){if(btn)btn.disabled=false;toast(friendlyErr(e),"err");return false;}
 }
-function waPickTpl(id){
-  waTplFlush();WA.tplId=id;waSetRef().set({tplId:id},{merge:true}).catch(()=>{});
+/* عند الانتقال لرسالة/تبويب آخر مع تعديلات غير محفوظة: حفظ أو تجاهل */
+async function waTplLeave(){
+  if(!WA||!WA.tplDirty||!waTplIsDirty()){if(WA)WA.tplDirty=false;return true;}
+  if(await confirmDialog("في هذه الرسالة تعديلات غير محفوظة. «حفظ» يحفظها، و«إلغاء» يتجاهلها ويرجع النص المحفوظ.","حفظ")){if(!await waTplSave())return false;}
+  WA.tplDirty=false;return true;
+}
+window.addEventListener("beforeunload",e=>{if(WA&&WA.tplDirty){e.preventDefault();e.returnValue="";}});
+async function waPickTpl(id){
+  if(id!==WA.tplId&&!await waTplLeave())return;
+  WA.tplId=id;waSetRef().set({tplId:id},{merge:true}).catch(()=>{});
   waRenderTab();waQRender();
 }
 async function waTplAdd(){
