@@ -2874,6 +2874,7 @@ function waMain(){
         <div><h2>رفع ملف الإكسل</h2><p>ادرج ملف يحتوي على الاسم ورقم الهاتف</p></div>
         <div class="end">
           <button class="wa-btn green-out" onclick="waSample()" data-testid="wa-sample-download">${waI("download")}تحميل نموذج</button>
+          <button class="wa-btn red" onclick="waAddOne()" data-testid="wa-add-single">${waI("plus")}إضافة متبرع</button>
           <button class="wa-btn out" onclick="waLegacyModal()" data-testid="wa-legacy-import">${waI("upload")}استيراد من النسخة القديمة</button>
         </div></div>
       <div class="wa-card-b">
@@ -3496,6 +3497,49 @@ function waQRender(){
 }
 
 /* ---------- الاستيراد من Excel/CSV ---------- */
+/* ---------- إضافة متبرع فردياً (بديل لرفع ملف) ---------- */
+function waAddOne(){
+  const today=waISO(new Date());
+  $("#modal-box").style.maxWidth="560px";
+  $("#modal-box").innerHTML=`<div class="wa" data-testid="wa-add-single-modal"><h3>إضافة متبرع</h3>
+    <div class="wa-form">
+      <div><label for="wa-one-name">الاسم *</label><input class="wa-in" id="wa-one-name" autocomplete="off" data-testid="wa-add-single-name"></div>
+      <div><label for="wa-one-phone">رقم الجوال *</label><input class="wa-in" id="wa-one-phone" type="tel" inputmode="tel" dir="ltr" placeholder="05xxxxxxxx" autocomplete="off" oninput="waAddOneCheck()" data-testid="wa-add-single-phone"></div>
+      <div><label for="wa-one-bt">فصيلة الدم</label><select class="wa-in" id="wa-one-bt" data-testid="wa-add-single-blood"><option value="">— غير معروفة —</option>${WA_BTS.map(b=>`<option value="${b}">${b}\u200E</option>`).join("")}</select></div>
+      <div><label for="wa-one-city">المدينة</label><input class="wa-in" id="wa-one-city" list="wa-one-cities" autocomplete="off" data-testid="wa-add-single-city"><datalist id="wa-one-cities">${[...new Set(Object.values(WA.contacts).map(c=>c.city).filter(Boolean))].map(c=>`<option value="${esc(c)}">`).join("")}</datalist></div>
+      <div><label for="wa-one-ld">آخر تبرع</label><input class="wa-in" id="wa-one-ld" type="date" max="${today}" data-testid="wa-add-single-last-donation"></div>
+    </div>
+    <p class="wa-hint" id="wa-one-msg" aria-live="polite" data-testid="wa-add-single-status"></p>
+    <div class="wa-row"><button class="wa-btn red" id="wa-one-save" onclick="waAddOneSave(false)" data-testid="wa-add-single-save">${waI("plus")}حفظ</button>
+      <button class="wa-btn out" onclick="waAddOneSave(true)" data-testid="wa-add-single-save-next">حفظ وإضافة آخر</button>
+      <button class="wa-btn out" onclick="closeModal()" data-testid="wa-add-single-cancel">إلغاء</button></div></div>`;
+  openModal();
+  $("#modal-box").querySelectorAll("input").forEach(i=>i.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();waAddOneSave(false);}}));
+}
+/* يبيّن فوراً أثناء الكتابة: رقم غير صالح وسببه، أو أن الرقم موجود مسبقاً (فيُحدَّث) أو في «لا ترسل» */
+function waAddOneCheck(){
+  const v=$("#wa-one-phone").value,m=$("#wa-one-msg");if(!m)return;
+  if(!v.trim()){m.textContent="";return;}
+  const z=waNorm(v);
+  if(!z.ok){m.textContent="⚠️ "+z.why;return;}
+  const ex=WA.contacts[z.phone];
+  m.textContent=ex?`ℹ️ الرقم موجود باسم «${ex.n}»${ex.opt?" وهو في «لا ترسل»":""} — الحفظ يحدّث بياناته`:`✓ +${z.phone}`;
+}
+async function waAddOneSave(again){
+  const n=$("#wa-one-name").value.trim(),z=waNorm($("#wa-one-phone").value);
+  if(!n||!z.ok){markMissing([["wa-one-name",!n],["wa-one-phone",!z.ok]]);return toast(!n?"اكتب اسم المتبرع":z.why,"err");}
+  const p=z.phone,ex=WA.contacts[p],d={n};
+  const bt=$("#wa-one-bt").value,city=$("#wa-one-city").value.trim(),ld=$("#wa-one-ld").value;
+  if(bt)d.bt=bt;if(city)d.city=city;if(ld)d.ld=ld;if(!ex)d.at=Date.now();
+  if(JSON.stringify(Object.fromEntries(Object.entries(WA.contacts).filter(([k])=>k.slice(-1)===p.slice(-1)))).length>950000)
+    return toast("القائمة تتجاوز سعة التخزين — احذف جهات قديمة","err");
+  const btn=$("#wa-one-save");btn.disabled=true;
+  try{
+    await waShard(p).set({c:{[p]:d}},{merge:true});
+    toast(ex?`تم تحديث بيانات ${n}`:`أُضيف ${n} ✓`);
+    if(again){waAddOne();$("#wa-one-name").focus();}else closeModal();
+  }catch(e){btn.disabled=false;toast(friendlyErr(e),"err");}
+}
 function waDrop(e){e.preventDefault();$("#wa-drop").classList.remove("over");const f=e.dataTransfer.files&&e.dataTransfer.files[0];if(f)waFile(f);}
 async function waFile(f){
   if(!f)return;
