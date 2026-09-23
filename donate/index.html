@@ -584,18 +584,19 @@
   .wa-link{background:none;border:none;color:var(--wa-green);font-weight:700;font-size:13px;padding:6px;text-decoration:underline}
 
   /* الواجهة الرئيسية */
-  .wa-hero{position:relative;overflow:hidden;background:var(--wa-grad-green);min-height:420px;border-radius:16px;display:flex;align-items:center}
+  .wa-hero{position:relative;overflow:hidden;background:var(--wa-grad-green);min-height:320px;border-radius:20px;display:flex;align-items:center;box-shadow:0 10px 30px -12px rgba(0,110,55,.45)}
   .wa-hero-bg{position:absolute;inset:0;opacity:.1;background-size:cover;background-position:center}
-  .wa-hero-fade{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,#fff 100%)}
-  .wa-hero-in{position:relative;z-index:1;width:100%;padding:64px 16px;text-align:center}
-  .wa-hero-in img{height:96px;max-width:90%;object-fit:contain;filter:drop-shadow(0 25px 25px rgba(0,0,0,.15));margin:0 auto 24px;display:block}
-  .wa-hero h1{font-size:clamp(30px,5vw,48px);font-weight:900;color:#fff;margin:0 0 8px;line-height:1.25;text-shadow:0 2px 20px rgba(0,0,0,.3)}
-  .wa-hero p{font-size:clamp(17px,2vw,20px);font-weight:500;color:#fff;margin:0 auto 32px;max-width:42rem;text-shadow:0 1px 8px rgba(0,0,0,.2)}
+  /* تعتيم أخضر خفيف أسفل البطل بدل التلاشي للأبيض — كان يمحو شارتي العدّاد البيضاوين */
+  .wa-hero-fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,60,30,0) 35%,rgba(0,60,30,.3) 100%)}
+  .wa-hero-in{position:relative;z-index:1;width:100%;padding:44px 16px 40px;text-align:center}
+  /* الشعار أخضر/ذهبي — على لوح أبيض ليبقى مقروءاً فوق الخلفية الخضراء */
+  .wa-hero-logo{display:inline-flex;background:#fff;border-radius:18px;padding:12px 22px;margin:0 auto 22px;box-shadow:0 12px 28px -12px rgba(0,0,0,.4)}
+  .wa-hero-logo img{height:64px;max-width:min(320px,70vw);object-fit:contain;display:block}
+  .wa-hero h1{font-size:clamp(28px,4.4vw,44px);font-weight:900;color:#fff;margin:0 0 6px;line-height:1.25;letter-spacing:-.01em;text-wrap:balance;text-shadow:0 2px 16px rgba(0,0,0,.25)}
+  .wa-hero p{font-size:clamp(16px,1.8vw,19px);font-weight:500;color:rgba(255,255,255,.92);margin:0 auto 26px;max-width:42rem}
   .wa-chips{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
-  .wa-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:10px 20px;color:#fff}
+  .wa-chip{display:flex;align-items:center;gap:8px;background:rgba(0,40,20,.18);backdrop-filter:blur(8px) saturate(160%);-webkit-backdrop-filter:blur(8px) saturate(160%);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:9px 18px;color:#fff}
   .wa-chip b{font-weight:700;font-variant-numeric:tabular-nums} .wa-chip span{font-size:14px;opacity:.9}
-  .wa-hero .bounce{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);animation:waBounce 1s infinite}
-  @keyframes waBounce{0%,100%{transform:translate(-50%,-25%);animation-timing-function:cubic-bezier(.8,0,1,1)}50%{transform:translate(-50%,0);animation-timing-function:cubic-bezier(0,0,.2,1)}}
 
   .wa-card{background:#fff;border:1px solid var(--wa-line3);border-radius:16px;overflow:hidden;box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1)}
   .wa-card-h{padding:16px 24px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--wa-line);background:linear-gradient(135deg,var(--wa-head),#fff);flex-wrap:wrap}
@@ -606,7 +607,9 @@
   .wa-card-b{padding:24px}
 
   .wa-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:8px;border:1px solid transparent;padding:8px 14px;font-size:14px;font-weight:600;min-height:40px;background:#fff;color:var(--wa-ink4);transition:transform .15s,box-shadow .2s,background .2s;white-space:nowrap}
-  .wa-btn:active{transform:scale(.97)} .wa-btn:disabled{opacity:.5;pointer-events:none}
+  .wa-btn:active{transform:scale(.96)} .wa-btn:disabled{opacity:.45;pointer-events:none}
+  .wa :focus-visible{outline:3px solid rgba(27,165,102,.5);outline-offset:2px}
+  .wa-card,.wa-queue,#wa-tabs-card{scroll-margin-top:88px}
   .wa-btn.out{border-color:var(--wa-line2)} .wa-btn.out:hover{background:#faf7f5}
   .wa-btn.green-out{border-color:var(--wa-green);color:var(--wa-green)}
   .wa-btn.danger-out{border-color:var(--wa-danger);color:var(--wa-danger)}
@@ -641,7 +644,8 @@
   .wa-lbl{font-weight:600;font-size:14px;color:var(--wa-ink3);margin:0}
   .wa-tpls{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
   @media(min-width:768px){.wa-tpls{grid-template-columns:repeat(3,1fr)}} @media(min-width:1024px){.wa-tpls{grid-template-columns:repeat(4,1fr)}}
-  .wa-tpl{padding:12px;border-radius:8px;border:2px solid var(--wa-line2);background:#fff;color:var(--wa-ink3);font-size:14px;font-weight:600;text-align:center;transition:all .2s;min-height:48px;line-height:1.5}
+  .wa-tpl{padding:12px;border-radius:10px;border:2px solid var(--wa-line2);background:#fff;color:var(--wa-ink3);font-size:14px;font-weight:600;text-align:center;transition:border-color .2s,background .2s,transform .15s;min-height:52px;line-height:1.5}
+  .wa-tpl:hover{border-color:#c9b4a8} .wa-tpl:active{transform:scale(.96)}
   .wa-tpl[aria-pressed="true"]{border-color:var(--wa-red);background:var(--wa-red-soft);color:var(--wa-red)}
   .wa-tpl small{display:block;font-size:11px;font-weight:500;opacity:.75}
   .wa-box{border-radius:12px;border:2px solid var(--wa-line2);background:var(--wa-box);padding:16px;display:flex;flex-direction:column;gap:12px}
@@ -674,8 +678,9 @@
   .wa-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px}
   .wa-list{display:grid;grid-template-columns:1fr;gap:16px}
   @media(min-width:640px){.wa-list{grid-template-columns:repeat(2,1fr)}} @media(min-width:1024px){.wa-list{grid-template-columns:repeat(3,1fr)}}
-  .wa-contact{border-radius:16px;border:1px solid var(--wa-line3);background:#fff;padding:16px;transition:all .3s;animation:waIn .4s both}
-  .wa-contact:hover{box-shadow:0 10px 15px -3px rgba(0,0,0,.1);transform:translateY(-4px)}
+  /* عمود مرن: أزرار الإرسال تصطف في أسفل كل البطاقات مهما اختلف عدد أسطر التفاصيل */
+  .wa-contact{border-radius:16px;border:1px solid var(--wa-line3);background:#fff;padding:16px;display:flex;flex-direction:column;transition:box-shadow .25s,transform .25s cubic-bezier(.16,1,.3,1),border-color .25s;animation:waIn .4s cubic-bezier(.16,1,.3,1) both}
+  .wa-contact:hover{box-shadow:0 10px 24px -8px rgba(0,0,0,.14);transform:translateY(-2px)}
   .wa-contact.sent{border-color:var(--wa-ok-line);background:var(--wa-ok-bg)}
   .wa-contact.open{border-color:var(--wa-open-line)}
   .wa-contact.opt{opacity:.6}
@@ -686,15 +691,16 @@
   .wa-ct-mid{flex:1;min-width:0}
   .wa-ct-name{font-weight:700;font-size:16px;color:var(--wa-ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
   .wa-ct-name span{color:var(--wa-red)}
-  .wa-ct-ph{font-size:14px;margin:2px 0 0;color:var(--wa-mut2);font-family:ui-monospace,Menlo,monospace;direction:ltr;text-align:right}
+  .wa-ct-ph{font-size:14px;margin:2px 0 0;color:var(--wa-mut2);font-variant-numeric:tabular-nums;letter-spacing:.02em;direction:ltr;text-align:right}
   .wa-ct-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:12px;color:var(--wa-mut2)}
   .wa-send{width:100%;padding:10px;border-radius:12px;border:none;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;background:var(--wa-grad-red);color:#fff;box-shadow:0 4px 12px rgba(155,0,7,.3);transition:transform .2s}
-  .wa-send:active{transform:scale(.95)}
+  .wa-send:active{transform:scale(.96)}
   .wa-send.done{background:var(--wa-ok-btn);color:var(--wa-ok-ink);box-shadow:none}
   .wa-send.cert{background:#fff;border:2px solid var(--wa-red);color:var(--wa-red);box-shadow:none}
-  .wa-ct-acts{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+  .wa-ct-acts{margin-top:auto;padding-top:16px;display:flex;flex-direction:column;gap:8px}
   .wa-mini{display:flex;gap:6px;flex-wrap:wrap}
-  .wa-mini button{border:1px solid var(--wa-line2);background:#fff;border-radius:8px;font-size:12px;font-weight:600;padding:4px 8px;color:var(--wa-ink4);min-height:32px}
+  .wa-mini button{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--wa-line2);background:#fff;border-radius:8px;font-size:12px;font-weight:600;padding:4px 10px;color:var(--wa-ink4);min-height:36px;min-width:36px;justify-content:center;transition:background .2s,transform .15s}
+  .wa-mini button:hover{background:#faf7f5} .wa-mini button:active{transform:scale(.96)}
   .wa-mini button[aria-pressed="true"]{background:var(--wa-ok-badge);border-color:var(--wa-ok-line);color:var(--wa-ok-ink)}
   .wa-mini button.warn{color:#a3261a}
   .wa-empty{text-align:center;padding:40px 0;color:var(--wa-mut3)}
@@ -730,14 +736,15 @@
     .wa{gap:20px}
     .wa-card-h,.wa-tabs,.wa-tab-b,.wa-card-b{padding-inline:14px}
     .wa-card-h .end{margin-inline-start:0;width:100%}
-    .wa-hero{min-height:340px} .wa-hero-in{padding:44px 14px}
+    .wa-hero{min-height:260px} .wa-hero-in{padding:32px 14px 30px} .wa-hero-logo{padding:10px 16px} .wa-hero-logo img{height:48px}
     .wa-login-card{padding:22px}
     .wa-drop{padding:28px 12px}
     .wa-foot{justify-content:center}
     .wa-filters{grid-template-columns:repeat(2,minmax(0,1fr))}
     .wa-tabs{scrollbar-width:none}
   }
-  @media(prefers-reduced-motion:reduce){.wa-contact,.wa-hero .bounce{animation:none}.wa-contact:hover{transform:none}}
+  @media(prefers-reduced-motion:reduce){.wa-contact{animation:none}.wa-contact:hover,.wa-btn:active,.wa-send:active,.wa-tpl:active{transform:none}}
+  @media(prefers-reduced-transparency:reduce){.wa-chip{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(0,60,30,.55)}}
 </style>
 </head>
 <body>
@@ -2832,7 +2839,9 @@ function waRunStats(r){
 /* ---------- بناء الرسالة ---------- */
 function waVals(c,run){
   const s=WA.set,r=run||{};
-  return {"الاسم":c.n,"اسم":c.n,"name":c.n,"الفصيلة":c.bt,"فصيلة_الدم":c.bt,"blood_type":c.bt,
+  /* LRM بعد الفصيلة يمنع انقلابها إلى «+O» داخل جملة عربية في واتساب */
+  const bt=c.bt?c.bt+"\u200E":"";
+  return {"الاسم":c.n,"اسم":c.n,"name":c.n,"الفصيلة":bt,"فصيلة_الدم":bt,"blood_type":bt,
     "آخر_تبرع":c.ld?fmtDate(c.ld):"","موقع_الحملة":r.place||s.place,"رابط_الخريطة":r.mapUrl||s.mapUrl,
     "تاريخ_الحملة":r.date?fmtDate(r.date):"","مدة_الأهلية":s.eligDays};
 }
@@ -2858,8 +2867,7 @@ function waMain(){
   waRoot(`
     <section class="wa-hero" data-testid="wa-hero">
       <div class="wa-hero-bg" style="background-image:url(${WA_HERO})"></div><div class="wa-hero-fade"></div>
-      <div class="wa-hero-in"><img src="${WA_LOGO}" alt="شعار وزارة الصحة"><h1>بنك الدم المركزي بالدمام</h1><p>وزارة الصحة</p><div class="wa-chips" id="wa-chips"></div></div>
-      <div class="bounce">${waI("chev","md")}</div>
+      <div class="wa-hero-in"><div class="wa-hero-logo"><img src="${WA_LOGO}" alt="شعار وزارة الصحة"></div><h1>بنك الدم المركزي بالدمام</h1><p>وزارة الصحة</p><div class="wa-chips" id="wa-chips"></div></div>
     </section>
     <section class="wa-card">
       <div class="wa-card-h"><div class="wa-ico-box">${waI("sheet","md")}</div>
@@ -2874,7 +2882,7 @@ function waMain(){
           onclick="$('#wa-file').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();$('#wa-file').click()}"
           ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="waDrop(event)">
           <div class="ib">${waI("upload","lg")}</div>
-          <div id="wa-drop-txt"><p class="t">اسحب وأفلت الملف هنا</p><p class="s">أو انقر للاختيار · Excel, CSV مدعوم</p></div>
+          <div id="wa-drop-txt"><p class="t">اسحب وأفلت الملف هنا</p><p class="s">أو انقر للاختيار · <bdi>Excel, CSV</bdi> مدعوم</p></div>
         </div>
         <div class="wa-info">${waI("alert","md")}<div><p>أعمدة الملف المطلوبة:</p><div class="wa-badges">
           <span class="wa-badge">الاسم</span><span class="wa-badge">رقم الهاتف</span><span class="wa-badge o">فصيلة الدم (اختياري)</span>
@@ -3269,7 +3277,7 @@ function waListShell(){
       <div class="wa-queue" id="wa-queue" hidden aria-live="polite" data-testid="wa-queue"></div>
       <div class="wa-search"><input id="wa-q" type="search" placeholder="ابحث بالاسم أو رقم الهاتف..." value="${esc(f.q)}" aria-label="ابحث بالاسم أو رقم الهاتف" oninput="waFilt('q',this.value)" data-testid="wa-search"><span class="i">${waI("phone")}</span></div>
       <div class="wa-filters">
-        <select class="wa-in" onchange="waFilt('bt',this.value)" aria-label="الفصيلة" data-testid="wa-filter-blood">${opt("","كل الفصائل",f.bt)}${WA_BTS.map(b=>opt(b,b,f.bt)).join("")}${opt("none","بدون فصيلة",f.bt)}</select>
+        <select class="wa-in" onchange="waFilt('bt',this.value)" aria-label="الفصيلة" data-testid="wa-filter-blood">${opt("","كل الفصائل",f.bt)}${WA_BTS.map(b=>opt(b,b+"\u200E",f.bt)).join("")}${opt("none","بدون فصيلة",f.bt)}</select>
         <select class="wa-in" id="wa-f-city" onchange="waFilt('city',this.value)" aria-label="المدينة" data-testid="wa-filter-city"></select>
         <select class="wa-in" onchange="waFilt('elig',this.value)" aria-label="آخر تبرع" data-testid="wa-filter-last-donation">${opt("","آخر تبرع: الكل",f.elig)}${opt("yes","مؤهل للتبرع",f.elig)}${opt("no","تبرع مؤخراً",f.elig)}${opt("unknown","غير معروف",f.elig)}</select>
         <select class="wa-in" onchange="waFilt('st',this.value)" aria-label="الحالة" data-testid="wa-filter-status">${opt("","الحالة: الكل",f.st)}${opt("ready","جاهز",f.st)}${opt("opened","تم الفتح",f.st)}${opt("sent","تم الإرسال",f.st)}${opt("failed","فشل",f.st)}${opt("invalid","غير صالح",f.st)}${opt("opt","لا ترسل",f.st)}</select>
@@ -3317,7 +3325,7 @@ function waCard(c,i,anim){
     <div class="wa-ct-top">
       <div class="wa-av" style="background:${sent?"linear-gradient(135deg,#278733,#53a367)":`linear-gradient(135deg,${G[0]},${G[1]})`}">${sent?waI("check","md"):esc(ini)}</div>
       <div class="wa-ct-mid"><p class="wa-ct-name">${esc(c.n||"—")} ${e.n>0?`<span>(${e.n})</span>`:""}</p><p class="wa-ct-ph">+${c.p}</p>
-        <div class="wa-ct-meta">${c.bt?`<span class="wa-badge bt">${esc(c.bt)}</span>`:""}${c.city?`<span>📍 ${esc(c.city)}</span>`:""}${c.ld?`<span>🩸 آخر تبرع ${fmtDate(c.ld)}${el==="yes"?" · مؤهل":""}</span>`:""}</div></div>
+        <div class="wa-ct-meta">${c.bt?`<span class="wa-badge bt" dir="ltr">${esc(c.bt)}</span>`:""}${c.city?`<span>📍 ${esc(c.city)}</span>`:""}${c.ld?`<span>🩸 آخر تبرع ${fmtDate(c.ld)}${el==="yes"?" · مؤهل":""}</span>`:""}</div></div>
       ${badge}</div>
     <div class="wa-ct-acts">
       <button class="wa-send ${sent?"done":""}" onclick="waSend('${c.p}','msg')" ${c.opt?"disabled":""} data-testid="wa-send-btn">${WA_WA_ICON}إرسال رسالة</button>
