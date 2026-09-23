@@ -546,6 +546,198 @@
     .modal{border:2px solid var(--ink)}
     .btn,.bt-btn{outline:1px solid currentColor}
   }
+
+  /* ================= مرسل الواتساب (#/wa) — هوية الموقع الأصلي معزولة بمتغيرات --wa-* ================= */
+  @media(max-width:640px){.topbar{flex-wrap:wrap}.top-tabs{order:3;width:100%;overflow-x:auto;scrollbar-width:none}.top-tabs::-webkit-scrollbar{display:none}.top-tab{flex:none}}
+  .wa{--wa-green:#1BA566;--wa-green2:#00A651;--wa-green-soft:#f0f8f5;
+    --wa-red:#9b0007;--wa-red2:#b22800;--wa-red-soft:#fff0ee;
+    --wa-line:#e0e0e0;--wa-line2:#d9cac2;--wa-line3:#e4dcd8;
+    --wa-ink:#1a1a1a;--wa-ink2:#1e1311;--wa-ink3:#372a28;--wa-ink4:#524441;
+    --wa-mut:#666666;--wa-mut2:#7a6e6c;--wa-mut3:#867e7d;--wa-box:#fefbf8;--wa-head:#f8f9fa;
+    --wa-ok-line:#9ecc9e;--wa-ok-bg:#e9fbe9;--wa-ok-badge:#beedbe;--wa-ok-ink:#004906;--wa-ok-btn:#d4f1d4;
+    --wa-open-bg:#fff7e6;--wa-open-ink:#8a5300;--wa-open-line:#f3d19c;
+    --wa-danger:#ff6b6b;--wa-font:"Cairo",system-ui,sans-serif;
+    --wa-grad-green:linear-gradient(135deg,#1BA566 0%,#00A651 100%);
+    --wa-grad-red:linear-gradient(135deg,#9b0007,#b22800);
+    font-family:var(--wa-font);color:var(--wa-ink);display:flex;flex-direction:column;gap:32px}
+  .wa *{font-family:inherit}
+  .wa svg.i{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .wa svg.i.lg{width:32px;height:32px} .wa svg.i.md{width:20px;height:20px} .wa svg.i.xl{width:48px;height:48px}
+  .wa svg.wa-logo-ic{width:16px;height:16px;fill:currentColor;flex:none}
+  .wa-loading{padding:60px;text-align:center;color:var(--wa-mut)}
+  .wa-err{background:#fdecea;border:1px solid #f5c2bd;color:#8c1d12;border-radius:12px;padding:14px 16px;font-weight:600;line-height:1.8}
+
+  /* الدخول */
+  .wa-login{background:var(--wa-grad-green);border-radius:16px;min-height:70vh;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+  .wa-login-card{background:#fff;border-radius:16px;box-shadow:0 25px 50px -12px rgba(0,0,0,.25);padding:32px;width:100%;max-width:448px}
+  .wa-login-card img{height:80px;max-width:100%;object-fit:contain;display:block;margin:0 auto 24px}
+  .wa-login-card h1{font-size:24px;font-weight:700;text-align:center;margin:0 0 8px;color:var(--wa-ink)}
+  .wa-login-card .sub{text-align:center;font-size:14px;color:var(--wa-mut);margin:0 0 24px}
+  .wa-login-card label{display:block;font-size:14px;font-weight:600;margin:0 0 8px;color:var(--wa-ink)}
+  .wa-login-card .fld{margin-bottom:16px}
+  .wa-login-card input{width:100%;border:2px solid var(--wa-line);background:#f5f5f5;color:var(--wa-ink);border-radius:8px;padding:12px;font-size:14px;outline:none}
+  .wa-login-card input:focus{border-color:var(--wa-green)}
+  .wa-login-card .pin{letter-spacing:10px;text-align:center;font-size:22px;direction:ltr}
+  .wa-login-btn{width:100%;padding:12px;border:none;border-radius:8px;color:#fff;font-weight:700;font-size:15px;background:linear-gradient(135deg,#1BA566,#00A651);min-height:44px}
+  .wa-login-btn:disabled{opacity:.6}
+  .wa-login-note{margin-top:14px;font-size:12.5px;color:var(--wa-mut);text-align:center;line-height:1.8}
+  .wa-link{background:none;border:none;color:var(--wa-green);font-weight:700;font-size:13px;padding:6px;text-decoration:underline}
+
+  /* الواجهة الرئيسية */
+  .wa-hero{position:relative;overflow:hidden;background:var(--wa-grad-green);min-height:420px;border-radius:16px;display:flex;align-items:center}
+  .wa-hero-bg{position:absolute;inset:0;opacity:.1;background-size:cover;background-position:center}
+  .wa-hero-fade{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,#fff 100%)}
+  .wa-hero-in{position:relative;z-index:1;width:100%;padding:64px 16px;text-align:center}
+  .wa-hero-in img{height:96px;max-width:90%;object-fit:contain;filter:drop-shadow(0 25px 25px rgba(0,0,0,.15));margin:0 auto 24px;display:block}
+  .wa-hero h1{font-size:clamp(30px,5vw,48px);font-weight:900;color:#fff;margin:0 0 8px;line-height:1.25;text-shadow:0 2px 20px rgba(0,0,0,.3)}
+  .wa-hero p{font-size:clamp(17px,2vw,20px);font-weight:500;color:#fff;margin:0 auto 32px;max-width:42rem;text-shadow:0 1px 8px rgba(0,0,0,.2)}
+  .wa-chips{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+  .wa-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:10px 20px;color:#fff}
+  .wa-chip b{font-weight:700;font-variant-numeric:tabular-nums} .wa-chip span{font-size:14px;opacity:.9}
+  .wa-hero .bounce{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);animation:waBounce 1s infinite}
+  @keyframes waBounce{0%,100%{transform:translate(-50%,-25%);animation-timing-function:cubic-bezier(.8,0,1,1)}50%{transform:translate(-50%,0);animation-timing-function:cubic-bezier(0,0,.2,1)}}
+
+  .wa-card{background:#fff;border:1px solid var(--wa-line3);border-radius:16px;overflow:hidden;box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1)}
+  .wa-card-h{padding:16px 24px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--wa-line);background:linear-gradient(135deg,var(--wa-head),#fff);flex-wrap:wrap}
+  .wa-card-h h2{font-size:18px;font-weight:700;margin:0;color:var(--wa-ink)} .wa-card-h p{font-size:14px;margin:0;color:var(--wa-mut)}
+  .wa-card-h .end{margin-inline-start:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .wa-ico-box{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;background:var(--wa-green);flex:none}
+  .wa-ico-box.red{background:var(--wa-red)}
+  .wa-card-b{padding:24px}
+
+  .wa-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:8px;border:1px solid transparent;padding:8px 14px;font-size:14px;font-weight:600;min-height:40px;background:#fff;color:var(--wa-ink4);transition:transform .15s,box-shadow .2s,background .2s;white-space:nowrap}
+  .wa-btn:active{transform:scale(.97)} .wa-btn:disabled{opacity:.5;pointer-events:none}
+  .wa-btn.out{border-color:var(--wa-line2)} .wa-btn.out:hover{background:#faf7f5}
+  .wa-btn.green-out{border-color:var(--wa-green);color:var(--wa-green)}
+  .wa-btn.danger-out{border-color:var(--wa-danger);color:var(--wa-danger)}
+  .wa-btn.red{background:var(--wa-grad-red);color:#fff;font-weight:700;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)}
+  .wa-btn.green{background:var(--wa-grad-green);color:#fff;font-weight:700}
+  .wa-btn.ghost{background:transparent;color:#dc2626} .wa-btn.ghost:hover{color:#b91c1c;background:#fef2f2}
+  .wa-btn.full{width:100%}
+
+  .wa-drop{position:relative;border:2px dashed var(--wa-line);border-radius:12px;padding:40px 16px;text-align:center;cursor:pointer;background:#fff;transition:all .3s;display:flex;flex-direction:column;align-items:center;gap:16px;width:100%}
+  .wa-drop.over{border-color:var(--wa-green);background:var(--wa-green-soft);transform:scale(1.02)}
+  .wa-drop .ib{width:64px;height:64px;border-radius:16px;background:#f0f0f0;color:var(--wa-green);display:flex;align-items:center;justify-content:center;transition:all .3s}
+  .wa-drop.over .ib{background:var(--wa-green);color:#fff;transform:scale(1.1)}
+  .wa-drop .t{font-weight:700;font-size:18px;color:var(--wa-ink);margin:0} .wa-drop .t.g{color:var(--wa-green)}
+  .wa-drop .s{font-size:14px;color:var(--wa-mut);margin:4px 0 0}
+  .wa-info{margin-top:16px;border-radius:12px;padding:16px;display:flex;gap:12px;align-items:flex-start;background:var(--wa-green-soft);font-size:14px}
+  .wa-info .i{color:var(--wa-green);margin-top:2px}
+  .wa-info p{margin:0 0 4px;font-weight:600}
+  .wa-badges{display:flex;flex-wrap:wrap;gap:8px}
+  .wa-badge{display:inline-flex;align-items:center;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:500;background:#f1ece9;color:var(--wa-ink);border:1px solid transparent;white-space:nowrap}
+  .wa-badge.o{background:transparent;border-color:var(--wa-line2)}
+  .wa-badge.bt{background:var(--wa-red);color:#fff;font-weight:700}
+  .wa-badge.st-sent{background:var(--wa-ok-badge);color:var(--wa-ok-ink);font-weight:600}
+  .wa-badge.st-open{background:var(--wa-open-bg);color:var(--wa-open-ink);border-color:var(--wa-open-line);font-weight:600}
+  .wa-badge.st-fail{background:#fdecea;color:#a3261a;font-weight:600}
+  .wa-badge.st-opt{background:#eee;color:#555;font-weight:600}
+  .wa-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+  .wa-tabs{padding:16px 24px;border-bottom:1px solid var(--wa-line3);background:linear-gradient(135deg,#fbf3ef,#fefbf8);display:flex;gap:8px;overflow-x:auto}
+  .wa-tab{display:inline-flex;align-items:center;gap:8px;border:1px solid transparent;background:transparent;color:var(--wa-mut);border-radius:6px;padding:6px 12px;font-size:14px;font-weight:500;white-space:nowrap;min-height:36px}
+  .wa-tab[aria-selected="true"]{background:var(--wa-grad-red);color:#fff;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  .wa-tab-b{padding:24px;display:flex;flex-direction:column;gap:16px}
+  .wa-lbl{font-weight:600;font-size:14px;color:var(--wa-ink3);margin:0}
+  .wa-tpls{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  @media(min-width:768px){.wa-tpls{grid-template-columns:repeat(3,1fr)}} @media(min-width:1024px){.wa-tpls{grid-template-columns:repeat(4,1fr)}}
+  .wa-tpl{padding:12px;border-radius:8px;border:2px solid var(--wa-line2);background:#fff;color:var(--wa-ink3);font-size:14px;font-weight:600;text-align:center;transition:all .2s;min-height:48px;line-height:1.5}
+  .wa-tpl[aria-pressed="true"]{border-color:var(--wa-red);background:var(--wa-red-soft);color:var(--wa-red)}
+  .wa-tpl small{display:block;font-size:11px;font-weight:500;opacity:.75}
+  .wa-box{border-radius:12px;border:2px solid var(--wa-line2);background:var(--wa-box);padding:16px;display:flex;flex-direction:column;gap:12px}
+  .wa-box-h{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+  .wa-box-h p{font-weight:600;color:var(--wa-ink3);margin:0;display:flex;align-items:center;gap:8px}
+  .wa-in{width:100%;border-radius:8px;border:2px solid var(--wa-line2);background:#fff;color:var(--wa-ink2);padding:8px 10px;font-size:14px;outline:none;transition:border-color .2s;min-height:40px}
+  .wa-in:focus{border-color:var(--wa-red)}
+  textarea.wa-in{resize:vertical;padding:12px;line-height:1.8}
+  select.wa-in{padding:6px 8px}
+  .wa-hint{font-size:12px;color:var(--wa-mut3);margin:0}
+  .wa-hint code,.wa-var{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-family:inherit;font-size:12px}
+  .wa-var{border:1px solid var(--wa-line2);cursor:pointer;color:var(--wa-ink3);min-height:28px}
+  .wa-var:hover{border-color:var(--wa-red);color:var(--wa-red)}
+  .wa-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+  .wa-form label{display:block;font-size:13px;font-weight:600;color:var(--wa-ink3);margin-bottom:4px}
+
+  /* معاينة فقاعة واتساب */
+  .wa-chat{background:#efeae2;border-radius:12px;padding:14px;display:flex;flex-direction:column;align-items:flex-start}
+  .wa-bubble{background:#d9fdd3;border-radius:10px 0 10px 10px;padding:8px 12px 18px;max-width:92%;white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.75;color:#111b21;position:relative;box-shadow:0 1px .5px rgba(11,20,26,.13)}
+  .wa-bubble::after{content:"✓✓";position:absolute;bottom:3px;left:8px;font-size:10px;color:#53bdeb}
+  .wa-bubble .v{background:#fff3b0;border-radius:3px}
+  .wa-bubble .miss{background:#ffd6d6;border-radius:3px}
+
+  /* قائمة جهات الاتصال */
+  .wa-prog{margin-top:16px} .wa-prog .l{display:flex;justify-content:space-between;font-size:12px;color:var(--wa-mut2);margin-bottom:6px}
+  .wa-bar{height:8px;border-radius:999px;background:#f1ece9;overflow:hidden} .wa-bar i{display:block;height:100%;background:var(--wa-red);transition:width .4s}
+  .wa-search{margin-top:16px;position:relative}
+  .wa-search input{width:100%;border-radius:12px;border:1px solid var(--wa-line2);padding:10px 16px 10px 40px;font-size:14px;outline:none;color:var(--wa-ink2);min-height:44px}
+  .wa-search .i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#958d8c}
+  .wa-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px}
+  .wa-list{display:grid;grid-template-columns:1fr;gap:16px}
+  @media(min-width:640px){.wa-list{grid-template-columns:repeat(2,1fr)}} @media(min-width:1024px){.wa-list{grid-template-columns:repeat(3,1fr)}}
+  .wa-contact{border-radius:16px;border:1px solid var(--wa-line3);background:#fff;padding:16px;transition:all .3s;animation:waIn .4s both}
+  .wa-contact:hover{box-shadow:0 10px 15px -3px rgba(0,0,0,.1);transform:translateY(-4px)}
+  .wa-contact.sent{border-color:var(--wa-ok-line);background:var(--wa-ok-bg)}
+  .wa-contact.open{border-color:var(--wa-open-line)}
+  .wa-contact.opt{opacity:.6}
+  .wa-contact.cur{outline:3px solid var(--wa-green);outline-offset:2px}
+  @keyframes waIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .wa-ct-top{display:flex;align-items:flex-start;gap:12px}
+  .wa-av{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:16px;flex:none}
+  .wa-ct-mid{flex:1;min-width:0}
+  .wa-ct-name{font-weight:700;font-size:16px;color:var(--wa-ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
+  .wa-ct-name span{color:var(--wa-red)}
+  .wa-ct-ph{font-size:14px;margin:2px 0 0;color:var(--wa-mut2);font-family:ui-monospace,Menlo,monospace;direction:ltr;text-align:right}
+  .wa-ct-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:12px;color:var(--wa-mut2)}
+  .wa-send{width:100%;padding:10px;border-radius:12px;border:none;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;background:var(--wa-grad-red);color:#fff;box-shadow:0 4px 12px rgba(155,0,7,.3);transition:transform .2s}
+  .wa-send:active{transform:scale(.95)}
+  .wa-send.done{background:var(--wa-ok-btn);color:var(--wa-ok-ink);box-shadow:none}
+  .wa-send.cert{background:#fff;border:2px solid var(--wa-red);color:var(--wa-red);box-shadow:none}
+  .wa-ct-acts{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+  .wa-mini{display:flex;gap:6px;flex-wrap:wrap}
+  .wa-mini button{border:1px solid var(--wa-line2);background:#fff;border-radius:8px;font-size:12px;font-weight:600;padding:4px 8px;color:var(--wa-ink4);min-height:32px}
+  .wa-mini button[aria-pressed="true"]{background:var(--wa-ok-badge);border-color:var(--wa-ok-line);color:var(--wa-ok-ink)}
+  .wa-mini button.warn{color:#a3261a}
+  .wa-empty{text-align:center;padding:40px 0;color:var(--wa-mut3)}
+  .wa-start{text-align:center;padding:64px 16px}
+  .wa-start .ib{width:96px;height:96px;border-radius:24px;background:#feeee6;color:var(--wa-red);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+  .wa-start h3{font-size:24px;font-weight:700;margin:0 0 8px;color:var(--wa-ink3)}
+  .wa-start p{max-width:28rem;margin:0 auto;color:var(--wa-mut2)}
+
+  /* لوحة الإرسال المتتابع */
+  .wa-queue{margin-top:16px;border:2px solid var(--wa-green);background:var(--wa-green-soft);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+  .wa-queue[hidden]{display:none}
+  .wa-queue .who{font-weight:700;font-size:16px}
+  .wa-queue .cnt{font-size:28px;font-weight:900;color:var(--wa-green);font-variant-numeric:tabular-nums}
+  .wa-day{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;border-radius:999px;padding:4px 12px;background:#fff;border:1px solid var(--wa-line2);font-variant-numeric:tabular-nums}
+  .wa-day.near{border-color:#f3d19c;background:var(--wa-open-bg);color:var(--wa-open-ink)}
+  .wa-day.over{border-color:#f5c2bd;background:#fdecea;color:#a3261a}
+  .wa-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+  .wa-kpi{border:1px solid var(--wa-line3);border-radius:12px;padding:12px;background:#fff;text-align:center}
+  .wa-kpi b{display:block;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--wa-ink2)}
+  .wa-kpi span{font-size:12px;color:var(--wa-mut2);font-weight:600}
+  .wa-kpi.hl{background:var(--wa-green-soft);border-color:var(--wa-ok-line)} .wa-kpi.hl b{color:var(--wa-green)}
+  .wa-tbl{width:100%;border-collapse:collapse;font-size:13px}
+  .wa-tbl th,.wa-tbl td{border-bottom:1px solid var(--wa-line3);padding:8px;text-align:right;vertical-align:top}
+  .wa-tbl th{background:#faf7f5;font-weight:700;color:var(--wa-ink3)}
+  .wa-scroll{max-height:320px;overflow:auto;border:1px solid var(--wa-line3);border-radius:10px}
+  .wa-foot{margin-top:8px;padding:32px 24px;border-top:1px solid var(--wa-line);background:var(--wa-head);display:flex;align-items:center;justify-content:space-between;gap:12px;border-radius:0 0 16px 16px;flex-wrap:wrap}
+  .wa-foot .b{display:flex;align-items:center;gap:8px;flex:1;justify-content:center;color:var(--wa-green);font-weight:700}
+  .wa-canvas{width:100%;border:1px solid var(--wa-line);border-radius:8px}
+  .wa-cert-prev{max-height:128px;margin-top:8px;border-radius:4px}
+  #modal-box .wa{gap:14px;text-align:right}
+  #modal-box .wa h3{margin:0;font-size:20px;font-weight:700}
+  @media(max-width:640px){
+    .wa{gap:20px}
+    .wa-card-h,.wa-tabs,.wa-tab-b,.wa-card-b{padding-inline:14px}
+    .wa-card-h .end{margin-inline-start:0;width:100%}
+    .wa-hero{min-height:340px} .wa-hero-in{padding:44px 14px}
+    .wa-login-card{padding:22px}
+    .wa-drop{padding:28px 12px}
+    .wa-foot{justify-content:center}
+    .wa-filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .wa-tabs{scrollbar-width:none}
+  }
+  @media(prefers-reduced-motion:reduce){.wa-contact,.wa-hero .bounce{animation:none}.wa-contact:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -672,7 +864,7 @@ async function drawQR(el,text,size){await ensureQR();el.innerHTML="";new QRCode(
 
 /* ================= التوجيه ================= */
 let unsub=null,timers=[];
-function clearPage(){if(unsub){try{unsub();}catch(e){}unsub=null;}timers.forEach(clearInterval);timers=[];}
+function clearPage(){if(unsub){try{unsub();}catch(e){}unsub=null;}timers.forEach(clearInterval);timers=[];waStop();}
 function baseURL(){return location.origin+location.pathname;}
 function route(){
   clearPage();
@@ -688,6 +880,7 @@ function route(){
      فلا يعود ظهورها مرهوناً بذاكرة كل جهاز على حدة، ولا يراها أي متبرع أو زائر يفتح رابط الشاشة نفسه */
   if((m=h.match(/^#\/s\/([\w-]+)(\/edit)?/))){document.documentElement.lang=scrLang;return renderScreen(m[1],!!m[2]);}
   if(h.startsWith("#/stats"))return renderStats();
+  if(h.startsWith("#/wa"))return renderWA();
   return renderAdmin();
 }
 window.addEventListener("hashchange",route);
@@ -700,6 +893,7 @@ function shell(inner,active){
     <div class="top-tabs">
       <button class="top-tab ${active==="admin"?"active":""}" onclick="location.hash='#/'">الحملات</button>
       <button class="top-tab ${active==="stats"?"active":""}" onclick="location.hash='#/stats'">الأرشيف والإحصائيات</button>
+      <button class="top-tab ${active==="wa"?"active":""}" onclick="location.hash='#/wa'" data-testid="nav-wa-sender">مرسل الواتساب</button>
     </div>
     <div class="sync-dot" id="sync-dot" title="حالة الاتصال"></div>
   </div><div class="main">${inner}<div class="credit">فكرة وإعداد: حسن العاقول</div></div>`;
@@ -2269,6 +2463,1200 @@ async function exportAllPDF(){
     rptSave(cv,f?("تقرير-"+f+"-شامل.pdf"):"التقرير-الشامل-لكل-الحملات.pdf");
     toast("صدر التقرير الشامل ✓");
   }catch(e){toast("تعذر إصدار التقرير","err");}
+}
+
+/* ================= مرسل الواتساب (#/wa) =================
+   نسخة من «مرسل رسائل التبرع بالدم» بنفس هويته، مع إصلاح أخطائه:
+   - البيانات في Firestore محمية بتسجيل دخول Firebase (القواعد في firestore.rules) + قفل PIN مشفّر SHA-256 مملّح؛
+     لا شيء من بيانات المتبرعين في localStorage، ونسخة Firestore المحلية تُمسح عند تسجيل الخروج.
+   - التخزين مجزّأ لتوفير حدود خطة Spark: wa_contacts/s0..s9 (خريطة c.{9665…} مقسّمة بآخر رقم) ·
+     wa_templates/{id} (تعديلات الرسائل الأصلية + المخصصة) · wa_sends/{runId} (حملة إرسال: st.{9665…} الحالة) · wa_settings/main
+   - «تم الإرسال» لا تُسجَّل إلا بتأكيد المستخدم؛ نافذة واحدة مسمّاة wa_sender؛ حد يومي + فاصل عشوائي */
+const WA_LOGO="data:image/png;base64,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";
+const WA_HERO="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBMRXhpZgAATU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAACMKADAAQAAAABAAABdQAAAAD/7QA4UGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAAA4QklNBCUAAAAAABDUHYzZjwCyBOmACZjs+EJ+/8AAEQgBdQIwAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/bAEMADAwMDAwMFAwMFB0UFBQdJx0dHR0nMScnJycnMTsxMTExMTE7Ozs7Ozs7O0dHR0dHR1NTU1NTXV1dXV1dXV1dXf/bAEMBDg8PGBYYKBYWKGFCNkJhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYf/dAAQAI//aAAwDAQACEQMRAD8A8zFLRS1JukLQKBS0h2CloooKsKKdSU4UikKKXFOApwFSWkMxTsU7FLilcpIAKXFKBTsVNy0hu2lxTwKNtFyrDMUuKftpQKVx2GgVKopAKlUVLZaQm2pFFOAp6iobNEgVTT1XmnqKft5qLl2E25pAlWFWkIxUXHYj208JT1FPA5pNlDQMU/FOAp+KljGYpNtShaMVNxkIXnmpNtLtqQChgQbaQipytMIpXGQFajIqwVphWqTAgIqIrVsrUZWqTE0VStJip9tJtq0yWiuVpm2rO3FMK07isVttNK1a21GRVJisViKbipytMK1VxWIcU0rUxWmkVSZLRARSYqUrSFaq5DRDikxU2KQrTuJxIsUmKlxSYp3J5SHFIRUuKMU7k8pDim4qYimYp3JcSM0lPIptO5DQ3FJTqQ0yGhpptOpCKZLQ2kpTSUyGhKSnU2mQ0f/Q81p2KAKdioudSQmKXFLRSuVYTFKBRSii47AKdQKdSKSFFSAVHUimoZpFDwKdilApwFTc0SGgU4CnbaXpSuVYbinAU4UoFK47CYpQtPAqQAVDZaiRBacq81NtpQvrS5ilEAtOVTT1HanhahstIcik1LspIx2qwFrNsqwxVpWTipVXmpCuam4yqq807FS7cGlxRcQwCpQtKqVMEqWwIttN21ZApCtTcZWxzUipT9lTItDYysyU0rVqQVHilcaKxWoytW2HFRFTTTGV8U1kqximmquIqlabip2FNxVJiICtM281ZIpu2ncLFdhioSKtOO1REVSYWICM00rU5WmkVVxWK+2mlan20hAqkxWKxWmlasbaCKq5PKVsUm2pitG2ncViArSYqYrTcU7ktEGKaRUxFRkVSZLRGaZUhFMxV3IaGEUwipcUmKdyHEixRin4ppFO5DQzFNNSYpuMVRm0RmkpxpMUzNoaaSnGkpkNH//R85FOptOrI7kFLilopFWG4p4FJingUXGkIBS4paUClcqwAU8UgFPAqWy0h6n1qUVDipkIPFQzREoFIU709RipsZqGy7FXFPAzT2TvSKKVxpCgVIBShcClqWy0iRRT9vpSJUwFQ2WkRheeanC5pu05qZVqGx2GgYOatRjPWoiKmiBzUsZOI8jil2VOq8UY5xWVxFUpzQVq0UJ6U0rVXEQqMcVOBTQnc1Ko5oYhu2grVgLTitTcLlXbUqJxS7easonFJsGyk681Htq4685ppAxU3KTKe3mmOoFWitQsuapFXKpWmbasFaTbxmquBVK5NGzFWAvJoKmquIqFeaCuBVgR8802T2ouMpMMmoytWCpzTSKtMCDbTCKsHioyKdwIcU0rU5WmkVSYiDFNIqYikxVXCxBikxVjbnpTvLo5gsVStNKcVYK4ppqkxWKhFQkVbZahIq0yHEr4pNtTlaTFVcnlIwlKUqbFNIpXHylYrUZWrDCoyK0TMXEgIphFWCKjIqkzFxISKbipSKbirTMmiMikNS0w07kOJ//S87ApaKWsT0EFLilpcUi0gApaUCnAVNykhAKcBS0tK5VgxSiinAUrlJABT1pAKeBUtlpE6nPFWE64NUxVtGDDHes5GiJtgNRtHg8VPGc8GpwuazvYuxTUVJs4zUpjwc05Rnik2NEKr3qdaXaRTlHNS2NEgXinAU9BUoTNZNlEW3ipUGKeFpdhBouItRjIp2MGiEY4qxszWbJuR7NwqMJzg1cUcYpHj6GhMi5UKU9RiptvFIBTC45RxRjipAvFO2k0hXK6rzVtU4qNV5q2BxQTKRSkSoCtX3XNQlallRkU2HFRYq469qrlaaZomViKQqdtT7cmnFMtgU7juVgmBTCO1W2GKaqZNDkNEDDaM1Tfk1oTYqqVzTiyiqfSoz1qyy4qJhk1omBCRxTCOamIphFUmJkXekqTbSYp3AjIFNVCTVhULHmrAQAUcwFUJihlxVgiomouBTbmoytWWXFRkcVomIrEVGVqc9aaBzVXAg20wrVoqBURFNMGhlRtxTzTGFUiGyBqaakIphFaIxYw000/FNNWZsjNMNPNMqkZMaaYaeaaaozZ/9Pz7FLikFLWB6aHAUuKBTqktIAKeKbiniky0gAoxThS1NyrCAU4CgU4ClcpIcBTsUgqRRnpUtlpCAU8cHNPEZpcYqLlWJ1ORkdauwtu4PWs5SQciriHuKyki0XCmaiK7TU0bhhT2UGs7hYiAyKTZg1IBg1IBmhsYiVZUZqAcVPH1rNsZKEqYJkUKBU6DFZtksjVcVbQZFQlMHNTRdcGgiQqjDYNTMu5aUr3p4GRVIxb6lNRzikxzUm0hqUr3oKuAWngUCngU7Etjcc1YUZWmBasIOKpIzlIquKgI5q7IOahK1LRUZFUioWUVaZaYEycVBsmVwmOaeq9TUroAKAMJk07D5ii45xUyJ8uTSBdz1I5wAtSy2+hRZcsaYU44rQglWFyzKGyKqtyxOMA00yr62KLKScCmtEVOGq/gdqic5q0x3M/ABywyKjbBJKjAqxIvP1qHHarQyLFSJEWqeOEscmrYjAFDkJsqhABTWGKsNxVZuTQhEJyajIqxionwKtAQMMCq7VO1VzVoCOl6UGmmqARutRnpTyaYapCbGYphFPzTKtEsYRURFTHmmNVozZERUbCpjTGFUjKRAabTyKSrMWRGmmpCKYapEM//9Tz0U4U0U8Vzs9NDhThTRThSNEPFPApgzUgqGaIMUoFPAzT9lS2WkRgZp4FOAK0oHrU3LSExU8YqPaakUkVLKRZGKiIyeKNxIp4U1nsWIBipVJBpoFKBQ2Fiwpwcirsb7xzWcKnRsHIrNoZeK+lAzmnxEPxU/lY6Vm2Ii25py8cVOqjFBSouFx8Z9atKBVZFOMirC1DEyyFyKjAIbmpIzTmXPNBjcnUhlpQccVHF/dqUjvWiMX2I5BzSDkYqVl3LxTEGKYJ6CKKkAo24NSquapITkNwe1ZOo6sLC5t4eCHOX9l6VulQoLNwByTXl+q3Jur1pT07fTtWkYm2EpqpLXY9NdcnjpULLVLRLv7ZYJuOXi+Rvw6H8q0yoqZROeScJOL6FQrimAfNVgimhe9Z2LUis4ywFOcDG2pQASD3pCuWqWiuYrqgUZqux3GrkvHAqrtxUM1g+pC1NqYjNMYYFI1TKrHmoWJNWmUVAVNUiiuwzUsUBY5NTx25c5PSrqoAMCquTKRXEYWmuQBU8hCiqbAuc00Sis2WNJtxVkqFFQH3qrlEbVWK7jgdamkbA4p1oA0mT2p30uURm0bGWqnLCUroiPWqdzEGWpjUdwOeNMNTuu0mo8V1Ikj27qiIwcVZx6VCwqkJkRphFSEUhFWiCI0w1KRTCMVSIYwimGpCaiNWiGRkUypDTDVoxYw1GakNRmqRmz//1fPRTxTRTxXOz1EOFPFNFPFSzVIeBTwKYKlFQzRIcKlBqMVKAKzZqkSBRijbSrUgIqLlWIcU4D1qwFBoMdLmGQ4qYNxim7MUuKTGhwp+KQCpAKhlDQKlXPSlC1IBSbAmhBByK2IsMPesuEYNX1bZzWExNE7R96aRirIdHHBqNk3HioIT7kQLKMKeDUik5yaQA9KkQ7OSM0AyZODmrP36qJkirSfLQjCYAFTmrQGRUZHGamj6YrWK1MZPQRR2NM2c1ZI6GkdOQRWnKZqQwLUyJ3oVeKkZ0giaWQ4VRkmtIR6mcpdDD166EUK2SHDz/e9kHLH8q8zlffIX9TmuluLh7oXeqy8ceVGPTd/gP51yjGtEe5hafs4NdTqNDu/sN1E0h/dXA2n2IOP8/WvQWWvI0k32Txd42Ei/jwf6V6F4f1IahaeXIf3sQwfcdjSaObG02/3iNNl5ppHyVZZKay8YrGUTgUioAakCcZNSBe9LIAFwOtZ2KcjPflqhYVfEW6qrxlSRWTRvGS2IMcVGRU+0g1G9SaplcipVts/NT44SxrQC4GKuMbinUtoisI8DAqOQhRVl2CjFUyhY5PSqasRF31ZXILnNG0AVYICjiqcsoHC1JqiCRgv1qm7E9auTGPAK9TVFxk1cTRETc0+3by5MnpSEU0ir8hm0CrDINVbp1RCazxLIv3TULsz/AHjmoVPURXf5jk1H0qYDIyaYwrpQiOo2qU0wiqRLITUZ4qVqhJq0QxCaYSKDUZq0jNsaxphpxphrRGbGk0wmnUw1SM2MNNNONNNUZn//1vPhTxSU4VzHqpDxTwKaBUgFQzaKFAqUCkAqQVm2bRiAqQUmKUVJZMKkAqJTUwNZsocMip0YHg1EOaeBzxUsCbyw3SmtARzT1YrzVpHVuDUNtDKGxh1p4xWiYgw4qI2x6ilzDuV1qdBuqPY68EVMq8VLGSoKnXPeogWOAe1aMsscsSJGm0jqazYmyFBzuBwKuIQ/FUFyvB6VOjbW3DpUkyVycqVNPA3DmpFw67ugpmCDTMrkittBUDrUsfI5pAFxmnAEdqLGTZaTkYpyqVIzUUZwaubdwyK2jqc8nZjttSbcrTVHY1OvHFbpHPJkarXJ+JNQ4+wwnP8Aex3PYV0Op3yafatKfvnhR71wemI15qHnzcqmXJPqO9VL+VHbg6V71pbIi1gC0trfTR1VfMk/3mrmW61qahcm8upbk/xHj6DpWYRVI9iMWoJPckjbB+oxVzTL6TT7pZ07cEeoqiOKQ9c0FySasz2qGSO5hSeI5VxkU5l5riPC2q+XJ9gmPyv932Nd+VpWuj53EU3Sny9CuEqCX72RV5hhTVV1FZSRnCWpWDMKjx82Wqx5ZzkVG4xWLRumiK4ZCAEFV0iLmpthZqsKoXpU8t3dl83KrIQRKo4qKRto461M8gAwOtVe+TVt20QopvVjRGT8zVE5C1K06qvvWeHDyfMazbRvCLerIpZSxx0FU3PpVm5Ch8IeKqtxQjoS0Is4pVXd1oxmrMacVTdhlcwjrULRelaLIeCKTZnrSUgMnbUbLir7x8kCoGjI61opAU+mTUbZqyy1XcVomS0QmmMan25GahIq0yWiPrULDNTnimGrTJaKxFNxVgrnpTdpquYjlKxWmkVYbioTVJkuJARUZ61MaiNaJmTQ01GakNRmrM2j/9fgBUgqIGpV5rmZ60WSCngUqoTU4jrJyOiKIxUopdlLjFZtmyQtOpoFSAZqWUAqQcU0CnYqWFiVTVgAVWHNSDNSxk4x3p4yORUCk1KDipAsJOy8HpVxJFfpWbkd6euV5BqGgNbarDmk8kdqpRzkcGr0cqnkVDTRIwREH2p5BTkVaTLe1SBYyfmqQ5ymN0hwBmrMVtK3UVfRVA+UVOnWmomMqz6FP7LcAYXp6VJ5EwHzCtNDVtFzzWipXOaWIaMADaRmr3mp5eB1rQktIpR0wazJLWSI8cilKnKIlUjMFxjOeauRdMVRQHOcVdjp0yahZC4NTHaql2OAOTSxjIrM1eYrD5K9+v09K6/hVzminOSijh9avXvbksPuDhR7f/XrSdBp2gs+MPOAo9cHrWelsJp97fdQ5NO1q8N3hQMJGMKKwjLqz6F003ClHZbnLuMCoCKnY5qPFao9CURuKQ07FJTJaCKRo5A68EGvX9F1BdQtFLH94nDf4146eDXRaDqbWVyrH7p4I9qG7anDisP7Wm0t1serMM1VdatKwdRIhyGGRUbL3NEkfORdiDoOarMMnIqZiTQsbN0FY2ubp2IQO9IT2FaSWyjl6cY415xV+ydifbIxfLc84qtMJV4Cmt15AOBVN3HesZQ8zeFV9jnGYj73Wqx65rfmhilGCOayJrV0O5ORWXLY74VEyqeRTDk07DZ+ap44snJoLuVQtXIhkc1Y8tcdKaBik2K5J5IC5NRMAtOLHpUbZapEr9SuQMkmoXUGrDLUZjJ6U0yzPdDmqrrWs0LY6VReMg1rGQylimFatlPWoitaqQmiowqMirJWoitWmQ0MGB1pHxQaYaYiFhmoSMVYJqFq1RDRA1RE1KahatUYyGGmGnmmGtEYs//Q8/FWEFVwasp0rlkerAtJVpKqoasqa55HXFj2XvTCKkLU2szVMZinDinAdqsx25bk0nKxSK2TT1561fW2WhrQ9VqOdDK6AE1MVGM1GUKGlB7GpuUKOKaSc5p2PSkNNMTQbsVIr1XNOVghBb8KqxDdjRii8zk8CtWGGJFBHNY9vLurTUMRlTWEkyWzQyhGRQo3grVZCScHg04yhDzwalImwsdwY38uTgitFLha5vUm3bZ4zzjBqS1ugVBPNWtBOnzK51iTqecVdjnUiubW4X1q0lwPWtFUaOWdC5vhxnINO3ButY6zqw4NWElIrRVDmlRsWXhUnK8GmqpBwaej7jVhcHg1SinqiHJrRihlijMjdAMmuUvLgztx95jWprc/2e1CA/fP6CuXtHa4vIo1PJP/ANc1NWV2oI7sHR911WdYdJSOz2IPnAyx9TXAXwwWFehahqSW8TxD7+MfnXm905kJNOtyppROvLPaO8pmQwpMVIwpMUXPdsRGmkVKRTcU7kOJGwyM0kZKnipQKiPBqjOUbO56j4X1H7Tam1kPzRdPpXRSZPAryjQrtrXUI2BwCcH6d69bO1RmhbWPm8woqnVuupXSMg81YBC8CoS+ajaQg0k0tjiabLJkwajZyRVYyY5zUTTDvQ5lRpkkhzVSTpmlaVccVVaUHg9BWMmdUIMQkioyTTWnUA5qGKUS5PYVkzpUeoSQhjkdar/Mh54qyXAPFRSSqflYVJauMabjimB+Oagfb1Q/hUYkpWLWpbLmpEw2TVEyCkExXkGlYqxfbDHHpTwABVOGUuasZqGDQ41UmiBBIqznNIwGKExoxGFQtVqT7xqm55rpTAhY1C1THmoyK0QiIioWqwelQMK0RDIWzUZqVqhbpWqIbIW5NQmpjUZFaoxkREU01IRTCKtGLR//0fPgKnRsCoQakFczPUiWlapw9U1qQGsmjaLLYbNODVADUgrNo2UjQt0DnJrTRQBVC1ICVeU1yT3N0TqtSbaahzV5IRgFqwbG2ZM6DOcdapEV0csaEYxWbPbjGV61cZlJ3M6m0p4ODSGtUAiqC2T0FU5pC0mRUsrlFx61VHNdEF1OWo9TStCc10VuTxXP2mB9a3YSARWNQEbawrIA2Oao3NvuGf7tX7aQ8CppEzUWMlNp2ORnyrBT0NUIHEcrRmtzUYgh3etc1I2Lnj0prU7Yao2hLgcGrMbk9TWMHOAFq3EW9c1DKcTcSYAYq3FOe9YocjvVmOYjrUN2MpUro6SJwelXY25rnY517HmtKCZsc1tTqHnVaLRzXiS833ZhB+4uKpaHIBcS3DfwLx+NZerTmTUZmP8AeIpLGcCGSMHBY/0rT+8e5GklQVNdjTu757h2dj97n86x2kzTpGCqcHOePyqqDzipS6nZSpqKshcZpcetPCnqKCB+NO5vciIpNtTbfWl25p3C6IFXkCoJBg1bCkMKgmGDVRepFRaCQPsdX9DXr2n3P2iwilJ7YP4V42v9a9G8M3G7TnVv4HP8qJaO54+YU+ampdjceXbyKrNc+lI8qsKoO654rllI4KdJPdFlZyc7qa0u5c55qiXzyKjMynvg0lI6FSJWmOTmqks+3PNQySkc+lZt1cbVLdjWiNVAmluWYkKa1Ld1jjAIznrXPWitL856Ct2IEAep7U2KS6F5RuPyd6gmUJx3rSji8tMfxGs+5QqSW61NjJS1MyRwKrrMC2KWdutZXmlWzW0YXQc9mbGS3SjdVaObemamQbjgVg1bQ6Vqrlq2cB+elajBSuRWKVaM57VILlgMCs5RvsJxNGoppQq4HWqRuHPFV2Yk80lAdgZtxphT1qRMFualKg1pcCoVBFQSJjkVbK4NRSfdq4sTRRNR4yaUmm7ua3RDGvGMZqoRVx3GKqk1rEykREcVGRU9RMK0TMmiIioyKmNRkVaIaP/S88BqUGohUgrBnpRJlNSA1AKkFZs2RYBqVTVcVYQZrKRtE0LdscVoKayVyKspMRxXLOJ0xNe3OXArT31zkVxtcGttW3DNc04tFWJGfNQMc1IRxUDHaMmoihozLkAPUG6i4lDyHHaod1dSQyK5+7u9KqI1WJpOCKoBwDXTTjocdWS5jWtpdtaMd2uR3rmhKRwKtRSGiVO5Eah2ttdpxitWK6BOD0rgo5ypzmtaG/AwDWDi0W4qR0+oWTXlsWt/vDkCvN7hzHcsHGCvBBr03TrtHAAPWsXxNpMUwF/GuGX74Hcev4VpFLcinVlCXs2clC00pyo4rRjd1OMYqGEqq/LU+41lPyO9Nk/n9qsJLxWazKBUQnLHYlYuDZrFJm7HJubjoK2YJs4Fc/b8KBWrBweKzTsznrxTOL1HIvZs/wB8/wA6pxEq1a+txbL1mHRwG/xrDZipr0Iao74yXLGRaBJqROvNV1YsM1ZTBNTI6oO6uTAU4KW6U9V4q0iZFZNkSlYrhO9OKelXFi44pfLqbmLqGbs+YGqc/LGuiH2aO2leQbpCMIPc965qVuTWsC4T5r+RXH867Pw8xSzk93/pXHE8V2WlL5VguerEtRWdonLiV7li5JNsYjsaqO5PIpLg1m/aTG21q40mzOnBWuXkdgaguN7coOaaJlaplkz1q4ruVJW1RlmeSM7ZeKzrqXcQoPBNb1zEsyHPBrk7qOWBueVBrrpRTZjOdlc6rTlBjVPfmuqt4A3zYwcce1cloKvcyhUBI6k+ld0zR2646ms3F31OfEStpET5YwT1NZF5JnluBT5LrLE7sCsi5uj3P50GcY23KFwykHBrEd+TWnLKr5HQ1jP941000TUZuabH5kTN71ppFsbNVdLIS3APfmtMsDXLU1bOmDskVpmyuKonNaLqDVKRcVCRpzERYiml6aWqMmrUR3LKPg5qzuBGQazMmm+awOKThcVy8zDNVJ5MDAphkY1AxzVRgJsYTUZNScEVEa3Rm2Mao6lxk4Heo2BUkGtEZMaTUZNK1RGrSM2xCajJpxphrRIybP/T88FSCmCpBXOz04ocKkFR08GpZqiUVsQRjYKxga1IbkKu1u1c9RPodFMlkGKhBoklD8CmA81ml3NrlqNc81rW9wYwFbkVlocCplbmsZK5aNozx4yDWZc3O4bUqMtVJiSTiphBA2Qk4NISQN1TpAWOWplxhVxXQtTOUrIzpX3GqxyCDTifmpSK64q2h5s3d3FFTqxAqsDtNPLfLkUmgiy5AGlkCjpXRWsNvu2sMgVzto+3OOpragfb1rGeh0w1OhW2EBE9ocqOWXuPcVuSyxzRAdcjBHrXJ+eY12hvvDn6VJHdNuBzXPKVkaOk52b6GHcN9nuZICPunj6dqhNwasaossl2zxrkED+VZy29yx+7iqjFNXOhSsPaQtwOpqzAoX60sFhKxxjJ9q3oNFmIDSEIP1qZdkV7VLdlaFulakTYq1Hpluo+ZyauJpsDnCsQaw9lJ7GNTEQOb1iHz7cSr1j/AJVyDrmvTJ7GSEEH5lrgdQtWtpSP4eo+lbUm0+VnXhqkZwcUUEOOKuxMB96s+rEb+tbyR10pr4WbcAD8jpWlFBkbqzLOWI4RiV5zXd6bBbuoOQa5eVt2OPGVvZK9jFWzbuKqzx7fau0uhDGmeBXD6lexK5CckUSg4yscmFqyqvRGLdStnb0rNZgx+lOnmLZJNVVb9a6IR0PYc1G0SzFE00ixr1Y4rsxtRVjXoox+VZWlWwjX7RIOW4X6VsfZp5RuiQmuWrLmdkcleabsVJznIrJlUPwetbUtjdqCTGcVlSwyIfmBH1qYq24oSVtGUVcqdpq2Jgq5Jqs8JbkVWMdwvQZAraykNyLrXJPSqxhkuWESjJY4FRjzz/Aa6DQ4TveeUcjhf61S93U56ktDpNNtIdLsxDGOf4m9TWffXqAECr93MPJ2R9TxWYLGIAmc5bvTbuclOKXvMwJLosSQaoyzFupqxqEaIxMfGKyDJmtoQCcxWkOaiJ3GmMaReldFjlcjYtZygArZjuAwrlomxxV+OYiuepTudFOZ0G/NRtg1SiuN3BqcPmuZxsdKkQyx45FUzkda0ywPBqB4waafcbKW6oy2aneMgVWIIrRABNMZqQmmGrSJbDdikzmkwaSrsZti000E1ETVJENgahIqQmoyatGbIzTDUhphq0Zs/9TzwVIDUYpwNYM9NMkpQajpwNQzRMmU1ODVUGpVNQ0aRZZBp4NVwak3Vm0bKRoRyjGD1qTeM8VmjJqdFNZOBopl8txQqDqahU4608yACo5ROROzqgrHuZCxqSSYniqDtk1vTgc1WehGPvVL1qvnmrQFbs5lqQupYYFQqzKcHpV0rkVE0dUmJx6omt2VWFaqyAd+KwAWj4PIqdZ+MZrGcbm9KaWjNkzljk1MlyAQByT0FYRuOy8mr9mhRhK/WuedPS7O6FVbI6xNPjb55nPPYVcSOwjydoOPWufe+kIwDVRrxxnmskpESV92dE+owxMfLUL9KqtqrscDpXNPcEmoTcEVoqfcV4o6r+1G9cVYh1Q5yrEVx8chc5bpVsTbPu0OFh+6zsv7TLcOaoaikN1AT3Hf0rAF2D7VatZ1nfyXPB61E09zSnFRfMjnvImZ9sSl/oM1MbW7RdzxMB9K7uG/tbQbIlAxVv8AtKKcYYAVr7S6B15J6R0POFlKnFatpq1xAw2N3rfvdNsr5CUwknYj+tcNJBNDK0LDDKcYoSjI6o11NWkrm/ca1cTn5mrIklLd6qqkhcIB8x4ArutM8O2iIJdRO5jzt7CnypDniI0o6Kxwhy3Srllbq8mXOcdq9PMWjwJhIk49qxp7bTZW3wgIwOeKVSdlZHJTxKk7uLL+n20UUYkuOfQelaMmpxKNsY4rlLi/B+VW6VnS33G1TmsoSaVkYTocz5pnUPqSZ5NRtfQOMNg/WuJe4kHOajF371Xs29yvZwR10sNlOModh9qoRabdM52bWA6HNYi3hA61ettSdG61LptGkZu1ky7Na3MP3oz+HNOtJSiuD6ipxqoZuTxUd9JFJAZYQA68/Woa6ApN/ERSXLbs5pPtJK5z0rE+07+aaJsZGetbRiE7DruXJJPesXdyau3EgIxWYzEHA712U1oedVepKWycVIOBUManvVgHirZkhQcGpleqrHmlDVLRadjQSTFW0nrJDVKGrOULmsZmuJqmEoNY4kxUyy1hKmbxqGmWU1XeMHpVbziDViOUGly2NFK5WMeKYVq+yd6qOMGmmOxXIqJqsGoWFaIhors1Rk1MwBqIoa1RjJDM000uKSrM2MJpuaU1GapGbP/V87FLTKXNYnoXH5pwpgp4pMtMeOanWolqTNQzWI/NSIM1CDmrC8VDNEydFFSlgoqAPUUklZ8ty3OyJjLk0jScVUDUpbirUDndS4jPmoGNBPNRsa1SMJSDPNXx0rOB5FaQHFTMulrccOKUjNMJpN4qEWxxQGo/JU9akD0hbNMWg1I1U5FX1kAFUd1KHqGrmkZWLxkFQuetVvMpplNCiNzFc1CXxSM2e9QswXqa0UTJzJ1mKmla6A61Ty7dKmjg7mm4rqEakuhMGlkXcvAFXbdzCu7uabGoWmnAfFZtJ6G8ajRpRSM3zsatJMR90/hWYJMCgy1lKBsp3NqO6ZW4NMvYUupVlxhsYJrG+1BevWuo0i2S7UXNwflHAX/GsZJp3R0RkkuYydPthDeiV/mCAkH+VbUuoE962dRktRYPGgCnHGK8/NyCSO9OzbM1PnXM1Y2JbsngmqEs0q/MhqqJKcXyK1UE9yXO2xSmmkLeYp+oqMXYPB4NPcAMcVFJCGGa1UVsYSqy6EvnBh1qozgscVWYOnHahWFaqBzuo2XA9TI+OapA5qYHNS4jVQ0FlNWBO20qD1rMDVIJMVm6aNVVIZi6MXT8ai+0ZFTs2arlV3VokupnKo+gu9pOlOWLHWpEwKe1O5la+rEAAppoJ9KbQMic80gNMkb5qaGq7GTepaDU8NVYNTwaVikyxu4qRGqtup6NUtFxlZllmp0chU1Ex4qLdio5TbmszaWZSKhdgaqRvmpG4rPksbqVxGNJnNMY1Hvwadhcw8gVGaUtTCeapEyY1hULVMTULGrRlIjNMNONMNaIwbP/1vOaKKWsTuHAVIKYKXNJlpkmaUGmU5RSZaZYQVJnFRA4FJuyazsa3JwahdqeDxVd2ppEVJaC5oLcVHmkJq7HM5CE0wmlJphqiLhmtFJAVBBrMpysV6VM43NKdTlZoswNRk1XEgNSA5qOWxq5J7Em404NUWSOlNLkdRTsS5WJST2pmWFR+Y3pS5cjgUWJ5x4Y0xpQKYVlNPjh5yadl1C7exH+8fpwKnits9auJEAKmXAqXPsaRp9yuIMVLtwvFSkioXbjis9Wa2SGltvBqN2zyKjLZPPWmF8cVaRDkS/aCOtRPcE8CoHfJwtPhhLHJquVbsnneyJIgXbLV19pcmK3ES8YrnBGF5q0k4AArnqK52UpWVmbks5kQqxrk7v5XynFarSZHzHFUpUElFNWY6ktLIqxznvVkSr1JrPkjKHihWz9a35Tl53sWy5Zt1SbuKqhqk3elS0FxzRgjNU3tyOVq+MmpMDFNSsJxTMcMyHDCp1cHkVakhDVTe3ZOVq00zJpomDUE1VWQ5w3FPZ6dhcxLuppaocml+tFhXJ99O8zPFVs0tFh8xYDU8DjNQKeakMgAqWikVZPvmmA0M245pBWhi9yVTT81EDTwaTKTJc0qtzUeaUHBpWKuWySRURpyt8tMY0jW5MjYNWd4IqgDUqvUOJpGVic1Xbin7qYxzSSG2N3UhNMzikJq7GfMPzTGpM0madiXIQ0w041GapGbZ//1/OBTs0ylFZnYmPzThUYqQVJSH1ItRVIKlmkWSE0wHmmlqF60rDcixniqz1Y7VWfrQhVNhuabmkzSVZzi0lFFMQhpKDTaYC1NC2eKgpY22sDSaHF2ZoCkIBpw5FJisTpaGqoJqwoFQg4pwahiSsPIGKAKYzZFR76SQ7l0EAUhaqwal3Uco+Ym30hYHrUDetQvKRwOTQog5WJJGUCq+GcccCpY4Sxy9WvLA4qr2Js2Vo4hirERCnBpACtNYg1Ldy4qxbMgxVUyAHB6VCxx3pqqznPYUKJd29C8sg6Gnb+1V3Yk7iMfSmjmpsVK6diR8M2KrSx4OR1qwCBRjd1q0zFoqo/Y8GrSDuajeHNRCRozhulG+wr23L4OKXdVcSZGRTt9TYq5YB5pG5FQ7qUyAD1p2FcrSordqgMR7GrZfI5poIrRMyaTKZRx3pBuq42KiwM0+YlxGBWp2MdafUTk0DtYC4FRs5amYpaqxF2FKKKKBDxThUYNOzSKJM0hNNzRRYGywjcUpNRoaU0rGsXoLmnK3NR0A4NFh3LDGmhqjLZFN3VNg5h7UyjOaSnYTYE0maKYTiqsQ2OzTTSZooE2f/Q83pabThWZ1IcKdmm5ozSLuSA0/NQ5pwNKxXMKTTlNMNC0xJlrPFV3qUHioXqUi5u6I6SkoqznFopM0maAFpKKWgBlFOpAKALcMgxtPWrG5azelLvb1qHC5sqtlZltmFM3e9Vtxoo5Sectb/ejdUIzQQe1Fh3Ji3oaTeBUIX1qVUzSaBNjSzOcCp4o1600KBU6FV61LfYtLW7LAAFKag3H+Gm+Yaixrcc1VnOKeXNIFLHJpoREvLc1rRRqFFUilTpIRz6VMnfY1pq25NNGpU4FZWSjbT0rTZ9w5PFUZVDtxRB9wqLqhQCanUVVRih2mp91NmaJjgCqzoGpxalHNNaEvUq7WjOR0qRX3U5xwaqEFDkVe5m3YuF8cVGWFRGUkdKbuHWmkJyJSc8igHFM3AjikoAk3UoFNFSBhUtlpBtNV5euKsNJgcVVPJyace4p22GUtLilxWhjYbS0YpcUCExS0UUALS9KbmloC49TTyaiWnmkzSL0FpDRRQUxM0maDSUEMdmlpgp1FhphTTTjTDTExKKSimSf//R82pwplOrM6UOoFNpc0FDqcKaKfigYhoBpDRQBLmmvSZpD0pFN6EVNzSnrRVGIlOpMUtIYtLSUZpDFxS8Cm5ppNMBTSUUtAgxTwKaKkFJlJEqLnrT2hKjK80sYqzu7VjJu+h0ximjP+tOD4q3sRuop6wx+lDkNUmU92aaSavG1Q9Dip4rSPOW5qXUSKVGTM1XNIzGukEcSjhRUUlvC4O4cmsvbq+xt9XdtzCRSeTVpQKlNlID8hyPer9tpc0o3OQopzqRte4o0pJ7FCKB5n2RKSfauosvDsbxn7QxDMOMdqsW0EVrHtjHPc1tQthQa4pV23oayhZHDajo9zYH5xuT+8v9axiMdK9VmIdMMMg1y2paPGf3tthT3XtWtOv0Zny3RxrJnrTASvB6Veltp422shpsdlNKwDDaPeutTVtTJwd9CsCDzQzYFby2NvGuNufrURtrYNygxUe1Ro6DMLcaTGetdM2n2rruQYrOmslT7tVGsmQ6EjHNJgVcNq+eKkjsssN5wK150Zexlcoxxs5wgzVhYMferajhjiXagqrLGCcisfbXZuqCSKJXA4qHHNWiKhYVpFmUkRnBqIrTjS5zWiMWR4pcU4ikp3JaExRinUhpktDcUlOpKZI2iikNMQ5TUlQipBQy4sdRSUVJdxDTafTTTJYCjNFFMkM000UUDuJRSUUCP//S80FOzTBTqg6Bc0UlKKBkgp+aYKdSKuBpKWgigYUHkUUtAyButJT2FR0zNjs0uabRSAdmm5oooAM0UYpcUwFFLQBS0h2EqeNaiAq0lRJmkESDgUZoJ4pgrM6ETrU4HFV1qYGokjWJKtWU4FVFJzVxDzzWUjaLJM01mFLIQBVUmskjW5biJJrahJCYrCgPNaxcCMCsqqKTLQPPJrUV8JWBHIWYA1qh8Jgd6xsKSHzXGAM+tEjZUVm3EwI9MVMsoaLNVyk2IZhzmqEuA+avTNlKzZnBrSKKE35qCQ5oU0h6VqlqSyW3mP3DT5lDCqGSrZFXFYMKbVtUKLvoUzwcUm6ppQO1VSa0WpMlYnEoxg0m4GqpNIrEU+QnmJHUVWcVZ3ZFRNg1cdDOSuUmFRnirDLUDCt0zllEaGp4NQnilDVVjK5NTDRmigGFNp1NNMgKYadTaYmKKeKjFS0MqIUUUUixaaaWmmgTFzSUZpM0yApKCaQ0CuFJSUZphc//0/M6Wkpak2FpwpKUUi0OFPFMp1IY8UEU0U7NItCUUUUANYVCRzVg1CaZMkNpKKKZAU6m06gELS4oFOFIpBikpTSCkUPUVYBwKjWlzUM1WhJnNA61GDUq0maR1JFNWEViMgVABxVuKcIu3FYyfY6IruIKmU1BnPNPU1DRaJGbIqKnGmd6Vh3LUXFXHc4AqlF1zUrPWMo3ZomWYWw4rVD8CsSFsvWgXwtYyjqVcqXDZJ+tTwvmPBqi5zk1LA+FIrVrQm5M7naRVJ2ypFTM3BqkTVRQMaGp27ioSeaC2K1sRcU06KTBxURNRE85quW5PNYvOSetVmFPEm4VExpJWKk7iVGaXNNJrRIybFDUuaizSg1ViLiMKgapmNQsatGUiAimGpSKjNaI55IAacDTKM0yCSkNNzRQAtJRRTJFFP7VGOtSdqTLiJS5pDSZoKuPppozSUAxpooNNpmYtJRRTEIaSiigk//U80FLikFLUG6FpwpKWgpDhS0gpaRQtLTc0uaCgpabRmkAE03FKetLQSREUlPNJimTYTFOFJS0wQtFJS0igpRSU4UikSA0ZpuaTNKxVyQVMtQCplqGbQJqcKjBpwrNo2TJgaepqAGng1LRVywKaaaDSZzU2KLMZwKRm5pqnikJqLamiehYgbmrjP8ALWdE2DVh24rOUdSkxuc5FIjbSRUYbmk3YNXYgkZ+KrFqc7VXJ5qoxE5DzTCaCaaTVpE3EzTSaQ03rVpENj1Yg08moKkU8UNAmI1HakY00HFNCYGm5pSaYapGchSaiNOJpvWqRkxDUZFSEU01SIZFijFOIpuKozaCiiimSLSUUUAA61IKYKfSZUQNNpcUdKBhRRmkoAQ02nGm0yGLTaKSgQUUlFMk/9XzQGlzTaWoN0OFOFMp2aCh4NGaZmjNIq4/NJmkooAM0A0lJQK5JTqYDT+1IpDKKU0lACUUtIaZLEpc02jNArjqWmZpwoKTHUmaSgUDuSqalBquKlBqGjWLJgafmoQakWoZtFko6U5aRadioZskPB4oqPNOBqbDuTKeKQmm59KQk4qbFEqHmpmbiqqGpGak1qNMcOtNY4NMElMZuc0JCbHM1Qk0pNRk1okZtkmaYTTN1BNVYXMLmkzTCaDjtVWIuOpRTc0ZpWGmPppozRRYbYlMNONNqkZsYaQHFKaZVoyY4nNMJpKQmnYhsXNJSZpaZIlJT8U00CsAoopaAsJT80yjNAx2aaaM0hNAXCjNJSUybik0lJRQS2FFJRTJCkopM0CP/9bzOlFJSipNkFLSUtIoKUUlKKBjqKKKQxtJS0lMQ4VIKiFSikUgNJSmk7UimJSGiimiGMpDSmkNMkUU+mCn0DQlKKQ04UikKKeKYKeKTLQ8U8GmCnVmzaJOpzTiTimrSms2brYbmnrTKeKbBDxTyKYtSGoNUN6UpPFIetIelICM8GjNB60VZAHpURqSozTRmxtLSUCqEhDTacelNpoli5o70CjvQAtKKSlFIYhpp6U4009KaJYymmlpDVmTGGmmlNJVGbClpBS0yUOppp1NpFMKKKKAEpKWk70CYtNp1Npki0lLSUCENJSmkpkiUUUUxCGkpTTaBM//2Q==";
+const WA_OPTOUT="للتوقف عن استقبال الرسائل أرسل: إيقاف";
+const WA_SET_DEF={dailyLimit:25,gapMin:20,gapMax:40,eligDays:90,place:"بنك الدم المركزي بالدمام",mapUrl:"https://maps.app.goo.gl/yLbq22RtxY5XcS7c7"};
+const WA_VARS=["الاسم","الفصيلة","آخر_تبرع","موقع_الحملة","رابط_الخريطة","تاريخ_الحملة","مدة_الأهلية"];
+const WA_SAMPLE={p:"966505886837",n:"حسن العاقول",bt:"O+",city:"الدمام",ld:"2025-06-01"};
+const WA_BTS=["O+","O-","A+","A-","B+","B-","AB+","AB-"];
+/* الرسائل الأصلية منقولة حرفياً من الموقع القديم + 4 قوالب تسويقية قصيرة (سطر أول بالاسم والقيمة، ودعوة واحدة للفعل) */
+const WA_TPL_DEF=[
+  {id:"msg-1",kind:"أصلية",title:"دعوة بنك الدم المركزي بالدمام",content:`تحية طيبة {اسم}
+السلام عليكم
+
+يسر بنك الدم المركزي بالدمام دعوتكم للتبرع بالدم خلال أيام الأسبوع.
+قال تعالى: {وَمَنْ أَحْيَاهَا فَكَأَنَّمَا أَحْيَا النَّاسَ جَمِيعًا}.
+
+مواقع ومواعيد التبرع:
+* بنك الدم المركزي بالدمام: من الأحد إلى الخميس، من الساعة 8:00 صباح حتى 1:45 مساءً.
+https://maps.app.goo.gl/yLbq22RtxY5XcS7c7
+
+* مركز دمي (مجمع العثيم مول – بوابة رقم 3): طيلة أيام الأسبوع بما في ذلك الجمعة والسبت، من الساعة 2:30 مساءً حتى 8:00 مساءً.
+https://maps.app.goo.gl/QnMdmojnPCrVhHfL6
+
+في حال رغبتكم بالتذكير للتبرع بالدم
+1: نعم
+2: لا
+
+نشكر لكم تعاونكم.
+
+هذه رسالة توعوية صادرة من بنك الدم المركزي بالدمام.`},
+  {id:"msg-2",kind:"أصلية",title:"دعوة مستشفى الجبيل العام",content:`تحية طيبة {اسم}
+السلام عليكم
+
+يسر بنك الدم بمستشفى الجبيل العام دعوتكم للتبرع بالدم خلال أيام الأسبوع.
+
+قال تعالى: {وَمَنْ أَحْيَاهَا فَكَأَنَّمَا أَحْيَا النَّاسَ جَمِيعًا}.
+
+مواقع ومواعيد التبرع:
+* بنك الدم المركزي بالدمام: من الأحد إلى الخميس، من الساعة 8:30 صباح حتى 2:30 مساءً.
+https://maps.app.goo.gl/PTJuDVw6PoZbBoLR7
+
+في حال رغبتكم بالتذكير للتبرع بالدم
+1: نعم
+2: لا
+
+نشكر لكم تعاونكم.
+
+هذه رسالة توعوية صادرة من بنك الدم بمستشفى الجبيل العام.`},
+  {id:"msg-3",kind:"أصلية",title:"رسالة تحفيزية 1",content:`السلام عليكم {اسم} 🩸
+تبرعك بالدم يمكن أن ينقذ حياة إنسان اليوم. كل قطرة دم تعني الفرق بين الحياة والموت. هل أنت مستعد لتكون البطل الذي ينقذ حياة؟ تبرع بالدم الآن وكن سبباً في إنقاذ أرواح. 💪❤️`},
+  {id:"msg-4",kind:"أصلية",title:"رسالة تحفيزية 2",content:`مرحباً {اسم} 🌟
+هل تعلم أن تبرعك بالدم مرة واحدة يمكن أن ينقذ حياة 3 أشخاص؟ لا يستغرق الأمر سوى 15 دقيقة من وقتك، لكنه يمنح شخصاً آخر فرصة للعيش. كن المنقذ الذي ينتظره أحدهم اليوم! 🩸✨`},
+  {id:"msg-5",kind:"أصلية",title:"رسالة تحفيزية 3",content:`أخي/أختي {اسم} العزيز 💝
+في كل ثانية، هناك شخص يحتاج إلى الدم. تبرعك اليوم هو هدية الحياة لمن يحتاجها. الدم لا يُصنع في المختبر، لكنه يُعطى بالحب والتضامن الإنساني. شاركنا في إنقاذ الأرواح! 🩸🙏`},
+  {id:"msg-6",kind:"أصلية",title:"رسالة تحفيزية 4",content:`تحية طيبة {اسم} 🌹
+أنت تملك قوة لا يملكها كثيرون - قوة إنقاذ حياة إنسان بتبرع بسيط. مخزون الدم يحتاج إلى تجديد مستمر، وتبرعك اليوم قد يكون الفارق لمريض في غرفة العمليات. كن البطل الصامت! ❤️💪`},
+  {id:"mk-invite",kind:"تسويقية",title:"دعوة لحملة",content:`{الاسم}، تبرعك بالدم قد ينقذ 3 أرواح 🩸
+ندعوك لحملة التبرع في {موقع_الحملة} يوم {تاريخ_الحملة}.
+الموقع: {رابط_الخريطة}
+احجز مكانك بالرد: 1`},
+  {id:"mk-urgent",kind:"تسويقية",title:"نداء عاجل لفصيلة",content:`{الاسم}، مرضانا يحتاجون فصيلة {الفصيلة} اليوم 🩸
+مخزون فصيلتك منخفض، وتبرعك الآن قد ينقذ مريضاً ينتظر.
+موقع التبرع: {رابط_الخريطة}
+تستطيع الحضور اليوم؟ رد بـ 1`},
+  {id:"mk-thanks",kind:"تسويقية",title:"شكر بعد التبرع",content:`{الاسم}، شكراً لأنك أنقذت حياة اليوم ❤️
+تبرعك بفصيلة {الفصيلة} وصل لمن يحتاجه.
+ادعُ صديقاً واحداً ليتبرع معك في المرة القادمة.`},
+  {id:"mk-eligible",kind:"تسويقية",title:"تذكير بالأهلية",content:`{الاسم}، أصبحت مؤهلاً للتبرع من جديد 🩸
+مرّ على تبرعك الأخير ({آخر_تبرع}) أكثر من {مدة_الأهلية} يوماً.
+موقع التبرع: {رابط_الخريطة}
+احجز موعدك بالرد: 1`}
+].map(t=>({...t,isDefault:true}));
+const WA_CERT_TPL=[
+  {id:"template-1",name:"الأخضر الكلاسيكي",bgColor:"#ffffff",textColor:"#1BA566",accentColor:"#B8A85C",borderStyle:"double"},
+  {id:"template-2",name:"الأزرق الملكي",bgColor:"#f0f4f8",textColor:"#003366",accentColor:"#FFD700",borderStyle:"solid"},
+  {id:"template-3",name:"الأحمر الدافئ",bgColor:"#fff5f5",textColor:"#8B0000",accentColor:"#FFB6C1",borderStyle:"dashed"},
+  {id:"template-4",name:"الذهبي الفاخر",bgColor:"#FFFACD",textColor:"#8B7500",accentColor:"#DAA520",borderStyle:"double"}
+];
+/* أيقونات lucide نفسها المستخدمة في الموقع الأصلي */
+const WA_I={
+  users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  check:'<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+  chev:'<path d="m6 9 6 6 6-6"/>',
+  sheet:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/>',
+  download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
+  upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/>',
+  alert:'<circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>',
+  msg:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
+  award:'<path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"/><circle cx="12" cy="8" r="6"/>',
+  plus:'<path d="M5 12h14"/><path d="M12 5v14"/>',
+  image:'<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>',
+  refresh:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+  trash:'<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>',
+  send:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+  phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+  heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+  lock:'<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  ban:'<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',
+  chart:'<path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
+  sliders:'<line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/>'
+};
+const waI=(n,c)=>`<svg class="i ${c||""}" viewBox="0 0 24 24" aria-hidden="true">${WA_I[n]}</svg>`;
+const WA_WA_ICON='<svg class="wa-logo-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>';
+/* سكربت يُلصق في Console الموقع القديم ليصدّر بياناته إلى JSON (يتجاهل moh-auth عمداً — كلمة المرور لا تُنقل) */
+const WA_LEGACY_SCRIPT='(function(){var o={v:1,from:location.host,at:new Date().toISOString()};["uploadedContacts","savedMessages","selectedTemplate"].concat(Object.keys(localStorage).filter(function(k){return /^hospital-/.test(k)})).forEach(function(k){var v=localStorage.getItem(k);try{o[k]=JSON.parse(v)}catch(e){o[k]=v}});var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:"application/json"}));a.download="whatsapp-sender-backup.json";document.body.appendChild(a);a.click();a.remove();})();';
+
+let WA=null,waAuthP=null,waXlsxP=null,waTickH=null;
+function waState(){return {user:null,set:{...WA_SET_DEF},contacts:{},tplOv:{},runs:{},runId:null,tplId:"msg-1",tab:"messages",
+  f:{q:"",bt:"",city:"",elig:"",st:""},page:60,q:null,pend:null,nextAt:0,drawn:false,dc:null,imp:null,
+  cert:{tpl:"template-1",img:null,imgEl:null,active:false},unsubs:[],loaded:{c:false,t:false,r:false}};}
+const waFP=(...a)=>new firebase.firestore.FieldPath(...a);
+const waShard=p=>db.collection("wa_contacts").doc("s"+p.slice(-1));
+const waSetRef=()=>db.doc("wa_settings/main");
+const waMobile=()=>/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+function waRoot(h){const r=$("#wa-root");if(r)r.innerHTML=h;}
+function waFont(){if($("#wa-font"))return;const l=document.createElement("link");l.id="wa-font";l.rel="stylesheet";
+  l.href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap";document.head.appendChild(l);}
+function waXLSX(){if(window.XLSX)return Promise.resolve();waXlsxP=waXlsxP||loadJS("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");waXlsxP.catch(()=>{waXlsxP=null;});return waXlsxP;}
+function waAuth(){
+  if(waAuthP)return waAuthP;
+  waAuthP=(async()=>{
+    await ensureFB();
+    await loadJS("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js");
+    const a=firebase.auth();
+    await new Promise(ok=>{const u=a.onAuthStateChanged(()=>{u();ok();});});
+    return a;
+  })();
+  waAuthP.catch(()=>{waAuthP=null;});
+  return waAuthP;
+}
+
+/* ---------- الأرقام والتواريخ والفصائل ---------- */
+function waDigits(s){return String(s??"").replace(/[٠-٩]/g,d=>d.charCodeAt(0)-1632).replace(/[۰-۹]/g,d=>d.charCodeAt(0)-1776);}
+/* يطبّع أي صيغة جوال سعودي إلى 9665XXXXXXXX أو يعيد سبب الرفض بوضوح */
+function waNorm(raw){
+  if(raw==null||String(raw).trim()==="")return {ok:false,why:"رقم فارغ"};
+  let s=typeof raw==="number"?String(Math.round(raw)):waDigits(raw).trim();
+  if(/^\d+\.0+$/.test(s))s=s.replace(/\.0+$/,"");
+  if(/\d[.,]\d+e\+?\d+/i.test(s))return {ok:false,why:"رقم بصيغة علمية — غيّر تنسيق العمود في Excel إلى «نص»"};
+  const parts=s.split(/[\/,;|\n]+/).map(x=>x.trim()).filter(Boolean);
+  if(parts.length>1){for(const p of parts){const r=waNorm(p);if(r.ok)return r;}return {ok:false,why:"أكثر من رقم في الخانة ولا أحد منها صالح"};}
+  if(/[A-Za-zء-ي]/.test(s))return {ok:false,why:"يحتوي حروفاً"};
+  let d=s.replace(/[^\d+]/g,"").replace(/(?!^)\+/g,"");
+  if(d.startsWith("+"))d=d.slice(1);else if(d.startsWith("00"))d=d.slice(2);
+  let local;
+  if(d.startsWith("966"))local=d.slice(3);
+  else if(d.length>10)return {ok:false,why:"رقم دولي غير سعودي"};
+  else local=d;
+  if(local.startsWith("0"))local=local.slice(1);
+  if(!local)return {ok:false,why:"رقم فارغ"};
+  if(!local.startsWith("5"))return {ok:false,why:"ليس رقم جوال سعودي (يجب أن يبدأ بـ 05)"};
+  if(local.length!==9)return {ok:false,why:`عدد الأرقام غير صحيح (${local.length} بدل 9 بعد 05)`};
+  return {ok:true,phone:"966"+local};
+}
+function waBT(v,strict){
+  const s=waDigits(v).toUpperCase().replace(/\s+/g,"").replace(/[−–—]/g,"-").replace(/موجب|POSITIVE|POS|\+VE/g,"+").replace(/سالب|NEGATIVE|NEG|-VE/g,"-").replace(/^0/,"O");
+  const m=s.match(/^(AB|A|B|O)(\+|-)$/);
+  if(m)return m[1]+m[2];
+  return strict?"":String(v??"").trim().slice(0,12);
+}
+function waYMD(y,mo,d){if(y<1990||y>2100||mo<1||mo>12||d<1||d>31)return "";return y+"-"+String(mo).padStart(2,"0")+"-"+String(d).padStart(2,"0");}
+function waISO(d){return waYMD(d.getFullYear(),d.getMonth()+1,d.getDate());}
+function waDate(v){
+  if(v==null||v==="")return "";
+  if(v instanceof Date)return isNaN(v)?"":waISO(new Date(v.getTime()+12*36e5)); // +12 ساعة تعالج انزياح المنطقة الزمنية في تواريخ SheetJS
+  if(typeof v==="number")return v>20000&&v<80000?waISO(new Date(Math.round((v-25569)*864e5)+12*36e5)):"";
+  const s=waDigits(v).trim();let m;
+  if((m=s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})/)))return waYMD(+m[1],+m[2],+m[3]);
+  if((m=s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})/)))return waYMD(+m[3],+m[2],+m[1]);
+  return "";
+}
+
+/* ---------- الدخول والقفل ---------- */
+async function renderWA(){
+  $("#view").innerHTML=shell(`<div class="wa" id="wa-root" data-testid="wa-root"><div class="wa-loading">جارِ التحميل…</div></div>`,"wa");
+  waFont();
+  if(!WA)WA=waState();
+  let a;
+  try{a=await waAuth();}catch(e){return waRoot(`<div class="wa-err">${NET_ERR}</div>`);}
+  if(!location.hash.startsWith("#/wa"))return;
+  const u=a.currentUser;
+  if(!u)return waLogin();
+  WA.user=u;
+  try{const s=await waSetRef().get();WA.set={...WA_SET_DEF,...(s.exists?s.data():{})};}
+  catch(e){return waDenied(e);}
+  if(!location.hash.startsWith("#/wa"))return;
+  if(sessionStorage.getItem("wa_unlock")!==u.uid)return waPin();
+  waMain();
+}
+function waCard0(inner){
+  return `<div class="wa-login"><div class="wa-login-card"><img src="${WA_LOGO}" alt="شعار وزارة الصحة">${inner}</div></div>`;
+}
+function waLogin(){
+  waRoot(waCard0(`<h1>بنك الدم المركزي بالدمام</h1><p class="sub">وزارة الصحة</p>
+    <div class="fld"><label for="wa-email">البريد الإلكتروني:</label><input id="wa-email" type="email" dir="ltr" autocomplete="username" placeholder="name@example.com" data-testid="wa-login-email"></div>
+    <div class="fld"><label for="wa-pass">كلمة المرور:</label><input id="wa-pass" type="password" autocomplete="current-password" placeholder="أدخل كلمة المرور" onkeydown="if(event.key==='Enter')waDoLogin()" data-testid="wa-login-password"></div>
+    <button class="wa-login-btn" id="wa-login-btn" onclick="waDoLogin()" data-testid="wa-login-submit">دخول</button>
+    <div class="wa-login-note">الدخول بحساب معتمد لهذا القسم فقط — أرقام المتبرعين بيانات شخصية محمية.<br>
+      <button class="wa-link" onclick="waResetPass()" data-testid="wa-login-reset">نسيت كلمة المرور؟</button></div>`));
+  $("#wa-email").focus();
+}
+function waAuthErr(e){
+  const c=(e&&e.code)||"";
+  if(/invalid-credential|wrong-password|user-not-found|invalid-email|invalid-login/.test(c))return "البريد أو كلمة المرور غير صحيحة";
+  if(/too-many-requests/.test(c))return "محاولات كثيرة — انتظر قليلاً ثم أعد المحاولة";
+  if(/network/.test(c))return NET_ERR;
+  if(/operation-not-allowed|configuration-not-found/.test(c))return "تسجيل الدخول بالبريد غير مفعّل في مشروع Firebase بعد";
+  if(/user-disabled/.test(c))return "هذا الحساب موقوف";
+  console.error("auth error:",c,e&&e.message);
+  return "تعذّر تسجيل الدخول — حاول مرة أخرى";
+}
+async function waDoLogin(){
+  const em=$("#wa-email").value.trim(),pw=$("#wa-pass").value;
+  if(!em||!pw){markMissing([["wa-email",!em],["wa-pass",!pw]]);return toast("الرجاء إدخال البريد وكلمة المرور","err");}
+  const b=$("#wa-login-btn");b.disabled=true;b.textContent="جارِ الدخول…";
+  try{
+    const a=await waAuth();
+    await a.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    await a.signInWithEmailAndPassword(em,pw);
+    toast("تم تسجيل الدخول بنجاح");renderWA();
+  }catch(e){b.disabled=false;b.textContent="دخول";toast(waAuthErr(e),"err");}
+}
+async function waResetPass(){
+  const em=$("#wa-email").value.trim();
+  if(!em){markMissing([["wa-email",true]]);return toast("اكتب بريدك أولاً","err");}
+  try{await (await waAuth()).sendPasswordResetEmail(em);toast("أُرسل رابط إعادة التعيين إلى بريدك إن كان مسجّلاً");}
+  catch(e){toast(waAuthErr(e),"err");}
+}
+async function waHash(pin,salt){
+  const d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(salt+":"+pin));
+  return [...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+function waPin(){
+  const setup=!WA.set.pinHash;
+  waRoot(waCard0(`<h1>${setup?"إنشاء رمز القفل":"القسم مقفل"}</h1>
+    <p class="sub">${setup?"اختر رمزاً من 4 إلى 8 أرقام يُطلب عند كل فتح للقسم":"أدخل رمز القفل (PIN) للمتابعة"}</p>
+    <div class="fld"><label for="wa-pin">رمز القفل:</label><input id="wa-pin" class="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="8" onkeydown="if(event.key==='Enter')waDoPin()" data-testid="wa-pin-input"></div>
+    ${setup?`<div class="fld"><label for="wa-pin2">تأكيد الرمز:</label><input id="wa-pin2" class="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="8" onkeydown="if(event.key==='Enter')waDoPin()" data-testid="wa-pin-confirm"></div>`:""}
+    <button class="wa-login-btn" id="wa-pin-btn" onclick="waDoPin()" data-testid="wa-pin-submit">${setup?"حفظ الرمز والدخول":"فتح القسم"}</button>
+    <div class="wa-login-note"><span dir="ltr">${esc(WA.user.email||"")}</span><br><button class="wa-link" onclick="waLogout()" data-testid="wa-pin-logout">تسجيل خروج</button></div>`));
+  $("#wa-pin").focus();
+}
+async function waDoPin(){
+  const p=waDigits($("#wa-pin").value).replace(/\D/g,"");
+  if(!/^\d{4,8}$/.test(p)){markMissing([["wa-pin",true]]);return toast("الرمز من 4 إلى 8 أرقام","err");}
+  const until=+sessionStorage.getItem("wa_pin_wait")||0;
+  if(Date.now()<until)return toast("محاولات كثيرة — انتظر "+Math.ceil((until-Date.now())/1000)+" ثانية","err");
+  const btn=$("#wa-pin-btn");btn.disabled=true;
+  try{
+    if(!WA.set.pinHash){
+      const p2=waDigits($("#wa-pin2").value).replace(/\D/g,"");
+      if(p!==p2){btn.disabled=false;markMissing([["wa-pin2",true]]);return toast("الرمزان غير متطابقين","err");}
+      const salt=[...crypto.getRandomValues(new Uint8Array(16))].map(b=>b.toString(16).padStart(2,"0")).join("");
+      const pinHash=await waHash(p,salt);
+      await waSetRef().set({pinHash,pinSalt:salt},{merge:true});
+      WA.set.pinHash=pinHash;WA.set.pinSalt=salt;
+      toast("تم حفظ رمز القفل");
+    }else if(await waHash(p,WA.set.pinSalt)!==WA.set.pinHash){
+      const n=(+sessionStorage.getItem("wa_pin_bad")||0)+1;
+      if(n>=5){sessionStorage.setItem("wa_pin_wait",Date.now()+60000);sessionStorage.setItem("wa_pin_bad",0);}
+      else sessionStorage.setItem("wa_pin_bad",n);
+      btn.disabled=false;$("#wa-pin").value="";$("#wa-pin").focus();
+      return toast("رمز غير صحيح","err");
+    }
+  }catch(e){btn.disabled=false;return toast(friendlyErr(e),"err");}
+  sessionStorage.setItem("wa_pin_bad",0);
+  sessionStorage.setItem("wa_unlock",WA.user.uid);
+  waMain();
+}
+function waLock(){sessionStorage.removeItem("wa_unlock");waStop();WA.pend=null;WA.q=null;waPin();}
+async function waLogout(){
+  waStop();sessionStorage.removeItem("wa_unlock");
+  try{await (await waAuth()).signOut();}catch(e){}
+  WA=null;
+  /* يمسح نسخة Firestore المحلية (IndexedDB) حتى لا تبقى أرقام المتبرعين على الجهاز بعد الخروج */
+  try{await db.terminate();await db.clearPersistence();}catch(e){}
+  toast("تم تسجيل الخروج");
+  setTimeout(()=>location.reload(),400);
+}
+function waDenied(e){
+  waStop();
+  const denied=((e&&e.code)||"")==="permission-denied";
+  waRoot(`<div class="wa-err" data-testid="wa-access-denied">${denied
+      ?`لا صلاحية للوصول لبيانات «مرسل الواتساب» بهذا الحساب (<span dir="ltr">${esc((WA&&WA.user&&WA.user.email)||"")}</span>).<br>تأكد من نشر قواعد Firestore الجديدة (ملف firestore.rules) وأن بريدك ضمن القائمة المسموح لها.`
+      :esc(friendlyErr(e))}</div>
+    <div class="wa-row"><button class="wa-btn out" onclick="renderWA()">إعادة المحاولة</button><button class="wa-btn ghost" onclick="waLogout()">تسجيل خروج</button></div>`);
+}
+
+/* ---------- الاشتراك في البيانات ---------- */
+function waStop(){
+  if(waTickH){clearInterval(waTickH);waTickH=null;}
+  if(!WA)return;
+  WA.unsubs.forEach(u=>{try{u();}catch(e){}});WA.unsubs=[];
+}
+function waPickRun(){
+  const r=WA.runs;
+  if(WA.runId&&r[WA.runId])return WA.runId;
+  if(WA.set.activeRun&&r[WA.set.activeRun])return WA.set.activeRun;
+  const l=Object.values(r).sort((a,b)=>(b.at||0)-(a.at||0));
+  return l.length?l[0].id:null;
+}
+function waSub(){
+  waStop();
+  const err=e=>waDenied(e);
+  WA.unsubs.push(db.collection("wa_contacts").onSnapshot(s=>{
+    const c={};s.forEach(d=>Object.assign(c,d.data().c||{}));
+    WA.contacts=c;WA.loaded.c=true;waRefresh();
+  },err));
+  WA.unsubs.push(db.collection("wa_templates").onSnapshot(s=>{
+    const t={};s.forEach(d=>t[d.id]=d.data());WA.tplOv=t;WA.loaded.t=true;waRefresh("tpl");
+  },err));
+  WA.unsubs.push(db.collection("wa_sends").onSnapshot(s=>{
+    const r={};s.forEach(d=>r[d.id]={id:d.id,...d.data()});WA.runs=r;WA.runId=waPickRun();WA.loaded.r=true;waRefresh();
+  },err));
+  WA.unsubs.push(waSetRef().onSnapshot(s=>{
+    WA.set={...WA_SET_DEF,...(s.exists?s.data():{})};WA.runId=waPickRun();waRefresh();
+  },err));
+}
+
+/* ---------- أدوات الحالة ---------- */
+function waAll(){return Object.entries(WA.contacts).map(([p,c])=>({p,...c})).sort((a,b)=>(a.at||0)-(b.at||0)||a.p.localeCompare(b.p));}
+function waRun(){return WA.runId?WA.runs[WA.runId]||null:null;}
+function waSt(p){const r=waRun();return (r&&r.st&&r.st[p])||null;}
+function waStatus(c){return c.opt?"opt":((waSt(c.p)||{}).s||"ready");}
+function waElig(c){if(!c.ld)return "unknown";return (Date.now()-new Date(c.ld+"T00:00:00"))/864e5>=(+WA.set.eligDays||90)?"yes":"no";}
+function waToday(){return ((WA.set.daily||{})[dkey(new Date())])||0;}
+function waTpls(){
+  const ov=WA.tplOv;
+  const defs=WA_TPL_DEF.map(t=>ov[t.id]&&ov[t.id].content!=null?{...t,content:ov[t.id].content,modified:true}:t);
+  const custom=Object.entries(ov).filter(([id])=>!WA_TPL_DEF.some(t=>t.id===id))
+    .map(([id,v])=>({id,title:v.title||"رسالة",content:v.content||"",kind:"مخصصة",at:v.at||0,isDefault:false})).sort((a,b)=>a.at-b.at);
+  return [...defs,...custom];
+}
+function waCurTpl(){const T=waTpls();return T.find(t=>t.id===WA.tplId)||T[0];}
+function waFiltered(){
+  const f=WA.f,q=f.q.trim().toLowerCase(),qd=waDigits(q).replace(/\D/g,"").replace(/^0+/,"");
+  return waAll().filter(c=>{
+    if(q&&!(String(c.n||"").toLowerCase().includes(q)||(qd&&c.p.includes(qd))))return false;
+    if(f.bt&&(f.bt==="none"?c.bt:c.bt!==f.bt))return false;
+    if(f.city&&c.city!==f.city)return false;
+    if(f.elig&&waElig(c)!==f.elig)return false;
+    const s=waStatus(c);
+    return f.st?f.st===s:s!=="opt";
+  });
+}
+/* طابور الإرسال: «تم الفتح» غير المؤكدة أولاً ثم الجاهزة، ويستبعد المرسل/الفاشل/غير الصالح و«لا ترسل» */
+function waQueueList(){
+  const skip=(WA.q&&WA.q.on&&WA.q.skip)||new Set();
+  const L=waFiltered().filter(c=>{const s=waStatus(c);return (s==="ready"||s==="opened")&&!skip.has(c.p);});
+  return L.filter(c=>waStatus(c)==="opened").concat(L.filter(c=>waStatus(c)==="ready"));
+}
+function waRunStats(r){
+  r=r||waRun();const o={opened:0,sent:0,failed:0,invalid:0,rp:0,bk:0,at:0,att:0};
+  if(!r||!r.st)return o;
+  Object.values(r.st).forEach(e=>{if(o[e.s]!=null)o[e.s]++;if(e.s==="sent"||e.s==="opened")o.att++;if(e.rp)o.rp++;if(e.bk)o.bk++;if(e.at)o.at++;});
+  return o;
+}
+
+/* ---------- بناء الرسالة ---------- */
+function waVals(c,run){
+  const s=WA.set,r=run||{};
+  return {"الاسم":c.n,"اسم":c.n,"name":c.n,"الفصيلة":c.bt,"فصيلة_الدم":c.bt,"blood_type":c.bt,
+    "آخر_تبرع":c.ld?fmtDate(c.ld):"","موقع_الحملة":r.place||s.place,"رابط_الخريطة":r.mapUrl||s.mapUrl,
+    "تاريخ_الحملة":r.date?fmtDate(r.date):"","مدة_الأهلية":s.eligDays};
+}
+function waCompose(tpl,c,run){
+  const V=waVals(c,run);
+  let t=String(tpl.content||"").replace(/\r\n?/g,"\n").replace(/\{([^{}\s]+)\}/g,(m,k)=>{const key=k in V?k:k.toLowerCase();return key in V?String(V[key]??""):m;});
+  if(!t.includes("إيقاف"))t=t.trimEnd()+"\n\n"+WA_OPTOUT;
+  return t;
+}
+function waMissing(content,c,run){
+  const V=waVals(c,run),out=new Set();
+  String(content||"").replace(/\{([^{}\s]+)\}/g,(m,k)=>{const key=k in V?k:k.toLowerCase();if(key in V&&(V[key]==null||V[key]===""))out.add("{"+k+"}");return m;});
+  return [...out];
+}
+function waURL(p,text){
+  const t=encodeURIComponent(text);
+  return waMobile()?`https://wa.me/${p}?text=${t}`:`https://web.whatsapp.com/send?phone=${p}&text=${t}`;
+}
+
+/* ---------- الواجهة الرئيسية ---------- */
+function waMain(){
+  WA.tplId=WA.set.tplId||WA.tplId;WA.drawn=false;
+  waRoot(`
+    <section class="wa-hero" data-testid="wa-hero">
+      <div class="wa-hero-bg" style="background-image:url(${WA_HERO})"></div><div class="wa-hero-fade"></div>
+      <div class="wa-hero-in"><img src="${WA_LOGO}" alt="شعار وزارة الصحة"><h1>بنك الدم المركزي بالدمام</h1><p>وزارة الصحة</p><div class="wa-chips" id="wa-chips"></div></div>
+      <div class="bounce">${waI("chev","md")}</div>
+    </section>
+    <section class="wa-card">
+      <div class="wa-card-h"><div class="wa-ico-box">${waI("sheet","md")}</div>
+        <div><h2>رفع ملف الإكسل</h2><p>ادرج ملف يحتوي على الاسم ورقم الهاتف</p></div>
+        <div class="end">
+          <button class="wa-btn green-out" onclick="waSample()" data-testid="wa-sample-download">${waI("download")}تحميل نموذج</button>
+          <button class="wa-btn out" onclick="waLegacyModal()" data-testid="wa-legacy-import">${waI("upload")}استيراد من النسخة القديمة</button>
+        </div></div>
+      <div class="wa-card-b">
+        <input id="wa-file" type="file" accept=".xlsx,.xls,.csv" hidden onchange="waFile(this.files[0])" data-testid="wa-file-input">
+        <div class="wa-drop" id="wa-drop" role="button" tabindex="0" aria-label="رفع ملف Excel أو CSV" data-testid="wa-dropzone"
+          onclick="$('#wa-file').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();$('#wa-file').click()}"
+          ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="waDrop(event)">
+          <div class="ib">${waI("upload","lg")}</div>
+          <div id="wa-drop-txt"><p class="t">اسحب وأفلت الملف هنا</p><p class="s">أو انقر للاختيار · Excel, CSV مدعوم</p></div>
+        </div>
+        <div class="wa-info">${waI("alert","md")}<div><p>أعمدة الملف المطلوبة:</p><div class="wa-badges">
+          <span class="wa-badge">الاسم</span><span class="wa-badge">رقم الهاتف</span><span class="wa-badge o">فصيلة الدم (اختياري)</span>
+          <span class="wa-badge o">المدينة (اختياري)</span><span class="wa-badge o">آخر تبرع (اختياري)</span></div></div></div>
+      </div>
+    </section>
+    <section class="wa-card" id="wa-tabs-card"></section>
+    <div id="wa-list-card"></div>
+    <footer class="wa-foot"><div class="b">${waI("heart")}بنك الدم المركزي بالدمام</div>
+      <div class="wa-row"><button class="wa-btn ghost" style="color:var(--wa-ink4)" onclick="waLock()" data-testid="wa-lock-footer">${waI("lock")}قفل</button>
+      <button class="wa-btn ghost" onclick="waLogout()" data-testid="wa-logout">تسجيل خروج</button></div></footer>`);
+  $("#wa-tabs-card").innerHTML=waTabsHTML();
+  waRenderTab();waRenderList();
+  waSub();
+}
+function waRefresh(kind){
+  if(!WA||!$("#wa-chips"))return;
+  const n=waAll().filter(c=>!c.opt).length,s=waRunStats().sent;
+  $("#wa-chips").innerHTML=n?`<div class="wa-chip">${waI("users")}<b>${n}</b><span>جهة اتصال</span></div><div class="wa-chip">${waI("check")}<b>${s}</b><span>تم الإرسال</span></div>`:"";
+  waRenderList();
+  const tb=$("#wa-tab-b");if(!tb||tb.contains(document.activeElement))return;
+  if(WA.tab==="runs"){const b=$("#wa-run-cur");if(b)b.innerHTML=waRunCurHTML();}
+  else if(WA.tab==="optout"||(WA.tab==="messages"&&kind==="tpl"))waRenderTab();
+}
+function waTabsHTML(){
+  const T=[["messages","msg","الرسائل"],["certificates","award","شهادات الشكر"],["runs","chart","الحملات والنتائج"],["optout","ban","لا ترسل"],["settings","sliders","الإعدادات"]];
+  return `<div class="wa-tabs" role="tablist">${T.map(([k,i,l])=>`<button class="wa-tab" role="tab" aria-selected="${WA.tab===k}" onclick="waTab('${k}')" data-testid="wa-tab-${k}">${waI(i)}${l}</button>`).join("")}</div>
+    <div class="wa-tab-b" id="wa-tab-b" role="tabpanel"></div>`;
+}
+function waTab(k){waTplFlush();WA.tab=k;$("#wa-tabs-card").innerHTML=waTabsHTML();waRenderTab();}
+function waRenderTab(){
+  const b=$("#wa-tab-b");if(!b)return;const k=WA.tab;
+  b.innerHTML=k==="messages"?waTabMessages():k==="certificates"?waTabCert():k==="runs"?waTabRuns():k==="optout"?waTabOpt():waTabSettings();
+  if(k==="messages")waPreview();
+  if(k==="runs")waLoadDC();
+}
+
+/* ---------- تبويب الرسائل ---------- */
+function waTabMessages(){
+  const T=waTpls(),cur=waCurTpl();WA.tplId=cur.id;
+  const who=waFiltered().slice(0,30);
+  return `<p class="wa-lbl">الرسائل المحفوظة:</p>
+    <div class="wa-tpls" role="group" aria-label="الرسائل المحفوظة">${T.map(t=>`<button class="wa-tpl" aria-pressed="${t.id===cur.id}" onclick="waPickTpl('${t.id}')" data-testid="wa-template-option" data-template-id="${t.id}">${esc(t.title)}<small>${esc(t.kind||"")}${t.modified?" · معدّلة":""}</small></button>`).join("")}</div>
+    <div class="wa-box">
+      <div class="wa-box-h"><p>محتوى الرسالة:</p><div class="wa-row">
+        <span class="wa-hint" id="wa-tpl-saved" aria-live="polite"></span>
+        ${cur.modified?`<button class="wa-btn out" onclick="waTplRestore('${cur.id}')" data-testid="wa-template-restore">${waI("refresh")}استعادة النص الأصلي</button>`:""}
+        ${!cur.isDefault?`<button class="wa-btn ghost" onclick="waTplDel('${cur.id}')" aria-label="حذف الرسالة" data-testid="wa-template-delete">${waI("trash")}</button>`:""}
+      </div></div>
+      ${!cur.isDefault?`<input class="wa-in" id="wa-tpl-title" value="${esc(cur.title)}" oninput="waTplEdit()" aria-label="عنوان الرسالة" data-testid="wa-template-title">`:""}
+      <textarea class="wa-in" id="wa-tpl-body" rows="8" oninput="waTplEdit()" aria-label="محتوى الرسالة" data-testid="wa-template-editor">${esc(cur.content)}</textarea>
+      <div class="wa-row">${WA_VARS.map(v=>`<button class="wa-var" onclick="waInsVar('${v}')" data-testid="wa-var-${v}">{${v}}</button>`).join("")}</div>
+      <p class="wa-hint">انقر متغيراً لإدراجه عند المؤشر. صيغ النسخة القديمة <code>{اسم}</code> و <code>{فصيلة_الدم}</code> تعمل أيضاً. يُضاف سطر «${WA_OPTOUT}» تلقائياً في نهاية كل رسالة عند الإرسال.</p>
+    </div>
+    <div class="wa-box">
+      <div class="wa-box-h"><p>👁️ معاينة حيّة</p>
+        <select class="wa-in" style="width:auto;max-width:100%" id="wa-prev-who" onchange="waPreview()" aria-label="معاينة لمتبرع" data-testid="wa-preview-contact">
+          <option value="">مثال: ${esc(WA_SAMPLE.n)}</option>${who.map(c=>`<option value="${c.p}">${esc(c.n)} — +${c.p}</option>`).join("")}</select></div>
+      <div class="wa-chat"><div class="wa-bubble" id="wa-prev" data-testid="wa-preview"></div></div>
+      <p class="wa-hint" id="wa-prev-warn" aria-live="polite"></p>
+    </div>
+    <div class="wa-box">
+      <p class="wa-lbl" style="display:flex;align-items:center;gap:8px">${waI("plus")}إضافة رسالة جديدة:</p>
+      <input class="wa-in" id="wa-new-title" placeholder="عنوان الرسالة" data-testid="wa-new-template-title">
+      <textarea class="wa-in" id="wa-new-body" rows="4" placeholder="محتوى الرسالة..." data-testid="wa-new-template-body"></textarea>
+      <button class="wa-btn red full" onclick="waTplAdd()" data-testid="wa-new-template-add">${waI("plus")}إضافة الرسالة</button>
+    </div>`;
+}
+function waPreview(){
+  const el=$("#wa-prev");if(!el)return;
+  const body=$("#wa-tpl-body"),t={...waCurTpl()};if(body)t.content=body.value;
+  const p=($("#wa-prev-who")||{}).value;
+  const c=p&&WA.contacts[p]?{p,...WA.contacts[p]}:WA_SAMPLE;
+  el.innerHTML=esc(waCompose(t,c,waRun())).replace(/\{[^{}\s]+\}/g,m=>`<span class="miss" title="متغير غير معروف">${m}</span>`);
+  const miss=waMissing(t.content,c,waRun());
+  $("#wa-prev-warn").textContent=miss.length?"⚠️ قيم فارغة لهذا المتبرع: "+miss.join("، ")+" — ستظهر فارغة في الرسالة":"";
+}
+function waInsVar(v){
+  const t=$("#wa-tpl-body");if(!t)return;
+  const s=t.selectionStart??t.value.length,e=t.selectionEnd??s,ins="{"+v+"}";
+  t.value=t.value.slice(0,s)+ins+t.value.slice(e);t.focus();t.selectionStart=t.selectionEnd=s+ins.length;
+  waTplEdit();
+}
+function waTplEdit(){
+  waPreview();clearTimeout(WA.tplT);
+  const m=$("#wa-tpl-saved");if(m)m.textContent="…";
+  WA.tplT=setTimeout(waTplSave,700);
+}
+function waTplFlush(){if(WA&&WA.tplT){clearTimeout(WA.tplT);WA.tplT=null;waTplSave();}}
+/* يحفظ مرة واحدة بعد توقف الكتابة (بدل حفظ + تنبيه مع كل حرف في الأصل)؛ تعديل الرسالة الأصلية يُحفظ كنسخة معدّلة قابلة للاستعادة */
+async function waTplSave(){
+  WA.tplT=null;
+  const body=$("#wa-tpl-body");if(!body)return;
+  const cur=waCurTpl(),ref=db.collection("wa_templates").doc(cur.id);
+  try{
+    if(cur.isDefault){
+      const orig=WA_TPL_DEF.find(t=>t.id===cur.id).content;
+      if(body.value===orig)await ref.delete();else await ref.set({content:body.value},{merge:true});
+    }else{
+      const ti=$("#wa-tpl-title");
+      await ref.set({content:body.value,title:(ti&&ti.value.trim())||cur.title},{merge:true});
+    }
+    const m=$("#wa-tpl-saved");if(m)m.textContent="✓ تم حفظ التعديل";
+  }catch(e){toast(friendlyErr(e),"err");}
+}
+function waPickTpl(id){
+  waTplFlush();WA.tplId=id;waSetRef().set({tplId:id},{merge:true}).catch(()=>{});
+  waRenderTab();waQRender();
+}
+async function waTplAdd(){
+  const ti=$("#wa-new-title").value.trim(),bo=$("#wa-new-body").value;
+  if(!ti||!bo.trim()){markMissing([["wa-new-title",!ti],["wa-new-body",!bo.trim()]]);return toast("الرجاء ملء جميع الحقول","err");}
+  const id="msg-"+Date.now();
+  try{
+    await db.collection("wa_templates").doc(id).set({title:ti,content:bo,at:Date.now()});
+    WA.tplId=id;waSetRef().set({tplId:id},{merge:true}).catch(()=>{});
+    toast("تم إضافة الرسالة بنجاح");waRenderTab();
+  }catch(e){toast(friendlyErr(e),"err");}
+}
+async function waTplDel(id){
+  if(WA_TPL_DEF.some(t=>t.id===id))return toast("لا يمكن حذف الرسائل الافتراضية","err");
+  if(!await confirmDialog("حذف هذه الرسالة نهائياً؟","حذف"))return;
+  try{await db.collection("wa_templates").doc(id).delete();WA.tplId="msg-1";toast("تم حذف الرسالة");waRenderTab();}
+  catch(e){toast(friendlyErr(e),"err");}
+}
+async function waTplRestore(id){
+  if(!await confirmDialog("استعادة النص الأصلي لهذه الرسالة وحذف تعديلاتك؟","استعادة"))return;
+  try{await db.collection("wa_templates").doc(id).delete();toast("تمت استعادة النص الأصلي");waRenderTab();}
+  catch(e){toast(friendlyErr(e),"err");}
+}
+
+/* ---------- تبويب شهادات الشكر ---------- */
+function waTabCert(){
+  const C=WA.cert;
+  return `<div class="wa-box"><p class="wa-lbl">اختر قالب الشهادة:</p>
+      <div class="wa-tpls">${WA_CERT_TPL.map(t=>`<button class="wa-tpl" aria-pressed="${C.tpl===t.id}" onclick="waCertTpl('${t.id}')" data-testid="wa-cert-template" data-template-id="${t.id}">${esc(t.name)}</button>`).join("")}</div></div>
+    <div class="wa-box"><p class="wa-lbl" style="display:flex;align-items:center;gap:8px">${waI("image")}رفع قالب الشهادة (PNG):</p>
+      <input type="file" id="wa-cert-file" accept="image/*" hidden onchange="waCertFile(this.files[0])" data-testid="wa-cert-file-input">
+      <div class="wa-drop" style="padding:24px;gap:8px;${C.img?"border-color:var(--wa-red);background:var(--wa-red-soft)":""}" role="button" tabindex="0" data-testid="wa-cert-upload"
+        onclick="$('#wa-cert-file').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();$('#wa-cert-file').click()}"
+        ondragover="event.preventDefault()" ondrop="event.preventDefault();waCertFile(event.dataTransfer.files[0])">
+        ${C.img?`<span style="color:var(--wa-red)">${waI("award","lg")}</span><p class="t" style="color:var(--wa-red);font-size:16px">تم رفع الشهادة بنجاح</p><img class="wa-cert-prev" src="${C.img}" alt="شهادة">`
+          :`<span style="color:var(--wa-mut2)">${waI("image","lg")}</span><p class="t" style="font-size:16px;color:var(--wa-ink3)">اسحب الصورة هنا أو انقر للاختيار</p><p class="s" style="font-size:12px">صيغة PNG أو JPG</p>`}
+      </div>
+      <button class="wa-btn out full" onclick="waCertPreview()" data-testid="wa-cert-preview">معاينة الشهادة</button>
+      <button class="wa-btn out full" onclick="waCertPDF('اسم المتبرع')" data-testid="wa-cert-pdf">تحميل PDF</button>
+      ${C.img?`<button class="wa-btn out full" onclick="WA.cert.img=null;WA.cert.imgEl=null;waRenderTab()" data-testid="wa-cert-change">تغيير الشهادة</button>`:""}
+      <p class="wa-hint">زر «إرسال الشهادة» يظهر في بطاقة كل متبرع بعد رفع صورة أو اختيار قالب. على الجوال تُشارَك الصورة مباشرة إلى واتساب؛ وعلى الكمبيوتر تُحفظ الصورة ثم تُفتح المحادثة لإرفاقها يدوياً (روابط واتساب لا تسمح بإرفاق الملفات).</p>
+    </div>`;
+}
+function waCertTpl(id){WA.cert.tpl=id;WA.cert.active=true;waRenderTab();waRenderGrid();}
+function waCertFile(f){
+  if(!f)return;
+  if(!/^image\//.test(f.type))return toast("الملف يجب أن يكون صورة — يرجى رفع صورة PNG أو JPG","err");
+  const r=new FileReader();
+  r.onload=()=>{const im=new Image();im.onload=()=>{WA.cert.img=r.result;WA.cert.imgEl=im;WA.cert.active=true;toast("تم رفع الشهادة بنجاح");waRenderTab();waRenderGrid();};im.src=r.result;};
+  r.readAsDataURL(f);
+}
+function waCertDraw(cv,name){
+  const C=WA.cert,t=WA_CERT_TPL.find(x=>x.id===C.tpl)||WA_CERT_TPL[0];
+  if(C.imgEl){
+    cv.width=C.imgEl.naturalWidth;cv.height=C.imgEl.naturalHeight;
+    const x=cv.getContext("2d");x.drawImage(C.imgEl,0,0);
+    x.font=`bold ${Math.max(18,Math.floor(cv.width/16))}px Cairo, sans-serif`;x.fillStyle=t.textColor;x.textAlign="center";x.textBaseline="middle";x.direction="rtl";
+    x.fillText(name,cv.width/2,cv.height/2);return;
+  }
+  const W=1200,H=800,x=cv.getContext("2d");cv.width=W;cv.height=H;x.direction="rtl";
+  x.fillStyle=t.bgColor;x.fillRect(0,0,W,H);
+  x.strokeStyle=t.accentColor;x.lineWidth=8;x.setLineDash(t.borderStyle==="dashed"?[20,10]:[]);x.strokeRect(30,30,W-60,H-60);x.setLineDash([]);
+  x.strokeStyle=t.textColor;x.lineWidth=2;x.strokeRect(50,50,W-100,H-100);
+  if(t.borderStyle==="double"){x.strokeRect(62,62,W-124,H-124);}
+  x.textAlign="center";
+  x.font="bold 48px Cairo, sans-serif";x.fillStyle=t.textColor;x.fillText("شهادة شكر",W/2,150);
+  x.font="24px Cairo, sans-serif";x.fillStyle=t.accentColor;x.fillText("وزارة الصحة — بنك الدم المركزي بالدمام",W/2,220);
+  x.font="32px Cairo, sans-serif";x.fillStyle=t.textColor;x.fillText("تقدم شهادة تقدير إلى",W/2,350);
+  x.font="bold 48px Cairo, sans-serif";x.fillStyle=t.accentColor;x.fillText(name,W/2,450);
+  x.font="20px Cairo, sans-serif";x.fillStyle=t.textColor;x.fillText("لتبرعك الكريم بالدم وإنقاذك لحياة الآخرين",W/2,550);
+  x.font="16px Cairo, sans-serif";x.fillText("شكراً لك على عطائك وإنسانيتك",W/2,700);
+  x.fillText(new Date().toLocaleDateString("ar-SA"),W/2,750);
+}
+async function waFontsReady(){try{await document.fonts.load("bold 40px Cairo");}catch(e){}}
+async function waCertPreview(){
+  await waFontsReady();
+  $("#modal-box").style.maxWidth="720px";
+  $("#modal-box").innerHTML=`<div class="wa" data-testid="wa-cert-modal"><h3>معاينة الشهادة</h3>
+    <div><label class="wa-lbl" for="wa-cert-name">اسم المتبرع:</label><input class="wa-in" id="wa-cert-name" value="أحمد محمد" oninput="waCertRedraw()" data-testid="wa-cert-name"></div>
+    <canvas class="wa-canvas" id="wa-cert-cv"></canvas>
+    <div class="wa-row"><button class="wa-btn red" style="flex:1" onclick="waCertPDF($('#wa-cert-name').value)" data-testid="wa-cert-modal-pdf">تحميل PDF</button>
+    <button class="wa-btn out" style="flex:1" onclick="closeModal()" data-testid="wa-cert-modal-close">إغلاق</button></div></div>`;
+  openModal();waCertRedraw();
+}
+function waCertRedraw(){const cv=$("#wa-cert-cv");if(cv)waCertDraw(cv,$("#wa-cert-name").value||" ");}
+async function waCertPDF(name){
+  name=String(name||"").trim()||"اسم المتبرع";
+  try{
+    await waFontsReady();
+    if(!window.jspdf)await loadJS("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+    const cv=document.createElement("canvas");waCertDraw(cv,name);
+    const pdf=new jspdf.jsPDF({orientation:cv.width>=cv.height?"landscape":"portrait",unit:"px",format:[cv.width,cv.height],hotfixes:["px_scaling"]});
+    pdf.addImage(cv.toDataURL("image/jpeg",.92),"JPEG",0,0,cv.width,cv.height);
+    pdf.save(`شهادة_${name}.pdf`);
+    toast(`تم تحميل شهادة ${name} بصيغة PDF`);
+  }catch(e){toast(NET_ERR,"err");}
+}
+async function waCertBlob(name){
+  await waFontsReady();
+  const cv=document.createElement("canvas");waCertDraw(cv,name);
+  return new Promise(r=>cv.toBlob(r,"image/png"));
+}
+
+/* ---------- تبويب الحملات والنتائج ---------- */
+function waRunCurHTML(){
+  const runs=Object.values(WA.runs).sort((a,b)=>(b.at||0)-(a.at||0)),r=waRun(),S=waRunStats(r);
+  return `<div class="wa-box-h"><p>${waI("chart")}حملة الإرسال الحالية</p></div>
+    ${runs.length?`<select class="wa-in" onchange="waSetRun(this.value)" aria-label="حملة الإرسال الحالية" data-testid="wa-run-select">${runs.map(x=>`<option value="${x.id}" ${x.id===WA.runId?"selected":""}>${esc(x.name)}${x.date?" — "+fmtDate(x.date):""}</option>`).join("")}</select>`
+      :`<p class="wa-hint">لا توجد حملة إرسال بعد — أنشئ واحدة أدناه، أو تُنشأ تلقائياً باسم اليوم عند أول إرسال.</p>`}
+    ${r?`<p class="wa-hint">📍 ${esc(r.place||"")}${r.mapUrl?` · <a href="${esc(r.mapUrl)}" target="_blank" rel="noopener">الخريطة</a>`:""}</p>
+      <div class="wa-kpis" data-testid="wa-run-results">
+        <div class="wa-kpi"><b>${S.att}</b><span>مُرسل (فُتحت المحادثة)</span></div>
+        <div class="wa-kpi hl"><b>${S.sent}</b><span>مؤكد</span></div>
+        <div class="wa-kpi"><b>${S.rp}</b><span>رد</span></div>
+        <div class="wa-kpi"><b>${S.bk}</b><span>حجز</span></div>
+        <div class="wa-kpi"><b>${S.at}</b><span>حضر</span></div>
+        <div class="wa-kpi hl"><b>${S.sent?Math.round(S.at/S.sent*100):0}%</b><span>التحويل (حضر ÷ مؤكد)</span></div>
+        <div class="wa-kpi"><b>${S.failed+S.invalid}</b><span>فشل / غير صالح</span></div>
+      </div>
+      <p class="wa-hint">«رد / حجز / حضر» تُعلَّم يدوياً من بطاقة كل متبرع بعد تأكيد الإرسال.</p>
+      <div class="wa-row"><button class="wa-btn green-out" onclick="waReportXLSX()" data-testid="wa-export-report">${waI("download")}تصدير تقرير الإرسال Excel</button>
+      <button class="wa-btn danger-out" onclick="waDelRun()" data-testid="wa-run-delete">${waI("trash")}حذف الحملة</button></div>`:""}`;
+}
+function waTabRuns(){
+  return `<div class="wa-box" id="wa-run-cur">${waRunCurHTML()}</div>
+    <div class="wa-box"><p class="wa-lbl" style="display:flex;align-items:center;gap:8px">${waI("plus")}حملة إرسال جديدة</p>
+      <div class="wa-form">
+        <div><label for="wa-run-dc">ربط بحملة من موقع الحملات (اختياري)</label><select class="wa-in" id="wa-run-dc" onchange="waRunFromDC(this.value)" data-testid="wa-run-link-campaign"><option value="">— بدون —</option></select></div>
+        <div><label for="wa-run-name">اسم الحملة *</label><input class="wa-in" id="wa-run-name" data-testid="wa-run-name"></div>
+        <div><label for="wa-run-date">تاريخ الحملة *</label><input class="wa-in" type="date" id="wa-run-date" data-testid="wa-run-date"></div>
+        <div><label for="wa-run-place">موقع الحملة</label><input class="wa-in" id="wa-run-place" value="${esc(WA.set.place)}" data-testid="wa-run-place"></div>
+        <div><label for="wa-run-map">رابط الخريطة</label><input class="wa-in" id="wa-run-map" dir="ltr" value="${esc(WA.set.mapUrl)}" data-testid="wa-run-map"></div>
+      </div>
+      <button class="wa-btn red" onclick="waRunAdd()" data-testid="wa-run-create">${waI("plus")}إنشاء الحملة</button></div>`;
+}
+async function waLoadDC(){
+  const sel=$("#wa-run-dc");if(!sel)return;
+  try{
+    if(!WA.dc){const s=await cQuery().get();WA.dc=sortRows(s.docs.map(d=>({id:d.id,...d.data()})));}
+    const s2=$("#wa-run-dc");if(!s2)return;
+    s2.innerHTML=`<option value="">— بدون —</option>`+WA.dc.map(c=>`<option value="${c.id}">${esc(c.name)} — ${esc(c.city||"")}${c.startDate?" — "+fmtDate(c.startDate):""}</option>`).join("");
+  }catch(e){}
+}
+function waRunFromDC(id){
+  const c=(WA.dc||[]).find(x=>x.id===id);if(!c)return;
+  $("#wa-run-name").value=c.name||"";$("#wa-run-date").value=c.startDate||"";
+  $("#wa-run-place").value=[c.org,c.city].filter(Boolean).join(" — ");
+}
+async function waRunAdd(){
+  const name=$("#wa-run-name").value.trim(),date=$("#wa-run-date").value;
+  if(!name||!date){markMissing([["wa-run-name",!name],["wa-run-date",!date]]);return toast("اكتب اسم الحملة وتاريخها","err");}
+  const ref=db.collection("wa_sends").doc();
+  try{
+    await ref.set({name,date,place:$("#wa-run-place").value.trim(),mapUrl:$("#wa-run-map").value.trim(),dc:$("#wa-run-dc").value||null,at:Date.now(),st:{}});
+    waSetRun(ref.id);toast("أُنشئت حملة الإرسال ✓");waRenderTab();
+  }catch(e){toast(friendlyErr(e),"err");}
+}
+function waSetRun(id){
+  WA.runId=id;WA.q=null;waSetRef().set({activeRun:id},{merge:true}).catch(()=>{});
+  const b=$("#wa-run-cur");if(b)b.innerHTML=waRunCurHTML();
+  waRefresh();
+}
+/* تُنشأ حملة باسم اليوم تلقائياً عند أول إرسال (متزامن — بلا انتظار حتى لا تُفقد نقرة فتح النافذة) */
+function waEnsureRun(){
+  if(waRun())return waRun();
+  const ref=db.collection("wa_sends").doc(),today=waISO(new Date());
+  const d={name:"إرسال "+fmtDate(today),date:today,place:WA.set.place,mapUrl:WA.set.mapUrl,at:Date.now(),st:{}};
+  ref.set(d).catch(e=>toast(friendlyErr(e),"err"));
+  WA.runs[ref.id]={id:ref.id,...d};WA.runId=ref.id;
+  waSetRef().set({activeRun:ref.id},{merge:true}).catch(()=>{});
+  return WA.runs[ref.id];
+}
+async function waDelRun(){
+  const r=waRun();if(!r)return;
+  if(!await confirmDialog(`حذف حملة الإرسال «${r.name}» ونتائجها؟ جهات الاتصال لا تُحذف.`,"حذف"))return;
+  try{await db.collection("wa_sends").doc(r.id).delete();WA.runId=null;WA.pend=null;WA.q=null;toast("حُذفت حملة الإرسال");}
+  catch(e){toast(friendlyErr(e),"err");}
+}
+
+/* ---------- تبويب «لا ترسل» ---------- */
+function waTabOpt(){
+  const L=waAll().filter(c=>c.opt);
+  return `<div class="wa-box"><p class="wa-lbl" style="display:flex;align-items:center;gap:8px">${waI("ban")}قائمة «لا ترسل» (${L.length})</p>
+    <p class="wa-hint">كل رقم هنا يُستبعد من جميع حملات الإرسال. أضِف كل من رد بـ «إيقاف».</p>
+    <div class="wa-row"><input class="wa-in" style="flex:1;min-width:180px" id="wa-opt-in" dir="ltr" placeholder="05xxxxxxxx" aria-label="رقم الجوال" onkeydown="if(event.key==='Enter')waOptAdd()" data-testid="wa-optout-input">
+      <button class="wa-btn red" onclick="waOptAdd()" data-testid="wa-optout-add">إضافة</button></div>
+    ${L.length?`<div class="wa-scroll"><table class="wa-tbl"><thead><tr><th>الاسم</th><th>الجوال</th><th></th></tr></thead><tbody>${L.map(c=>`<tr><td>${esc(c.n)}</td><td dir="ltr">+${c.p}</td><td><button class="wa-btn out" onclick="waOpt('${c.p}',false)" data-testid="wa-optout-remove">إزالة</button></td></tr>`).join("")}</tbody></table></div>`
+      :`<p class="wa-empty">القائمة فارغة</p>`}</div>`;
+}
+async function waOptAdd(){
+  const z=waNorm($("#wa-opt-in").value);if(!z.ok){markMissing([["wa-opt-in",true]]);return toast(z.why,"err");}
+  const p=z.phone;
+  try{
+    await waShard(p).set({c:{[p]:WA.contacts[p]?{opt:true}:{n:"—",opt:true,at:Date.now()}}},{merge:true});
+    toast("أُضيف إلى «لا ترسل»");waRenderTab();
+  }catch(e){toast(friendlyErr(e),"err");}
+}
+async function waOpt(p,v){
+  try{await waShard(p).set({c:{[p]:{opt:v}}},{merge:true});toast(v?"أُضيف إلى «لا ترسل» — لن يُرسل له في أي حملة":"أُزيل من «لا ترسل»");if(WA.tab==="optout")waRenderTab();}
+  catch(e){toast(friendlyErr(e),"err");}
+}
+
+/* ---------- تبويب الإعدادات ---------- */
+function waTabSettings(){
+  const s=WA.set,n=(id,l,v,min,max,tid)=>`<div><label for="${id}">${l}</label><input class="wa-in" type="number" id="${id}" min="${min}" max="${max}" value="${esc(v)}" data-testid="${tid}"></div>`;
+  return `<div class="wa-box"><p class="wa-lbl" style="display:flex;align-items:center;gap:8px">${waI("sliders")}الإرسال والحماية من الحظر</p>
+      <div class="wa-form">
+        ${n("wa-s-limit","الحد اليومي للرسائل",s.dailyLimit,1,500,"wa-setting-daily-limit")}
+        ${n("wa-s-gmin","أقل فاصل بين الرسائل (ثانية)",s.gapMin,5,600,"wa-setting-gap-min")}
+        ${n("wa-s-gmax","أكبر فاصل بين الرسائل (ثانية)",s.gapMax,5,900,"wa-setting-gap-max")}
+        ${n("wa-s-elig","مدة الأهلية للتبرع (يوم)",s.eligDays,1,365,"wa-setting-eligibility-days")}
+        <div><label for="wa-s-place">موقع التبرع الافتراضي</label><input class="wa-in" id="wa-s-place" value="${esc(s.place)}" data-testid="wa-setting-default-place"></div>
+        <div><label for="wa-s-map">رابط الخريطة الافتراضي</label><input class="wa-in" id="wa-s-map" dir="ltr" value="${esc(s.mapUrl)}" data-testid="wa-setting-default-map"></div>
+      </div>
+      <p class="wa-hint">الحد والفاصل يحميان رقم الواتساب من الحظر. مدة الأهلية تُستخدم في فلتر «مؤهل للتبرع» والمتغير {مدة_الأهلية}.</p>
+      <button class="wa-btn red" onclick="waSaveSettings()" data-testid="wa-settings-save">حفظ الإعدادات</button></div>
+    <div class="wa-box"><p class="wa-lbl" style="display:flex;align-items:center;gap:8px">${waI("lock")}الأمان</p>
+      <p class="wa-hint">الحساب الحالي: <span dir="ltr">${esc(WA.user.email||"")}</span></p>
+      <div class="wa-row"><button class="wa-btn out" onclick="waChangePin()" data-testid="wa-change-pin">تغيير رمز القفل</button>
+      <button class="wa-btn out" onclick="waLock()" data-testid="wa-lock">${waI("lock")}قفل القسم الآن</button></div></div>`;
+}
+async function waSaveSettings(){
+  const g=id=>+$("#"+id).value;
+  const d={dailyLimit:g("wa-s-limit"),gapMin:g("wa-s-gmin"),gapMax:g("wa-s-gmax"),eligDays:g("wa-s-elig"),place:$("#wa-s-place").value.trim(),mapUrl:$("#wa-s-map").value.trim()};
+  const bad=[["wa-s-limit",!(d.dailyLimit>=1&&d.dailyLimit<=500)],["wa-s-gmin",!(d.gapMin>=5)],["wa-s-gmax",!(d.gapMax>=d.gapMin)],["wa-s-elig",!(d.eligDays>=1&&d.eligDays<=365)]];
+  if(bad.some(b=>b[1])){markMissing(bad);return toast("راجع القيم المظللة (أكبر فاصل ≥ أقل فاصل ≥ 5 ثوانٍ)","err");}
+  try{await waSetRef().set(d,{merge:true});toast("تم حفظ الإعدادات ✓");}catch(e){toast(friendlyErr(e),"err");}
+}
+function waChangePin(){
+  $("#modal-box").style.maxWidth="400px";
+  $("#modal-box").innerHTML=`<div class="wa"><h3>تغيير رمز القفل</h3>
+    <div><label class="wa-lbl" for="wa-cp-old">الرمز الحالي</label><input class="wa-in" id="wa-cp-old" type="password" inputmode="numeric" maxlength="8" data-testid="wa-change-pin-old"></div>
+    <div><label class="wa-lbl" for="wa-cp-new">الرمز الجديد (4–8 أرقام)</label><input class="wa-in" id="wa-cp-new" type="password" inputmode="numeric" maxlength="8" data-testid="wa-change-pin-new"></div>
+    <div><label class="wa-lbl" for="wa-cp-new2">تأكيد الرمز الجديد</label><input class="wa-in" id="wa-cp-new2" type="password" inputmode="numeric" maxlength="8" data-testid="wa-change-pin-confirm"></div>
+    <div class="wa-row"><button class="wa-btn red" onclick="waDoChangePin()" data-testid="wa-change-pin-save">حفظ</button><button class="wa-btn out" onclick="closeModal()">إلغاء</button></div></div>`;
+  openModal();
+}
+async function waDoChangePin(){
+  const v=id=>waDigits($("#"+id).value).replace(/\D/g,"");
+  if(await waHash(v("wa-cp-old"),WA.set.pinSalt)!==WA.set.pinHash){markMissing([["wa-cp-old",true]]);return toast("الرمز الحالي غير صحيح","err");}
+  const n=v("wa-cp-new");
+  if(!/^\d{4,8}$/.test(n)){markMissing([["wa-cp-new",true]]);return toast("الرمز من 4 إلى 8 أرقام","err");}
+  if(n!==v("wa-cp-new2")){markMissing([["wa-cp-new2",true]]);return toast("الرمزان غير متطابقين","err");}
+  const salt=[...crypto.getRandomValues(new Uint8Array(16))].map(b=>b.toString(16).padStart(2,"0")).join("");
+  try{await waSetRef().set({pinHash:await waHash(n,salt),pinSalt:salt},{merge:true});closeModal();toast("تم تغيير رمز القفل ✓");}
+  catch(e){toast(friendlyErr(e),"err");}
+}
+
+/* ---------- قائمة جهات الاتصال ---------- */
+function waListShell(){
+  const opt=(v,l,cur)=>`<option value="${v}" ${cur===v?"selected":""}>${l}</option>`,f=WA.f;
+  return `<section class="wa-card" data-testid="wa-contacts-card"><div class="wa-card-h" style="display:block">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+        <div style="display:flex;align-items:center;gap:12px"><div class="wa-ico-box red">${waI("users","md")}</div>
+          <div><h2>قائمة جهات الاتصال</h2><p id="wa-list-sub" data-testid="wa-list-summary"></p></div></div>
+        <div class="wa-row" id="wa-list-btns"></div>
+      </div>
+      <div class="wa-prog" id="wa-prog"></div>
+      <div class="wa-row" style="margin-top:12px;justify-content:space-between" id="wa-run-row"></div>
+      <div class="wa-queue" id="wa-queue" hidden aria-live="polite" data-testid="wa-queue"></div>
+      <div class="wa-search"><input id="wa-q" type="search" placeholder="ابحث بالاسم أو رقم الهاتف..." value="${esc(f.q)}" aria-label="ابحث بالاسم أو رقم الهاتف" oninput="waFilt('q',this.value)" data-testid="wa-search"><span class="i">${waI("phone")}</span></div>
+      <div class="wa-filters">
+        <select class="wa-in" onchange="waFilt('bt',this.value)" aria-label="الفصيلة" data-testid="wa-filter-blood">${opt("","كل الفصائل",f.bt)}${WA_BTS.map(b=>opt(b,b,f.bt)).join("")}${opt("none","بدون فصيلة",f.bt)}</select>
+        <select class="wa-in" id="wa-f-city" onchange="waFilt('city',this.value)" aria-label="المدينة" data-testid="wa-filter-city"></select>
+        <select class="wa-in" onchange="waFilt('elig',this.value)" aria-label="آخر تبرع" data-testid="wa-filter-last-donation">${opt("","آخر تبرع: الكل",f.elig)}${opt("yes","مؤهل للتبرع",f.elig)}${opt("no","تبرع مؤخراً",f.elig)}${opt("unknown","غير معروف",f.elig)}</select>
+        <select class="wa-in" onchange="waFilt('st',this.value)" aria-label="الحالة" data-testid="wa-filter-status">${opt("","الحالة: الكل",f.st)}${opt("ready","جاهز",f.st)}${opt("opened","تم الفتح",f.st)}${opt("sent","تم الإرسال",f.st)}${opt("failed","فشل",f.st)}${opt("invalid","غير صالح",f.st)}${opt("opt","لا ترسل",f.st)}</select>
+      </div></div>
+    <div class="wa-card-b"><div class="wa-list" id="wa-grid"></div><div id="wa-more"></div></div></section>`;
+}
+function waDayChip(){
+  const n=waToday(),L=+WA.set.dailyLimit||25;
+  return `<span class="wa-day ${n>=L?"over":n>=L-3?"near":""}" data-testid="wa-daily-counter" title="الرسائل المؤكدة اليوم / الحد اليومي">اليوم: ${n} / ${L}</span>`;
+}
+function waRenderList(){
+  const box=$("#wa-list-card");if(!box)return;
+  if(!WA.loaded.c){box.innerHTML=`<section class="wa-card"><div class="wa-loading">جارِ تحميل جهات الاتصال…</div></section>`;box.dataset.mode="load";return;}
+  if(!Object.keys(WA.contacts).length){
+    if(box.dataset.mode!=="empty"){box.dataset.mode="empty";box.innerHTML=`<div class="wa-start" data-testid="wa-empty-state"><div class="ib">${waI("sheet","xl")}</div><h3>ابدأ برفع ملف الإكسل</h3><p>ارفع ملف إكسل يحتوي على أسماء وأرقام هواتف المتبرعين المحتملين وسنرسل لهم رسائل تحفيزية عبر واتساب</p></div>`;}
+    return;
+  }
+  if(box.dataset.mode!=="list"){box.dataset.mode="list";box.innerHTML=waListShell();}
+  const all=waAll().filter(c=>!c.opt),tot=all.length,sent=all.filter(c=>waStatus(c)==="sent").length,pct=tot?sent/tot*100:0;
+  const rem=waQueueList().length,r=waRun(),started=r&&r.st&&Object.keys(r.st).length,qOn=WA.q&&WA.q.on;
+  $("#wa-list-sub").textContent=`${sent} من ${tot} تم إرسالهم`;
+  $("#wa-list-btns").innerHTML=`
+    <button class="wa-btn out" onclick="waResetRun()" data-testid="wa-reset-statuses">${waI("refresh")}إعادة تعيين</button>
+    <button class="wa-btn out" onclick="waClearList()" data-testid="wa-clear-list">مسح القائمة</button>
+    <button class="wa-btn danger-out" onclick="waWipe()" data-testid="wa-delete-all-data">${waI("trash")}حذف البيانات</button>
+    <button class="wa-btn green-out" onclick="waReportXLSX()" data-testid="wa-export-report-top">${waI("download")}تقرير Excel</button>
+    <button class="wa-btn red" onclick="waQStart()" ${qOn?"disabled":""} data-testid="wa-send-all">${waI("send")}${started&&rem?"استئناف من حيث توقفت":"إرسال للكل"} (${rem})</button>`;
+  $("#wa-prog").innerHTML=`<div class="l"><span>تقدم الإرسال</span><span>${Math.round(pct)}%</span></div><div class="wa-bar" role="progressbar" aria-label="تقدم الإرسال" aria-valuenow="${Math.round(pct)}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div>`;
+  $("#wa-run-row").innerHTML=`<span class="wa-hint" style="font-size:13px">حملة الإرسال: <b>${r?esc(r.name):"— تُنشأ عند أول إرسال"}</b> · الرسالة: <b>${esc(waCurTpl().title)}</b>
+    <button class="wa-link" onclick="waTab('runs');$('#wa-tabs-card').scrollIntoView({behavior:'smooth'})" data-testid="wa-change-run">تغيير</button></span>${waDayChip()}`;
+  const cities=[...new Set(all.map(c=>c.city).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"ar"));
+  if(WA.f.city&&!cities.includes(WA.f.city))cities.unshift(WA.f.city);
+  $("#wa-f-city").innerHTML=`<option value="">كل المدن</option>`+cities.map(c=>`<option ${WA.f.city===c?"selected":""}>${esc(c)}</option>`).join("");
+  waRenderGrid();waQRender();
+}
+function waFilt(k,v){WA.f[k]=v;WA.page=60;if(k==="q")waRenderGrid();else waRenderList();}
+function waCard(c,i,anim){
+  const e=waSt(c.p)||{},s=waStatus(c),sent=s==="sent";
+  const G=[["#9b0007","#c53829"],["#760009","#a11000"],["#b22800","#c65d26"],["#860000","#a52c18"]][i%4];
+  const ini=String(c.n||"").trim().split(/\s+/).slice(0,2).map(w=>w[0]||"").join("")||"؟";
+  const badge={ready:"",opened:`<span class="wa-badge st-open">تم الفتح</span>`,sent:`<span class="wa-badge st-sent">أُرسل</span>`,
+    failed:`<span class="wa-badge st-fail">فشل</span>`,invalid:`<span class="wa-badge st-fail">غير صالح</span>`,opt:`<span class="wa-badge st-opt">لا ترسل</span>`}[s];
+  const el=waElig(c);
+  return `<article class="wa-contact ${sent?"sent":s==="opened"?"open":s==="opt"?"opt":""}" data-testid="wa-contact" data-phone="${c.p}" data-status="${s}" style="${anim?`animation-delay:${Math.min(i*50,500)}ms`:"animation:none"}">
+    <div class="wa-ct-top">
+      <div class="wa-av" style="background:${sent?"linear-gradient(135deg,#278733,#53a367)":`linear-gradient(135deg,${G[0]},${G[1]})`}">${sent?waI("check","md"):esc(ini)}</div>
+      <div class="wa-ct-mid"><p class="wa-ct-name">${esc(c.n||"—")} ${e.n>0?`<span>(${e.n})</span>`:""}</p><p class="wa-ct-ph">+${c.p}</p>
+        <div class="wa-ct-meta">${c.bt?`<span class="wa-badge bt">${esc(c.bt)}</span>`:""}${c.city?`<span>📍 ${esc(c.city)}</span>`:""}${c.ld?`<span>🩸 آخر تبرع ${fmtDate(c.ld)}${el==="yes"?" · مؤهل":""}</span>`:""}</div></div>
+      ${badge}</div>
+    <div class="wa-ct-acts">
+      <button class="wa-send ${sent?"done":""}" onclick="waSend('${c.p}','msg')" ${c.opt?"disabled":""} data-testid="wa-send-btn">${WA_WA_ICON}إرسال رسالة</button>
+      ${WA.cert.active&&!c.opt?`<button class="wa-send cert" onclick="waSend('${c.p}','cert')" data-testid="wa-send-cert-btn">${waI("award")}إرسال الشهادة${e.cs==="sent"?" ✓":""}</button>`:""}
+      <div class="wa-mini">${sent?[["rp","رد"],["bk","حجز"],["at","حضر"]].map(([k,l])=>`<button aria-pressed="${!!e[k]}" onclick="waMark('${c.p}','${k}')" data-testid="wa-mark-${k}">${l}</button>`).join(""):""}
+        <button class="warn" onclick="waOpt('${c.p}',${!c.opt})" data-testid="wa-optout-btn">${c.opt?"إلغاء «لا ترسل»":"🚫 لا ترسل"}</button>
+        <button class="warn" onclick="waDelContact('${c.p}')" aria-label="حذف ${esc(c.n)}" data-testid="wa-delete-contact">${waI("trash")}</button></div>
+    </div></article>`;
+}
+function waRenderGrid(){
+  const g=$("#wa-grid");if(!g)return;
+  const L=waFiltered();
+  if(!L.length){g.innerHTML=`<div class="wa-empty" style="grid-column:1/-1">${waI("users","xl")}<p style="font-weight:600">لا توجد نتائج</p></div>`;$("#wa-more").innerHTML="";return;}
+  const anim=!WA.drawn;
+  g.innerHTML=L.slice(0,WA.page).map((c,i)=>waCard(c,i,anim)).join("");WA.drawn=true;
+  $("#wa-more").innerHTML=L.length>WA.page?`<div style="text-align:center;margin-top:16px"><button class="wa-btn out" onclick="WA.page+=60;waRenderGrid()" data-testid="wa-show-more">عرض المزيد (${L.length-WA.page})</button></div>`:"";
+  waMarkCur();
+}
+async function waMark(p,k){
+  const r=waRun();if(!r)return;const e=(r.st||{})[p]||{};
+  try{await db.collection("wa_sends").doc(r.id).update(waFP("st",p,k),!e[k]);}catch(err){toast(friendlyErr(err),"err");}
+}
+async function waDelContact(p){
+  const c=WA.contacts[p]||{};
+  if(!await confirmDialog(`حذف ${c.n||""} (+${p}) من القائمة؟`,"حذف"))return;
+  try{await waShard(p).update(waFP("c",p),firebase.firestore.FieldValue.delete());toast("حُذفت جهة الاتصال");}
+  catch(e){toast(friendlyErr(e),"err");}
+}
+async function waResetRun(){
+  const r=waRun();if(!r)return toast("لا توجد حالات إرسال لإعادة تعيينها");
+  if(!await confirmDialog(`تصفير كل حالات الإرسال في «${r.name}»؟ تعود كل الجهات «جاهز».`,"إعادة تعيين"))return;
+  try{await db.collection("wa_sends").doc(r.id).update({st:{}});WA.pend=null;WA.q=null;toast("تم إعادة تعيين حالة الإرسال");}
+  catch(e){toast(friendlyErr(e),"err");}
+}
+async function waClearList(){
+  if(!await confirmDialog("مسح كل جهات الاتصال من القائمة (بما فيها «لا ترسل»)؟ حملات الإرسال ونتائجها تبقى.","مسح القائمة"))return;
+  try{const b=db.batch();for(let i=0;i<10;i++)b.delete(db.collection("wa_contacts").doc("s"+i));await b.commit();WA.pend=null;WA.q=null;toast("تم مسح القائمة");}
+  catch(e){toast(friendlyErr(e),"err");}
+}
+async function waWipe(){
+  if(!await confirmDialog("سيُحذف كل شيء في «مرسل الواتساب»: جهات الاتصال، حملات الإرسال ونتائجها، والرسائل المخصصة والمعدّلة. رمز القفل والإعدادات تبقى. لا يمكن التراجع.","حذف نهائي"))return;
+  try{
+    const b=db.batch();
+    for(let i=0;i<10;i++)b.delete(db.collection("wa_contacts").doc("s"+i));
+    Object.keys(WA.runs).forEach(id=>b.delete(db.collection("wa_sends").doc(id)));
+    Object.keys(WA.tplOv).forEach(id=>b.delete(db.collection("wa_templates").doc(id)));
+    await b.commit();WA.runId=null;WA.pend=null;WA.q=null;WA.tplId="msg-1";
+    toast("تم حذف جميع البيانات المحفوظة");waRenderTab();
+  }catch(e){toast(friendlyErr(e),"err");}
+}
+
+/* ---------- الإرسال والتأكيد ---------- */
+async function waLimitOk(){
+  const n=waToday(),L=+WA.set.dailyLimit||25;
+  if(n>=L)return await confirmDialog(`وصلت للحد اليومي (${n} من ${L}). الإرسال الزائد يعرّض رقم الواتساب للحظر. المتابعة رغم ذلك؟`,"متابعة على مسؤوليتي");
+  if(n>=L-3)toast(`تنبيه: تبقّى ${L-n} ${L-n===1?"رسالة":"رسائل"} على الحد اليومي`);
+  return true;
+}
+async function waSend(p,kind){
+  const c=WA.contacts[p];if(!c)return;
+  if(c.opt)return toast("هذا الرقم في قائمة «لا ترسل»","err");
+  if(WA.pend){
+    if(WA.pend.p===p&&WA.pend.kind===kind)return waReopen();
+    toast("أكّد نتيجة المحادثة المفتوحة أولاً","err");const q=$("#wa-queue");if(q)q.scrollIntoView({behavior:"smooth",block:"center"});return;
+  }
+  const wait=Math.ceil(((WA.nextAt||0)-Date.now())/1000);
+  if(wait>0)return toast(`انتظر ${wait} ثانية بين الرسائل (حماية من الحظر)`,"err");
+  if(!await waLimitOk())return;
+  const run=waEnsureRun(),ct={p,...c};
+  let text;
+  if(kind==="cert"){
+    text=`شهادة شكر للمتبرع الكريم ${c.n}\n\nشكراً لك على تبرعك بالدم 🩸\n\n${WA_OPTOUT}`;
+    const blob=await waCertBlob(c.n),file=new File([blob],`شهادة_${c.n}.png`,{type:"image/png"});
+    if(waMobile()&&navigator.canShare&&navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file],text});}catch(e){if(e&&e.name==="AbortError")return;}
+      return waOpened(run,p,kind);
+    }
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=file.name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    toast("حُفظت صورة الشهادة — أرفقها في المحادثة ثم اضغط إرسال");
+  }else text=waCompose(waCurTpl(),ct,run);
+  const w=window.open(waURL(p,text),"wa_sender");
+  if(!w)return toast("المتصفح منع فتح النافذة — اسمح بالنوافذ المنبثقة لهذا الموقع","err");
+  waOpened(run,p,kind);
+}
+function waOpened(run,p,kind){
+  WA.pend={p,kind};
+  const e=(run.st||{})[p]||{},ref=db.collection("wa_sends").doc(run.id);
+  const upd=kind==="cert"?[waFP("st",p,"cs"),"opened"]
+    :[waFP("st",p,"s"),e.s==="sent"?"sent":"opened",waFP("st",p,"t"),Date.now(),waFP("st",p,"tpl"),WA.tplId];
+  ref.update(...upd).catch(err=>toast(friendlyErr(err),"err"));
+  waQRender();
+  const q=$("#wa-queue");if(q)q.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function waReopen(){
+  const pd=WA.pend;if(!pd)return;const c=WA.contacts[pd.p];if(!c)return;
+  const text=pd.kind==="cert"?`شهادة شكر للمتبرع الكريم ${c.n}\n\nشكراً لك على تبرعك بالدم 🩸\n\n${WA_OPTOUT}`:waCompose(waCurTpl(),{p:pd.p,...c},waRun());
+  if(!window.open(waURL(pd.p,text),"wa_sender"))toast("المتصفح منع فتح النافذة — اسمح بالنوافذ المنبثقة لهذا الموقع","err");
+}
+/* النتيجة: sent (بتأكيد المستخدم فقط) | failed | invalid (ليس على واتساب) | later (تبقى «تم الفتح») */
+function waConfirm(res){
+  const pd=WA.pend,r=waRun();if(!pd||!r)return;
+  const p=pd.p,ref=db.collection("wa_sends").doc(r.id),now=Date.now();
+  let w;
+  if(res==="later")w=null;
+  else if(pd.kind==="cert")w=ref.update(waFP("st",p,"cs"),res);
+  else{
+    const upd=[waFP("st",p,"s"),res,waFP("st",p,res==="sent"?"ct":"ft"),now];
+    if(res==="sent")upd.push(waFP("st",p,"n"),inc(1));
+    w=ref.update(...upd);
+  }
+  if(w)w.catch(e=>toast(friendlyErr(e),"err"));
+  if(res==="sent")waSetRef().set({daily:{[dkey(new Date())]:inc(1)}},{merge:true}).catch(()=>{});
+  WA.pend=null;
+  if(res==="later"&&WA.q&&WA.q.on)WA.q.skip.add(p);
+  if(res!=="later"){
+    const a=+WA.set.gapMin||20,b=Math.max(a,+WA.set.gapMax||40);
+    WA.nextAt=now+(a+Math.random()*(b-a))*1000;
+  }
+  toast(res==="sent"?"✓ سُجّل الإرسال":res==="later"?"بقيت «تم الفتح» — يمكنك التأكيد لاحقاً":"سُجّلت النتيجة");
+  waQRender();
+}
+function waQStart(){
+  if(!waQueueList().length)return toast("تم إرسال الرسائل لجميع جهات الاتصال");
+  WA.q={on:true,skip:new Set(),done:false};
+  waRenderList();
+  const q=$("#wa-queue");if(q)q.scrollIntoView({behavior:"smooth",block:"center"});
+}
+function waQSkip(){if(!WA.q)return;WA.q.skip.add(WA.q.cur);waQRender();}
+function waQStop(){if(WA.q)WA.q.on=false;waRenderList();toast("أُوقف الإرسال المتتابع — اضغط «استئناف من حيث توقفت» للمتابعة");}
+function waMarkCur(){
+  document.querySelectorAll(".wa-contact.cur").forEach(x=>x.classList.remove("cur"));
+  const cp=WA.pend?WA.pend.p:(WA.q&&WA.q.on?WA.q.cur:null);
+  if(cp){const e=document.querySelector(`.wa-contact[data-phone="${cp}"]`);if(e)e.classList.add("cur");}
+}
+function waQRender(){
+  const el=$("#wa-queue");if(!el||!WA)return;
+  const wait=Math.max(0,Math.ceil(((WA.nextAt||0)-Date.now())/1000));
+  if(wait>0&&!waTickH)waTickH=setInterval(()=>{if(!WA||Date.now()>=(WA.nextAt||0)){clearInterval(waTickH);waTickH=null;}if(WA)waQRender();},1000);
+  const pd=WA.pend,q=WA.q&&WA.q.on;
+  const stop=`<button class="wa-btn out" onclick="waQStop()" data-testid="wa-queue-stop">⏸ إيقاف</button>`;
+  if(!pd&&!q&&!wait){el.hidden=true;el.innerHTML="";waMarkCur();return;}
+  el.hidden=false;let h="";
+  if(pd){
+    const c=WA.contacts[pd.p]||{n:"—"};
+    h=`<p class="who">هل أُرسلت ${pd.kind==="cert"?"الشهادة":"الرسالة"} إلى ${esc(c.n)} <span dir="ltr">+${pd.p}</span>؟</p>
+      <p class="wa-hint" style="margin:0">اضغط «إرسال» داخل واتساب أولاً ثم أكّد هنا — لا تُسجَّل «تم الإرسال» إلا بتأكيدك.</p>
+      <div class="wa-row"><button class="wa-btn green" onclick="waConfirm('sent')" data-testid="wa-confirm-sent">✓ تم الإرسال</button>
+      <button class="wa-btn out" onclick="waConfirm('failed')" data-testid="wa-confirm-failed">✗ فشل</button>
+      <button class="wa-btn out" onclick="waConfirm('invalid')" data-testid="wa-confirm-invalid">🚫 ليس على واتساب</button>
+      <button class="wa-btn out" onclick="waReopen()" data-testid="wa-reopen">↺ إعادة فتح</button>
+      <button class="wa-btn out" onclick="waConfirm('later')" data-testid="wa-confirm-later">لاحقاً</button></div>`;
+  }else if(wait>0){
+    h=`<div class="wa-row"><span class="cnt" data-testid="wa-countdown">${wait}</span><span>ثانية حتى الرسالة التالية — فاصل عشوائي ${esc(WA.set.gapMin)}–${esc(WA.set.gapMax)} ث للحماية من الحظر</span></div>${q?`<div class="wa-row">${stop}</div>`:""}`;
+  }else{
+    const L=waQueueList();
+    if(!L.length){h=`<p class="who" data-testid="wa-queue-done">✓ اكتملت القائمة — لا توجد جهات متبقية في هذا الفلتر</p><div class="wa-row"><button class="wa-btn out" onclick="WA.q=null;waRenderList()">إغلاق</button></div>`;}
+    else{
+      const c=L[0],tpl=waCurTpl();WA.q.cur=c.p;
+      h=`<div class="wa-row" style="justify-content:space-between"><p class="who" data-testid="wa-queue-next">التالي: ${esc(c.n)} <span dir="ltr">+${c.p}</span>${waStatus(c)==="opened"?" · <span class=\"wa-badge st-open\">بانتظار التأكيد</span>":""}</p><span class="wa-hint">باقٍ ${L.length}</span></div>
+        <details><summary class="wa-hint" style="cursor:pointer">معاينة الرسالة (${esc(tpl.title)})</summary><div class="wa-chat" style="margin-top:8px"><div class="wa-bubble">${esc(waCompose(tpl,c,waRun()))}</div></div></details>
+        <div class="wa-row"><button class="wa-btn green" onclick="waSend('${c.p}','msg')" data-testid="wa-queue-open-next">${WA_WA_ICON}فتح المحادثة ▶</button>
+        <button class="wa-btn out" onclick="waQSkip()" data-testid="wa-queue-skip">تخطي</button>${stop}</div>`;
+    }
+  }
+  el.innerHTML=h+`<div>${waDayChip()}</div>`;
+  waMarkCur();
+}
+
+/* ---------- الاستيراد من Excel/CSV ---------- */
+function waDrop(e){e.preventDefault();$("#wa-drop").classList.remove("over");const f=e.dataTransfer.files&&e.dataTransfer.files[0];if(f)waFile(f);}
+async function waFile(f){
+  if(!f)return;
+  if(!/\.(xlsx|xls|csv)$/i.test(f.name))return toast("الملف غير مدعوم — يرجى رفع ملف Excel أو CSV","err");
+  try{await waXLSX();}catch(e){return toast(NET_ERR,"err");}
+  let wb;
+  try{wb=XLSX.read(new Uint8Array(await f.arrayBuffer()),{type:"array",cellDates:true});}
+  catch(e){return toast("خطأ في قراءة الملف — تأكد من أن الملف بصيغة Excel صحيحة","err");}
+  const sheets=wb.SheetNames.map(n=>waSheet(n,wb.Sheets[n])).filter(s=>s.rows.length);
+  if(!sheets.length)return toast("الملف فارغ — لم يتم العثور على بيانات في الملف","err");
+  sheets.sort((a,b)=>b.score-a.score);
+  WA.imp={file:f.name,sheets,si:0,map:{...sheets[0].map}};
+  $("#wa-drop-txt").innerHTML=`<p class="t g">${esc(f.name)}</p><p class="s">انقر لتغيير الملف</p>`;
+  $("#wa-file").value="";
+  waImpModal();
+}
+function waSheet(name,ws){
+  const aoa=XLSX.utils.sheet_to_json(ws,{header:1,defval:"",raw:true,blankrows:false});
+  let hi=0;
+  for(let i=0;i<Math.min(5,aoa.length);i++){if(aoa[i].filter(v=>String(v).trim()!=="").length>=2){hi=i;break;}}
+  const width=Math.max(0,...aoa.map(r=>r.length));
+  let headers=Array.from({length:width},(_,i)=>String((aoa[hi]||[])[i]??"").trim()),rows=aoa.slice(hi+1);
+  if(headers.some(h=>waNorm(h).ok)){rows=aoa.slice(hi);headers=headers.map(()=>"");} // لا يوجد صف عناوين
+  headers=headers.map((h,i)=>h||("عمود "+(i+1)));
+  const map=waDetect(headers,rows);
+  return {name,headers,rows,hi,map,score:map.conf*1e6+rows.length};
+}
+/* اكتشاف الأعمدة بالعنوان (عربي/إنجليزي) + بالمحتوى معاً؛ «رقم الهوية/الملف» لا يُعدّ جوالاً، و«آخر تبرع» لا يُعدّ فصيلة */
+function waDetect(headers,rows){
+  const sample=rows.slice(0,200),S={n:[],p:[],b:[],c:[],d:[]};
+  headers.forEach((h0,i)=>{
+    const h=h0.toLowerCase(),vals=sample.map(r=>r[i]).filter(v=>String(v??"").trim()!==""),cnt=vals.length||1;
+    const phoneOk=vals.filter(v=>waNorm(v).ok).length/cnt,btOk=vals.filter(v=>waBT(v,true)).length/cnt,dateOk=vals.filter(v=>waDate(v)).length/cnt;
+    const textOk=vals.filter(v=>typeof v==="string"&&/[ء-يa-z]{2}/i.test(v)&&!/\d{4}/.test(waDigits(v))).length/cnt;
+    let p=phoneOk*2;
+    if(/جوال|موبايل|mobile|هاتف|phone|tel|واتس|whats|تواصل|contact/.test(h))p+=2;else if(/رقم|number|\bno\b/.test(h))p+=.5;
+    if(/هوي|سجل|ملف|national|iqama|إقامة|اقامة|mrn|\bid\b|file|تبرع/.test(h))p-=3;
+    let n=textOk;if(/اسم|name|المتبرع|donor/.test(h))n+=2;if(/مستخدم|user|ملف|file|حمل|مدين|city|فصيل|blood|جوال|phone/.test(h))n-=2;
+    let b=btOk*2;if(/فصيل|blood|abo|group|زمرة/.test(h))b+=2;if(/تبرع|date|تاريخ|آخر|اخر|last/.test(h))b-=3;
+    let c=0;if(/مدين|city|منطق|region|محافظ|الحي/.test(h))c+=3;
+    let d=dateOk;if(/(آخر|اخر|last).*(تبرع|don)/.test(h))d+=3;else if(/تاريخ.*تبرع|donation.?date/.test(h))d+=2;
+    S.p.push(p);S.n.push(n);S.b.push(b);S.c.push(c);S.d.push(d);
+  });
+  const used=new Set(),m={};
+  [["p",1.2],["n",1],["b",1.5],["c",2],["d",1.5]].forEach(([k,min])=>{
+    let best=-1,bs=min;S[k].forEach((v,i)=>{if(!used.has(i)&&v>=bs){bs=v;best=i;}});
+    m[k]=best;if(best>=0)used.add(best);
+  });
+  m.conf=(m.p>=0?1:0)+(m.n>=0?1:0);
+  return m;
+}
+function waImpCompute(){
+  const I=WA.imp,s=I.sheets[I.si],m=I.map,seen=new Set(),ok=[],bad=[];let dup=0,upd=0,opt=0;
+  s.rows.forEach((r,i)=>{
+    const raw=m.p>=0?r[m.p]:"",nm=m.n>=0?String(r[m.n]??"").trim():"";
+    if(String(raw??"").trim()===""&&!nm)return;
+    const z=waNorm(raw);
+    if(!z.ok){bad.push({row:s.hi+2+i,n:nm,raw:raw instanceof Date?"":String(raw??""),why:m.p<0?"لم يُحدَّد عمود الجوال":z.why});return;}
+    if(seen.has(z.phone)){dup++;return;}
+    seen.add(z.phone);
+    const ex=WA.contacts[z.phone];if(ex){upd++;if(ex.opt)opt++;}
+    ok.push({p:z.phone,n:nm||("شخص "+(i+1)),bt:m.b>=0?waBT(r[m.b]):"",city:m.c>=0?String(r[m.c]??"").trim():"",ld:m.d>=0?waDate(r[m.d]):""});
+  });
+  return {ok,bad,dup,upd,opt};
+}
+function waImpModal(){
+  const I=WA.imp,s=I.sheets[I.si],R=waImpCompute();
+  const sampleOf=i=>{const v=(s.rows.find(r=>String(r[i]??"").trim()!=="")||[])[i];return v==null?"":v instanceof Date?waISO(v):String(v).slice(0,18);};
+  const opts=k=>`<option value="-1">— لا يوجد —</option>`+s.headers.map((h,i)=>{const sm=sampleOf(i);return `<option value="${i}" ${I.map[k]===i?"selected":""}>${esc(h)}${sm?" — مثال: "+esc(sm):""}</option>`;}).join("");
+  const F=[["n","الاسم",0],["p","رقم الجوال",1],["b","فصيلة الدم",0],["c","المدينة",0],["d","آخر تبرع",0]];
+  const auto=I.map.p>=0&&I.map.n>=0;
+  $("#modal-box").style.maxWidth="760px";
+  $("#modal-box").innerHTML=`<div class="wa" data-testid="wa-import-modal"><h3>مراجعة الملف: ${esc(I.file)}</h3>
+    ${I.sheets.length>1?`<div><label class="wa-lbl" for="wa-imp-sheet">الورقة</label><select class="wa-in" id="wa-imp-sheet" onchange="waImpSheet(+this.value)" data-testid="wa-import-sheet">${I.sheets.map((x,i)=>`<option value="${i}" ${i===I.si?"selected":""}>${esc(x.name)} (${x.rows.length} صف)</option>`).join("")}</select></div>`:""}
+    <p class="wa-hint" style="font-size:13px">${auto?"✓ تم اكتشاف الأعمدة تلقائياً — راجعها وعدّلها عند الحاجة.":"⚠️ لم يُكتشف عمود الاسم أو الجوال بثقة — اربط الأعمدة يدوياً من القوائم."}</p>
+    <div class="wa-form">${F.map(([k,l,req])=>`<div><label for="wa-map-${k}">${l}${req?" *":""}</label><select class="wa-in" id="wa-map-${k}" onchange="waImpMap('${k}',+this.value)" data-testid="wa-map-${k}">${opts(k)}</select></div>`).join("")}</div>
+    <div class="wa-kpis" data-testid="wa-import-summary">
+      <div class="wa-kpi hl"><b>${R.ok.length}</b><span>رقم صالح</span></div><div class="wa-kpi"><b>${R.ok.length-R.upd}</b><span>جديد</span></div>
+      <div class="wa-kpi"><b>${R.upd}</b><span>موجود (يُحدَّث)</span></div><div class="wa-kpi"><b>${R.dup}</b><span>مكرر في الملف</span></div>
+      <div class="wa-kpi"><b>${R.bad.length}</b><span>مرفوض</span></div></div>
+    ${R.opt?`<p class="wa-hint">🚫 ${R.opt} من هذه الأرقام في «لا ترسل» وسيبقى مستبعداً.</p>`:""}
+    ${R.bad.length?`<details ${R.ok.length?"":"open"}><summary class="wa-lbl" style="cursor:pointer">الأرقام المرفوضة وأسبابها (${R.bad.length})</summary>
+      <div class="wa-scroll" style="margin-top:8px"><table class="wa-tbl" data-testid="wa-import-rejected"><thead><tr><th>الصف</th><th>الاسم</th><th>القيمة</th><th>السبب</th></tr></thead>
+      <tbody>${R.bad.slice(0,200).map(b=>`<tr><td>${b.row}</td><td>${esc(b.n)}</td><td dir="ltr">${esc(b.raw)}</td><td>${esc(b.why)}</td></tr>`).join("")}</tbody></table></div></details>`:""}
+    <div class="wa-row"><button class="wa-btn red" onclick="waImpDo()" ${R.ok.length?"":"disabled"} data-testid="wa-import-confirm">${waI("upload")}استيراد ${R.ok.length} رقم</button>
+      ${R.bad.length?`<button class="wa-btn out" onclick="waImpBadXLSX()" data-testid="wa-import-export-rejected">${waI("download")}تصدير المرفوضين Excel</button>`:""}
+      <button class="wa-btn out" onclick="closeModal()" data-testid="wa-import-cancel">إلغاء</button></div></div>`;
+  if(!$("#modal-bg").classList.contains("open"))openModal();
+}
+function waImpSheet(i){WA.imp.si=i;WA.imp.map={...WA.imp.sheets[i].map};waImpModal();const s=$("#wa-imp-sheet");if(s)s.focus();}
+function waImpMap(k,v){
+  const M=WA.imp.map;if(v>=0)Object.keys(M).forEach(x=>{if(x!==k&&M[x]===v)M[x]=-1;});M[k]=v;
+  waImpModal();const s=$("#wa-map-"+k);if(s)s.focus();
+}
+async function waImpDo(){
+  const R=waImpCompute();if(!R.ok.length)return;
+  const by={},now=Date.now();
+  R.ok.forEach((c,i)=>{
+    const sh="s"+c.p.slice(-1),d={n:c.n};
+    if(c.bt)d.bt=c.bt;if(c.city)d.city=c.city;if(c.ld)d.ld=c.ld;if(!WA.contacts[c.p])d.at=now+i;
+    (by[sh]=by[sh]||{})[c.p]=d;
+  });
+  /* حد وثيقة Firestore 1MB — نتحقق من حجم كل جزء قبل الكتابة */
+  for(const [sh,m] of Object.entries(by)){
+    const cur={};Object.entries(WA.contacts).forEach(([p,c])=>{if("s"+p.slice(-1)===sh)cur[p]=c;});
+    if(JSON.stringify({...cur,...m}).length>950000)return toast("القائمة تتجاوز سعة التخزين — قسّم الملف أو احذف جهات قديمة","err");
+  }
+  const btn=$("[data-testid=wa-import-confirm]");btn.disabled=true;btn.textContent="جارِ الحفظ…";
+  try{
+    const b=db.batch();Object.entries(by).forEach(([sh,m])=>b.set(db.collection("wa_contacts").doc(sh),{c:m},{merge:true}));
+    await b.commit();
+    closeModal();WA.imp=null;
+    toast(`تم تحميل ${R.ok.length} جهة اتصال — يمكنك الآن إرسال رسائل واتساب`);
+  }catch(e){btn.disabled=false;btn.textContent="استيراد";toast(friendlyErr(e),"err");}
+}
+async function waImpBadXLSX(){
+  const R=waImpCompute();await waXLSX();
+  const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet([["الصف","الاسم","القيمة الأصلية","السبب"],...R.bad.map(b=>[b.row,b.n,b.raw,b.why])]);
+  ws["!cols"]=[{wch:6},{wch:22},{wch:20},{wch:40}];wb.Workbook={Views:[{RTL:true}]};
+  XLSX.utils.book_append_sheet(wb,ws,"المرفوضة");XLSX.writeFile(wb,"أرقام-مرفوضة.xlsx");
+}
+async function waSample(){
+  try{await waXLSX();}catch(e){return toast(NET_ERR,"err");}
+  const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet([
+    ["الاسم","رقم الهاتف","فصيلة الدم","المدينة","آخر تبرع"],
+    ["أحمد محمد","0501234567","A+","الدمام","2025-01-15"],["سارة علي","0559876543","B+","الخبر","2025-03-02"],
+    ["محمد خالد","0531112233","O+","الدمام",""],["فاطمة أحمد","0544455566","AB+","القطيف","2024-11-20"]]);
+  ws["!cols"]=[{wch:20},{wch:15},{wch:12},{wch:12},{wch:14}];wb.Workbook={Views:[{RTL:true}]};
+  XLSX.utils.book_append_sheet(wb,ws,"القائمة");XLSX.writeFile(wb,"نموذج_قائمة_التبرع.xlsx");
+}
+
+/* ---------- تقرير الإرسال ---------- */
+async function waReportXLSX(){
+  const r=waRun();if(!r)return toast("لا توجد حملة إرسال بعد","err");
+  try{await waXLSX();}catch(e){return toast(NET_ERR,"err");}
+  const L={opened:"تم الفتح (غير مؤكد)",sent:"تم الإرسال ✓",failed:"فشل",invalid:"غير صالح"};
+  const T=t=>t?new Date(t).toLocaleString("ar-SA-u-nu-latn"):"",yes=v=>v?"نعم":"";
+  const rows=[["الاسم","الجوال","الفصيلة","المدينة","آخر تبرع","الحالة","وقت الفتح","وقت التأكيد","مرات الإرسال","رد","حجز","حضر","الشهادة"]];
+  new Set([...Object.keys(WA.contacts),...Object.keys(r.st||{})]).forEach(p=>{
+    const c=WA.contacts[p]||{},e=(r.st||{})[p]||{};
+    rows.push([c.n||"","+"+p,c.bt||"",c.city||"",c.ld||"",c.opt?"لا ترسل":(L[e.s]||"جاهز"),T(e.t),T(e.ct),e.n||0,yes(e.rp),yes(e.bk),yes(e.at),e.cs==="sent"?"أُرسلت":e.cs?"فُتحت":""]);
+  });
+  const S=waRunStats(r);
+  const sum=[["حملة الإرسال",r.name],["التاريخ",r.date||""],["الموقع",r.place||""],["مُرسل (فُتحت المحادثة)",S.att],["مؤكد",S.sent],["رد",S.rp],["حجز",S.bk],["حضر",S.at],
+    ["نسبة التحويل (حضر ÷ مؤكد)",(S.sent?Math.round(S.at/S.sent*100):0)+"%"],["فشل / غير صالح",S.failed+S.invalid],["تاريخ التصدير",T(Date.now())]];
+  const wb=XLSX.utils.book_new(),ws1=XLSX.utils.aoa_to_sheet(sum),ws2=XLSX.utils.aoa_to_sheet(rows);
+  ws1["!cols"]=[{wch:26},{wch:30}];ws2["!cols"]=[{wch:22},{wch:16},{wch:8},{wch:12},{wch:12},{wch:18},{wch:20},{wch:20},{wch:10},{wch:6},{wch:6},{wch:6},{wch:10}];
+  wb.Workbook={Views:[{RTL:true}]};
+  XLSX.utils.book_append_sheet(wb,ws1,"الملخص");XLSX.utils.book_append_sheet(wb,ws2,"التفاصيل");
+  XLSX.writeFile(wb,"تقرير-إرسال-"+String(r.name).replace(/[\\/:*?"<>|]/g,"-")+".xlsx");
+}
+
+/* ---------- الاستيراد من النسخة القديمة ---------- */
+function waLegacyModal(){
+  $("#modal-box").style.maxWidth="640px";
+  $("#modal-box").innerHTML=`<div class="wa" data-testid="wa-legacy-modal"><h3>استيراد من النسخة القديمة</h3>
+    <ol style="margin:0;padding-inline-start:20px;line-height:2;font-size:14px">
+      <li>افتح الموقع القديم في نفس المتصفح الذي كنت تستخدمه، وسجّل دخولك.</li>
+      <li>اضغط <b dir="ltr">F12</b> ثم تبويب <b dir="ltr">Console</b>، والصق السكربت أدناه واضغط Enter.</li>
+      <li>سيُنزَّل ملف <b dir="ltr">whatsapp-sender-backup.json</b> — اختره هنا.</li></ol>
+    <textarea class="wa-in" rows="4" dir="ltr" readonly id="wa-legacy-script" style="font-family:ui-monospace,Menlo,monospace;font-size:11px" data-testid="wa-legacy-script">${esc(WA_LEGACY_SCRIPT)}</textarea>
+    <div class="wa-row"><button class="wa-btn out" onclick="navigator.clipboard.writeText(WA_LEGACY_SCRIPT).then(()=>toast('نُسخ السكربت ✓'),()=>{$('#wa-legacy-script').select();toast('انسخه يدوياً (Ctrl+C)')})" data-testid="wa-legacy-copy">نسخ السكربت</button>
+      <input type="file" id="wa-legacy-file" accept=".json,application/json" hidden onchange="waLegacyFile(this.files[0])" data-testid="wa-legacy-file">
+      <button class="wa-btn red" onclick="$('#wa-legacy-file').click()" data-testid="wa-legacy-choose">${waI("upload")}اختيار ملف JSON</button>
+      <button class="wa-btn out" onclick="closeModal()">إغلاق</button></div>
+    <p class="wa-hint">السكربت لا ينقل كلمة المرور. الجهات التي كانت «أُرسل» في النسخة القديمة تُستورد كـ «تم الفتح» لأن القديم كان يسجّلها بمجرد فتح الرابط دون تأكيد.</p></div>`;
+  openModal();
+}
+async function waLegacyFile(f){
+  if(!f)return;
+  let o;try{o=JSON.parse(await f.text());}catch(e){return toast("ملف غير صالح — اختر الملف الناتج من السكربت","err");}
+  const arr=v=>Array.isArray(v)?v:[];
+  const list=[...arr(o.uploadedContacts),...Object.keys(o).filter(k=>/^hospital-.*-contacts$/.test(k)).flatMap(k=>arr(o[k]))];
+  const by={},st={},seen=new Set(),now=Date.now();let ok=0,bad=0;
+  list.forEach((c,i)=>{
+    const z=waNorm(c&&c.phone);if(!z.ok){bad++;return;}
+    if(seen.has(z.phone))return;seen.add(z.phone);ok++;
+    const d={n:String(c.name||("شخص "+(i+1))).trim()};const bt=waBT(c.bloodType||"");if(bt)d.bt=bt;if(!WA.contacts[z.phone])d.at=now+i;
+    (by["s"+z.phone.slice(-1)]=by["s"+z.phone.slice(-1)]||{})[z.phone]=d;
+    if(c.sent||c.sendCount>0)st[z.phone]={s:"opened",n:+c.sendCount||0,t:now,legacy:true};
+  });
+  const msgs=arr(o.savedMessages).filter(m=>m&&!m.isDefault&&m.title&&m.content);
+  if(!ok&&!msgs.length)return toast("لا توجد بيانات قابلة للاستيراد في الملف","err");
+  try{
+    const b=db.batch();
+    Object.entries(by).forEach(([sh,m])=>b.set(db.collection("wa_contacts").doc(sh),{c:m},{merge:true}));
+    msgs.forEach((m,i)=>b.set(db.collection("wa_templates").doc("legacy-"+String(m.id||i).replace(/[^\w-]/g,"")),{title:String(m.title),content:String(m.content),at:now+i}));
+    let runId=null;
+    if(Object.keys(st).length){const ref=db.collection("wa_sends").doc();runId=ref.id;b.set(ref,{name:"مستورد من النسخة القديمة",date:waISO(new Date()),place:WA.set.place,mapUrl:WA.set.mapUrl,at:now,st,legacy:true});}
+    await b.commit();
+    if(runId)waSetRun(runId);
+    closeModal();
+    toast(`استُورد ${ok} جهة اتصال و${msgs.length} رسالة${bad?` — رُفض ${bad} رقم غير صالح`:""}`);
+  }catch(e){toast(friendlyErr(e),"err");}
 }
 
 route();
