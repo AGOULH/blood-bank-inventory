@@ -1,0 +1,26 @@
+rules_version = '2';
+// قواعد Firestore لمشروع bloodbank-dammam
+// ⚠️ هذا الملف لا يُنشر تلقائياً — انسخ كتلة «مرسل الواتساب» أدناه إلى القواعد الحالية في
+//    Firebase Console → Firestore Database → Rules، دون تعديل قاعدة inventory_sync الموجودة، ثم Publish.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===== القاعدة الحالية لـ inventory_sync (التموين + حملات التبرع) — تبقى كما هي في الـ Console =====
+    // match /inventory_sync/{docId} { ... }
+
+    // ===== مرسل الواتساب (donate/#/wa) — أرقام المتبرعين بيانات شخصية =====
+    // مسموح فقط لحساب Firebase Auth مسجّل ببريد ضمن القائمة (Email/Password + بريد مؤكَّد غير مطلوب).
+    // مهم: أي شخص يستطيع إنشاء حساب بمفتاح API العام إذا كان التسجيل مفتوحاً، لذلك القائمة إلزامية
+    // (ويُفضّل أيضاً إيقاف "Enable create (sign-up)" من Authentication → Settings → User actions).
+    function isWaUser() {
+      return request.auth != null
+        && request.auth.token.email in [
+          'REPLACE_WITH_YOUR_EMAIL@example.com'
+        ];
+    }
+    match /wa_contacts/{doc}  { allow read, write: if isWaUser(); }
+    match /wa_templates/{doc} { allow read, write: if isWaUser(); }
+    match /wa_sends/{doc}     { allow read, write: if isWaUser(); }
+    match /wa_settings/{doc}  { allow read, write: if isWaUser(); }
+  }
+}
