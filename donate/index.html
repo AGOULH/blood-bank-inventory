@@ -138,66 +138,66 @@
      بدل مجرد فقدان الشاشة الواحدة. الحل: min-height بدل height + overflow-y:auto كشبكة أمان، ولكل من
      .bag-area/.scr-types حد أدنى حقيقي (بالأسفل) فلا ينضغطان أبداً لما دون قراءة معقولة — فإن لم تتسع
      المساحة threshold يكبر ارتفاع .screen نفسه وتظهر شريط تمرير طبيعي بدل التراكب/الانضغاط غير المفهوم */
-  .screen{--chip:clamp(48px,7.6vh,86px);min-height:100vh;min-height:100dvh;background:radial-gradient(1400px 800px at 70% -10%,#d90429 0%,#800f2f 45%,#3d0814 100%);color:#fff;display:flex;flex-direction:column;padding:1.6vh 3vw;overflow-x:hidden;overflow-y:auto;position:relative;box-sizing:border-box}
+  .screen{--chip:clamp(48px,calc(7.6*var(--vh,1vh)),86px);min-height:calc(100*var(--vh,1vh));min-height:calc(100*var(--vh,1dvh));background:radial-gradient(1400px 800px at 70% -10%,#d90429 0%,#800f2f 45%,#3d0814 100%);color:#fff;display:flex;flex-direction:column;padding:calc(1.6*var(--vh,1vh)) calc(3*var(--vw,1vw));overflow-x:hidden;overflow-y:auto;position:relative;box-sizing:border-box}
   /* fitScreen() يُصغّر .screen ككل بـ transform ليبقى ضمن ارتفاع النافذة دون تمرير — الحاوية تُثبَّت على ارتفاع
      النافذة وتُخفي الفائض المرئي فقط (شكلياً، بلا قصّ حقيقي لأن التصغير محسوب مسبقاً ليطابقها تماماً) */
   #view.fit-view{height:100vh;height:100dvh;overflow:hidden;background:#210911}
   #view.fit-view .screen{transform-origin:top center}
   /* العنوان وشريط الأيام/الوقت يتوسطان كامل عرض الشاشة (بلا تقسيم أعمدة اصطناعي كان يفرض التفافاً غير مرغوب) */
-  .scr-head{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;flex:none;margin-top:1.4vh}
-  .scr-logo{height:9vh;max-height:90px;min-height:52px;object-fit:contain;background:#fff;border-radius:14px;padding:6px}
+  .scr-head{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;flex:none;margin-top:calc(1.4*var(--vh,1vh))}
+  .scr-logo{height:calc(9*var(--vh,1vh));max-height:90px;min-height:52px;object-fit:contain;background:#fff;border-radius:14px;padding:6px}
   .scr-title{text-align:center}
-  .scr-title h1{margin:0;font-size:clamp(18px,3vh,38px);font-weight:800;line-height:1.2}
-  .scr-title p{margin:2px 0 0;font-size:clamp(11px,1.7vh,17px);opacity:.85}
+  .scr-title h1{margin:0;font-size:clamp(18px,calc(3*var(--vh,1vh)),38px);font-weight:800;line-height:1.2}
+  .scr-title p{margin:2px 0 0;font-size:clamp(11px,calc(1.7*var(--vh,1vh)),17px);opacity:.85}
   .scr-timerow{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
   .scr-days{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .day-chip{background:linear-gradient(160deg,var(--chip-g1,rgba(255,255,255,.18)),var(--chip-g2,rgba(255,255,255,.08)) 65%);border:1px solid rgba(255,255,255,.25);border-radius:12px;text-align:center;font-size:clamp(10px,1.3vh,13px);height:var(--chip);min-width:var(--chip);flex:none;position:relative;transition:transform .25s}
+  .day-chip{background:linear-gradient(160deg,var(--chip-g1,rgba(255,255,255,.18)),var(--chip-g2,rgba(255,255,255,.08)) 65%);border:1px solid rgba(255,255,255,.25);border-radius:12px;text-align:center;font-size:clamp(10px,calc(1.3*var(--vh,1vh)),13px);height:var(--chip);min-width:var(--chip);flex:none;position:relative;transition:transform .25s}
   .day-in{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:2px 10px}
-  .day-chip b{display:block;font-size:clamp(13px,1.9vh,19px)}
+  .day-chip b{display:block;font-size:clamp(13px,calc(1.9*var(--vh,1vh)),19px)}
   /* يوم الحملة الجاري أبرز من البقية — أكبر وفوق البقية، ليتضح للجمهور أي يوم هو الآن دون قراءة كل الشارات */
   .day-chip.now{background:#fff;color:#800f2f;transform:scale(1.22);z-index:2;box-shadow:0 6px 16px rgba(0,0,0,.25)}
-  .scr-body{flex:1 1 auto;display:flex;align-items:center;gap:2.4vw;margin-top:.8vh;min-height:0}
-  .bag-area{flex:none;height:100%;min-height:170px;display:flex;align-items:center;gap:2vw;max-width:44%}
+  .scr-body{flex:1 1 auto;display:flex;align-items:center;gap:calc(2.4*var(--vw,1vw));margin-top:calc(.8*var(--vh,1vh));min-height:0}
+  .bag-area{flex:none;height:100%;min-height:170px;display:flex;align-items:center;gap:calc(2*var(--vw,1vw));max-width:44%}
   .bag-svg{height:100%;max-height:100%;width:auto;filter:drop-shadow(0 12px 30px rgba(0,0,0,.4))}
   #blood-g{transition:transform 1.5s cubic-bezier(.22,1,.36,1)}
-  .bag-side .pct{font-size:clamp(30px,7vh,84px);font-weight:800;line-height:1;text-shadow:0 4px 18px rgba(0,0,0,.35)}
-  .bag-side .of{font-size:clamp(12px,2vh,20px);opacity:.9;margin-top:6px}
-  .bag-side .of b{font-size:clamp(16px,2.8vh,30px)}
+  .bag-side .pct{font-size:clamp(30px,calc(7*var(--vh,1vh)),84px);font-weight:800;line-height:1;text-shadow:0 4px 18px rgba(0,0,0,.35)}
+  .bag-side .of{font-size:clamp(12px,calc(2*var(--vh,1vh)),20px);opacity:.9;margin-top:6px}
+  .bag-side .of b{font-size:clamp(16px,calc(2.8*var(--vh,1vh)),30px)}
   .drop-fall{animation:dropFall 1.15s cubic-bezier(.45,0,.9,.55) forwards}
   @keyframes dropFall{0%{transform:translateY(0) scale(.85);opacity:0}12%{opacity:1}80%{opacity:1}100%{transform:translateY(258px) scale(1.02);opacity:0}}
-  .scr-types{flex:1;height:100%;min-height:170px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:1vh 1.2vw;min-width:0}
+  .scr-types{flex:1;height:100%;min-height:170px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:calc(1*var(--vh,1vh)) calc(1.2*var(--vw,1vw));min-width:0}
   .type-tile{background:linear-gradient(160deg,var(--tile-g1,rgba(255,255,255,.16)),var(--tile-g2,rgba(255,255,255,.06)) 65%);border:1px solid rgba(255,255,255,.22);border-radius:16px;text-align:center;backdrop-filter:blur(4px);min-height:60px;position:relative}
   .tile-in{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:4px 8px;gap:2px}
-  .type-tile .tl{font-size:clamp(13px,2.6vh,26px);font-weight:800;direction:ltr}
-  .type-tile .tc{font-size:clamp(18px,3.3vh,38px);font-weight:800;line-height:1.05;margin:1px 0}
-  .type-tile .ts{font-size:clamp(10px,1.35vh,14px);opacity:.85;line-height:1}
+  .type-tile .tl{font-size:clamp(13px,calc(2.6*var(--vh,1vh)),26px);font-weight:800;direction:ltr}
+  .type-tile .tc{font-size:clamp(18px,calc(3.3*var(--vh,1vh)),38px);font-weight:800;line-height:1.05;margin:1px 0}
+  .type-tile .ts{font-size:clamp(10px,calc(1.35*var(--vh,1vh)),14px);opacity:.85;line-height:1}
   .tile-ic{display:none}
-  .scr-foot{display:flex;align-items:center;gap:2vw;margin-top:.8vh;flex:none}
+  .scr-foot{display:flex;align-items:center;gap:calc(2*var(--vw,1vw));margin-top:calc(.8*var(--vh,1vh));flex:none}
   /* عرض شريط العبارة يتبع طول العبارة نفسها (متوسطاً) بدل التمدد لكامل العرض بمساحة فارغة كبيرة حول نص قصير */
-  .phrase-box{flex:0 1 auto;width:fit-content;max-width:100%;margin-inline:auto;box-sizing:border-box;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:1.2vh 3vw;font-size:clamp(13px,2.3vh,24px);font-weight:700;text-align:center;transition:opacity .8s}
+  .phrase-box{flex:0 1 auto;width:fit-content;max-width:100%;margin-inline:auto;box-sizing:border-box;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:calc(1.2*var(--vh,1vh)) calc(3*var(--vw,1vw));font-size:clamp(13px,calc(2.3*var(--vh,1vh)),24px);font-weight:700;text-align:center;transition:opacity .8s}
   .phrase-box.fade{opacity:0}
   .scr-qr{flex:none;background:#fff;border-radius:14px;padding:8px;text-align:center;color:var(--ink)}
   .scr-qr .cap{font-size:10px;font-weight:700;margin-top:3px}
   .pulse{animation:pulse .9s ease}
   @keyframes pulse{0%{transform:scale(1)}35%{transform:scale(1.06)}100%{transform:scale(1)}}
   .scr-ended{position:absolute;inset:0;background:rgba(61,8,20,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;text-align:center;padding:20px}
-  .scr-ended h2{font-size:clamp(22px,4.5vh,48px);margin:0 0 8px}
-  .scr-credit{text-align:center;font-size:clamp(13px,2.2vh,24px);font-weight:800;opacity:.95;margin-top:.6vh;text-shadow:0 2px 8px rgba(0,0,0,.3);flex:none}
+  .scr-ended h2{font-size:clamp(22px,calc(4.5*var(--vh,1vh)),48px);margin:0 0 8px}
+  .scr-credit{text-align:center;font-size:clamp(13px,calc(2.2*var(--vh,1vh)),24px);font-weight:800;opacity:.95;margin-top:calc(.6*var(--vh,1vh));text-shadow:0 2px 8px rgba(0,0,0,.3);flex:none}
   .credit{text-align:center;color:var(--ink);font-size:16px;font-weight:800;padding:20px 0 6px}
   /* خيار «إخفاء الباركود» من لوحة الأدوات (scrCfg.hideQr) */
   .screen.hide-qr .scr-qr{display:none}
   /* طبقة خلفية زخرفية شفافة (scrCfg.overlay) — داخل .screen لا body لأن خلفية .screen المعتمة تغطي body بالكامل؛
      absolute بدل fixed لأن fitScreen() يضع transform على .screen فيتصرف fixed داخله كـ absolute أصلاً */
   .scr-overlay{display:none}
-  .logo-bar{display:flex;align-items:center;justify-content:space-between;gap:2vw;flex:none}
+  .logo-bar{display:flex;align-items:center;justify-content:space-between;gap:calc(2*var(--vw,1vw));flex:none}
   .logo-bar .lg{flex:1;display:flex;justify-content:center}
   .logo-bar .lg:first-child{justify-content:flex-start}
   .logo-bar .lg:last-child{justify-content:flex-end}
   /* شعارات المنظمين بنفس مقاس شعارات الرعاة ومقاس مربع الأيام — يبقى ارتفاع الصف ثابتاً (var(--chip))
      والتكبير/التحريك يتمّان بـ transform وحده (لا تغيير في height) حتى لا يضغط بقية التصميم؛ ينمو كل شعار
      من نقطة ثابتة (transform-origin) نحو الفراغ الأقرب له بدل أن يتمدد فوق العناصر المجاورة */
-  .logo-bar img,.sponsor-bar img{height:var(--chip);max-width:26vw;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35));transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
-  .sponsor-bar img{max-width:15vw}
+  .logo-bar img,.sponsor-bar img{height:var(--chip);max-width:calc(26*var(--vw,1vw));object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35));transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
+  .sponsor-bar img{max-width:calc(15*var(--vw,1vw))}
   /* اسم الحملة/المدينة، الأيام الثلاثة معاً، وشريط الساعة تُحرَّك بنفس آلية الشعارات (transform فقط، بلا تغيير في مساحتها المحجوزة) */
   .scr-title,.scr-days,.scr-times,.scr-types,.bag-side,.bag-svg,.phrase-box,.scr-qr,.scr-credit{transform:translate(var(--lg-x,0px),var(--lg-y,0px)) scale(var(--lg-s,1))}
   /* -webkit-user-drag/user-select يمنعان سحب الصور بآلية المتصفح الأصلية (شبح الصورة عند السحب بالماوس)
@@ -207,18 +207,18 @@
   /* تمييز أقوى (إطار أصفر متوهج) عند تمرير الماوس فوق صف التحكم المقابل في اللوحة، لا فوق العنصر نفسه */
   [data-lg].lg-hl{outline:3px solid #ffd60a!important;outline-offset:4px;box-shadow:0 0 0 4px rgba(255,214,10,.25),0 0 26px 8px rgba(255,214,10,.6);position:relative;z-index:6}
   .screen.tools-editable [data-lg]:active{cursor:grabbing}
-  .sponsor-bar{display:flex;align-items:center;justify-content:space-around;width:100%;gap:1.5vw;padding:2px 0;flex:none}
+  .sponsor-bar{display:flex;align-items:center;justify-content:space-around;width:100%;gap:calc(1.5*var(--vw,1vw));padding:2px 0;flex:none}
   /* أداة تحديد مكان الاسم على الشهادة */
   .cert-pick{position:relative;max-width:440px;cursor:crosshair;display:none}
   .cert-pick img{width:100%;display:block;border:1px solid var(--line);border-radius:8px}
   .cert-pick .marker{position:absolute;transform:translate(-50%,-100%);pointer-events:none;font-size:13px;font-weight:800;color:#c0392b;text-shadow:0 0 4px #fff,0 0 8px #fff;white-space:nowrap}
-  .scr-times{text-align:center;font-size:clamp(16px,3.2vh,34px);font-weight:700;line-height:1.25;margin-top:.4vh;flex:none}
+  .scr-times{text-align:center;font-size:clamp(16px,calc(3.2*var(--vh,1vh)),34px);font-weight:700;line-height:1.25;margin-top:calc(.4*var(--vh,1vh));flex:none}
   .scr-time-pill{display:inline-flex;flex-direction:column;gap:5px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.32);border-radius:26px;padding:8px 26px}
   .scr-time-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
-  .scr-clock{font-family:"Courier New",monospace;background:rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:1px 10px;letter-spacing:2px;font-size:clamp(15px,2.8vh,28px);font-weight:700}
+  .scr-clock{font-family:"Courier New",monospace;background:rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:1px 10px;letter-spacing:2px;font-size:clamp(15px,calc(2.8*var(--vh,1vh)),28px);font-weight:700}
   .scr-timebar{height:6px;max-width:520px;margin:0 auto;border-radius:4px;background:rgba(255,255,255,.2);overflow:hidden}
   .scr-timebar-fill{height:100%;width:0%;border-radius:4px;background:linear-gradient(90deg,#ff9500,#ffd166);transition:width 1s linear}
-  .pct-wrap{position:relative;width:clamp(84px,12.5vh,140px);height:clamp(84px,12.5vh,140px);margin:0 auto;display:flex;align-items:center;justify-content:center}
+  .pct-wrap{position:relative;width:clamp(84px,calc(12.5*var(--vh,1vh)),140px);height:clamp(84px,calc(12.5*var(--vh,1vh)),140px);margin:0 auto;display:flex;align-items:center;justify-content:center}
   .pct-ring{position:absolute;inset:0;border-radius:50%;background:none}
   .pct-wrap .pct{position:relative;z-index:1}
   /* لوحة الأدوات تُرسم خارج .screen كوعاء مستقل (#scr-tools-host) وموضعها ثابت بالنسبة للشاشة لا لعنصر .screen،
@@ -271,10 +271,10 @@
     content:"";position:absolute;inset:5px;clip-path:var(--hx);z-index:0
   }
   .screen.skin-neonblue .tile-in>*,.screen.skin-goldglass .tile-in>*,.screen.skin-bloodbags .tile-in>*{position:relative;z-index:1}
-  .screen.skin-neonblue .type-tile .tl,.screen.skin-goldglass .type-tile .tl,.screen.skin-bloodbags .type-tile .tl{font-size:clamp(16px,3.5vh,40px)}
-  .screen.skin-neonblue .type-tile .tc,.screen.skin-goldglass .type-tile .tc,.screen.skin-bloodbags .type-tile .tc{font-size:clamp(18px,3.5vh,39px)}
-  .screen.skin-neonblue .type-tile .ts,.screen.skin-goldglass .type-tile .ts,.screen.skin-bloodbags .type-tile .ts{font-size:clamp(9px,1.15vh,12px);letter-spacing:-.2px}
-  .screen.skin-neonblue .scr-types,.screen.skin-goldglass .scr-types,.screen.skin-bloodbags .scr-types{gap:1.6vh 1.4vw;min-height:220px}
+  .screen.skin-neonblue .type-tile .tl,.screen.skin-goldglass .type-tile .tl,.screen.skin-bloodbags .type-tile .tl{font-size:clamp(16px,calc(3.5*var(--vh,1vh)),40px)}
+  .screen.skin-neonblue .type-tile .tc,.screen.skin-goldglass .type-tile .tc,.screen.skin-bloodbags .type-tile .tc{font-size:clamp(18px,calc(3.5*var(--vh,1vh)),39px)}
+  .screen.skin-neonblue .type-tile .ts,.screen.skin-goldglass .type-tile .ts,.screen.skin-bloodbags .type-tile .ts{font-size:clamp(9px,calc(1.15*var(--vh,1vh)),12px);letter-spacing:-.2px}
+  .screen.skin-neonblue .scr-types,.screen.skin-goldglass .scr-types,.screen.skin-bloodbags .scr-types{gap:calc(1.6*var(--vh,1vh)) calc(1.4*var(--vw,1vw));min-height:220px}
   .screen.skin-neonblue .type-tile{background:var(--sk-tile-bg,rgba(12,44,56,.42));border:1px solid var(--sk-border-soft,rgba(120,220,255,.22));box-shadow:inset 0 0 22px rgba(72,219,255,.08),0 10px 26px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
   .screen.skin-neonblue .tile-in{background:var(--sk-tile,linear-gradient(160deg,rgba(155,238,255,.95),rgba(63,169,201,.8) 55%,rgba(28,87,112,.95)));filter:drop-shadow(0 0 10px rgba(72,219,255,.45))}
   .screen.skin-neonblue .tile-in::before{background:var(--sk-tile-in,linear-gradient(165deg,rgba(14,52,66,.94),rgba(5,22,30,.96)))}
@@ -290,7 +290,7 @@
     --hx:polygon(25% 0,75% 0,100% 25%,100% 75%,75% 100%,25% 100%,0 75%,0 25%);
     width:var(--chip);min-width:var(--chip);border-radius:0;border:none;clip-path:var(--hx)
   }
-  .day-in{font-size:clamp(8px,1.05vh,11px);line-height:1.15}
+  .day-in{font-size:clamp(8px,calc(1.05*var(--vh,1vh)),11px);line-height:1.15}
   .screen.skin-neonblue .day-in,.screen.skin-goldglass .day-in,.screen.skin-bloodbags .day-in{
     position:absolute;inset:4px;clip-path:var(--hx)
   }
@@ -322,7 +322,7 @@
   .screen.skin-goldglass .scr-timebar-fill,  .screen.skin-bloodbags .scr-timebar-fill{background:var(--sk-bar,linear-gradient(90deg,#d4af37,#f5d67d))}
   .screen.skin-goldglass .scr-time-pill,  .screen.skin-bloodbags .scr-time-pill,.screen.skin-goldglass .phrase-box,.screen.skin-bloodbags .phrase-box,.screen.skin-goldglass .scr-theme,.screen.skin-bloodbags .scr-theme,.screen.skin-goldglass .scr-lang,.screen.skin-bloodbags .scr-lang{background:rgba(255,255,255,.6);border-color:rgba(184,144,46,.5);color:#16213a}
   .screen.skin-goldglass .scr-lang,  .screen.skin-bloodbags .scr-lang{color:#16213a}
-  .screen.skin-goldglass .scr-credit,  .screen.skin-bloodbags .scr-credit{display:inline-block;background:rgba(255,255,255,.65);border:1px solid rgba(184,144,46,.5);border-radius:20px;padding:5px 18px;margin:.6vh auto 0}
+  .screen.skin-goldglass .scr-credit,  .screen.skin-bloodbags .scr-credit{display:inline-block;background:rgba(255,255,255,.65);border:1px solid rgba(184,144,46,.5);border-radius:20px;padding:5px 18px;margin:calc(.6*var(--vh,1vh)) auto 0}
   .screen.skin-goldglass .scr-credit,  .screen.skin-bloodbags .scr-credit{text-shadow:none;color:#16213a}
   .screen.skin-goldglass .scr-title h1,  .screen.skin-bloodbags .scr-title h1,.screen.skin-goldglass .bag-side .pct,.screen.skin-bloodbags .bag-side .pct,.screen.skin-goldglass .bag-side .of,.screen.skin-bloodbags .bag-side .of{color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.85),0 2px 14px rgba(60,45,10,.6)}
   .screen.skin-goldglass .bag-side .pct,  .screen.skin-bloodbags .bag-side .pct{color:#8a6d1d}
@@ -356,10 +356,10 @@
   .screen.skin-neonblue .scr-timebar-fill{background:var(--sk-bar,linear-gradient(90deg,#2fb6d9,#8be9ff));box-shadow:0 0 10px rgba(0,0,0,.35)}
   /* النسبة داخل حلقة دائرية في الهويتين: الرقم في مركز الدائرة والأعداد أسفلها */
   .screen.skin-neonblue .bag-side .pct{color:#ffcf4d;text-shadow:0 0 16px rgba(255,207,77,.55)}
-  .screen.skin-neonblue .pct-wrap,.screen.skin-goldglass .pct-wrap,.screen.skin-bloodbags .pct-wrap{width:clamp(120px,19vh,200px);height:clamp(120px,19vh,200px)}
+  .screen.skin-neonblue .pct-wrap,.screen.skin-goldglass .pct-wrap,.screen.skin-bloodbags .pct-wrap{width:clamp(120px,calc(19*var(--vh,1vh)),200px);height:clamp(120px,calc(19*var(--vh,1vh)),200px)}
   .screen.skin-neonblue .pct-ring::after,.screen.skin-goldglass .pct-ring::after,.screen.skin-bloodbags .pct-ring::after{inset:8%}
   .screen.skin-neonblue .bag-side,.screen.skin-goldglass .bag-side,.screen.skin-bloodbags .bag-side{text-align:center}
-  .screen.skin-neonblue .bag-side .of,.screen.skin-goldglass .bag-side .of,.screen.skin-bloodbags .bag-side .of{margin-top:1.2vh;font-size:clamp(11px,1.7vh,17px)}
+  .screen.skin-neonblue .bag-side .of,.screen.skin-goldglass .bag-side .of,.screen.skin-bloodbags .bag-side .of{margin-top:calc(1.2*var(--vh,1vh));font-size:clamp(11px,calc(1.7*var(--vh,1vh)),17px)}
   /* خط نبض ECG على كيس الدم في الهويتين */
   .bag-svg .ecg{display:none}
   .screen.skin-neonblue .bag-svg .ecg,.screen.skin-goldglass .bag-svg .ecg,.screen.skin-bloodbags .bag-svg .ecg{display:block}
@@ -489,14 +489,14 @@
      ارتفاعها تلقائي بحسب المحتوى، فلا خطر قصّ حقيقي (لا clip-path هنا) — كلمة "متبرعاً" كانت رغم ذلك
      تُصغَّر لحد شبه غير مقروء على الشاشات الكبيرة (تليفزيون) لأن fitScreen() يُصغّر الشاشة كاملة بعد
      احتساب الحجم، فيتضاعف صِغَر آخر سطر أصلاً؛ لذا رُفع حدّه الأدنى ووُزّن خطّه هنا خصيصاً */
-  .screen.skin-bloodbags .type-tile .tl{font-size:clamp(13px,3vh,32px)}
-  .screen.skin-bloodbags .type-tile .tc{font-size:clamp(15px,2.9vh,30px)}
-  .screen.skin-bloodbags .type-tile .ts{font-size:clamp(12px,1.6vh,16px);opacity:1;font-weight:700}
+  .screen.skin-bloodbags .type-tile .tl{font-size:clamp(13px,calc(3*var(--vh,1vh)),32px)}
+  .screen.skin-bloodbags .type-tile .tc{font-size:clamp(15px,calc(2.9*var(--vh,1vh)),30px)}
+  .screen.skin-bloodbags .type-tile .ts{font-size:clamp(12px,calc(1.6*var(--vh,1vh)),16px);opacity:1;font-weight:700}
   /* أنبوب واصل مرئي بين شبكة الأكياس والكيس الرئيسي — يوحي بأن التعبئة قادمة من هذه الأكياس، بلا حاجة
      لرسم خط لكل كيس على حدة (كان هشاً مع سحب/تحريك العناصر وتغيّر المقاسات) */
   .scr-flow{display:none}
   .screen.skin-bloodbags .scr-flow{
-    display:block;flex:none;align-self:center;width:clamp(22px,3.2vw,46px);height:62%;min-height:90px;
+    display:block;flex:none;align-self:center;width:clamp(22px,calc(3.2*var(--vw,1vw)),46px);height:62%;min-height:90px;
     border-radius:10px;border:1px solid rgba(122,12,18,.5);
     background:repeating-linear-gradient(180deg,#c1121f 0 10px,#7a0c12 10px 20px);
     background-size:100% 20px;animation:bbFlow 1s linear infinite;
@@ -527,10 +527,10 @@
   @media(max-width:760px){
     /* .screen صار min-height/overflow-y:auto عالمياً في القاعدة أعلاه (وليس هنا فقط) — الخاص بالجوال هنا
        هو قلب اتجاه .scr-body لعمود، وجعل الكيس بلا حد أدنى صارم لأن محتواه (32vh) أصلاً أكبر منه بكثير */
-    .screen{padding-bottom:4vh}
+    .screen{padding-bottom:calc(4*var(--vh,1vh))}
     .bag-area{max-width:100%;width:100%;height:auto;flex:0 0 auto;justify-content:center}
-    .scr-body{flex-direction:column;gap:2vh;align-items:stretch}
-    .bag-svg{height:32vh;max-height:32vh}
+    .scr-body{flex-direction:column;gap:calc(2*var(--vh,1vh));align-items:stretch}
+    .bag-svg{height:calc(32*var(--vh,1vh));max-height:calc(32*var(--vh,1vh))}
     /* grid-template-rows:1fr (القاعدة الأصلية) يحتاج ارتفاعاً محدداً ليقسمه؛ بما أن .screen/.scr-body صارا
        بلا ارتفاع محدد هنا (auto بحسب المحتوى) ينهار الصف. الاعتماد على محتوى المربع لتحديد ارتفاعه (auto)
        لا يكفي أيضاً لأن محتوى الهويتين (tile-in) موضوع position:absolute أي خارج تدفق الصفحة فلا يُحتسب في
@@ -1613,14 +1613,15 @@ const curPos=()=>isMobileScr()?scrLogoPosM:scrLogoPos;
 /* مقاس النافذة الذي رُتّبت عليه المواضع (يُحفظ مع الحملة posRef/posRefM) — الإزاحات محفوظة بالبكسل بينما العناصر
    نفسها مقاسة بـ vw/vh، فبلا هذا تبقى الإزاحة ثابتة حين تصغر النافذة وتصغر العناصر فتتداخل (مثل الباركود فوق الكيس).
    الإزاحة الفعلية = المحفوظة × (النافذة الحالية ÷ المرجع) فتبقى النسب كما رُتّبت على أي مقاس */
-let scrPosRef=null,scrPosRefM=null;
+let scrPosRef=null,scrPosRefM=null,scrFitS=1;
 const REFOK=r=>r&&r.w>0&&r.h>0?{w:+r.w,h:+r.h}:null;
 function posK(){
-  const m=isMobileScr();
-  let r=m?scrPosRefM:scrPosRef;
-  if(!r){r={w:window.innerWidth,h:window.innerHeight};if(m)scrPosRefM=r;else scrPosRef=r;} // حملة بلا مرجع: النافذة الحالية هي المرجع
-  return {x:window.innerWidth/r.w,y:window.innerHeight/r.h};
+  if(!isMobileScr())return {x:1,y:1}; // الشاشة الكبيرة لوحة ثابتة بمقاس المرجع (fitScreen) — الإزاحات بكسلات اللوحة نفسها
+  if(!scrPosRefM)scrPosRefM={w:window.innerWidth,h:window.innerHeight}; // حملة بلا مرجع: النافذة الحالية هي المرجع
+  return {x:window.innerWidth/scrPosRefM.w,y:window.innerHeight/scrPosRefM.h};
 }
+/* تحويل حركة الماوس/الأسهم (بكسلات الشاشة الفعلية) إلى وحدات الإزاحة المحفوظة */
+const dragK=()=>isMobileScr()?posK():{x:scrFitS||1,y:scrFitS||1};
 function applyLogoScale(){
   const scr=$("#scr");if(!scr)return;
   const sc=curScale(),ps=curPos(),kk=posK();
@@ -1635,7 +1636,7 @@ function setLogoScale(k,v){curScale()[k]=parseFloat(v)||1;applyLogoScale();}
 /* تحريك عنصر بالنقر على أسهم ◀▶▲▼ — بديل موثوق للسحب المباشر يعمل بالماوس (والّلمس) على كل المتصفحات دون استثناء */
 function nudgePos(k,dx,dy){
   const pos=curPos(),cur=Object.assign({x:0,y:0},pos[k]),kk=posK();
-  pos[k]={x:cur.x+dx/kk.x,y:cur.y+dy/kk.y};
+  pos[k]={x:cur.x+dx/kk.x,y:cur.y+dy/kk.y}; // الأسهم خطوة ثابتة بوحدات اللوحة
   applyLogoScale();
 }
 /* استمرار الحركة مع استمرار الضغط على السهم: خطوة فورية عند الضغط، ثم تكرار كل 60ms بعد تأخير قصير (350ms)
@@ -1659,7 +1660,9 @@ function hlEl(k,on){
 function resetAllPos(){
   const pos=curPos();
   Object.keys(pos).forEach(k=>{pos[k]={x:0,y:0};});
-  applyLogoScale();
+  const cur={w:window.innerWidth,h:window.innerHeight}; // إعادة التعيين تعتمد مقاس النافذة الحالية لوحةً جديدة للترتيب
+  if(isMobileScr())scrPosRefM=cur;else scrPosRef=cur;
+  applyLogoScale();fitScreen();
 }
 /* سحب العناصر لتحريكها — يعمل فقط وقت ظهور لوحة الأدوات (scrToolsVisible)، فيختفي مع إخفاء الأدوات */
 function attachLogoDrag(){
@@ -1669,7 +1672,7 @@ function attachLogoDrag(){
       if(!scrToolsVisible)return;
       e.preventDefault();
       const k=el.dataset.lg,startX=e.clientX,startY=e.clientY,pos=curPos();
-      const base=Object.assign({x:0,y:0},pos[k]),kk=posK();
+      const base=Object.assign({x:0,y:0},pos[k]),kk=dragK();
       const move=ev=>{
         pos[k]={x:base.x+(ev.clientX-startX)/kk.x,y:base.y+(ev.clientY-startY)/kk.y};
         applyLogoScale();
@@ -1687,11 +1690,28 @@ function attachLogoDrag(){
 function fitScreen(){
   const scr=$("#scr"),view=$("#view");
   if(!scr||!view)return;
-  if(isMobileScr()){scr.style.transform="";view.classList.remove("fit-view");return;}
-  scr.style.transform=""; // قياس الارتفاع الطبيعي أولاً بلا أي تصغير سابق قد يشوّه القياس
-  const scale=Math.min(1,window.innerHeight/scr.scrollHeight);
+  if(isMobileScr()){
+    ["width","--vh","--vw","transform-origin"].forEach(k=>scr.style.removeProperty(k));
+    scr.style.transform="";view.classList.remove("fit-view");scrFitS=1;return;
+  }
+  /* لوحة ثابتة المقاس (مقاس النافذة التي رُتّبت عليها الشاشة = posRef) تُرسم كل وحداتها vh/vw منسوبة إليها
+     (--vh/--vw) لا إلى النافذة الفعلية، ثم تُكبَّر/تُصغَّر ككل كصورة واحدة — فيبقى كل عنصر في مكانه النسبي
+     تماماً على أي مقاس نافذة أو شاشة، بلا أي تداخل عند تصغير المتصفح (كانت العناصر تتقلّص بنسب مختلفة
+     بينما إزاحات السحب ثابتة بالبكسل فتتراكب) */
+  // حملة لم يُحفظ لها مقاس لوحة بعد: مقاس الشاشة كاملة (متصفح مكبَّر) لا النافذة الحالية — فتظهر نافذة صغيرة
+  // كنسخة مصغّرة من الترتيب الكامل بدل إعادة ترتيب العناصر على مقاسها الصغير
+  const r=scrPosRef||(scrPosRef={w:Math.max(window.innerWidth,screen.availWidth||0),h:Math.max(window.innerHeight,(screen.availHeight||0)-Math.max(0,window.outerHeight-window.innerHeight))});
   view.classList.add("fit-view");
-  scr.style.transform=scale<1?`scale(${scale})`:"";
+  scr.style.width=r.w+"px";
+  scr.style.setProperty("--vh",(r.h/100)+"px");
+  scr.style.setProperty("--vw",(r.w/100)+"px");
+  scr.style.transformOrigin="0 0";
+  scr.style.transform="";
+  const h=Math.max(r.h,scr.scrollHeight);
+  const s=Math.min(window.innerWidth/r.w,window.innerHeight/h);
+  scrFitS=s;
+  const x0=scr.getBoundingClientRect().left; // في RTL تنزاح اللوحة الأعرض من النافذة لليسار — يُقاس موضعها الفعلي قبل التوسيط
+  scr.style.transform=`translateX(${((window.innerWidth-r.w*s)/2-x0).toFixed(1)}px) scale(${s})`;
 }
 /* عند عبور العتبة بين وضعي الجوال/الشاشة الكبيرة (تدوير الجوال، أو تصغير نافذة الديسك توب) تُعاد لوحة
    الأدوات وتموضع العناصر لتعكس إعدادات السياق الجديد فوراً بدل بقائها على قيم السياق السابق */
@@ -2073,7 +2093,7 @@ function updateScreen(c,prevTotal){
   if(c.status!=="active"){
     $("#scr").insertAdjacentHTML("beforeend",`<div class="scr-ended" id="ended-ovl">
       <div style="font-size:64px" aria-hidden="true">🏆</div><h2>${L.ended}</h2>
-      <p style="font-size:clamp(16px,2.2vw,26px)">${L.endedSub(total,c.goal,pct)}</p>
+      <p style="font-size:clamp(16px,calc(2.2*var(--vw,1vw)),26px)">${L.endedSub(total,c.goal,pct)}</p>
       <div class="scr-credit">${L.credit}</div></div>`);
     applyTheme();
   }
