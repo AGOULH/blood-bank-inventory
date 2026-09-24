@@ -577,7 +577,6 @@
   .wa-login-card .fld{margin-bottom:16px}
   .wa-login-card input{width:100%;border:2px solid var(--wa-line);background:#f5f5f5;color:var(--wa-ink);border-radius:8px;padding:12px;font-size:14px;outline:none}
   .wa-login-card input:focus{border-color:var(--wa-green)}
-  .wa-login-card .pin{letter-spacing:10px;text-align:center;font-size:22px;direction:ltr}
   .wa-login-btn{width:100%;padding:12px;border:none;border-radius:8px;color:#fff;font-weight:700;font-size:15px;background:linear-gradient(135deg,#1BA566,#00A651);min-height:44px}
   .wa-login-btn:disabled{opacity:.6}
   .wa-login-note{margin-top:14px;font-size:12.5px;color:var(--wa-mut);text-align:center;line-height:1.8}
@@ -2475,7 +2474,7 @@ async function exportAllPDF(){
 
 /* ================= مرسل الواتساب (#/wa) =================
    نسخة من «مرسل رسائل التبرع بالدم» بنفس هويته، مع إصلاح أخطائه:
-   - البيانات في Firestore محمية بتسجيل دخول Firebase (القواعد في firestore.rules) + قفل PIN مشفّر SHA-256 مملّح؛
+   - البيانات في Firestore محمية بتسجيل دخول Firebase (القواعد في firestore.rules)؛
      لا شيء من بيانات المتبرعين في localStorage، ونسخة Firestore المحلية تُمسح عند تسجيل الخروج.
    - التخزين مجزّأ لتوفير حدود خطة Spark: wa_contacts/s0..s9 (خريطة c.{9665…} مقسّمة بآخر رقم) ·
      wa_templates/{id} (تعديلات الرسائل الأصلية + المخصصة) · wa_sends/{runId} (حملة إرسال: st.{9665…} الحالة) · wa_settings/main
@@ -2651,7 +2650,7 @@ function waDate(v){
   return "";
 }
 
-/* ---------- الدخول والقفل ---------- */
+/* ---------- الدخول ---------- */
 async function renderWA(){
   $("#view").innerHTML=shell(`<div class="wa" id="wa-root" data-testid="wa-root"><div class="wa-loading">جارِ التحميل…</div></div>`,"wa");
   waFont();
@@ -2665,16 +2664,7 @@ async function renderWA(){
   try{const s=await waSetRef().get();WA.set={...WA_SET_DEF,...(s.exists?s.data():{})};}
   catch(e){return waDenied(e);}
   if(!location.hash.startsWith("#/wa"))return;
-  if(!waUnlocked())return waPin();
   waMain();
-}
-/* الفتح يُحفظ في localStorage (لا sessionStorage) حتى يبقى القسم مفتوحاً عبر التبويبات الجديدة وإعادة التحميل
-   وجلسات الأتمتة الطويلة؛ مربوط بالحساب وببصمة الرمز الحالي فيُقفل تلقائياً عند تغيير الرمز أو الحساب،
-   ولا يُمسح إلا بزر «قفل» أو «تسجيل خروج» */
-const waUnlockVal=()=>WA.user.uid+":"+WA.set.pinHash;
-function waUnlocked(){try{return !!WA.set.pinHash&&localStorage.getItem("wa_unlock")===waUnlockVal();}catch(e){return sessionStorage.getItem("wa_unlock")===waUnlockVal();}}
-function waSetUnlock(on){
-  for(const st of [localStorage,sessionStorage]){try{on?st.setItem("wa_unlock",waUnlockVal()):st.removeItem("wa_unlock");}catch(e){}}
 }
 function waCard0(inner){
   return `<div class="wa-login"><div class="wa-login-card"><img src="${WA_LOGO}" alt="شعار وزارة الصحة">${inner}</div></div>`;
@@ -2715,50 +2705,8 @@ async function waResetPass(){
   try{await (await waAuth()).sendPasswordResetEmail(em);toast("أُرسل رابط إعادة التعيين إلى بريدك إن كان مسجّلاً");}
   catch(e){toast(waAuthErr(e),"err");}
 }
-async function waHash(pin,salt){
-  const d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(salt+":"+pin));
-  return [...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,"0")).join("");
-}
-function waPin(){
-  const setup=!WA.set.pinHash;
-  waRoot(waCard0(`<h1>${setup?"إنشاء رمز القفل":"القسم مقفل"}</h1>
-    <p class="sub">${setup?"اختر رمزاً من 4 إلى 8 أرقام — يُطلب مرة واحدة على هذا الجهاز حتى تضغط «قفل» أو «تسجيل خروج»":"أدخل رمز القفل (PIN) للمتابعة"}</p>
-    <div class="fld"><label for="wa-pin">رمز القفل:</label><input id="wa-pin" class="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="8" onkeydown="if(event.key==='Enter')waDoPin()" data-testid="wa-pin-input"></div>
-    ${setup?`<div class="fld"><label for="wa-pin2">تأكيد الرمز:</label><input id="wa-pin2" class="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="8" onkeydown="if(event.key==='Enter')waDoPin()" data-testid="wa-pin-confirm"></div>`:""}
-    <button class="wa-login-btn" id="wa-pin-btn" onclick="waDoPin()" data-testid="wa-pin-submit">${setup?"حفظ الرمز والدخول":"فتح القسم"}</button>
-    <div class="wa-login-note"><span dir="ltr">${esc(WA.user.email||"")}</span><br><button class="wa-link" onclick="waLogout()" data-testid="wa-pin-logout">تسجيل خروج</button></div>`));
-  $("#wa-pin").focus();
-}
-async function waDoPin(){
-  const p=waDigits($("#wa-pin").value).replace(/\D/g,"");
-  if(!/^\d{4,8}$/.test(p)){markMissing([["wa-pin",true]]);return toast("الرمز من 4 إلى 8 أرقام","err");}
-  const until=+sessionStorage.getItem("wa_pin_wait")||0;
-  if(Date.now()<until)return toast("محاولات كثيرة — انتظر "+Math.ceil((until-Date.now())/1000)+" ثانية","err");
-  const btn=$("#wa-pin-btn");btn.disabled=true;
-  try{
-    if(!WA.set.pinHash){
-      const p2=waDigits($("#wa-pin2").value).replace(/\D/g,"");
-      if(p!==p2){btn.disabled=false;markMissing([["wa-pin2",true]]);return toast("الرمزان غير متطابقين","err");}
-      const salt=[...crypto.getRandomValues(new Uint8Array(16))].map(b=>b.toString(16).padStart(2,"0")).join("");
-      const pinHash=await waHash(p,salt);
-      await waSetRef().set({pinHash,pinSalt:salt},{merge:true});
-      WA.set.pinHash=pinHash;WA.set.pinSalt=salt;
-      toast("تم حفظ رمز القفل");
-    }else if(await waHash(p,WA.set.pinSalt)!==WA.set.pinHash){
-      const n=(+sessionStorage.getItem("wa_pin_bad")||0)+1;
-      if(n>=5){sessionStorage.setItem("wa_pin_wait",Date.now()+60000);sessionStorage.setItem("wa_pin_bad",0);}
-      else sessionStorage.setItem("wa_pin_bad",n);
-      btn.disabled=false;$("#wa-pin").value="";$("#wa-pin").focus();
-      return toast("رمز غير صحيح","err");
-    }
-  }catch(e){btn.disabled=false;return toast(friendlyErr(e),"err");}
-  sessionStorage.setItem("wa_pin_bad",0);
-  waSetUnlock(true);
-  waMain();
-}
-function waLock(){waSetUnlock(false);waStop();WA.pend=null;WA.q=null;waPin();}
 async function waLogout(){
-  waStop();if(WA&&WA.user)waSetUnlock(false);
+  waStop();
   try{await (await waAuth()).signOut();}catch(e){}
   WA=null;
   /* يمسح نسخة Firestore المحلية (IndexedDB) حتى لا تبقى أرقام المتبرعين على الجهاز بعد الخروج */
@@ -2902,8 +2850,7 @@ function waMain(){
     <section class="wa-card" id="wa-tabs-card"></section>
     <div id="wa-list-card"></div>
     <footer class="wa-foot"><div class="b">${waI("heart")}بنك الدم المركزي بالدمام</div>
-      <div class="wa-row"><button class="wa-btn ghost" style="color:var(--wa-ink4)" onclick="waLock()" data-testid="wa-lock-footer">${waI("lock")}قفل</button>
-      <button class="wa-btn ghost" onclick="waLogout()" data-testid="wa-logout">تسجيل خروج</button></div></footer>`);
+      <div class="wa-row"><button class="wa-btn ghost" onclick="waLogout()" data-testid="wa-logout">تسجيل خروج</button></div></footer>`);
   $("#wa-tabs-card").innerHTML=waTabsHTML();
   waRenderTab();waRenderList();
   waSub();
@@ -3242,9 +3189,7 @@ function waTabSettings(){
       <p class="wa-hint">الحد والفاصل يحميان رقم الواتساب من الحظر. مدة الأهلية تُستخدم في فلتر «مؤهل للتبرع» والمتغير {مدة_الأهلية}.</p>
       <button class="wa-btn red" onclick="waSaveSettings()" data-testid="wa-settings-save">حفظ الإعدادات</button></div>
     <div class="wa-box"><p class="wa-lbl" style="display:flex;align-items:center;gap:8px">${waI("lock")}الأمان</p>
-      <p class="wa-hint">الحساب الحالي: <span dir="ltr">${esc(WA.user.email||"")}</span></p>
-      <div class="wa-row"><button class="wa-btn out" onclick="waChangePin()" data-testid="wa-change-pin">تغيير رمز القفل</button>
-      <button class="wa-btn out" onclick="waLock()" data-testid="wa-lock">${waI("lock")}قفل القسم الآن</button></div></div>`;
+      <p class="wa-hint">الحساب الحالي: <span dir="ltr">${esc(WA.user.email||"")}</span></p></div>`;
 }
 async function waSaveSettings(){
   const g=id=>+$("#"+id).value;
@@ -3252,26 +3197,6 @@ async function waSaveSettings(){
   const bad=[["wa-s-limit",!(d.dailyLimit>=1&&d.dailyLimit<=500)],["wa-s-gmin",!(d.gapMin>=5)],["wa-s-gmax",!(d.gapMax>=d.gapMin)],["wa-s-elig",!(d.eligDays>=1&&d.eligDays<=365)]];
   if(bad.some(b=>b[1])){markMissing(bad);return toast("راجع القيم المظللة (أكبر فاصل ≥ أقل فاصل ≥ 5 ثوانٍ)","err");}
   try{await waSetRef().set(d,{merge:true});toast("تم حفظ الإعدادات ✓");}catch(e){toast(friendlyErr(e),"err");}
-}
-function waChangePin(){
-  $("#modal-box").style.maxWidth="400px";
-  $("#modal-box").innerHTML=`<div class="wa"><h3>تغيير رمز القفل</h3>
-    <div><label class="wa-lbl" for="wa-cp-old">الرمز الحالي</label><input class="wa-in" id="wa-cp-old" type="password" inputmode="numeric" maxlength="8" data-testid="wa-change-pin-old"></div>
-    <div><label class="wa-lbl" for="wa-cp-new">الرمز الجديد (4–8 أرقام)</label><input class="wa-in" id="wa-cp-new" type="password" inputmode="numeric" maxlength="8" data-testid="wa-change-pin-new"></div>
-    <div><label class="wa-lbl" for="wa-cp-new2">تأكيد الرمز الجديد</label><input class="wa-in" id="wa-cp-new2" type="password" inputmode="numeric" maxlength="8" data-testid="wa-change-pin-confirm"></div>
-    <div class="wa-row"><button class="wa-btn red" onclick="waDoChangePin()" data-testid="wa-change-pin-save">حفظ</button><button class="wa-btn out" onclick="closeModal()">إلغاء</button></div></div>`;
-  openModal();
-}
-async function waDoChangePin(){
-  const v=id=>waDigits($("#"+id).value).replace(/\D/g,"");
-  if(await waHash(v("wa-cp-old"),WA.set.pinSalt)!==WA.set.pinHash){markMissing([["wa-cp-old",true]]);return toast("الرمز الحالي غير صحيح","err");}
-  const n=v("wa-cp-new");
-  if(!/^\d{4,8}$/.test(n)){markMissing([["wa-cp-new",true]]);return toast("الرمز من 4 إلى 8 أرقام","err");}
-  if(n!==v("wa-cp-new2")){markMissing([["wa-cp-new2",true]]);return toast("الرمزان غير متطابقين","err");}
-  const salt=[...crypto.getRandomValues(new Uint8Array(16))].map(b=>b.toString(16).padStart(2,"0")).join("");
-  try{const pinHash=await waHash(n,salt);await waSetRef().set({pinHash,pinSalt:salt},{merge:true});
-    WA.set.pinHash=pinHash;WA.set.pinSalt=salt;waSetUnlock(true);closeModal();toast("تم تغيير رمز القفل ✓");}
-  catch(e){toast(friendlyErr(e),"err");}
 }
 
 /* ---------- قائمة جهات الاتصال ---------- */
@@ -3377,7 +3302,7 @@ async function waClearList(){
   catch(e){toast(friendlyErr(e),"err");}
 }
 async function waWipe(){
-  if(!await confirmDialog("سيُحذف كل شيء في «مرسل الواتساب»: جهات الاتصال، حملات الإرسال ونتائجها، والرسائل المخصصة والمعدّلة. رمز القفل والإعدادات تبقى. لا يمكن التراجع.","حذف نهائي"))return;
+  if(!await confirmDialog("سيُحذف كل شيء في «مرسل الواتساب»: جهات الاتصال، حملات الإرسال ونتائجها، والرسائل المخصصة والمعدّلة. الإعدادات تبقى. لا يمكن التراجع.","حذف نهائي"))return;
   try{
     const b=db.batch();
     for(let i=0;i<10;i++)b.delete(db.collection("wa_contacts").doc("s"+i));
