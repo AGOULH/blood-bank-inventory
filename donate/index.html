@@ -173,7 +173,8 @@
   .type-tile .ts{font-size:clamp(10px,1.35vh,14px);opacity:.85;line-height:1}
   .tile-ic{display:none}
   .scr-foot{display:flex;align-items:center;gap:2vw;margin-top:.8vh;flex:none}
-  .phrase-box{flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:1.2vh 2vw;font-size:clamp(13px,2.3vh,24px);font-weight:700;text-align:center;transition:opacity .8s}
+  /* عرض شريط العبارة يتبع طول العبارة نفسها (متوسطاً) بدل التمدد لكامل العرض بمساحة فارغة كبيرة حول نص قصير */
+  .phrase-box{flex:0 1 auto;width:fit-content;max-width:100%;margin-inline:auto;box-sizing:border-box;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:1.2vh 3vw;font-size:clamp(13px,2.3vh,24px);font-weight:700;text-align:center;transition:opacity .8s}
   .phrase-box.fade{opacity:0}
   .scr-qr{flex:none;background:#fff;border-radius:14px;padding:8px;text-align:center;color:var(--ink)}
   .scr-qr .cap{font-size:10px;font-weight:700;margin-top:3px}
