@@ -514,7 +514,7 @@
   }
   .screen.skin-goldglass.skin-national::before,.screen.skin-goldglass.skin-national::after{display:none}
   .screen.has-overlay>*:not(.scr-overlay):not(.scr-ended){position:relative;z-index:1}
-  .screen.has-overlay>.scr-overlay{display:block;position:absolute!important;inset:0;background:url("assets/blood-lab-overlay.svg") center/cover no-repeat;pointer-events:none;z-index:0!important}
+  .screen.has-overlay>.scr-overlay{display:block;position:absolute!important;inset:0;bottom:var(--ov-b,0px);background:url("assets/blood-lab-overlay.svg") center bottom/cover no-repeat;-webkit-mask-image:linear-gradient(#000 88%,transparent);mask-image:linear-gradient(#000 88%,transparent);pointer-events:none;z-index:0!important}
   /* عند اختيار «لون الخط» يدوياً: العنوان والنسبة والأعداد تُعرض بنفس مظهر بقية النصوص تماماً — بلا الظلال
      السوداء/التوهج المصمَّمة أصلاً للنص الأبيض الافتراضي (كانت تلطّخ الخط الداكن وتسبب تبايناً مشوّهاً بين العناصر) */
   .screen.has-font .scr-title h1,.screen.has-font .scr-title p,.screen.has-font .bag-side .pct,.screen.has-font .bag-side .of,.screen.has-font .type-tile .tc,.screen.has-font .scr-credit{text-shadow:none}
@@ -1121,7 +1121,8 @@ async function createCampaign(){
     logos:logoData.slice(),logoNames,
     sponsors:spPairs.map(s=>s.img),sponsorNames:spPairs.map(s=>s.name),
     cert:certOn?{img:certData,imgEn:certDataEn||null,nx:certNX,ny:certNY}:null,
-    status:"active",total:0,phraseIdx:0,daily:{}
+    status:"active",total:0,phraseIdx:0,daily:{},
+    scrCfg:JSON.parse(JSON.stringify(SCR_DEF_CFG)) // الترتيب والهوية الافتراضيان (SCR_DEF_CFG)
   };
   if(JSON.stringify(doc).length>930000)return toast("حجم الشعارات/الشهادة يتجاوز الحد — قلّل حجم الملفات","err");
   $("#f-save").disabled=true;
@@ -1599,6 +1600,14 @@ let scrHideQr=false; // إخفاء الباركود من شاشة العرض (ي
    كل شعار ثابت من زاويته البعيدة عن المنتصف (transform-origin بالقالب) فينمو نحو الفراغ لا فوق العناصر المجاورة */
 const LG_SCALE_DEF=()=>({a:1,b:1,c:1.2,sp:1.15,title:1,days:1,time:1,types:1,pct:1,bag:1,phrase:1,qr:1,credit:1});
 const LG_POS_DEF=()=>({a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},sp:{x:0,y:0},title:{x:0,y:0},days:{x:0,y:0},time:{x:0,y:0},types:{x:0,y:0},pct:{x:0,y:0},bag:{x:0,y:0},phrase:{x:0,y:0},qr:{x:0,y:0},credit:{x:0,y:0}});
+/* الترتيب الافتراضي لكل حملة جديدة = ترتيب حملة «النفس الزكية 12» المعتمد (مقاسات ومواضع كل العناصر: الكيس، الأيام،
+   المربعات، النسبة، الباركود، العبارات، فكرة وإعداد...) مع هويتها وألوانها والطبقة الزخرفية — يُنسخ داخل وثيقة الحملة
+   عند إنشائها (createCampaign) فيبقى قابلاً للتعديل والحفظ لكل حملة بعدها كالمعتاد */
+const SCR_DEF_CFG={skin:"gold-glass",tint:"#eed795",font:"#140f0f",hideQr:false,overlay:true,
+  logoScale:{a:1.6,b:1.7,c:1.7,sp:1.15,title:1,days:1.9,time:1,types:1.2,pct:1.1,bag:0.8,phrase:1,qr:0.9,credit:1.1},
+  logoPos:{a:{x:-30,y:24},b:{x:30,y:36},c:{x:114,y:24},sp:{x:0,y:0},title:{x:378,y:-54},days:{x:18,y:0},time:{x:-72,y:0},
+    types:{x:81.7,y:-95.1},pct:{x:150.4,y:-72},bag:{x:72,y:-30},phrase:{x:-303.3,y:-253.7},qr:{x:1020.4,y:-212.5},credit:{x:-209.8,y:-265.1}},
+  logoScaleM:LG_SCALE_DEF(),logoPosM:LG_POS_DEF()};
 const LG_LABELS_LOGOS=[["a","يمين"],["b","وسط"],["c","يسار"],["sp","رعاة"]];
 const LG_LABELS_ELEMS=[["title","العنوان"],["days","الأيام"],["time","الوقت"],["types","المربعات"],["pct","النسبة"],["bag","الكيس"],["phrase","العبارات"],["qr","الباركود"],["credit","فكرة وإعداد"]];
 let scrLogoScale=LG_SCALE_DEF();
@@ -1631,6 +1640,15 @@ function applyLogoScale(){
     el.style.setProperty("--lg-x",((p.x||0)*kk.x).toFixed(1)+"px");
     el.style.setProperty("--lg-y",((p.y||0)*kk.y).toFixed(1)+"px");
   });
+  fitOverlay();
+}
+/* رفع زخارف أسفل الطبقة الزخرفية لتحاذي سطر «فكرة وإعداد» بدل بقائها في الفراغ أسفل الشاشة: الطبقة تنتهي عند
+   أسفل سطر فكرة وإعداد (بعد تحريكه/تكبيره) ومحاذاة الصورة للأسفل، فتنتقل الزخارف معه أينما وُضع */
+function fitOverlay(){
+  const scr=$("#scr"),cr=scr&&scr.querySelector('[data-lg="credit"]');
+  if(!cr||!scrOverlay){if(scr)scr.style.removeProperty("--ov-b");return;}
+  const k=isMobileScr()?1:(scrFitS||1),sr=scr.getBoundingClientRect(),b=(cr.getBoundingClientRect().bottom-sr.top)/k;
+  scr.style.setProperty("--ov-b",Math.max(0,sr.height/k-b-12).toFixed(0)+"px");
 }
 function setLogoScale(k,v){curScale()[k]=parseFloat(v)||1;applyLogoScale();}
 /* تحريك عنصر بالنقر على أسهم ◀▶▲▼ — بديل موثوق للسحب المباشر يعمل بالماوس (والّلمس) على كل المتصفحات دون استثناء */
@@ -1712,6 +1730,7 @@ function fitScreen(){
   scrFitS=s;
   const x0=scr.getBoundingClientRect().left; // في RTL تنزاح اللوحة الأعرض من النافذة لليسار — يُقاس موضعها الفعلي قبل التوسيط
   scr.style.transform=`translateX(${((window.innerWidth-r.w*s)/2-x0).toFixed(1)}px) scale(${s})`;
+  fitOverlay();
 }
 /* عند عبور العتبة بين وضعي الجوال/الشاشة الكبيرة (تدوير الجوال، أو تصغير نافذة الديسك توب) تُعاد لوحة
    الأدوات وتموضع العناصر لتعكس إعدادات السياق الجديد فوراً بدل بقائها على قيم السياق السابق */
@@ -1802,7 +1821,7 @@ function setTint(c){
   if(!HEXOK(c))return;
   scrTint=c;applyTheme();
 }
-function setOverlay(on){scrOverlay=!!on;applyTheme();}
+function setOverlay(on){scrOverlay=!!on;applyTheme();fitOverlay();}
 function setHideQr(on){scrHideQr=!!on;applyTheme();if(typeof fitScreen==="function")fitScreen();}
 function setFont(c){
   if(!HEXOK(c))return;
