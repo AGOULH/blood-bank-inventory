@@ -1606,9 +1606,10 @@ const LG_POS_DEF=()=>({a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},sp:{x:0,y:0},title:{x
    عند إنشائها (createCampaign) فيبقى قابلاً للتعديل والحفظ لكل حملة بعدها كالمعتاد */
 const SCR_DEF_CFG={skin:"gold-glass",tint:"#eed795",font:"#140f0f",hideQr:false,overlay:true,
   logoScale:{a:1.6,b:1.7,c:1.7,sp:1.15,title:1,days:1.9,time:1,types:1.2,pct:1.1,bag:0.8,phrase:1,qr:0.9,credit:1.1},
-  logoPos:{a:{x:-30,y:24},b:{x:30,y:36},c:{x:114,y:24},sp:{x:0,y:0},title:{x:378,y:-54},days:{x:18,y:0},time:{x:-72,y:0},
+  logoPos:{a:{x:-30,y:24},b:{x:30,y:36},c:{x:114,y:36},sp:{x:0,y:0},title:{x:378,y:-54},days:{x:18,y:0},time:{x:-72,y:0},
     types:{x:81.7,y:-95.1},pct:{x:150.4,y:-72},bag:{x:72,y:-30},phrase:{x:-303.3,y:-253.7},qr:{x:1020.4,y:-212.5},credit:{x:-209.8,y:-265.1}},
-  logoScaleM:LG_SCALE_DEF(),logoPosM:LG_POS_DEF()};
+  logoScaleM:LG_SCALE_DEF(),logoPosM:LG_POS_DEF(),
+  posRef:{w:1470,h:743},posRefM:null}; // مقاس اللوحة التي رُتّبت عليها المواضع — فتظهر الحملة الجديدة مطابقة تماماً
 const LG_LABELS_LOGOS=[["a","يمين"],["b","وسط"],["c","يسار"],["sp","رعاة"]];
 const LG_LABELS_ELEMS=[["title","العنوان"],["days","الأيام"],["time","الوقت"],["types","المربعات"],["pct","النسبة"],["bag","الكيس"],["phrase","العبارات"],["qr","الباركود"],["credit","فكرة وإعداد"]];
 let scrLogoScale=LG_SCALE_DEF();
