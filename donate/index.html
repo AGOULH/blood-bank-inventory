@@ -186,6 +186,9 @@
   .credit{text-align:center;color:var(--ink);font-size:16px;font-weight:800;padding:20px 0 6px}
   /* خيار «إخفاء الباركود» من لوحة الأدوات (scrCfg.hideQr) */
   .screen.hide-qr .scr-qr{display:none}
+  /* طبقة خلفية زخرفية شفافة (scrCfg.overlay) — داخل .screen لا body لأن خلفية .screen المعتمة تغطي body بالكامل؛
+     absolute بدل fixed لأن fitScreen() يضع transform على .screen فيتصرف fixed داخله كـ absolute أصلاً */
+  .scr-overlay{display:none}
   .logo-bar{display:flex;align-items:center;justify-content:space-between;gap:2vw;flex:none}
   .logo-bar .lg{flex:1;display:flex;justify-content:center}
   .logo-bar .lg:first-child{justify-content:flex-start}
@@ -510,6 +513,8 @@
     background-blend-mode:normal
   }
   .screen.skin-goldglass.skin-national::before,.screen.skin-goldglass.skin-national::after{display:none}
+  .screen.has-overlay>*:not(.scr-overlay):not(.scr-ended){position:relative;z-index:1}
+  .screen.has-overlay>.scr-overlay{display:block;position:absolute!important;inset:0;background:url("assets/blood-lab-overlay.svg") center/cover no-repeat;pointer-events:none;z-index:0!important}
   /* عند اختيار «لون الخط» يدوياً: العنوان والنسبة والأعداد تُعرض بنفس مظهر بقية النصوص تماماً — بلا الظلال
      السوداء/التوهج المصمَّمة أصلاً للنص الأبيض الافتراضي (كانت تلطّخ الخط الداكن وتسبب تبايناً مشوّهاً بين العناصر) */
   .screen.has-font .scr-title h1,.screen.has-font .scr-title p,.screen.has-font .bag-side .pct,.screen.has-font .bag-side .of,.screen.has-font .type-tile .tc,.screen.has-font .scr-credit{text-shadow:none}
@@ -1586,6 +1591,7 @@ let scrTheme="neon-blue";
 const HEXOK=v=>/^#[0-9a-fA-F]{6}$/.test(v||"");
 let scrTint="";
 let scrFont="";
+let scrOverlay=false; // الطبقة الزخرفية الشفافة خلف الشاشة (scrCfg.overlay)
 let scrHideQr=false; // إخفاء الباركود من شاشة العرض (يُحفظ مع الحملة في scrCfg.hideQr)
 /* مقياس/موضع كل عنصر قابل للتحريك مستقلاً — شعارات (a=يمين، b=وسط، c=يسار، sp=رعاة، c/sp أكبر افتراضياً لوضوحها)
    وعناصر بلا تكبير (title=اسم الحملة+المدينة، days=مربعات الأيام الثلاثة معاً، time=شريط الساعة وبداية/نهاية الحملة).
@@ -1708,6 +1714,7 @@ function applyTheme(){
   const scr=$("#scr");if(!scr)return;
   scr.classList.remove("skin-neonblue","skin-goldglass","skin-bloodbags","skin-national","has-font");
   scr.classList.toggle("hide-qr",scrHideQr);
+  scr.classList.toggle("has-overlay",scrOverlay);
   const ov=$("#ended-ovl");
   if(scrTheme==="neon-blue"||scrTheme==="gold-glass"||scrTheme==="blood-bags"||scrTheme==="national"){
     scr.classList.add(scrTheme==="neon-blue"?"skin-neonblue":scrTheme==="blood-bags"?"skin-bloodbags":"skin-goldglass");
@@ -1764,6 +1771,7 @@ function setTint(c){
   if(!HEXOK(c))return;
   scrTint=c;applyTheme();
 }
+function setOverlay(on){scrOverlay=!!on;applyTheme();}
 function setHideQr(on){scrHideQr=!!on;applyTheme();if(typeof fitScreen==="function")fitScreen();}
 function setFont(c){
   if(!HEXOK(c))return;
@@ -1774,7 +1782,7 @@ async function saveScrCfg(){
   if(!window._scrId)return;
   const btn=$("#scr-save");if(btn)btn.disabled=true;
   try{
-    await cDoc(window._scrId).update({scrCfg:{skin:scrTheme,tint:scrTint||null,font:scrFont||null,hideQr:scrHideQr,logoScale:scrLogoScale,logoPos:scrLogoPos,logoScaleM:scrLogoScaleM,logoPosM:scrLogoPosM}});
+    await cDoc(window._scrId).update({scrCfg:{skin:scrTheme,tint:scrTint||null,font:scrFont||null,hideQr:scrHideQr,overlay:scrOverlay,logoScale:scrLogoScale,logoPos:scrLogoPos,logoScaleM:scrLogoScaleM,logoPosM:scrLogoPosM}});
     toast("حُفظ شكل الشاشة لهذه الحملة ✓");
   }catch(e){toast(friendlyErr(e),"err");}
   if(btn)btn.disabled=false;
@@ -1801,12 +1809,13 @@ async function renderScreen(id,edit){
         scrTint=HEXOK(c.scrCfg.tint)?c.scrCfg.tint:"";
         scrFont=HEXOK(c.scrCfg.font)?c.scrCfg.font:"";
         scrHideQr=c.scrCfg.hideQr===true;
+        scrOverlay=c.scrCfg.overlay===true;
         scrLogoScale=Object.assign(LG_SCALE_DEF(),c.scrCfg.logoScale||{});
         scrLogoPos=Object.assign(LG_POS_DEF(),c.scrCfg.logoPos||{});
         scrLogoScaleM=Object.assign(LG_SCALE_DEF(),c.scrCfg.logoScaleM||{});
         scrLogoPosM=Object.assign(LG_POS_DEF(),c.scrCfg.logoPosM||{});
       }else{
-        scrTheme="neon-blue";scrTint="";scrFont="";scrHideQr=false;
+        scrTheme="neon-blue";scrTint="";scrFont="";scrHideQr=false;scrOverlay=false;
         scrLogoScale=LG_SCALE_DEF();
         scrLogoPos=LG_POS_DEF();
         scrLogoScaleM=LG_SCALE_DEF();
@@ -1957,6 +1966,7 @@ function renderScrTools(id){
         <div class="tool-row"><span>لون</span><input type="color" class="sw-custom" id="sw-tint" value="${scrTint||(scrTheme==="gold-glass"?"#c9a23a":scrTheme==="blood-bags"?"#c1121f":scrTheme==="national"?"#1565c0":"#1f97c2")}" title="لون الهوية" oninput="setTint(this.value)"></div>
         <div class="tool-row"><span>خط</span><input type="color" class="sw-custom" id="sw-font" value="${scrFont||"#ffffff"}" title="لون الخط" oninput="setFont(this.value)"></div>
         <label class="tool-row" style="cursor:pointer"><input type="checkbox" ${scrHideQr?"checked":""} onchange="setHideQr(this.checked)"><span>إخفاء الباركود</span></label>
+        <label class="tool-row" style="cursor:pointer"><input type="checkbox" ${scrOverlay?"checked":""} onchange="setOverlay(this.checked)"><span>طبقة زخرفية</span></label>
       </div>
       <div class="tool-grp" id="logo-size-row">
         <div class="tg-lbl">🖼️ مقاس وموضع الشعارات</div>
@@ -1995,6 +2005,7 @@ function drawScreen(id,c){
                             :(c.times?`<div class="scr-times" data-lg="time">${esc(c.times)}</div>`:"");
   $("#scr").setAttribute("dir",scrLang==="en"?"ltr":"rtl");
   $("#scr").innerHTML=`
+    <div class="scr-overlay" aria-hidden="true"></div>
     ${logoBar}
     <div class="scr-head">
       <div class="scr-title" data-lg="title"><h1>${esc(c.name)}</h1><p>${c.org?esc(c.org)+" · ":""}${esc(c.city)}</p></div>
