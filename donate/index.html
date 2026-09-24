@@ -813,7 +813,9 @@ function ensureFB(){
     await loadJS("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js");
     const app=(firebase.apps&&firebase.apps.length)?firebase.app():firebase.initializeApp(FB_CFG);
     db=app.firestore();
-    try{await db.enablePersistence({synchronizeTabs:true});}catch(e){}
+    /* بلا synchronizeTabs: في وضع تعدد التبويبات لا يتصل بالخادم إلا التبويب «الأساسي»، فإذا جمّده Chrome في الخلفية
+       علقت بقية التبويبات على «جارِ التحميل…». الآن أول تبويب يأخذ التخزين المحلي والبقية تعمل من الذاكرة باتصال مستقل */
+    try{await db.enablePersistence();}catch(e){}
     const dot=$("#sync-dot"); if(dot)dot.classList.add("on");
     return db;
   })();
@@ -2661,7 +2663,9 @@ async function renderWA(){
   const u=a.currentUser;
   if(!u)return waLogin();
   WA.user=u;
-  try{const s=await waSetRef().get();WA.set={...WA_SET_DEF,...(s.exists?s.data():{})};}
+  /* من النسخة المحلية أولاً حتى لا يعلق العرض بانتظار الخادم؛ waSub يحدّثها فوراً عند وصول بيانات الخادم */
+  try{let s;try{s=await waSetRef().get({source:"cache"});}catch(e){s=await waSetRef().get();}
+    WA.set={...WA_SET_DEF,...(s.exists?s.data():{})};}
   catch(e){return waDenied(e);}
   if(!location.hash.startsWith("#/wa"))return;
   waMain();
