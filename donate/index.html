@@ -186,7 +186,7 @@
   .scr-credit{text-align:center;font-size:clamp(13px,calc(2.2*var(--vh,1vh)),24px);font-weight:800;opacity:.95;margin-top:calc(.6*var(--vh,1vh));text-shadow:0 2px 8px rgba(0,0,0,.3);flex:none}
   .credit{text-align:center;color:var(--ink);font-size:16px;font-weight:800;padding:20px 0 6px}
   /* خيار «إخفاء الباركود» من لوحة الأدوات (scrCfg.hideQr) */
-  .screen.hide-qr .scr-qr{display:none}
+  .screen.hide-qr .scr-qr{visibility:hidden} /* لا display:none — يبقى مكانه محجوزاً فلا يتغير التخطيط ولا تتداخل العناصر */
   /* طبقة خلفية زخرفية شفافة (scrCfg.overlay) — داخل .screen لا body لأن خلفية .screen المعتمة تغطي body بالكامل؛
      absolute بدل fixed لأن fitScreen() يضع transform على .screen فيتصرف fixed داخله كـ absolute أصلاً */
   .scr-overlay{display:none}
@@ -1724,7 +1724,7 @@ function fitScreen(){
      تغيير ارتفاع حتى لا يعيد flex توزيع العناصر. يُقاس [data-lg] فقط لأن صناديق التخطيط الأصلية (scr-body...)
      تبقى ممتدة للأسفل حتى لو نُقل محتواها للأعلى بـ transform */
   const top=scr.getBoundingClientRect().top,full=Math.max(r.h,scr.scrollHeight);
-  let cb=0;scr.querySelectorAll("[data-lg]").forEach(el=>{const b=el.getBoundingClientRect();if(b.height)cb=Math.max(cb,b.bottom-top);});
+  let cb=0;scr.querySelectorAll("[data-lg]").forEach(el=>{const b=el.getBoundingClientRect();if(b.height&&getComputedStyle(el).visibility!=="hidden")cb=Math.max(cb,b.bottom-top);});
   const h=Math.min(full,cb?Math.ceil(cb+2.5*r.h/100):full);
   scr.style.setProperty("--fit-cut",(full-h)+"px");
   const s=Math.min(window.innerWidth/r.w,window.innerHeight/h);
