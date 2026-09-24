@@ -559,7 +559,7 @@
     --wa-danger:#ff6b6b;--wa-font:"Cairo",system-ui,sans-serif;
     --wa-grad-green:linear-gradient(135deg,#1BA566 0%,#00A651 100%);
     --wa-grad-red:linear-gradient(135deg,#9b0007,#b22800);
-    font-family:var(--wa-font);color:var(--wa-ink);display:flex;flex-direction:column;gap:32px}
+    font-family:var(--wa-font);color:var(--wa-ink);display:flex;flex-direction:column;gap:32px;min-width:0}
   .wa *{font-family:inherit}
   .wa svg.i{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .wa svg.i.lg{width:32px;height:32px} .wa svg.i.md{width:20px;height:20px} .wa svg.i.xl{width:48px;height:48px}
@@ -642,8 +642,8 @@
   .wa-tab[aria-selected="true"]{background:var(--wa-grad-red);color:#fff;box-shadow:0 1px 2px rgba(0,0,0,.08)}
   .wa-tab-b{padding:24px;display:flex;flex-direction:column;gap:16px}
   .wa-lbl{font-weight:600;font-size:14px;color:var(--wa-ink3);margin:0}
-  .wa-tpls{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-  @media(min-width:768px){.wa-tpls{grid-template-columns:repeat(3,1fr)}} @media(min-width:1024px){.wa-tpls{grid-template-columns:repeat(4,1fr)}}
+  .wa-tpls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  @media(min-width:768px){.wa-tpls{grid-template-columns:repeat(3,minmax(0,1fr))}} @media(min-width:1024px){.wa-tpls{grid-template-columns:repeat(4,minmax(0,1fr))}}
   .wa-tpl{padding:12px;border-radius:10px;border:2px solid var(--wa-line2);background:#fff;color:var(--wa-ink3);font-size:14px;font-weight:600;text-align:center;transition:border-color .2s,background .2s,transform .15s;min-height:52px;line-height:1.5}
   .wa-tpl:hover{border-color:#c9b4a8} .wa-tpl:active{transform:scale(.96)}
   .wa-tpl[aria-pressed="true"]{border-color:var(--wa-red);background:var(--wa-red-soft);color:var(--wa-red)}
@@ -676,10 +676,11 @@
   .wa-search input{width:100%;border-radius:12px;border:1px solid var(--wa-line2);padding:10px 16px 10px 40px;font-size:14px;outline:none;color:var(--wa-ink2);min-height:44px}
   .wa-search .i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#958d8c}
   .wa-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px}
-  .wa-list{display:grid;grid-template-columns:1fr;gap:16px}
-  @media(min-width:640px){.wa-list{grid-template-columns:repeat(2,1fr)}} @media(min-width:1024px){.wa-list{grid-template-columns:repeat(3,1fr)}}
+  /* minmax(0,1fr) لا 1fr: الحد الأدنى التلقائي لـ 1fr هو عرض المحتوى، فالاسم الطويل (nowrap) كان يمدّ العمود خارج الشاشة */
+  .wa-list{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+  @media(min-width:640px){.wa-list{grid-template-columns:repeat(2,minmax(0,1fr))}} @media(min-width:1024px){.wa-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
   /* عمود مرن: أزرار الإرسال تصطف في أسفل كل البطاقات مهما اختلف عدد أسطر التفاصيل */
-  .wa-contact{border-radius:16px;border:1px solid var(--wa-line3);background:#fff;padding:16px;display:flex;flex-direction:column;transition:box-shadow .25s,transform .25s cubic-bezier(.16,1,.3,1),border-color .25s;animation:waIn .4s cubic-bezier(.16,1,.3,1) both}
+  .wa-contact{min-width:0;border-radius:16px;border:1px solid var(--wa-line3);background:#fff;padding:16px;display:flex;flex-direction:column;transition:box-shadow .25s,transform .25s cubic-bezier(.16,1,.3,1),border-color .25s;animation:waIn .4s cubic-bezier(.16,1,.3,1) both}
   .wa-contact:hover{box-shadow:0 10px 24px -8px rgba(0,0,0,.14);transform:translateY(-2px)}
   .wa-contact.sent{border-color:var(--wa-ok-line);background:var(--wa-ok-bg)}
   .wa-contact.open{border-color:var(--wa-open-line)}
@@ -2664,8 +2665,16 @@ async function renderWA(){
   try{const s=await waSetRef().get();WA.set={...WA_SET_DEF,...(s.exists?s.data():{})};}
   catch(e){return waDenied(e);}
   if(!location.hash.startsWith("#/wa"))return;
-  if(sessionStorage.getItem("wa_unlock")!==u.uid)return waPin();
+  if(!waUnlocked())return waPin();
   waMain();
+}
+/* الفتح يُحفظ في localStorage (لا sessionStorage) حتى يبقى القسم مفتوحاً عبر التبويبات الجديدة وإعادة التحميل
+   وجلسات الأتمتة الطويلة؛ مربوط بالحساب وببصمة الرمز الحالي فيُقفل تلقائياً عند تغيير الرمز أو الحساب،
+   ولا يُمسح إلا بزر «قفل» أو «تسجيل خروج» */
+const waUnlockVal=()=>WA.user.uid+":"+WA.set.pinHash;
+function waUnlocked(){try{return !!WA.set.pinHash&&localStorage.getItem("wa_unlock")===waUnlockVal();}catch(e){return sessionStorage.getItem("wa_unlock")===waUnlockVal();}}
+function waSetUnlock(on){
+  for(const st of [localStorage,sessionStorage]){try{on?st.setItem("wa_unlock",waUnlockVal()):st.removeItem("wa_unlock");}catch(e){}}
 }
 function waCard0(inner){
   return `<div class="wa-login"><div class="wa-login-card"><img src="${WA_LOGO}" alt="شعار وزارة الصحة">${inner}</div></div>`;
@@ -2713,7 +2722,7 @@ async function waHash(pin,salt){
 function waPin(){
   const setup=!WA.set.pinHash;
   waRoot(waCard0(`<h1>${setup?"إنشاء رمز القفل":"القسم مقفل"}</h1>
-    <p class="sub">${setup?"اختر رمزاً من 4 إلى 8 أرقام يُطلب عند كل فتح للقسم":"أدخل رمز القفل (PIN) للمتابعة"}</p>
+    <p class="sub">${setup?"اختر رمزاً من 4 إلى 8 أرقام — يُطلب مرة واحدة على هذا الجهاز حتى تضغط «قفل» أو «تسجيل خروج»":"أدخل رمز القفل (PIN) للمتابعة"}</p>
     <div class="fld"><label for="wa-pin">رمز القفل:</label><input id="wa-pin" class="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="8" onkeydown="if(event.key==='Enter')waDoPin()" data-testid="wa-pin-input"></div>
     ${setup?`<div class="fld"><label for="wa-pin2">تأكيد الرمز:</label><input id="wa-pin2" class="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="8" onkeydown="if(event.key==='Enter')waDoPin()" data-testid="wa-pin-confirm"></div>`:""}
     <button class="wa-login-btn" id="wa-pin-btn" onclick="waDoPin()" data-testid="wa-pin-submit">${setup?"حفظ الرمز والدخول":"فتح القسم"}</button>
@@ -2744,12 +2753,12 @@ async function waDoPin(){
     }
   }catch(e){btn.disabled=false;return toast(friendlyErr(e),"err");}
   sessionStorage.setItem("wa_pin_bad",0);
-  sessionStorage.setItem("wa_unlock",WA.user.uid);
+  waSetUnlock(true);
   waMain();
 }
-function waLock(){sessionStorage.removeItem("wa_unlock");waStop();WA.pend=null;WA.q=null;waPin();}
+function waLock(){waSetUnlock(false);waStop();WA.pend=null;WA.q=null;waPin();}
 async function waLogout(){
-  waStop();sessionStorage.removeItem("wa_unlock");
+  waStop();if(WA&&WA.user)waSetUnlock(false);
   try{await (await waAuth()).signOut();}catch(e){}
   WA=null;
   /* يمسح نسخة Firestore المحلية (IndexedDB) حتى لا تبقى أرقام المتبرعين على الجهاز بعد الخروج */
@@ -3260,7 +3269,8 @@ async function waDoChangePin(){
   if(!/^\d{4,8}$/.test(n)){markMissing([["wa-cp-new",true]]);return toast("الرمز من 4 إلى 8 أرقام","err");}
   if(n!==v("wa-cp-new2")){markMissing([["wa-cp-new2",true]]);return toast("الرمزان غير متطابقين","err");}
   const salt=[...crypto.getRandomValues(new Uint8Array(16))].map(b=>b.toString(16).padStart(2,"0")).join("");
-  try{await waSetRef().set({pinHash:await waHash(n,salt),pinSalt:salt},{merge:true});closeModal();toast("تم تغيير رمز القفل ✓");}
+  try{const pinHash=await waHash(n,salt);await waSetRef().set({pinHash,pinSalt:salt},{merge:true});
+    WA.set.pinHash=pinHash;WA.set.pinSalt=salt;waSetUnlock(true);closeModal();toast("تم تغيير رمز القفل ✓");}
   catch(e){toast(friendlyErr(e),"err");}
 }
 
