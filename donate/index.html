@@ -142,7 +142,8 @@
   /* fitScreen() يُصغّر .screen ككل بـ transform ليبقى ضمن ارتفاع النافذة دون تمرير — الحاوية تُثبَّت على ارتفاع
      النافذة وتُخفي الفائض المرئي فقط (شكلياً، بلا قصّ حقيقي لأن التصغير محسوب مسبقاً ليطابقها تماماً) */
   #view.fit-view{height:100vh;height:100dvh;overflow:hidden;background:#210911}
-  #view.fit-view .screen{transform-origin:top center}
+  #view.fit-view .screen{transform-origin:top center;clip-path:inset(0 0 var(--fit-cut,0px) 0)}
+  #view.fit-view .screen>.scr-ended{bottom:var(--fit-cut,0px)}
   /* العنوان وشريط الأيام/الوقت يتوسطان كامل عرض الشاشة (بلا تقسيم أعمدة اصطناعي كان يفرض التفافاً غير مرغوب) */
   .scr-head{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;flex:none;margin-top:calc(1.4*var(--vh,1vh))}
   .scr-logo{height:calc(9*var(--vh,1vh));max-height:90px;min-height:52px;object-fit:contain;background:#fff;border-radius:14px;padding:6px}
@@ -514,7 +515,7 @@
   }
   .screen.skin-goldglass.skin-national::before,.screen.skin-goldglass.skin-national::after{display:none}
   .screen.has-overlay>*:not(.scr-overlay):not(.scr-ended){position:relative;z-index:1}
-  .screen.has-overlay>.scr-overlay{display:block;position:absolute!important;inset:0;bottom:var(--ov-b,0px);background:url("assets/blood-lab-overlay.svg") center bottom/cover no-repeat;-webkit-mask-image:linear-gradient(#000 88%,transparent);mask-image:linear-gradient(#000 88%,transparent);pointer-events:none;z-index:0!important}
+  .screen.has-overlay>.scr-overlay{display:block;position:absolute!important;inset:0;bottom:var(--fit-cut,0px)!important;background:url("assets/blood-lab-overlay.svg") center bottom/cover no-repeat;pointer-events:none;z-index:0!important}
   /* عند اختيار «لون الخط» يدوياً: العنوان والنسبة والأعداد تُعرض بنفس مظهر بقية النصوص تماماً — بلا الظلال
      السوداء/التوهج المصمَّمة أصلاً للنص الأبيض الافتراضي (كانت تلطّخ الخط الداكن وتسبب تبايناً مشوّهاً بين العناصر) */
   .screen.has-font .scr-title h1,.screen.has-font .scr-title p,.screen.has-font .bag-side .pct,.screen.has-font .bag-side .of,.screen.has-font .type-tile .tc,.screen.has-font .scr-credit{text-shadow:none}
@@ -1640,15 +1641,6 @@ function applyLogoScale(){
     el.style.setProperty("--lg-x",((p.x||0)*kk.x).toFixed(1)+"px");
     el.style.setProperty("--lg-y",((p.y||0)*kk.y).toFixed(1)+"px");
   });
-  fitOverlay();
-}
-/* رفع زخارف أسفل الطبقة الزخرفية لتحاذي سطر «فكرة وإعداد» بدل بقائها في الفراغ أسفل الشاشة: الطبقة تنتهي عند
-   أسفل سطر فكرة وإعداد (بعد تحريكه/تكبيره) ومحاذاة الصورة للأسفل، فتنتقل الزخارف معه أينما وُضع */
-function fitOverlay(){
-  const scr=$("#scr"),cr=scr&&scr.querySelector('[data-lg="credit"]');
-  if(!cr||!scrOverlay){if(scr)scr.style.removeProperty("--ov-b");return;}
-  const k=isMobileScr()?1:(scrFitS||1),sr=scr.getBoundingClientRect(),b=(cr.getBoundingClientRect().bottom-sr.top)/k;
-  scr.style.setProperty("--ov-b",Math.max(0,sr.height/k-b-12).toFixed(0)+"px");
 }
 function setLogoScale(k,v){curScale()[k]=parseFloat(v)||1;applyLogoScale();}
 /* تحريك عنصر بالنقر على أسهم ◀▶▲▼ — بديل موثوق للسحب المباشر يعمل بالماوس (والّلمس) على كل المتصفحات دون استثناء */
@@ -1666,7 +1658,9 @@ function nudgeStart(k,dx,dy){
   _nudgeDelay=setTimeout(()=>{_nudgeTimer=setInterval(()=>nudgePos(k,dx,dy),60);},350);
 }
 function nudgeStop(){
+  const was=_nudgeDelay||_nudgeTimer;
   clearTimeout(_nudgeDelay);clearInterval(_nudgeTimer);_nudgeDelay=null;_nudgeTimer=null;
+  if(was)fitScreen(); // ارتفاع اللوحة يتبع آخر عنصر بعد التحريك
 }
 document.addEventListener("pointerup",nudgeStop);
 document.addEventListener("pointercancel",nudgeStop);
@@ -1695,7 +1689,7 @@ function attachLogoDrag(){
         pos[k]={x:base.x+(ev.clientX-startX)/kk.x,y:base.y+(ev.clientY-startY)/kk.y};
         applyLogoScale();
       };
-      const up=()=>{document.removeEventListener("pointermove",move);document.removeEventListener("pointerup",up);};
+      const up=()=>{document.removeEventListener("pointermove",move);document.removeEventListener("pointerup",up);fitScreen();};
       document.addEventListener("pointermove",move);
       document.addEventListener("pointerup",up);
     };
@@ -1709,7 +1703,7 @@ function fitScreen(){
   const scr=$("#scr"),view=$("#view");
   if(!scr||!view)return;
   if(isMobileScr()){
-    ["width","--vh","--vw","transform-origin"].forEach(k=>scr.style.removeProperty(k));
+    ["width","--vh","--vw","--fit-cut","transform-origin"].forEach(k=>scr.style.removeProperty(k));
     scr.style.transform="";view.classList.remove("fit-view");scrFitS=1;return;
   }
   /* لوحة ثابتة المقاس (مقاس النافذة التي رُتّبت عليها الشاشة = posRef) تُرسم كل وحداتها vh/vw منسوبة إليها
@@ -1725,12 +1719,18 @@ function fitScreen(){
   scr.style.setProperty("--vw",(r.w/100)+"px");
   scr.style.transformOrigin="0 0";
   scr.style.transform="";
-  const h=Math.max(r.h,scr.scrollHeight);
+  /* اللوحة تُقصّ أسفل آخر عنصر ظاهر (بعد تحريكه/تكبيره) بهامش صغير (--fit-cut: clip-path + نهاية الطبقة الزخرفية)
+     — لا فراغ غير مستغل أسفل الشاشة حين تُرفع العناصر بالسحب، والزخارف (center bottom) تنتهي مع نهايتها. قصّ لا
+     تغيير ارتفاع حتى لا يعيد flex توزيع العناصر. يُقاس [data-lg] فقط لأن صناديق التخطيط الأصلية (scr-body...)
+     تبقى ممتدة للأسفل حتى لو نُقل محتواها للأعلى بـ transform */
+  const top=scr.getBoundingClientRect().top,full=Math.max(r.h,scr.scrollHeight);
+  let cb=0;scr.querySelectorAll("[data-lg]").forEach(el=>{const b=el.getBoundingClientRect();if(b.height)cb=Math.max(cb,b.bottom-top);});
+  const h=Math.min(full,cb?Math.ceil(cb+2.5*r.h/100):full);
+  scr.style.setProperty("--fit-cut",(full-h)+"px");
   const s=Math.min(window.innerWidth/r.w,window.innerHeight/h);
   scrFitS=s;
   const x0=scr.getBoundingClientRect().left; // في RTL تنزاح اللوحة الأعرض من النافذة لليسار — يُقاس موضعها الفعلي قبل التوسيط
-  scr.style.transform=`translateX(${((window.innerWidth-r.w*s)/2-x0).toFixed(1)}px) scale(${s})`;
-  fitOverlay();
+  scr.style.transform=`translate(${((window.innerWidth-r.w*s)/2-x0).toFixed(1)}px,${((window.innerHeight-h*s)/2).toFixed(1)}px) scale(${s})`;
 }
 /* عند عبور العتبة بين وضعي الجوال/الشاشة الكبيرة (تدوير الجوال، أو تصغير نافذة الديسك توب) تُعاد لوحة
    الأدوات وتموضع العناصر لتعكس إعدادات السياق الجديد فوراً بدل بقائها على قيم السياق السابق */
@@ -1821,7 +1821,7 @@ function setTint(c){
   if(!HEXOK(c))return;
   scrTint=c;applyTheme();
 }
-function setOverlay(on){scrOverlay=!!on;applyTheme();fitOverlay();}
+function setOverlay(on){scrOverlay=!!on;applyTheme();}
 function setHideQr(on){scrHideQr=!!on;applyTheme();if(typeof fitScreen==="function")fitScreen();}
 function setFont(c){
   if(!HEXOK(c))return;
