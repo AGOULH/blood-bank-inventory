@@ -1610,21 +1610,32 @@ let scrLogoPosM=LG_POS_DEF();
 const isMobileScr=()=>window.innerWidth<=760;
 const curScale=()=>isMobileScr()?scrLogoScaleM:scrLogoScale;
 const curPos=()=>isMobileScr()?scrLogoPosM:scrLogoPos;
+/* مقاس النافذة الذي رُتّبت عليه المواضع (يُحفظ مع الحملة posRef/posRefM) — الإزاحات محفوظة بالبكسل بينما العناصر
+   نفسها مقاسة بـ vw/vh، فبلا هذا تبقى الإزاحة ثابتة حين تصغر النافذة وتصغر العناصر فتتداخل (مثل الباركود فوق الكيس).
+   الإزاحة الفعلية = المحفوظة × (النافذة الحالية ÷ المرجع) فتبقى النسب كما رُتّبت على أي مقاس */
+let scrPosRef=null,scrPosRefM=null;
+const REFOK=r=>r&&r.w>0&&r.h>0?{w:+r.w,h:+r.h}:null;
+function posK(){
+  const m=isMobileScr();
+  let r=m?scrPosRefM:scrPosRef;
+  if(!r){r={w:window.innerWidth,h:window.innerHeight};if(m)scrPosRefM=r;else scrPosRef=r;} // حملة بلا مرجع: النافذة الحالية هي المرجع
+  return {x:window.innerWidth/r.w,y:window.innerHeight/r.h};
+}
 function applyLogoScale(){
   const scr=$("#scr");if(!scr)return;
-  const sc=curScale(),ps=curPos();
+  const sc=curScale(),ps=curPos(),kk=posK();
   scr.querySelectorAll("[data-lg]").forEach(el=>{
     const k=el.dataset.lg,s=(sc[k]||1),p=ps[k]||{x:0,y:0};
     el.style.setProperty("--lg-s",s);
-    el.style.setProperty("--lg-x",(p.x||0)+"px");
-    el.style.setProperty("--lg-y",(p.y||0)+"px");
+    el.style.setProperty("--lg-x",((p.x||0)*kk.x).toFixed(1)+"px");
+    el.style.setProperty("--lg-y",((p.y||0)*kk.y).toFixed(1)+"px");
   });
 }
 function setLogoScale(k,v){curScale()[k]=parseFloat(v)||1;applyLogoScale();}
 /* تحريك عنصر بالنقر على أسهم ◀▶▲▼ — بديل موثوق للسحب المباشر يعمل بالماوس (والّلمس) على كل المتصفحات دون استثناء */
 function nudgePos(k,dx,dy){
-  const pos=curPos(),cur=Object.assign({x:0,y:0},pos[k]);
-  pos[k]={x:cur.x+dx,y:cur.y+dy};
+  const pos=curPos(),cur=Object.assign({x:0,y:0},pos[k]),kk=posK();
+  pos[k]={x:cur.x+dx/kk.x,y:cur.y+dy/kk.y};
   applyLogoScale();
 }
 /* استمرار الحركة مع استمرار الضغط على السهم: خطوة فورية عند الضغط، ثم تكرار كل 60ms بعد تأخير قصير (350ms)
@@ -1658,9 +1669,9 @@ function attachLogoDrag(){
       if(!scrToolsVisible)return;
       e.preventDefault();
       const k=el.dataset.lg,startX=e.clientX,startY=e.clientY,pos=curPos();
-      const base=Object.assign({x:0,y:0},pos[k]);
+      const base=Object.assign({x:0,y:0},pos[k]),kk=posK();
       const move=ev=>{
-        pos[k]={x:base.x+(ev.clientX-startX),y:base.y+(ev.clientY-startY)};
+        pos[k]={x:base.x+(ev.clientX-startX)/kk.x,y:base.y+(ev.clientY-startY)/kk.y};
         applyLogoScale();
       };
       const up=()=>{document.removeEventListener("pointermove",move);document.removeEventListener("pointerup",up);};
@@ -1782,7 +1793,7 @@ async function saveScrCfg(){
   if(!window._scrId)return;
   const btn=$("#scr-save");if(btn)btn.disabled=true;
   try{
-    await cDoc(window._scrId).update({scrCfg:{skin:scrTheme,tint:scrTint||null,font:scrFont||null,hideQr:scrHideQr,overlay:scrOverlay,logoScale:scrLogoScale,logoPos:scrLogoPos,logoScaleM:scrLogoScaleM,logoPosM:scrLogoPosM}});
+    await cDoc(window._scrId).update({scrCfg:{skin:scrTheme,tint:scrTint||null,font:scrFont||null,hideQr:scrHideQr,overlay:scrOverlay,logoScale:scrLogoScale,logoPos:scrLogoPos,logoScaleM:scrLogoScaleM,logoPosM:scrLogoPosM,posRef:scrPosRef,posRefM:scrPosRefM}});
     toast("حُفظ شكل الشاشة لهذه الحملة ✓");
   }catch(e){toast(friendlyErr(e),"err");}
   if(btn)btn.disabled=false;
@@ -1814,7 +1825,9 @@ async function renderScreen(id,edit){
         scrLogoPos=Object.assign(LG_POS_DEF(),c.scrCfg.logoPos||{});
         scrLogoScaleM=Object.assign(LG_SCALE_DEF(),c.scrCfg.logoScaleM||{});
         scrLogoPosM=Object.assign(LG_POS_DEF(),c.scrCfg.logoPosM||{});
+        scrPosRef=REFOK(c.scrCfg.posRef);scrPosRefM=REFOK(c.scrCfg.posRefM);
       }else{
+        scrPosRef=null;scrPosRefM=null;
         scrTheme="neon-blue";scrTint="";scrFont="";scrHideQr=false;scrOverlay=false;
         scrLogoScale=LG_SCALE_DEF();
         scrLogoPos=LG_POS_DEF();
