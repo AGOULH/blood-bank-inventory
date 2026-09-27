@@ -744,6 +744,7 @@
   .wa-log-t th{position:sticky;top:0;background:#f7f3f1;color:var(--wa-mut2);font-weight:700;text-align:start;padding:8px 10px;white-space:nowrap;border-bottom:1px solid var(--wa-line3)}
   .wa-log-t td{padding:8px 10px;border-bottom:1px solid var(--wa-line3);white-space:nowrap;font-variant-numeric:tabular-nums}
   .wa-log-t tr:last-child td{border-bottom:0}
+  .wa-contact.sent .wa-ct-name,.wa-contact.sent .wa-ct-name span,.wa-log-t td.ok{color:var(--wa-green);font-weight:700}
   .wa-ct-sent{margin-top:6px;font-size:12px;color:var(--wa-ok-ink);font-weight:600}
   .wa-ct-prev{margin-top:4px;font-size:12px;color:var(--wa-open-ink);font-weight:600}
   .wa-kpi.hl{background:var(--wa-green-soft);border-color:var(--wa-ok-line)} .wa-kpi.hl b{color:var(--wa-green)}
@@ -3234,7 +3235,7 @@ function waLogRender(chips){
   box.innerHTML=`<div class="wa-row" style="justify-content:space-between"><span class="wa-hint" style="font-size:13px" data-testid="wa-log-count"><b>${R.length}</b> رقم${WA.log.q.trim()&&!R.length?" — لم يُرسل لهذا الاسم/الرقم في النطاق المختار":""}</span>
       ${R.length?`<div class="wa-row"><button class="wa-btn out" onclick="waLogCopy()" data-testid="wa-log-copy">نسخ الأرقام</button><button class="wa-btn green-out" onclick="waLogXLSX()" data-testid="wa-log-export">${waI("download")}Excel</button></div>`:""}</div>
     ${R.length?`<div class="wa-log-wrap"><table class="wa-log-t"><thead><tr><th>#</th><th>الاسم</th><th>الرقم</th><th>الحالة</th><th>الوقت</th><th>الرسالة</th>${all?"<th>حملة الإرسال</th>":""}<th>المرات</th></tr></thead><tbody>
-      ${R.map((x,i)=>`<tr data-testid="wa-log-row" data-phone="${x.p}"><td>${i+1}</td><td>${esc(x.n||"—")}</td><td dir="ltr">+${x.p}</td><td><span class="wa-badge ${x.s==="sent"?"st-sent":x.s==="opened"?"st-open":"st-fail"}">${WA_ST_L[x.s]||x.s}</span></td><td>${waFmtT(x.t)}</td><td>${esc(x.tpl)}</td>${all?`<td>${esc(x.run)}</td>`:""}<td>${x.cnt||""}</td></tr>`).join("")}
+      ${R.map((x,i)=>`<tr data-testid="wa-log-row" data-phone="${x.p}"><td>${i+1}</td><td${x.s==="sent"?' class="ok"':""}>${esc(x.n||"—")}</td><td dir="ltr">+${x.p}</td><td><span class="wa-badge ${x.s==="sent"?"st-sent":x.s==="opened"?"st-open":"st-fail"}">${WA_ST_L[x.s]||x.s}</span></td><td>${waFmtT(x.t)}</td><td>${esc(x.tpl)}</td>${all?`<td>${esc(x.run)}</td>`:""}<td>${x.cnt||""}</td></tr>`).join("")}
     </tbody></table></div>`:""}`;
 }
 function waLogCopy(){
