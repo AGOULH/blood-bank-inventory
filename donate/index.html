@@ -735,6 +735,17 @@
   .wa-kpi{border:1px solid var(--wa-line3);border-radius:12px;padding:12px;background:#fff;text-align:center}
   .wa-kpi b{display:block;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--wa-ink2)}
   .wa-kpi span{font-size:12px;color:var(--wa-mut2);font-weight:600}
+  .wa-log-f{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .wa-log-f .wa-in{flex:1;min-width:180px}
+  .wa-log-chip{border:1px solid var(--wa-line2);background:#fff;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--wa-ink3);cursor:pointer;min-height:32px}
+  .wa-log-chip[aria-pressed="true"]{background:var(--wa-red);border-color:var(--wa-red);color:#fff}
+  .wa-log-wrap{overflow-x:auto;border:1px solid var(--wa-line3);border-radius:10px;background:#fff;max-height:460px;overflow-y:auto}
+  .wa-log-t{width:100%;border-collapse:collapse;font-size:13px}
+  .wa-log-t th{position:sticky;top:0;background:#f7f3f1;color:var(--wa-mut2);font-weight:700;text-align:start;padding:8px 10px;white-space:nowrap;border-bottom:1px solid var(--wa-line3)}
+  .wa-log-t td{padding:8px 10px;border-bottom:1px solid var(--wa-line3);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .wa-log-t tr:last-child td{border-bottom:0}
+  .wa-ct-sent{margin-top:6px;font-size:12px;color:var(--wa-ok-ink);font-weight:600}
+  .wa-ct-prev{margin-top:4px;font-size:12px;color:var(--wa-open-ink);font-weight:600}
   .wa-kpi.hl{background:var(--wa-green-soft);border-color:var(--wa-ok-line)} .wa-kpi.hl b{color:var(--wa-green)}
   .wa-tbl{width:100%;border-collapse:collapse;font-size:13px}
   .wa-tbl th,.wa-tbl td{border-bottom:1px solid var(--wa-line3);padding:8px;text-align:right;vertical-align:top}
@@ -2942,7 +2953,12 @@ function waRefresh(kind){
   const n=waAll().filter(c=>!c.opt).length,s=waRunStats().sent;
   $("#wa-chips").innerHTML=n?`<div class="wa-chip">${waI("users")}<b>${n}</b><span>جهة اتصال</span></div><div class="wa-chip">${waI("check")}<b>${s}</b><span>تم الإرسال</span></div>`:"";
   waRenderList();
-  const tb=$("#wa-tab-b");if(!tb||tb.contains(document.activeElement))return;
+  const tb=$("#wa-tab-b");if(!tb)return;
+  /* وصول نص محفوظ أحدث من الخادم يُعرض فوراً حتى لو كان المؤشر داخل التبويب (ما لم تكن هناك تعديلات غير محفوظة أو كتابة في «إضافة رسالة») */
+  const ae=document.activeElement,typingNew=ae&&/^wa-new-/.test(ae.id||"");
+  if(WA.tab==="messages"&&kind==="tpl"&&!WA.tplDirty&&!typingNew)return waRenderTab();
+  if(WA.tab==="runs")waLogRender();
+  if(tb.contains(ae))return;
   if(WA.tab==="runs"){const b=$("#wa-run-cur");if(b)b.innerHTML=waRunCurHTML();}
   else if(WA.tab==="optout"||(WA.tab==="messages"&&kind==="tpl"&&!WA.tplDirty))waRenderTab();
 }
@@ -2956,7 +2972,7 @@ function waRenderTab(){
   const b=$("#wa-tab-b");if(!b)return;const k=WA.tab;
   b.innerHTML=k==="messages"?waTabMessages():k==="certificates"?waTabCert():k==="runs"?waTabRuns():k==="optout"?waTabOpt():waTabSettings();
   if(k==="messages")waPreview();
-  if(k==="runs")waLoadDC();
+  if(k==="runs"){waLoadDC();waLogRender();}
 }
 
 /* ---------- تبويب الرسائل ---------- */
@@ -3035,12 +3051,16 @@ async function waTplSave(){
   try{
     if(cur.isDefault){
       const orig=WA_TPL_DEF.find(t=>t.id===cur.id).content;
-      if(body.value===orig)await ref.delete();else await ref.set({content:body.value},{merge:true});
+      if(body.value===orig)await ref.delete();else await ref.set({content:body.value,at:Date.now()},{merge:true});
     }else{
       const ti=$("#wa-tpl-title");
       await ref.set({content:body.value,title:(ti&&ti.value.trim())||cur.title},{merge:true});
     }
-    WA.tplDirty=false;toast("✓ تم حفظ التعديل");waRenderTab();
+    /* تحقق من الخادم نفسه (لا النسخة المحلية) أن النص وصل فعلاً قبل إعلان الحفظ */
+    const chk=await ref.get({source:"server"}),want=cur.isDefault&&body.value===WA_TPL_DEF.find(t=>t.id===cur.id).content?null:body.value;
+    if((chk.exists?chk.data().content:null)!==want)throw {code:"aborted"};
+    WA.tplOv={...WA.tplOv};if(want==null)delete WA.tplOv[cur.id];else WA.tplOv[cur.id]={...(WA.tplOv[cur.id]||{}),...chk.data()};
+    WA.tplDirty=false;toast("✓ تم الحفظ نهائياً على الخادم");waRenderTab();
     return true;
   }catch(e){if(btn)btn.disabled=false;toast(friendlyErr(e),"err");return false;}
 }
@@ -3177,8 +3197,59 @@ function waRunCurHTML(){
       <div class="wa-row"><button class="wa-btn green-out" onclick="waReportXLSX()" data-testid="wa-export-report">${waI("download")}تصدير تقرير الإرسال Excel</button>
       <button class="wa-btn danger-out" onclick="waDelRun()" data-testid="wa-run-delete">${waI("trash")}حذف الحملة</button></div>`:""}`;
 }
+/* ---------- سجل الأرقام المرسل لها ---------- */
+const WA_ST_L={sent:"تم الإرسال ✓",opened:"تم الفتح (غير مؤكد)",failed:"فشل",invalid:"ليس على واتساب"};
+function waFmtT(t){return t?new Date(t).toLocaleString("ar-SA-u-nu-latn",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"}):"";}
+function waTplTitle(id){const t=id&&waTpls().find(x=>x.id===id);return t?t.title:(id?"رسالة محذوفة":"");}
+function waLogRows(){
+  const L=WA.log||(WA.log={q:"",st:"sent",all:false});
+  const runs=L.all?Object.values(WA.runs):[waRun()].filter(Boolean);
+  const q=L.q.trim().toLowerCase(),qd=waDigits(q).replace(/\D/g,"").replace(/^0+/,"");
+  const out=[];
+  runs.forEach(r=>Object.entries(r.st||{}).forEach(([p,e])=>{
+    if(!e||!e.s)return;
+    if(L.st==="fail"?!(e.s==="failed"||e.s==="invalid"):L.st&&e.s!==L.st)return;
+    const c=WA.contacts[p]||{};
+    if(q&&!(String(c.n||"").toLowerCase().includes(q)||(qd&&p.includes(qd))))return;
+    out.push({p,n:c.n||"",s:e.s,t:e.s==="sent"?e.ct||e.t:e.s==="opened"?e.t:e.ft||e.t,tpl:waTplTitle(e.tpl),run:r.name||"",cnt:e.n||0});
+  }));
+  return out.sort((a,b)=>(b.t||0)-(a.t||0));
+}
+function waLogHTML(){
+  const L=WA.log||(WA.log={q:"",st:"sent",all:false});
+  const chip=(k,l)=>`<button class="wa-log-chip" aria-pressed="${L.st===k}" onclick="WA.log.st='${k}';waLogRender(true)" data-testid="wa-log-filter-${k||"all"}">${l}</button>`;
+  return `<div class="wa-box" data-testid="wa-send-log"><div class="wa-box-h"><p>${waI("send")}سجل الأرقام المرسل لها</p></div>
+    <div class="wa-log-f">
+      <input class="wa-in" id="wa-log-q" type="search" placeholder="ابحث باسم أو رقم للتأكد هل أُرسل له…" value="${esc(L.q)}" oninput="WA.log.q=this.value;waLogRender()" aria-label="بحث في سجل الإرسال" data-testid="wa-log-search">
+      <label class="wa-hint" style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" ${L.all?"checked":""} onchange="WA.log.all=this.checked;waLogRender()" data-testid="wa-log-all-runs">كل حملات الإرسال</label>
+    </div>
+    <div class="wa-log-f" role="group" aria-label="تصفية حسب الحالة">${chip("sent","تم الإرسال ✓")}${chip("opened","تم الفتح")}${chip("fail","فشل / ليس على واتساب")}${chip("","الكل")}</div>
+    <div id="wa-log-b"></div></div>`;
+}
+function waLogRender(chips){
+  const box=$("#wa-log-b");if(!box)return;
+  if(chips)document.querySelectorAll(".wa-log-chip").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.testid==="wa-log-filter-"+(WA.log.st||"all"))));
+  const R=waLogRows(),all=WA.log.all;
+  if(!all&&!waRun()){box.innerHTML=`<p class="wa-hint">لا توجد حملة إرسال حالية — فعّل «كل حملات الإرسال» لعرض السجل الكامل.</p>`;return;}
+  box.innerHTML=`<div class="wa-row" style="justify-content:space-between"><span class="wa-hint" style="font-size:13px" data-testid="wa-log-count"><b>${R.length}</b> رقم${WA.log.q.trim()&&!R.length?" — لم يُرسل لهذا الاسم/الرقم في النطاق المختار":""}</span>
+      ${R.length?`<div class="wa-row"><button class="wa-btn out" onclick="waLogCopy()" data-testid="wa-log-copy">نسخ الأرقام</button><button class="wa-btn green-out" onclick="waLogXLSX()" data-testid="wa-log-export">${waI("download")}Excel</button></div>`:""}</div>
+    ${R.length?`<div class="wa-log-wrap"><table class="wa-log-t"><thead><tr><th>#</th><th>الاسم</th><th>الرقم</th><th>الحالة</th><th>الوقت</th><th>الرسالة</th>${all?"<th>حملة الإرسال</th>":""}<th>المرات</th></tr></thead><tbody>
+      ${R.map((x,i)=>`<tr data-testid="wa-log-row" data-phone="${x.p}"><td>${i+1}</td><td>${esc(x.n||"—")}</td><td dir="ltr">+${x.p}</td><td><span class="wa-badge ${x.s==="sent"?"st-sent":x.s==="opened"?"st-open":"st-fail"}">${WA_ST_L[x.s]||x.s}</span></td><td>${waFmtT(x.t)}</td><td>${esc(x.tpl)}</td>${all?`<td>${esc(x.run)}</td>`:""}<td>${x.cnt||""}</td></tr>`).join("")}
+    </tbody></table></div>`:""}`;
+}
+function waLogCopy(){
+  const t=[...new Set(waLogRows().map(x=>"+"+x.p))].join("\n");
+  navigator.clipboard.writeText(t).then(()=>toast("نُسخت الأرقام ✓"),()=>toast("تعذّر النسخ","err"));
+}
+async function waLogXLSX(){
+  try{await waXLSX();}catch(e){return toast(NET_ERR,"err");}
+  const rows=[["الاسم","الجوال","الحالة","الوقت","الرسالة","حملة الإرسال","مرات الإرسال"]].concat(waLogRows().map(x=>[x.n,"+"+x.p,WA_ST_L[x.s]||x.s,waFmtT(x.t),x.tpl,x.run,x.cnt]));
+  const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(rows);
+  ws["!cols"]=[{wch:22},{wch:16},{wch:18},{wch:22},{wch:20},{wch:22},{wch:10}];wb.Workbook={Views:[{RTL:true}]};
+  XLSX.utils.book_append_sheet(wb,ws,"سجل الإرسال");XLSX.writeFile(wb,"سجل-الأرقام-المرسل-لها.xlsx");
+}
 function waTabRuns(){
-  return `<div class="wa-box" id="wa-run-cur">${waRunCurHTML()}</div>
+  return `<div class="wa-box" id="wa-run-cur">${waRunCurHTML()}</div>${waLogHTML()}
     <div class="wa-box"><p class="wa-lbl" style="display:flex;align-items:center;gap:8px">${waI("plus")}حملة إرسال جديدة</p>
       <div class="wa-form">
         <div><label for="wa-run-dc">ربط بحملة من موقع الحملات (اختياري)</label><select class="wa-in" id="wa-run-dc" onchange="waRunFromDC(this.value)" data-testid="wa-run-link-campaign"><option value="">— بدون —</option></select></div>
@@ -3339,11 +3410,15 @@ function waCard(c,i,anim){
   const badge={ready:"",opened:`<span class="wa-badge st-open">تم الفتح</span>`,sent:`<span class="wa-badge st-sent">أُرسل</span>`,
     failed:`<span class="wa-badge st-fail">فشل</span>`,invalid:`<span class="wa-badge st-fail">غير صالح</span>`,opt:`<span class="wa-badge st-opt">لا ترسل</span>`}[s];
   const el=waElig(c);
+  const sentInfo=sent?`<p class="wa-ct-sent" data-testid="wa-contact-sent-info">📤 أُرسلت ${waFmtT(e.ct||e.t)}${e.tpl?" · "+esc(waTplTitle(e.tpl)):""}</p>`
+    :s==="opened"&&e.t?`<p class="wa-ct-prev">فُتحت المحادثة ${waFmtT(e.t)} — بانتظار التأكيد</p>`:"";
+  const prev=Object.values(WA.runs).filter(r=>r.id!==WA.runId&&r.st&&r.st[c.p]&&r.st[c.p].s==="sent");
+  const prevInfo=prev.length?`<p class="wa-ct-prev" data-testid="wa-contact-prev-runs">⚠️ سبق الإرسال له في ${prev.length} ${prev.length===1?"حملة أخرى":"حملات أخرى"} (${esc(prev.map(r=>r.name).join("، "))})</p>`:"";
   return `<article class="wa-contact ${sent?"sent":s==="opened"?"open":s==="opt"?"opt":""}" data-testid="wa-contact" data-phone="${c.p}" data-status="${s}" style="${anim?`animation-delay:${Math.min(i*50,500)}ms`:"animation:none"}">
     <div class="wa-ct-top">
       <div class="wa-av" style="background:${sent?"linear-gradient(135deg,#278733,#53a367)":`linear-gradient(135deg,${G[0]},${G[1]})`}">${sent?waI("check","md"):esc(ini)}</div>
       <div class="wa-ct-mid"><p class="wa-ct-name">${esc(c.n||"—")} ${e.n>0?`<span>(${e.n})</span>`:""}</p><p class="wa-ct-ph">+${c.p}</p>
-        <div class="wa-ct-meta">${c.bt?`<span class="wa-badge bt" dir="ltr">${esc(c.bt)}</span>`:""}${c.city?`<span>📍 ${esc(c.city)}</span>`:""}${c.ld?`<span>🩸 آخر تبرع ${fmtDate(c.ld)}${el==="yes"?" · مؤهل":""}</span>`:""}</div></div>
+        ${sentInfo}${prevInfo}<div class="wa-ct-meta">${c.bt?`<span class="wa-badge bt" dir="ltr">${esc(c.bt)}</span>`:""}${c.city?`<span>📍 ${esc(c.city)}</span>`:""}${c.ld?`<span>🩸 آخر تبرع ${fmtDate(c.ld)}${el==="yes"?" · مؤهل":""}</span>`:""}</div></div>
       ${badge}</div>
     <div class="wa-ct-acts">
       <button class="wa-send ${sent?"done":""}" onclick="waSend('${c.p}','msg')" ${c.opt?"disabled":""} data-testid="wa-send-btn">${WA_WA_ICON}إرسال رسالة</button>
