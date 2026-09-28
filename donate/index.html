@@ -228,6 +228,10 @@
   #scr-tools-host{position:fixed;inset:0;pointer-events:none;z-index:15}
   .scr-tools-btn{position:fixed;bottom:14px;right:14px;pointer-events:auto;z-index:21;background:rgba(20,22,30,.85);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:20px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35)}
   .scr-tools-btn:hover{background:rgba(40,42,52,.9)}
+  /* وضع ملء الشاشة: يخفي كل الأزرار والمؤشر — الخروج بـ Esc أو نقرتين على الشاشة */
+  .scr-fs-btn{right:auto;left:14px}
+  body.scr-full #scr-tools-host{display:none}
+  body.scr-full,body.scr-full *{cursor:none!important}
   /* شفافية واضحة (لا تعتيم شبه كامل ولا تمويه ثقيل يحجب التفاصيل) كي تظهر الشاشة الفعلية خلف اللوحة بوضوح أثناء التعديل
      text-shadow على اللوحة نفسها يورَّث لكل نص بداخلها فيبقى مقروءاً فوق أي خلفية فاتحة أو غامقة خلفه */
   .scr-tools-panel{position:fixed;top:0;bottom:0;right:0;width:min(300px,86vw);pointer-events:auto;z-index:20;background:rgba(10,12,18,.08);backdrop-filter:blur(2px) saturate(140%);-webkit-backdrop-filter:blur(2px) saturate(140%);box-shadow:-10px 0 28px rgba(0,0,0,.4);padding:20px 16px 72px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 10px rgba(0,0,0,.6);transform:translateX(105%);transition:transform .28s ease}
@@ -1856,6 +1860,20 @@ async function saveScrCfg(){
   }catch(e){toast(friendlyErr(e),"err");}
   if(btn)btn.disabled=false;
 }
+function scrFsBtn(){return `<button class="scr-tools-btn scr-fs-btn" onclick="enterScrFull()" title="ملء الشاشة وإخفاء كل الأزرار — للخروج: Esc أو نقرتين على الشاشة">⛶ ${scrLang==="en"?"Full screen":"ملء الشاشة"}</button>`;}
+function enterScrFull(){
+  document.body.classList.add("scr-full");
+  const el=document.documentElement,rq=el.requestFullscreen||el.webkitRequestFullscreen;
+  if(rq)try{const r=rq.call(el);if(r&&r.catch)r.catch(()=>{});}catch(e){}
+}
+function exitScrFull(){
+  document.body.classList.remove("scr-full");
+  const fe=document.fullscreenElement||document.webkitFullscreenElement,ex=document.exitFullscreen||document.webkitExitFullscreen;
+  if(fe&&ex)try{const r=ex.call(document);if(r&&r.catch)r.catch(()=>{});}catch(e){}
+}
+["fullscreenchange","webkitfullscreenchange"].forEach(ev=>document.addEventListener(ev,()=>{if(!(document.fullscreenElement||document.webkitFullscreenElement))document.body.classList.remove("scr-full");}));
+document.addEventListener("dblclick",()=>{if(document.body.classList.contains("scr-full"))exitScrFull();});
+window.addEventListener("hashchange",()=>{if(document.body.classList.contains("scr-full"))exitScrFull();});
 function toggleScrLang(){
   scrLang=scrLang==="ar"?"en":"ar";localStorage.setItem("dc_scr_lang",scrLang);
   document.documentElement.lang=scrLang; // يطابق لغة النطق التي يستخدمها قارئ الشاشة مع اللغة المعروضة فعلياً
@@ -2026,7 +2044,7 @@ function renderScrTools(id){
   const L=SCR_T[scrLang],sc=curScale();
   const toolsHost=$("#scr-tools-host");
   if(!toolsHost)return;
-  toolsHost.innerHTML=`
+  toolsHost.innerHTML=scrFsBtn()+`
     <button class="scr-tools-btn" id="scr-tools-btn" onclick="toggleScrTools()">${scrToolsVisible?"🙈 إخفاء الأدوات":"🛠️ إظهار الأدوات"}</button>
     <div class="scr-tools-panel${scrToolsVisible?" open":""}" id="scr-tools-panel">
       <div class="tg-lbl" style="font-size:13px;opacity:1">${isMobileScr()?"📱 إعدادات الجوال":"🖥️ إعدادات الشاشة الكبيرة"}</div>
@@ -2103,7 +2121,7 @@ function drawScreen(id,c){
   // للجمهور) يحصل فقط على زر لغة صغير — ميزة تخص الجمهور نفسه لا إعدادات إدارية يجب إخفاؤها عنه
   const toolsHost=$("#scr-tools-host");
   if(window._scrEdit)renderScrTools(id);
-  else if(toolsHost)toolsHost.innerHTML=`<button class="scr-tools-btn" onclick="toggleScrLang()">🌐 ${L.btn}</button>`;
+  else if(toolsHost)toolsHost.innerHTML=scrFsBtn()+`<button class="scr-tools-btn" onclick="toggleScrLang()">🌐 ${L.btn}</button>`;
   $("#phrase").dataset.p=phraseFor(c,scrLang);
   drawQR($("#scr-qr-box"),baseURL()+"#/d/"+id,window.innerWidth<=760?84:110); // على الجوال يصغَّر بدل إخفائه — يبقى المسار الوحيد للتسجيل ظاهراً
   applyTheme();
