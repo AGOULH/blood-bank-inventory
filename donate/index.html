@@ -826,6 +826,12 @@ function friendlyErr(e){
 function dayOrd(n){return "اليوم "+(ORD[n-1]||("رقم "+n));}
 function dkey(d){return "d"+d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");}
 function dkeyOf(startISO,i){const d=new Date(startISO+"T00:00:00");d.setDate(d.getDate()+i);return dkey(d);}
+// مفاتيح يوم الحملة i — ما سُجّل قبل تاريخ البداية يُحسب لليوم الأول وما بعد النهاية لليوم الأخير (حماية من خطأ تاريخ البداية)
+function dayKeys(c,i,obj){
+  const k=dkeyOf(c.startDate,i-1),first=dkeyOf(c.startDate,0),last=dkeyOf(c.startDate,c.days-1);
+  return Object.keys(obj||{}).filter(x=>x===k||(i===1&&x<first)||(i===c.days&&x>last)).sort();
+}
+function dayAgg(c,i){const o={};dayKeys(c,i,c.daily).forEach(k=>{const d=c.daily[k]||{};for(const f in d)o[f]=(o[f]||0)+(+d[f]||0);});return o;}
 function todayIdx(c){const s=new Date(c.startDate+"T00:00:00"),t=new Date();t.setHours(0,0,0,0);return Math.floor((t-s)/86400000)+1;}
 function fmtDate(iso){const d=new Date(iso+"T00:00:00");return d.toLocaleDateString("ar-SA-u-nu-latn",{day:"numeric",month:"long",year:"numeric"});}
 
@@ -2117,7 +2123,7 @@ function updateScreen(c,prevTotal){
   BT.forEach(b=>{const el=$("#tc-"+b.k);if(el)el.textContent=(c.counts||{})[b.k]||0;});
   const ti=todayIdx(c),chips=[];
   for(let i=1;i<=c.days;i++){
-    const dk=dkeyOf(c.startDate,i-1),n=((c.daily||{})[dk]||{}).total||0;
+    const n=dayAgg(c,i).total||0;
     chips.push(`<div class="day-chip ${i===ti?"now":""}"><div class="day-in">${L.day(i)}<b>${n}</b></div></div>`);
   }
   $("#scr-days").innerHTML=chips.join("");
@@ -2216,7 +2222,7 @@ function showDays(id){
   const sum={total:0};BT.forEach(b=>sum[b.k]=0);
   let rowsH="";
   for(let i=1;i<=r.days;i++){
-    const dk=dkeyOf(r.startDate,i-1),dd=(r.daily||{})[dk]||{};
+    const dd=dayAgg(r,i);
     sum.total+=dd.total||0;BT.forEach(b=>sum[b.k]+=dd[b.k]||0);
     const dt=new Date(r.startDate+"T00:00:00");dt.setDate(dt.getDate()+i-1);
     rowsH+=`<tr><td>${dayOrd(i)}<div style="font-size:11px;color:var(--muted)">${dt.toLocaleDateString("ar-SA-u-nu-latn",{day:"numeric",month:"short"})}</div></td>`
@@ -2254,10 +2260,10 @@ function showDays(id){
 function logRows(r){
   const out=[];
   for(let i=1;i<=r.days;i++){
-    const dk=dkeyOf(r.startDate,i-1),list=(((r.log||{})[dk])||[]).slice().sort((a,b)=>String(a.t).localeCompare(String(b.t)));
+    const list=[];dayKeys(r,i,r.log).forEach(dk=>(r.log[dk]||[]).forEach(o=>list.push([o,dk])));list.sort((a,b)=>(a[1]+a[0].t).localeCompare(b[1]+b[0].t));
     const dt=new Date(r.startDate+"T00:00:00");dt.setDate(dt.getDate()+i-1);
     const ds=dt.toLocaleDateString("ar-SA-u-nu-latn",{day:"numeric",month:"short",year:"numeric"});
-    list.forEach(o=>out.push({day:dayOrd(i),date:ds,t:String(o.t||"").slice(0,5),bt:o.bt||"",dk,ref:o.r||""}));
+    list.forEach(([o,dk])=>out.push({day:dayOrd(i),date:ds,t:String(o.t||"").slice(0,5),bt:o.bt||"",dk,ref:o.r||""}));
   }
   return out;
 }
@@ -2385,7 +2391,7 @@ async function exportLogPDF(id){
 function certRows(r){
   const out=[];
   for(let i=1;i<=r.days;i++){
-    const dk=dkeyOf(r.startDate,i-1),list=((r.certNames||{})[dk])||[];
+    const list=[];dayKeys(r,i,r.certNames).forEach(dk=>list.push(...(r.certNames[dk]||[])));
     const dt=new Date(r.startDate+"T00:00:00");dt.setDate(dt.getDate()+i-1);
     const ds=dt.toLocaleDateString("ar-SA-u-nu-latn",{day:"numeric",month:"short",year:"numeric"});
     list.forEach(o=>out.push({day:dayOrd(i),date:ds,n:(o&&o.n)||String(o||""),bt:(o&&o.bt)||""}));
@@ -2523,7 +2529,7 @@ async function exportCampPDF(id){
     const sum={total:0};BT.forEach(b=>sum[b.k]=0);
     const rows=[];
     for(let i=1;i<=r.days;i++){
-      const dk=dkeyOf(r.startDate,i-1),dd=(r.daily||{})[dk]||{};
+      const dd=dayAgg(r,i);
       sum.total+=dd.total||0;BT.forEach(b=>sum[b.k]+=dd[b.k]||0);
       const dt=new Date(r.startDate+"T00:00:00");dt.setDate(dt.getDate()+i-1);
       rows.push([dayOrd(i).replace("اليوم ",""),dt.toLocaleDateString("ar-SA-u-nu-latn",{day:"numeric",month:"short"}),...BT.map(b=>dd[b.k]||0),dd.total||0]);
