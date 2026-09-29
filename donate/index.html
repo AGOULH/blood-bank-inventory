@@ -230,7 +230,11 @@
   .scr-tools-btn:hover{background:rgba(40,42,52,.9)}
   /* وضع ملء الشاشة: يخفي كل الأزرار والمؤشر — الخروج بـ Esc أو نقرتين على الشاشة */
   .scr-fs-btn{right:auto;left:14px}
-  body.scr-full #scr-tools-host{display:none}
+  /* زر «حفظ صورة» بجوار «ملء الشاشة» مباشرة — الاثنان في وعاء مرن ثابت أسفل اليسار فلا يتداخلان مهما تغير طول النص باللغتين */
+  .scr-left-btns{position:fixed;bottom:14px;left:14px;display:flex;gap:8px;pointer-events:auto;z-index:21}
+  .scr-left-btns .scr-tools-btn{position:static}
+  .scr-left-btns .scr-tools-btn:disabled{opacity:.6;cursor:wait}
+  body.scr-full #scr-tools-host,body.scr-shot #scr-tools-host{display:none}
   body.scr-full,body.scr-full *{cursor:none!important}
   /* شفافية واضحة (لا تعتيم شبه كامل ولا تمويه ثقيل يحجب التفاصيل) كي تظهر الشاشة الفعلية خلف اللوحة بوضوح أثناء التعديل
      text-shadow على اللوحة نفسها يورَّث لكل نص بداخلها فيبقى مقروءاً فوق أي خلفية فاتحة أو غامقة خلفه */
@@ -1860,7 +1864,41 @@ async function saveScrCfg(){
   }catch(e){toast(friendlyErr(e),"err");}
   if(btn)btn.disabled=false;
 }
-function scrFsBtn(){return `<button class="scr-tools-btn scr-fs-btn" onclick="enterScrFull()" title="ملء الشاشة وإخفاء كل الأزرار — للخروج: Esc أو نقرتين على الشاشة">⛶ ${scrLang==="en"?"Full screen":"ملء الشاشة"}</button>`;}
+function scrFsBtn(){const en=scrLang==="en";return `<div class="scr-left-btns"><button class="scr-tools-btn" onclick="enterScrFull()" title="ملء الشاشة وإخفاء كل الأزرار — للخروج: Esc أو نقرتين على الشاشة">⛶ ${en?"Full screen":"ملء الشاشة"}</button><button class="scr-tools-btn" id="scr-shot-btn" onclick="saveScrShot()" title="التقاط الشاشة الحالية وحفظها صورة PNG باسم الحملة">📸 ${en?"Save image":"حفظ صورة"}</button></div>`;}
+// التقاط الشاشة: الطريقة الأولى getDisplayMedia (لقطة حقيقية للتبويب بكل المؤثرات: التمويه، القص، الموجة) — المتصفح يطلب الإذن
+// للتبويب الحالي؛ إن لم تتوفر (الجوال/Safari القديم) أو رُفض الإذن ← html2canvas كبديل. الأزرار تُخفى أثناء اللقطة (body.scr-shot)
+async function saveScrShot(){
+  const c=window._scrC||{},en=scrLang==="en";
+  const fname=String(c.name||"الحملة").replace(/[\\/:*?"<>|]+/g,"-").trim()+".png";
+  const btn=$("#scr-shot-btn");if(btn)btn.disabled=true;
+  const done=cv=>new Promise(ok=>cv.toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=fname;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);ok();},"image/png"));
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  let cv=null;
+  try{
+    const md=navigator.mediaDevices;
+    if(md&&md.getDisplayMedia){
+      let st=null;
+      try{st=await md.getDisplayMedia({video:{displaySurface:"browser"},audio:false,preferCurrentTab:true,selfBrowserSurface:"include"});}catch(e){st=null;}
+      if(st){
+        try{
+          document.body.classList.add("scr-shot");
+          const v=document.createElement("video");v.muted=true;v.playsInline=true;v.srcObject=st;await v.play();
+          await wait(700); // يترك وقتاً لاختفاء الأزرار ولشريط «مشاركة التبويب» حتى يستقر التخطيط
+          cv=document.createElement("canvas");cv.width=v.videoWidth;cv.height=v.videoHeight;cv.getContext("2d").drawImage(v,0,0);
+        }finally{st.getTracks().forEach(t=>t.stop());document.body.classList.remove("scr-shot");}
+      }
+    }
+    if(!cv){
+      if(!window.html2canvas)await loadJS("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js");
+      document.body.classList.add("scr-shot");
+      try{cv=await html2canvas(document.body,{useCORS:true,backgroundColor:"#000",scale:Math.min(2,window.devicePixelRatio||1),x:window.scrollX,y:window.scrollY,width:window.innerWidth,height:window.innerHeight});}
+      finally{document.body.classList.remove("scr-shot");}
+    }
+    await done(cv);
+    toast(en?"Image saved ✓":"حُفظت صورة الشاشة ✓");
+  }catch(e){toast((en?"Capture failed: ":"تعذر التقاط الشاشة: ")+(e&&e.message||e),"err");}
+  if(btn)btn.disabled=false;
+}
 function enterScrFull(){
   document.body.classList.add("scr-full");
   const el=document.documentElement,rq=el.requestFullscreen||el.webkitRequestFullscreen;
