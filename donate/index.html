@@ -234,6 +234,12 @@
   .scr-left-btns{position:fixed;bottom:14px;left:14px;display:flex;gap:8px;pointer-events:auto;z-index:21}
   .scr-left-btns .scr-tools-btn{position:static}
   .scr-left-btns .scr-tools-btn:disabled{opacity:.6;cursor:wait}
+  /* قائمة مقاسات «حفظ صورة»: الشاشة كما هي، أو ستوري 9:16 (واتساب/إنستغرام/سناب شات)، أو منشور 4:5 / 1:1 */
+  .scr-shot-menu{position:absolute;bottom:calc(100% + 8px);left:0;display:none;flex-direction:column;gap:4px;min-width:250px;background:rgba(20,22,30,.94);border:1px solid rgba(255,255,255,.35);border-radius:14px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+  .scr-shot-menu.open{display:flex}
+  .scr-shot-menu button{background:none;border:0;color:#fff;text-align:start;padding:8px 10px;border-radius:9px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+  .scr-shot-menu button:hover,.scr-shot-menu button:focus-visible{background:rgba(255,255,255,.14);outline:none}
+  .scr-shot-menu small{font-weight:500;opacity:.7;font-size:11px}
   body.scr-full #scr-tools-host,body.scr-shot #scr-tools-host{display:none}
   body.scr-full,body.scr-full *{cursor:none!important}
   /* شفافية واضحة (لا تعتيم شبه كامل ولا تمويه ثقيل يحجب التفاصيل) كي تظهر الشاشة الفعلية خلف اللوحة بوضوح أثناء التعديل
@@ -973,6 +979,8 @@ async function renderAdmin(){
         <div><label for="f-logo2-name">اسم الجهة لشعار 2 (لقارئ الشاشة)</label><input id="f-logo2-name" placeholder="اسم الجهة"></div>
         <div><label for="f-logo3">شعار 3 — منتصف أعلى الشاشة (PNG)</label><input id="f-logo3" type="file" accept="image/png,image/*"></div>
         <div><label for="f-logo3-name">اسم الجهة لشعار 3 (لقارئ الشاشة)</label><input id="f-logo3-name" placeholder="اسم الجهة"></div>
+        <div><label for="f-logo4">شعار 4 — بين المنتصف واليسار (PNG)</label><input id="f-logo4" type="file" accept="image/png,image/*"></div>
+        <div><label for="f-logo4-name">اسم الجهة لشعار 4 (لقارئ الشاشة)</label><input id="f-logo4-name" placeholder="اسم الجهة"></div>
         <div class="full"><label id="f-sp-label">شعارات الرعاة — تظهر أسفل شاشة العرض (PNG)، مع اسم كل راعٍ لقارئ الشاشة</label>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px" role="group" aria-labelledby="f-sp-label">
             <div><label style="font-size:12px" for="f-sp1">راعي 1</label><input id="f-sp1" type="file" accept="image/png,image/*"><input id="f-sp1-name" placeholder="اسم الراعي 1" style="margin-top:6px"></div>
@@ -1003,8 +1011,8 @@ async function renderAdmin(){
     </div>`,"admin");
   $("#f-start").value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
   timeOptions($("#f-time-from"),16);timeOptions($("#f-time-to"),22);
-  logoData=[null,null,null];sponsorData=[null,null,null,null,null,null];certData=null;
-  [1,2,3].forEach(i=>$("#f-logo"+i).addEventListener("change",e=>onLogoPick(e,i-1)));
+  logoData=[null,null,null,null];sponsorData=[null,null,null,null,null,null];certData=null;
+  [1,2,3,4].forEach(i=>$("#f-logo"+i).addEventListener("change",e=>onLogoPick(e,i-1)));
   [1,2,3,4,5,6].forEach(i=>$("#f-sp"+i).addEventListener("change",e=>onSponsorPick(e,i-1)));
   $("#f-cert").addEventListener("change",e=>onCertPick(e,"ar"));
   $("#f-cert-en").addEventListener("change",e=>onCertPick(e,"en"));
@@ -1029,7 +1037,7 @@ function timeOptions(sel,defH){
   }
   sel.innerHTML=out.join("");
 }
-let logoData=[null,null,null],sponsorData=[],certData=null,certDataEn=null,certNX=.5,certNY=.55;
+let logoData=[null,null,null,null],sponsorData=[],certData=null,certDataEn=null,certNX=.5,certNY=.55;
 /* أداة اختيار مكان الاسم: النقر على معاينة التصميم يحدد نسبتي x/y */
 function bindCertPick(wrapId,markerId,get,set){
   const w=$(wrapId),m=$(markerId);
@@ -1141,7 +1149,7 @@ async function createCampaign(){
   }
   const certOn=$("#f-cert-on").checked;
   if(certOn&&!certData)return toast("فعّلت الشهادة — أرفق تصميمها (PDF أو صورة)","err");
-  const logoNames=[1,2,3].map(i=>$("#f-logo"+i+"-name").value.trim()||null);
+  const logoNames=[1,2,3,4].map(i=>$("#f-logo"+i+"-name").value.trim()||null);
   const spPairs=sponsorData.map((d,i)=>d?{img:d,name:$("#f-sp"+(i+1)+"-name").value.trim()||null}:null).filter(Boolean);
   const doc={
     name,city,startDate:start,days,times,timeFrom:tFrom,timeTo:tTo,goal,org:org||null,
@@ -1161,10 +1169,10 @@ async function createCampaign(){
     await cDoc(id).set(doc);
     db.doc(META_DOC).set({names:firebase.firestore.FieldValue.arrayUnion(name),
                           cities:firebase.firestore.FieldValue.arrayUnion(city)},{merge:true}).catch(()=>{});
-    ["f-name","f-city","f-goal","f-org","f-logo1","f-logo2","f-logo3","f-logo1-name","f-logo2-name","f-logo3-name",
+    ["f-name","f-city","f-goal","f-org","f-logo1","f-logo2","f-logo3","f-logo4","f-logo1-name","f-logo2-name","f-logo3-name","f-logo4-name",
      "f-sp1","f-sp2","f-sp3","f-sp4","f-sp5","f-sp6","f-sp1-name","f-sp2-name","f-sp3-name","f-sp4-name","f-sp5-name","f-sp6-name",
      "f-cert","f-cert-en"].forEach(i=>$("#"+i).value="");
-    logoData=[null,null,null];sponsorData=[null,null,null,null,null,null];certData=null;certDataEn=null;
+    logoData=[null,null,null,null];sponsorData=[null,null,null,null,null,null];certData=null;certDataEn=null;
     $("#f-cert-on").checked=false;$("#cert-opts").style.display="none";$("#f-cert-pick").style.display="none";$("#f-cert-en-prev").style.display="none";
     certNX=.5;certNY=.55;
     toast("تم إنشاء الحملة ✓");
@@ -1290,7 +1298,7 @@ function confirmDialog(msg,okLabel){
 let editSp=[],editLogos=[],editCertAr=null,editCertEn=null,editNX=.5,editNY=.55,editTimesTouched=false;
 function showEdit(id){
   const r=(window._rows||window._srows||[]).find(x=>x.id===id);if(!r)return;
-  editSp=[null,null,null,null,null,null];editLogos=[null,null,null];editCertAr=null;editCertEn=null;editTimesTouched=false;
+  editSp=[null,null,null,null,null,null];editLogos=[null,null,null,null];editCertAr=null;editCertEn=null;editTimesTouched=false;
   editNX=(r.cert&&r.cert.nx!=null)?r.cert.nx:.5;
   editNY=(r.cert&&r.cert.ny!=null)?r.cert.ny:({top:.38,mid:.55,low:.72}[(r.cert||{}).pos]||.55);
   const sp=r.sponsors||[],lg=r.logos||[],lgn=r.logoNames||[],spn=r.sponsorNames||[];
@@ -1312,6 +1320,8 @@ function showEdit(id){
       <div><label for="e-logo2-name">اسم الجهة 2 (لقارئ الشاشة)</label><input id="e-logo2-name" value="${esc(lgn[1]||"")}"></div>
       <div><label for="e-logo3">شعار 3 — وسط ${lg[2]?"✓":""}</label><input id="e-logo3" type="file" accept="image/png,image/*"></div>
       <div><label for="e-logo3-name">اسم الجهة 3 (لقارئ الشاشة)</label><input id="e-logo3-name" value="${esc(lgn[2]||"")}"></div>
+      <div><label for="e-logo4">شعار 4 — بين الوسط واليسار ${lg[3]?"✓":""}</label><input id="e-logo4" type="file" accept="image/png,image/*"></div>
+      <div><label for="e-logo4-name">اسم الجهة 4 (لقارئ الشاشة)</label><input id="e-logo4-name" value="${esc(lgn[3]||"")}"></div>
       <div class="full" style="border-top:1px solid var(--line);padding-top:10px;font-size:14px"><b>🏅 شهادة الشكر</b> ${r.cert?`<span class="tag ok">مفعّلة — الرفع يستبدل التصميم</span>`:`<span class="tag mut">غير مفعّلة — ارفع التصميم العربي لتفعيلها</span>`}</div>
       <div><label for="e-cert">التصميم العربي ${r.cert?"✓":""}</label><input id="e-cert" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
       <div><label for="e-cert-en">التصميم الإنجليزي ${(r.cert&&r.cert.imgEn)?"✓":""}</label><input id="e-cert-en" type="file" accept="application/pdf,image/*,.tif,.tiff"></div>
@@ -1339,7 +1349,7 @@ function showEdit(id){
   $("#e-cert-en").addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;
     try{editCertEn=await certFileToImage(f);toast("جُهّز التصميم الإنجليزي ✓");}
     catch(e){ev.target.value="";toast("ملف كبير أو غير مدعوم","err");}});
-  [1,2,3].forEach(i=>$("#e-logo"+i).addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;
+  [1,2,3,4].forEach(i=>$("#e-logo"+i).addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;
     try{editLogos[i-1]=await compressLogo(f,280,90000);toast("جُهّز الشعار "+i+" ✓");}
     catch(e){ev.target.value="";toast("الشعار كبير جداً","err");}}));
   [0,1,2,3,4,5].forEach(i=>$("#e-sp"+i).addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;
@@ -1360,11 +1370,11 @@ async function saveEdit(id){
     const tF=$("#e-time-from").value,tT=$("#e-time-to").value;
     upd.timeFrom=tF;upd.timeTo=tT;upd.times="من "+tF+" إلى "+tT;
   }
-  const lg=(r.logos||[null,null,null]).slice(0,3);while(lg.length<3)lg.push(null);
+  const lg=(r.logos||[]).slice(0,4);while(lg.length<4)lg.push(null);
   editLogos.forEach((d,i)=>{if(d)lg[i]=d;});
   upd.logos=lg;
-  const lgn=(r.logoNames||[null,null,null]).slice(0,3);while(lgn.length<3)lgn.push(null);
-  [1,2,3].forEach((n,i)=>{const v=$("#e-logo"+n+"-name").value.trim();lgn[i]=v||null;});
+  const lgn=(r.logoNames||[]).slice(0,4);while(lgn.length<4)lgn.push(null);
+  [1,2,3,4].forEach((n,i)=>{const v=$("#e-logo"+n+"-name").value.trim();lgn[i]=v||null;});
   upd.logoNames=lgn;
   const sp=(r.sponsors||[]).slice(0,6),spn0=(r.sponsorNames||[]).slice(0,6);
   editSp.forEach((d,i)=>{if(d)sp[i]=d;});
@@ -1462,7 +1472,7 @@ function downloadDataURL(d,filename){
 function downloadCampaignLogos(id){
   const r=(window._rows||window._srows||[]).find(x=>x.id===id);if(!r)return;
   const safe=(r.name||"حملة").replace(/[\\/:*?"<>|]/g,"-").trim()||"حملة";
-  const orgLabel=["يمين","يسار","وسط"];
+  const orgLabel=["يمين","يسار","وسط","بين-الوسط-واليسار"];
   let n=0;
   (r.logos||[]).forEach((d,i)=>{if(d){downloadDataURL(d,`${safe}-شعار-${orgLabel[i]||i+1}.png`);n++;}});
   (r.sponsors||[]).forEach((d,i)=>{if(d){downloadDataURL(d,`${safe}-راعي-${i+1}.png`);n++;}});
@@ -1625,8 +1635,8 @@ let scrHideQr=false; // إخفاء الباركود من شاشة العرض (ي
    وعناصر بلا تكبير (title=اسم الحملة+المدينة، days=مربعات الأيام الثلاثة معاً، time=شريط الساعة وبداية/نهاية الحملة).
    التكبير والتحريك يُطبَّقان بـ transform على العنصر نفسه فقط (لا تغيير في height/width) فلا يضغطان بقية التصميم؛
    كل شعار ثابت من زاويته البعيدة عن المنتصف (transform-origin بالقالب) فينمو نحو الفراغ لا فوق العناصر المجاورة */
-const LG_SCALE_DEF=()=>({a:1,b:1,c:1.2,sp:1.15,title:1,days:1,time:1,types:1,pct:1,bag:1,phrase:1,qr:1,credit:1});
-const LG_POS_DEF=()=>({a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},sp:{x:0,y:0},title:{x:0,y:0},days:{x:0,y:0},time:{x:0,y:0},types:{x:0,y:0},pct:{x:0,y:0},bag:{x:0,y:0},phrase:{x:0,y:0},qr:{x:0,y:0},credit:{x:0,y:0}});
+const LG_SCALE_DEF=()=>({a:1,b:1,c:1.2,d:1,sp:1.15,title:1,days:1,time:1,types:1,pct:1,bag:1,phrase:1,qr:1,credit:1});
+const LG_POS_DEF=()=>({a:{x:0,y:0},b:{x:0,y:0},c:{x:0,y:0},d:{x:0,y:0},sp:{x:0,y:0},title:{x:0,y:0},days:{x:0,y:0},time:{x:0,y:0},types:{x:0,y:0},pct:{x:0,y:0},bag:{x:0,y:0},phrase:{x:0,y:0},qr:{x:0,y:0},credit:{x:0,y:0}});
 /* الترتيب الافتراضي لكل حملة جديدة = ترتيب حملة «النفس الزكية 12» المعتمد (مقاسات ومواضع كل العناصر: الكيس، الأيام،
    المربعات، النسبة، الباركود، العبارات، فكرة وإعداد...) مع هويتها وألوانها والطبقة الزخرفية — يُنسخ داخل وثيقة الحملة
    عند إنشائها (createCampaign) فيبقى قابلاً للتعديل والحفظ لكل حملة بعدها كالمعتاد */
@@ -1636,7 +1646,7 @@ const SCR_DEF_CFG={skin:"gold-glass",tint:"#eed795",font:"#140f0f",hideQr:false,
     types:{x:81.7,y:-95.1},pct:{x:150.4,y:-72},bag:{x:72,y:-30},phrase:{x:-303.3,y:-253.7},qr:{x:1020.4,y:-212.5},credit:{x:-209.8,y:-265.1}},
   logoScaleM:LG_SCALE_DEF(),logoPosM:LG_POS_DEF(),
   posRef:{w:1470,h:743},posRefM:null}; // مقاس اللوحة التي رُتّبت عليها المواضع — فتظهر الحملة الجديدة مطابقة تماماً
-const LG_LABELS_LOGOS=[["a","يمين"],["b","وسط"],["c","يسار"],["sp","رعاة"]];
+const LG_LABELS_LOGOS=[["a","يمين"],["b","وسط"],["d","شعار 4"],["c","يسار"],["sp","رعاة"]];
 const LG_LABELS_ELEMS=[["title","العنوان"],["days","الأيام"],["time","الوقت"],["types","المربعات"],["pct","النسبة"],["bag","الكيس"],["phrase","العبارات"],["qr","الباركود"],["credit","فكرة وإعداد"]];
 let scrLogoScale=LG_SCALE_DEF();
 let scrLogoPos=LG_POS_DEF();
@@ -1864,12 +1874,50 @@ async function saveScrCfg(){
   }catch(e){toast(friendlyErr(e),"err");}
   if(btn)btn.disabled=false;
 }
-function scrFsBtn(){const en=scrLang==="en";return `<div class="scr-left-btns"><button class="scr-tools-btn" onclick="enterScrFull()" title="ملء الشاشة وإخفاء كل الأزرار — للخروج: Esc أو نقرتين على الشاشة">⛶ ${en?"Full screen":"ملء الشاشة"}</button><button class="scr-tools-btn" id="scr-shot-btn" onclick="saveScrShot()" title="التقاط الشاشة الحالية وحفظها صورة PNG باسم الحملة">📸 ${en?"Save image":"حفظ صورة"}</button></div>`;}
+function scrFsBtn(){const en=scrLang==="en";return `<div class="scr-left-btns"><button class="scr-tools-btn" onclick="enterScrFull()" title="ملء الشاشة وإخفاء كل الأزرار — للخروج: Esc أو نقرتين على الشاشة">⛶ ${en?"Full screen":"ملء الشاشة"}</button><button class="scr-tools-btn" id="scr-shot-btn" onclick="toggleShotMenu(event)" aria-haspopup="true" aria-expanded="false" title="التقاط الشاشة الحالية وحفظها صورة PNG باسم الحملة — اختر المقاس">📸 ${en?"Save image":"حفظ صورة"}</button><div class="scr-shot-menu" id="scr-shot-menu" role="menu">${SHOT_FMTS.map(f=>`<button role="menuitem" onclick="saveScrShot('${f.k}')">${en?f.en:f.ar}<small>${en?f.enH:f.arH}</small></button>`).join("")}</div></div>`;}
+/* مقاسات الحفظ: «كما هي» = لقطة الشاشة بمقاسها؛ البقية تضع اللقطة وسط لوحة بالمقاس المطلوب فوق خلفية من نفس اللقطة مموّهة،
+   مع اسم الحملة أعلاها — وتُترك مناطق آمنة أعلى/أسفل الستوري حتى لا تغطيها أزرار التطبيقات (الاسم، الرد، الإرسال) */
+const SHOT_FMTS=[
+  {k:"raw",ar:"🖥️ الشاشة كما هي",arH:"بنفس مقاس الشاشة الحالية",en:"🖥️ Screen as is",enH:"Current screen size"},
+  {k:"story",w:1080,h:1920,ar:"📱 ستوري 9:16",arH:"واتساب · إنستغرام · سناب شات (1080×1920)",en:"📱 Story 9:16",enH:"WhatsApp · Instagram · Snapchat (1080×1920)"},
+  {k:"post45",w:1080,h:1350,ar:"🖼️ منشور عمودي 4:5",arH:"منشور إنستغرام (1080×1350)",en:"🖼️ Portrait post 4:5",enH:"Instagram post (1080×1350)"},
+  {k:"square",w:1080,h:1080,ar:"⬛ منشور مربع 1:1",arH:"إنستغرام · واتساب (1080×1080)",en:"⬛ Square post 1:1",enH:"Instagram · WhatsApp (1080×1080)"}];
+function toggleShotMenu(e){
+  if(e)e.stopPropagation();
+  const m=$("#scr-shot-menu"),b=$("#scr-shot-btn");if(!m)return;
+  const o=!m.classList.contains("open");m.classList.toggle("open",o);if(b)b.setAttribute("aria-expanded",o);
+  if(o){const f=m.querySelector("button");if(f)f.focus();}
+}
+function closeShotMenu(){const m=$("#scr-shot-menu");if(m&&m.classList.contains("open")){m.classList.remove("open");const b=$("#scr-shot-btn");if(b)b.setAttribute("aria-expanded","false");}}
+document.addEventListener("click",e=>{if(!e.target.closest||!e.target.closest("#scr-shot-menu"))closeShotMenu();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeShotMenu();});
+/* تركيب اللقطة على لوحة بمقاس السوشال: خلفية مموّهة معتمة تغطي اللوحة + اللقطة كاملة بحواف دائرية وظل + اسم الحملة */
+function shotCompose(src,fmt,title){
+  const W=fmt.w,H=fmt.h,cv=document.createElement("canvas");cv.width=W;cv.height=H;
+  const x=cv.getContext("2d"),sw=src.width,sh=src.height,cs=Math.max(W/sw,H/sh);
+  x.save();x.filter="blur(28px) brightness(.55)";x.drawImage(src,(W-sw*cs)/2,(H-sh*cs)/2,sw*cs,sh*cs);x.restore();
+  x.fillStyle="rgba(0,0,0,.25)";x.fillRect(0,0,W,H);
+  const isStory=fmt.k==="story",safeT=isStory?250:70,safeB=isStory?250:50,titleH=title?(isStory?150:110):0,pad=40;
+  const aw=W-pad*2,ah=H-safeT-safeB-titleH,s=Math.min(aw/sw,ah/sh),dw=sw*s,dh=sh*s;
+  const dx=(W-dw)/2,dy=safeT+titleH+(ah-dh)/2,r=28;
+  const box=()=>{x.beginPath();if(x.roundRect)x.roundRect(dx,dy,dw,dh,r);else x.rect(dx,dy,dw,dh);};
+  if(title){
+    x.font=`800 ${isStory?64:52}px Tajawal,"Segoe UI",Tahoma,sans-serif`;
+    x.fillStyle="#fff";x.textAlign="center";x.textBaseline="middle";x.direction=/[؀-ۿ]/.test(title)?"rtl":"ltr";
+    x.shadowColor="rgba(0,0,0,.6)";x.shadowBlur=18;
+    let t=title;while(x.measureText(t).width>W-pad*2&&t.length>4)t=t.slice(0,-2);if(t!==title)t=t.trim()+"…";
+    x.fillText(t,W/2,dy-titleH/2);x.shadowBlur=0;
+  }
+  x.save();x.shadowColor="rgba(0,0,0,.55)";x.shadowBlur=40;x.shadowOffsetY=12;box();x.fillStyle="#000";x.fill();x.restore();
+  x.save();box();x.clip();x.drawImage(src,dx,dy,dw,dh);x.restore();
+  return cv;
+}
 // التقاط الشاشة: الطريقة الأولى getDisplayMedia (لقطة حقيقية للتبويب بكل المؤثرات: التمويه، القص، الموجة) — المتصفح يطلب الإذن
 // للتبويب الحالي؛ إن لم تتوفر (الجوال/Safari القديم) أو رُفض الإذن ← html2canvas كبديل. الأزرار تُخفى أثناء اللقطة (body.scr-shot)
-async function saveScrShot(){
-  const c=window._scrC||{},en=scrLang==="en";
-  const fname=String(c.name||"الحملة").replace(/[\\/:*?"<>|]+/g,"-").trim()+".png";
+async function saveScrShot(fk){
+  closeShotMenu();
+  const c=window._scrC||{},en=scrLang==="en",fmt=SHOT_FMTS.find(f=>f.k===fk)||SHOT_FMTS[0];
+  const fname=String(c.name||"الحملة").replace(/[\\/:*?"<>|]+/g,"-").trim()+(fmt.w?"-"+fmt.k:"")+".png";
   const btn=$("#scr-shot-btn");if(btn)btn.disabled=true;
   const done=cv=>new Promise(ok=>cv.toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=fname;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);ok();},"image/png"));
   const wait=ms=>new Promise(r=>setTimeout(r,ms));
@@ -1894,8 +1942,9 @@ async function saveScrShot(){
       try{cv=await html2canvas(document.body,{useCORS:true,backgroundColor:"#000",scale:Math.min(2,window.devicePixelRatio||1),x:window.scrollX,y:window.scrollY,width:window.innerWidth,height:window.innerHeight});}
       finally{document.body.classList.remove("scr-shot");}
     }
+    if(fmt.w)cv=shotCompose(cv,fmt,c.name||"");
     await done(cv);
-    toast(en?"Image saved ✓":"حُفظت صورة الشاشة ✓");
+    toast(en?"Image saved ✓":(fmt.w?"حُفظت الصورة بمقاس "+fmt.ar.replace(/^\S+\s/,"")+" ✓":"حُفظت صورة الشاشة ✓"));
   }catch(e){toast((en?"Capture failed: ":"تعذر التقاط الشاشة: ")+(e&&e.message||e),"err");}
   if(btn)btn.disabled=false;
 }
@@ -2112,9 +2161,10 @@ function drawScreen(id,c){
   const L=SCR_T[scrLang];
   const lgs=c.logos||(c.logo?[c.logo]:[]);
   const lgn=c.logoNames||[];
-  const logoBar=(lgs[0]||lgs[1]||lgs[2])?`<div class="logo-bar">
+  const logoBar=(lgs[0]||lgs[1]||lgs[2]||lgs[3])?`<div class="logo-bar">
       <div class="lg">${lgs[0]?`<img src="${lgs[0]}" alt="${esc(lgn[0]||"")}" data-lg="a" draggable="false" style="transform-origin:left bottom">`:""}</div>
       <div class="lg">${lgs[2]?`<img src="${lgs[2]}" alt="${esc(lgn[2]||"")}" data-lg="b" draggable="false" style="transform-origin:center bottom">`:""}</div>
+      ${lgs[3]?`<div class="lg"><img src="${lgs[3]}" alt="${esc(lgn[3]||"")}" data-lg="d" draggable="false" style="transform-origin:center bottom"></div>`:""}
       <div class="lg">${lgs[1]?`<img src="${lgs[1]}" alt="${esc(lgn[1]||"")}" data-lg="c" draggable="false" style="transform-origin:right bottom">`:""}</div>
     </div>`:"";
   const spn=c.sponsorNames||[];
