@@ -1825,26 +1825,46 @@ function labelHTML(){
   return `<div class="label-card"><div class="lc-name">${esc(name||"—")}</div><div class="lc-meta">${lot?(t("bc_lot")+": "+esc(lot)):""}${(lot&&exp)?" · ":""}${exp?(t("bc_exp")+": "+fmtG(exp)):""}</div>${svg}<div class="lc-code">${esc(code||"")}</div></div>`;
 }
 function renderBarcode(){ const p=$("bc-preview"); if(p)p.innerHTML=labelHTML(); }
+function labelPNG(W,H){
+  const code=($("bc-code").value||"").toUpperCase().trim(), name=$("bc-name").value.trim()||"—", lot=$("bc-lot").value.trim(), exp=$("bc-exp").value;
+  const meta=(lot?(t("bc_lot")+": "+lot):"")+((lot&&exp)?" · ":"")+(exp?(t("bc_exp")+": "+fmtG(exp)):"");
+  const K=12, cw=Math.round(W*K), ch=Math.round(H*K), pad=1.5*K;
+  const c=document.createElement("canvas"); c.width=cw; c.height=ch; const g=c.getContext("2d");
+  g.fillStyle="#fff"; g.fillRect(0,0,cw,ch); g.fillStyle="#000"; g.textAlign="center"; g.textBaseline="top"; g.direction=LANG==="ar"?"rtl":"ltr";
+  const font=(px,w)=>`${w} ${px}px "Segoe UI",Tahoma,Arial,sans-serif`, maxW=cw-2*pad;
+  const fit=(txt,px,w)=>{g.font=font(px,w); if(g.measureText(txt).width<=maxW)return txt; while(txt.length>1&&g.measureText(txt+"…").width>maxW)txt=txt.slice(0,-1); return txt+"…";};
+  /* sizes in mm, scaled to the label height */
+  const nPx=Math.min(3.7,H*0.105)*K, mPx=Math.min(2.5,H*0.075)*K, cPx=Math.min(3,H*0.09)*K, barH=H*0.38*K, barW=W*0.92*K;
+  g.font=font(nPx,800); const words=name.split(/\s+/), lines=[]; let cur="";
+  for(const w of words){const tr=cur?cur+" "+w:w; if(g.measureText(tr).width<=maxW||!cur)cur=tr; else{lines.push(cur);cur=w;}} if(cur)lines.push(cur);
+  let nl=lines.slice(0,2); if(lines.length>2)nl[1]=nl[1]+" "+lines.slice(2).join(" "); nl=nl.map(l=>fit(l,nPx,800));
+  const gap=0.6*K, total=nl.length*nPx*1.12+(meta?mPx+gap:0)+gap+barH+gap+cPx; let y=Math.max(pad,(ch-total)/2);
+  g.font=font(nPx,800); nl.forEach(l=>{g.fillText(l,cw/2,y); y+=nPx*1.12;});
+  if(meta){g.font=font(mPx,400); g.fillText(fit(meta,mPx,400),cw/2,y+gap/2); y+=mPx+gap;}
+  y+=gap;
+  /* Code 39 bars, integer pixel widths for crisp thermal printing */
+  const seq="*"+code.replace(/[^0-9A-Z\-\.\ \$\/\+%]/g,"-")+"*"; let units=0;
+  for(const chr of seq){const p=C39[chr]; if(!p)continue; for(const m of p)units+=m==="w"?3:1; units+=1;} units-=1;
+  const u=Math.max(1,Math.floor(barW/units)), bw=u*units; let x=Math.round((cw-bw)/2);
+  for(const chr of seq){const p=C39[chr]; if(!p)continue; for(let i=0;i<p.length;i++){const w=(p[i]==="w"?3:1)*u; if(i%2===0)g.fillRect(x,Math.round(y),w,Math.round(barH)); x+=w;} x+=u;}
+  y+=barH+gap;
+  g.direction="ltr"; g.font=`400 ${cPx}px monospace`; g.fillText(code.split("").join(String.fromCharCode(8202)),cw/2,y);
+  return c.toDataURL("image/png");
+}
 function printBarcode(){
   const code=($("bc-code").value||"").trim(); if(!code)return toast(t("bc_err_code"),"err");
   const copies=Math.min(200,Math.max(1,+$("bc-copies").value||1));
-  const W=Math.max(10,+$("bc-w").value||50), H=Math.max(10,+$("bc-h").value||30); const one=labelHTML();
-  const w=window.open("","_blank"); const dir=LANG==="ar"?"rtl":"ltr";
-  w.document.write('<html dir="'+dir+'"><head><meta charset="utf-8"><title>'+t("bc_print_title")+'</title><style>'
+  const W=Math.max(10,+$("bc-w").value||50), H=Math.max(10,+$("bc-h").value||30); const src=labelPNG(W,H);
+  const w=window.open("","_blank"); if(!w)return toast(t("l2l_popup"),"err");
+  /* the label is a ready-made image: prints the same on any browser / Citrix / Zebra driver */
+  w.document.write('<html><head><meta charset="utf-8"><title> </title><style>'
     +'@page{size:'+W+'mm '+H+'mm;margin:0}'
-    +'html,body{margin:0;padding:0}'
-    +'body{font-family:"Segoe UI",Tahoma,sans-serif}'
-    +'*{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-sizing:border-box}'
-    +'.label-card{width:'+W+'mm;height:'+H+'mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.5mm;border:0;border-radius:0;overflow:hidden;page-break-after:always;break-after:page}'
-    +'.label-card:last-child{page-break-after:auto;break-after:auto}'
-    +'.label-card>*{flex:none;max-width:100%}'
-    +'.lc-name{font-weight:800;font-size:'+Math.min(10.5,H*0.3)+'pt;line-height:1.12;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}'
-    +'.lc-meta{font-size:'+Math.min(7,H*0.22)+'pt;color:#000;margin:0.6mm 0;white-space:nowrap;overflow:hidden}'
-    +'.lc-code{font-family:monospace;letter-spacing:1.5px;margin-top:0.6mm;font-size:'+Math.min(8.5,H*0.27)+'pt;line-height:1}'
-    +'.label-card svg{display:block;width:'+(W*0.92).toFixed(1)+'mm !important;height:'+(H*0.38).toFixed(1)+'mm !important;max-height:none;flex:none}'
+    +'html,body{margin:0;padding:0;background:#fff}'
+    +'img{display:block;width:'+W+'mm;height:'+H+'mm;page-break-after:always;break-after:page}'
+    +'img:last-child{page-break-after:auto;break-after:auto}'
     +'</style></head><body>'
-    +Array(copies).fill(one.replace('preserveAspectRatio="xMidYMid meet"','preserveAspectRatio="none"')).join("")
-    +'<scr'+'ipt>window.onload=function(){window.print();}</scr'+'ipt></body></html>');
+    +Array(copies).fill('<img src="'+src+'" alt="">').join("")
+    +'<scr'+'ipt>window.onload=function(){setTimeout(function(){window.focus();window.print();},400);};</scr'+'ipt></body></html>');
   w.document.close();
 }
 const C39={'0':'nnnwwnwnn','1':'wnnwnnnnw','2':'nnwwnnnnw','3':'wnwwnnnnn','4':'nnnwwnnnw','5':'wnnwwnnnn','6':'nnwwwnnnn','7':'nnnwnnwnw','8':'wnnwnnwnn','9':'nnwwnnwnn','A':'wnnnnwnnw','B':'nnwnnwnnw','C':'wnwnnwnnn','D':'nnnnwwnnw','E':'wnnnwwnnn','F':'nnwnwwnnn','G':'nnnnnwwnw','H':'wnnnnwwnn','I':'nnwnnwwnn','J':'nnnnwwwnn','K':'wnnnnnnww','L':'nnwnnnnww','M':'wnwnnnnwn','N':'nnnnwnnww','O':'wnnnwnnwn','P':'nnwnwnnwn','Q':'nnnnnnwww','R':'wnnnnnwwn','S':'nnwnnnwwn','T':'nnnnwnwwn','U':'wwnnnnnnw','V':'nwwnnnnnw','W':'wwwnnnnnn','X':'nwnnwnnnw','Y':'wwnnwnnnn','Z':'nwwnwnnnn','-':'nwnnnnwnw','.':'wwnnnnwnn',' ':'nwwnnnwnn','$':'nwnwnwnnn','/':'nwnwnnnwn','+':'nwnnnwnwn','%':'nnnwnwnwn','*':'nwnnwnwnn'};
@@ -2617,8 +2637,8 @@ const GUIDE=[
   ar:{t:"التتبّع والاستدعاء والإتلاف",s:["«تتبع التشغيلة»: ابحث برقم التشغيلة (Lot) لعرض سجلها الكامل — إجمالي المستلم/المصروف/المُتلَف/المتبقي، وأين ومتى صُرفت — للاستدعاء وسلامة المريض.","الاستدعاء 🚩 (من جدول التشغيلات): يحجز المتبقي تلقائياً، ويسجّل السبب ومرجع NCMDR، ويعرض أثر الاستدعاء.","الإتلاف 🚮: لإخراج المنتهي/المرفوض مع توثيق السبب والمسؤول والتاريخ. تقريرا الإتلاف والاستدعاء متاحان في «التقارير»."]},
   en:{t:"Trace, recall & disposal",s:["“Lot trace”: search by lot number for the full record — total received/dispensed/disposed/remaining, and where & when dispensed — for recalls and patient safety.","Recall 🚩 (from the lots table): auto-quarantines the remaining stock, takes the reason and NCMDR reference, and shows the recall impact.","Disposal 🚮: remove expired/rejected stock documenting reason, responsible person, and date. Disposal & recall reports are in “Reports”."]}},
  {ic:svgIcon("barcode",22),cls:"g-cyan",
-  ar:{t:"الباركود: طباعة ومسح",s:["اطبع الملصقات: «طباعة الباركود» ← اختر صنفاً أو أدخل الكود، عدّل الاسم/التشغيلة/الانتهاء (Code 39) وعدد النسخ. يعمل دون اتصال.","يُطبع الباركود دائماً بحجم ثابت يتناسب مع مقاس الملصق (عرض × ارتفاع بالمليمتر)، ويُختصر اسم الصنف الطويل في سطرين حتى لا يطغى على الباركود أو الكود أسفله.","للمسح السريع: اضغط زر «📷 مسح» في الأعلى — امسح بماسح USB/بلوتوث أو بالكاميرا (حيث تُدعم) أو أدخل الكود يدوياً ثم Enter.","بعد المسح ينتقل النظام مباشرة إلى الصنف مع أزرار سريعة: عرض في المخزون، استقبال، أو صرف."]},
-  en:{t:"Barcode: print & scan",s:["Print labels: “Barcode printing” ← pick an item or enter the code, adjust name/lot/expiry (Code 39) and copies. Works offline.","The barcode always prints at a fixed size that fits the label dimensions (width × height in mm), and long item names are trimmed to two lines so they never crowd out the barcode or the code beneath it.","Quick scan: press the “📷 Scan” button at the top — scan with a USB/Bluetooth reader or the camera (where supported), or type the code and press Enter.","After scanning it jumps straight to the item with quick actions: view in inventory, receive, or dispense."]}},
+  ar:{t:"الباركود: طباعة ومسح",s:["اطبع الملصقات: «طباعة الباركود» ← اختر صنفاً أو أدخل الكود، عدّل الاسم/التشغيلة/الانتهاء (Code 39) وعدد النسخ. يعمل دون اتصال.","يُجهَّز الملصق كاملاً (الاسم والتشغيلة والانتهاء والباركود والكود) صورةً عالية الدقة بمقاس الملصق (عرض × ارتفاع بالمليمتر)، فيُطبع بالشكل نفسه على أي متصفح أو طابعة (Zebra أو Citrix)، ويُختصر اسم الصنف الطويل في سطرين. يُفضَّل إلغاء خيار «الرأس والتذييل» (Headers and footers) في نافذة الطباعة.","للمسح السريع: اضغط زر «📷 مسح» في الأعلى — امسح بماسح USB/بلوتوث أو بالكاميرا (حيث تُدعم) أو أدخل الكود يدوياً ثم Enter.","بعد المسح ينتقل النظام مباشرة إلى الصنف مع أزرار سريعة: عرض في المخزون، استقبال، أو صرف."]},
+  en:{t:"Barcode: print & scan",s:["Print labels: “Barcode printing” ← pick an item or enter the code, adjust name/lot/expiry (Code 39) and copies. Works offline.","The whole label (name, lot, expiry, barcode and code) is rendered as one high-resolution image at the label size (width × height in mm), so it prints identically on any browser or printer (Zebra or Citrix), with long item names trimmed to two lines. Turn off “Headers and footers” in the print dialog for best results.","Quick scan: press the “📷 Scan” button at the top — scan with a USB/Bluetooth reader or the camera (where supported), or type the code and press Enter.","After scanning it jumps straight to the item with quick actions: view in inventory, receive, or dispense."]}},
  {ic:svgIcon("reports",22),cls:"g-pink",
   ar:{t:"التقارير والتصدير",s:["افتح «التقارير» لرؤية التشغيلات المنتهية/القريبة والأكثر استهلاكاً، وتقرير الفترة وتقرير الموظفين.","صدّر أي تقرير بصيغة Excel/CSV: المخزون، الحركات، الانتهاء، الاستهلاك، استهلاك المختبرات، الإتلاف، الاستدعاء، الفترة، الموظفين.","استخدم «طباعة الصفحة» لطباعة تقرير جاهز."]},
   en:{t:"Reports & export",s:["Open “Reports” to see expired/near-expiry lots, most-consumed items, plus the period and employee reports.","Export any report as Excel/CSV: inventory, movements, expiry, consumption, lab usage, disposal, recall, period, employees.","Use “Print page” to print a ready report."]}},
