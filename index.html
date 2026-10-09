@@ -1834,14 +1834,16 @@ function printBarcode(){
     +'@page{size:'+W+'mm '+H+'mm;margin:0}'
     +'html,body{margin:0;padding:0}'
     +'body{font-family:"Segoe UI",Tahoma,sans-serif}'
+    +'*{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-sizing:border-box}'
     +'.label-card{width:'+W+'mm;height:'+H+'mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.5mm;border:0;border-radius:0;overflow:hidden;page-break-after:always;break-after:page}'
     +'.label-card:last-child{page-break-after:auto;break-after:auto}'
-    +'.lc-name{font-weight:800;font-size:10.5pt;line-height:1.12}'
-    +'.lc-meta{font-size:7pt;color:#333;margin:0.8mm 0}'
-    +'.lc-code{font-family:monospace;letter-spacing:1.5px;margin-top:0.8mm;font-size:8.5pt}'
-    +'.label-card svg{width:92% !important;height:auto !important;max-height:48%}'
+    +'.label-card>*{flex:none;max-width:100%}'
+    +'.lc-name{font-weight:800;font-size:'+Math.min(10.5,H*0.3)+'pt;line-height:1.12;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}'
+    +'.lc-meta{font-size:'+Math.min(7,H*0.22)+'pt;color:#000;margin:0.6mm 0;white-space:nowrap;overflow:hidden}'
+    +'.lc-code{font-family:monospace;letter-spacing:1.5px;margin-top:0.6mm;font-size:'+Math.min(8.5,H*0.27)+'pt;line-height:1}'
+    +'.label-card svg{display:block;width:'+(W*0.92).toFixed(1)+'mm !important;height:'+(H*0.38).toFixed(1)+'mm !important;max-height:none;flex:none}'
     +'</style></head><body>'
-    +Array(copies).fill(one).join("")
+    +Array(copies).fill(one.replace('preserveAspectRatio="xMidYMid meet"','preserveAspectRatio="none"')).join("")
     +'<scr'+'ipt>window.onload=function(){window.print();}</scr'+'ipt></body></html>');
   w.document.close();
 }
@@ -2615,8 +2617,8 @@ const GUIDE=[
   ar:{t:"التتبّع والاستدعاء والإتلاف",s:["«تتبع التشغيلة»: ابحث برقم التشغيلة (Lot) لعرض سجلها الكامل — إجمالي المستلم/المصروف/المُتلَف/المتبقي، وأين ومتى صُرفت — للاستدعاء وسلامة المريض.","الاستدعاء 🚩 (من جدول التشغيلات): يحجز المتبقي تلقائياً، ويسجّل السبب ومرجع NCMDR، ويعرض أثر الاستدعاء.","الإتلاف 🚮: لإخراج المنتهي/المرفوض مع توثيق السبب والمسؤول والتاريخ. تقريرا الإتلاف والاستدعاء متاحان في «التقارير»."]},
   en:{t:"Trace, recall & disposal",s:["“Lot trace”: search by lot number for the full record — total received/dispensed/disposed/remaining, and where & when dispensed — for recalls and patient safety.","Recall 🚩 (from the lots table): auto-quarantines the remaining stock, takes the reason and NCMDR reference, and shows the recall impact.","Disposal 🚮: remove expired/rejected stock documenting reason, responsible person, and date. Disposal & recall reports are in “Reports”."]}},
  {ic:svgIcon("barcode",22),cls:"g-cyan",
-  ar:{t:"الباركود: طباعة ومسح",s:["اطبع الملصقات: «طباعة الباركود» ← اختر صنفاً أو أدخل الكود، عدّل الاسم/التشغيلة/الانتهاء (Code 39) وعدد النسخ. يعمل دون اتصال.","للمسح السريع: اضغط زر «📷 مسح» في الأعلى — امسح بماسح USB/بلوتوث أو بالكاميرا (حيث تُدعم) أو أدخل الكود يدوياً ثم Enter.","بعد المسح ينتقل النظام مباشرة إلى الصنف مع أزرار سريعة: عرض في المخزون، استقبال، أو صرف."]},
-  en:{t:"Barcode: print & scan",s:["Print labels: “Barcode printing” ← pick an item or enter the code, adjust name/lot/expiry (Code 39) and copies. Works offline.","Quick scan: press the “📷 Scan” button at the top — scan with a USB/Bluetooth reader or the camera (where supported), or type the code and press Enter.","After scanning it jumps straight to the item with quick actions: view in inventory, receive, or dispense."]}},
+  ar:{t:"الباركود: طباعة ومسح",s:["اطبع الملصقات: «طباعة الباركود» ← اختر صنفاً أو أدخل الكود، عدّل الاسم/التشغيلة/الانتهاء (Code 39) وعدد النسخ. يعمل دون اتصال.","يُطبع الباركود دائماً بحجم ثابت يتناسب مع مقاس الملصق (عرض × ارتفاع بالمليمتر)، ويُختصر اسم الصنف الطويل في سطرين حتى لا يطغى على الباركود أو الكود أسفله.","للمسح السريع: اضغط زر «📷 مسح» في الأعلى — امسح بماسح USB/بلوتوث أو بالكاميرا (حيث تُدعم) أو أدخل الكود يدوياً ثم Enter.","بعد المسح ينتقل النظام مباشرة إلى الصنف مع أزرار سريعة: عرض في المخزون، استقبال، أو صرف."]},
+  en:{t:"Barcode: print & scan",s:["Print labels: “Barcode printing” ← pick an item or enter the code, adjust name/lot/expiry (Code 39) and copies. Works offline.","The barcode always prints at a fixed size that fits the label dimensions (width × height in mm), and long item names are trimmed to two lines so they never crowd out the barcode or the code beneath it.","Quick scan: press the “📷 Scan” button at the top — scan with a USB/Bluetooth reader or the camera (where supported), or type the code and press Enter.","After scanning it jumps straight to the item with quick actions: view in inventory, receive, or dispense."]}},
  {ic:svgIcon("reports",22),cls:"g-pink",
   ar:{t:"التقارير والتصدير",s:["افتح «التقارير» لرؤية التشغيلات المنتهية/القريبة والأكثر استهلاكاً، وتقرير الفترة وتقرير الموظفين.","صدّر أي تقرير بصيغة Excel/CSV: المخزون، الحركات، الانتهاء، الاستهلاك، استهلاك المختبرات، الإتلاف، الاستدعاء، الفترة، الموظفين.","استخدم «طباعة الصفحة» لطباعة تقرير جاهز."]},
   en:{t:"Reports & export",s:["Open “Reports” to see expired/near-expiry lots, most-consumed items, plus the period and employee reports.","Export any report as Excel/CSV: inventory, movements, expiry, consumption, lab usage, disposal, recall, period, employees.","Use “Print page” to print a ready report."]}},
