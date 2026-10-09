@@ -807,7 +807,7 @@ function labelOf(list,key){ const o=list.find(x=>x.k===key); return o?lbl(o):(ke
 /* ===================== Storage ===================== */
 const KEY="bbdammam_inv_v1";
 /* keep in sync with the non-admin entries of NAVS below */
-const PERM_ROUTES=["dashboard","receive","inventory","dispense","reorder","barcode","temp","products","import","reports","trace","log"];
+const PERM_ROUTES=["dashboard","receive","inventory","dispense","reorder","barcode","products","import","reports","trace","log"];
 const blank=()=>({items:[],lots:[],txns:[],disposals:[],recalls:[],tempLogs:[],settings:{user:"admin",pass:"1234",warnDays:60,seeded:false,customLabs:[],customCatalog:[],orders:{},suppliers:[],tempUnits:[],permsMigrated:false,users:[{u:"admin",p:"1234",role:"superadmin",perms:PERM_ROUTES.slice()}]}});
 function normalize(d){ const base=blank(); d=d||{}; const incoming=d.settings||{}; const hadUsers=Array.isArray(incoming.users)&&incoming.users.length>0;
   d.settings=Object.assign(base.settings,incoming); d.items=d.items||[]; d.lots=d.lots||[]; d.txns=d.txns||[]; d.disposals=d.disposals||[]; d.recalls=d.recalls||[]; d.tempLogs=d.tempLogs||[]; d.settings.customLabs=d.settings.customLabs||[]; d.settings.customCatalog=d.settings.customCatalog||[]; d.settings.orders=d.settings.orders||{}; d.settings.suppliers=d.settings.suppliers||[]; d.settings.tempUnits=d.settings.tempUnits||[];
@@ -975,7 +975,6 @@ const NAVS=[
  {r:"dispense",i:"movement",k:"nav_movement2"},
  {r:"reorder",i:"reorder",k:"nav_reorder"},
  {r:"barcode",i:"barcode",k:"nav_barcode"},
- {r:"temp",i:"temp",k:"nav_temp"},
  {r:"products",i:"products",k:"nav_products"},
  {r:"import",i:"import",k:"nav_import"},
  {r:"reports",i:"reports",k:"nav_reports"},
@@ -1778,45 +1777,6 @@ function renderTrace(){
   box.innerHTML=h;
 }
 
-/* ===== Temperature log (cold chain) ===== */
-pages.temp=()=>{
-  const units=DB.settings.tempUnits||[];
-  const logs=(DB.tempLogs||[]).slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(b.id>a.id?1:-1));
-  return `
-  <div class="page-head"><div><h2>${t("temp_title")}</h2><p>${t("temp_sub")}</p></div>
-    <div class="head-actions">${logs.length?`<button class="btn ghost" onclick="App.exportCSV('temp')">${t("btn_export_excel")}</button>`:""}</div></div>
-  <div class="two-col">
-    <div class="panel"><div class="panel-h"><h3>${t("temp_log_h")}</h3></div><div class="panel-b">
-      ${units.length?`<div class="form-grid">
-        <div><label class="req">${t("temp_unit")}</label><select id="tp-unit">${units.map(u=>`<option value="${esc(u.id)}">${esc(u.name)} (${num(u.min)}–${num(u.max)}°)</option>`).join("")}</select></div>
-        <div><label class="req">${t("temp_reading")}</label><input id="tp-val" type="number" step="0.1" min="-200" max="200"></div>
-        <div><label>${t("temp_date")}</label><input id="tp-date" type="date" value="${todayISO()}"></div>
-      </div><div style="margin-top:12px"><button class="btn" onclick="App.logTemp()">${t("btn_temp_log")}</button></div>`
-      :`<div class="empty"><div class="em-ic">${svgIcon("temp",36,1.5)}</div><h4>${t("temp_no_units")}</h4></div>`}
-    </div></div>
-    <div class="panel"><div class="panel-h"><h3>${t("temp_units_h")}</h3></div><div class="panel-b">
-      <div style="margin-bottom:10px">${units.length?units.map(u=>`<span class="tag mut" style="margin:0 4px 6px 0">${esc(u.name)} (${num(u.min)}–${num(u.max)}°) <button class="icon-btn danger" style="padding:0 6px;margin-inline-start:4px" title="${t("act_delete")}" aria-label="${t("act_delete")+" "+esc(u.name)}" onclick="App.delTempUnit('${jsq(u.id)}')">×</button></span>`).join(""):`<span class="muted" style="font-size:13px">${t("temp_no_units")}</span>`}</div>
-      <div class="form-grid"><div><label>${t("temp_unit_name")}</label><input id="tu-name"></div><div><label>${t("temp_min")}</label><input id="tu-min" type="number" step="0.1" min="-200" max="200" value="2"></div><div><label>${t("temp_max")}</label><input id="tu-max" type="number" step="0.1" min="-200" max="200" value="8"></div></div>
-      <div style="margin-top:10px"><button class="btn soft" onclick="App.addTempUnit()">${t("temp_add_unit")}</button></div>
-    </div></div>
-  </div>
-  <div class="panel"><div class="panel-h"><h3>${t("temp_history_h")}</h3><span class="hint">${num(logs.length)}</span></div><div class="panel-b">
-  ${logs.length?`<div class="tbl-wrap"><table><thead><tr><th>${t("temp_date")}</th><th>${t("temp_unit")}</th><th class="num">${t("temp_reading")}</th><th>${t("temp_th_range")}</th><th>${t("temp_by")}</th><th>${t("th_status")}</th></tr></thead><tbody>
-  ${logs.map(g=>{const exc=(g.val<g.min||g.val>g.max);return `<tr><td>${fmtG(g.date)}</td><td>${esc(g.unitName||"—")}</td><td class="num"><b>${num(g.val)}°</b></td><td>${num(g.min)}–${num(g.max)}°</td><td>${esc(g.by||"—")}</td><td><span class="tag ${exc?"danger":"ok"}">${exc?t("temp_excursion"):t("temp_in_range")}</span></td></tr>`;}).join("")}
-  </tbody></table></div>`:`<div class="empty"><div class="em-ic">${svgIcon("clipboard",36,1.5)}</div><h4>${t("temp_no_logs")}</h4></div>`}
-  </div></div>`;
-};
-function addTempUnit(){ const name=$("tu-name").value.trim(); let mn=+$("tu-min").value, mx=+$("tu-max").value;
-  if(!name||isNaN(mn)||isNaN(mx)||mn===mx)return toast(t("temp_unit_need"),"err");
-  if(mn>mx){const tmp=mn;mn=mx;mx=tmp;}
-  DB.settings.tempUnits=DB.settings.tempUnits||[]; DB.settings.tempUnits.push({id:uid(),name,min:mn,max:mx}); save(); go("temp"); }
-function delTempUnit(id){ DB.settings.tempUnits=(DB.settings.tempUnits||[]).filter(u=>u.id!==id); save(); go("temp"); }
-function logTemp(){ const unitId=$("tp-unit").value, valStr=$("tp-val").value, val=+valStr, date=$("tp-date").value||todayISO();
-  const u=(DB.settings.tempUnits||[]).find(x=>x.id===unitId); if(!u||valStr==="")return toast(t("temp_need"),"err");
-  const exc=(val<u.min||val>u.max);
-  DB.tempLogs=DB.tempLogs||[]; DB.tempLogs.push({id:uid(),unitId,unitName:u.name,val,min:u.min,max:u.max,date,by:curUser(),excursion:exc});
-  save(); toast(exc?t("ok_temp_excursion"):t("ok_temp_logged"), exc?"err":"ok"); go("temp"); }
-
 pages.settings=()=>{
   const custom=DB.settings.customLabs||[];
   return `
@@ -2253,9 +2213,6 @@ function exportCSV(kind){
   }else if(kind==="recall"){
     name=t("fn_recall"); rows.push([t("th_date"),t("th_name"),t("th_code"),t("th_lot"),t("recall_reason"),t("recall_ref"),t("recall_by"),t("trace_sum_rem"),t("trace_sum_disp")]);
     (DB.recalls||[]).slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).forEach(r=>rows.push([r.date,r.name||r.code,r.code,r.lot||"",r.reason||"",r.ref||"",r.by||"",r.heldQty,r.dispatchedQty]));
-  }else if(kind==="temp"){
-    name=t("fn_temp"); rows.push([t("temp_date"),t("temp_unit"),t("temp_reading"),t("temp_min"),t("temp_max"),t("temp_by"),t("th_status")]);
-    (DB.tempLogs||[]).slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).forEach(g=>rows.push([g.date,g.unitName||"",g.val,g.min,g.max,g.by||"",(g.val<g.min||g.val>g.max)?t("temp_excursion"):t("temp_in_range")]));
   }
   if(rows.length<=1)return toast(t("no_export_data"),"err");
   const csv="\uFEFF"+rows.map(r=>r.map(c=>{c=String(c==null?"":c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(",")).join("\r\n");
@@ -2369,8 +2326,8 @@ function unlockSync(){
 /* ===== User guide ===== */
 const GUIDE=[
  {ic:svgIcon("book",22),cls:"g-purple",
-  ar:{t:"نظرة عامة على النظام",s:["سجّل الدخول باسم المستخدم وكلمة المرور (افتراضياً admin / 1234، ويمكن تغييرهما من الإعدادات).","تنقّل بين الأقسام من القائمة الجانبية: لوحة التحكم، المخزون، الاستقبال، الصرف، إعادة الطلب، سجل الحرارة، الباركود، إدارة المنتجات، التقارير، تتبع التشغيلة، الإعدادات، إدارة المستخدمين.","بدّل لغة الواجهة (عربي/إنجليزي) من زر اللغة بالأعلى — تعمل كل البيانات والتقارير باللغتين.","تُحفظ البيانات تلقائياً على الجهاز، ويمكن تفعيل المزامنة بين الأجهزة من الإعدادات.","بطاقات لوحة التحكم الثمانية (الأصناف، الكمية، قرب الانتهاء، المنتهية، المخزون المنخفض، النافد، المرفوضة، حركات اليوم) بأيقونات ملوّنة توضّح كل مؤشر بلمحة.","الواجهة محسّنة لسهولة القراءة والوصول: أرقام ثابتة العرض في البطاقات والجداول لا تهتز عند التحديث، تباين ألوان أوضح لعناوين القائمة الجانبية، حقول الإدخال لا تكبّر الشاشة عند اللمس على الجوال، وتُحترَم إعدادات «تقليل الحركة» من نظام التشغيل لمن يفضّل ذلك.","لمسة حركية أهدأ وأكثر طبيعية: الأزرار والبطاقات تستجيب فور الضغط عليها، النوافذ المنبثقة تظهر بحركة ظهور ناعمة بدل القفزة المفاجئة، والشريط العلوي شبه شفاف يكشف المحتوى خلفه أثناء التمرير — مع دعم كامل لإعدادات «تقليل الشفافية» و«زيادة التباين» من نظام التشغيل.","دعم أوسع للوحة المفاتيح وقارئات الشاشة: كل أزرار الأيقونات (عرض، تعديل، حذف، اعتماد، استدعاء...) لها وصف مسموع واضح، النوافذ المنبثقة تحصر التنقّل بالتاب داخلها وتُعيد التركيز لمكانه عند الإغلاق (Esc أو ×)، وبطاقات الدليل وزر الملف الشخصي بالقائمة الجانبية تُفتح أيضاً بالإدخال (Enter/Space) لمن يتنقّل بلوحة المفاتيح فقط."]},
-  en:{t:"System overview",s:["Sign in with your username and password (default admin / 1234, changeable in Settings).","Use the side menu to move between sections: Dashboard, Inventory, Receive, Dispense, Reorder, Temperature, Barcode, Products, Reports, Lot trace, Settings, Users.","Switch the interface language (Arabic/English) from the top button — all data and reports work in both.","Data is saved automatically on the device; multi-device sync can be enabled in Settings.","The 8 dashboard KPI cards (items, quantity, expiring soon, expired, low stock, out of stock, rejected, today's movements) use colored icons for at-a-glance recognition.","The interface is tuned for readability and accessibility: fixed-width numbers in cards and tables so they don't shift on update, clearer contrast on sidebar section labels, form fields that no longer zoom the page on mobile taps, and full respect for the OS-level “reduce motion” preference.","A calmer, more natural feel to the motion: buttons and cards respond the instant you press them, dialogs materialize in with a soft settle instead of an abrupt pop, and the top bar is subtly translucent so content is visible scrolling beneath it — with full support for the OS “reduce transparency” and “increase contrast” settings.","Broader keyboard and screen-reader support: every icon-only button (view, edit, delete, release, recall…) now has a clear spoken label, dialogs trap Tab navigation inside them and return focus to where you were on close (Esc or ×), and the guide cards and sidebar profile button also open with Enter/Space for keyboard-only navigation."]}},
+  ar:{t:"نظرة عامة على النظام",s:["سجّل الدخول باسم المستخدم وكلمة المرور (افتراضياً admin / 1234، ويمكن تغييرهما من الإعدادات).","تنقّل بين الأقسام من القائمة الجانبية: لوحة التحكم، المخزون، الاستقبال، الصرف، إعادة الطلب، الباركود، إدارة المنتجات، التقارير، تتبع التشغيلة، الإعدادات، إدارة المستخدمين.","بدّل لغة الواجهة (عربي/إنجليزي) من زر اللغة بالأعلى — تعمل كل البيانات والتقارير باللغتين.","تُحفظ البيانات تلقائياً على الجهاز، ويمكن تفعيل المزامنة بين الأجهزة من الإعدادات.","بطاقات لوحة التحكم الثمانية (الأصناف، الكمية، قرب الانتهاء، المنتهية، المخزون المنخفض، النافد، المرفوضة، حركات اليوم) بأيقونات ملوّنة توضّح كل مؤشر بلمحة.","الواجهة محسّنة لسهولة القراءة والوصول: أرقام ثابتة العرض في البطاقات والجداول لا تهتز عند التحديث، تباين ألوان أوضح لعناوين القائمة الجانبية، حقول الإدخال لا تكبّر الشاشة عند اللمس على الجوال، وتُحترَم إعدادات «تقليل الحركة» من نظام التشغيل لمن يفضّل ذلك.","لمسة حركية أهدأ وأكثر طبيعية: الأزرار والبطاقات تستجيب فور الضغط عليها، النوافذ المنبثقة تظهر بحركة ظهور ناعمة بدل القفزة المفاجئة، والشريط العلوي شبه شفاف يكشف المحتوى خلفه أثناء التمرير — مع دعم كامل لإعدادات «تقليل الشفافية» و«زيادة التباين» من نظام التشغيل.","دعم أوسع للوحة المفاتيح وقارئات الشاشة: كل أزرار الأيقونات (عرض، تعديل، حذف، اعتماد، استدعاء...) لها وصف مسموع واضح، النوافذ المنبثقة تحصر التنقّل بالتاب داخلها وتُعيد التركيز لمكانه عند الإغلاق (Esc أو ×)، وبطاقات الدليل وزر الملف الشخصي بالقائمة الجانبية تُفتح أيضاً بالإدخال (Enter/Space) لمن يتنقّل بلوحة المفاتيح فقط."]},
+  en:{t:"System overview",s:["Sign in with your username and password (default admin / 1234, changeable in Settings).","Use the side menu to move between sections: Dashboard, Inventory, Receive, Dispense, Reorder, Barcode, Products, Reports, Lot trace, Settings, Users.","Switch the interface language (Arabic/English) from the top button — all data and reports work in both.","Data is saved automatically on the device; multi-device sync can be enabled in Settings.","The 8 dashboard KPI cards (items, quantity, expiring soon, expired, low stock, out of stock, rejected, today's movements) use colored icons for at-a-glance recognition.","The interface is tuned for readability and accessibility: fixed-width numbers in cards and tables so they don't shift on update, clearer contrast on sidebar section labels, form fields that no longer zoom the page on mobile taps, and full respect for the OS-level “reduce motion” preference.","A calmer, more natural feel to the motion: buttons and cards respond the instant you press them, dialogs materialize in with a soft settle instead of an abrupt pop, and the top bar is subtly translucent so content is visible scrolling beneath it — with full support for the OS “reduce transparency” and “increase contrast” settings.","Broader keyboard and screen-reader support: every icon-only button (view, edit, delete, release, recall…) now has a clear spoken label, dialogs trap Tab navigation inside them and return focus to where you were on close (Esc or ×), and the guide cards and sidebar profile button also open with Enter/Space for keyboard-only navigation."]}},
  {ic:svgIcon("receive",22),cls:"g-green",
   ar:{t:"استقبال المحاليل والفحص",s:["للأصناف المعتمدة: استخدم «إضافة من القائمة المعتمدة» ← اختر المجموعة ثم الصنف، وأدخل عدد الكتات/العلب فتُحسب الكمية تلقائياً. أو أدخل الكود يدوياً فتُعبّأ بياناته.","أدخل رقم التشغيلة وتاريخ الانتهاء والكمية، واختر المورّد (من الموردين المعتمدين)، والمختبر المستلِم، ونتيجة الفحص (مقبول/مرفوض).","التشغيلة المرفوضة لا تُحتسب ولا تُصرف. فعّل خيار «يتطلب فحص QC» إن كانت تحتاج اعتماد جودة قبل الاستخدام — تُحجَز ولا يمكن صرفها حتى اعتمادها.","احفظ الاستلام (مع إمكانية طباعة الباركود)."]},
   en:{t:"Receiving & inspection",s:["For approved items use “Add from the approved list” ← pick group then item, enter the number of kits/boxes (quantity auto-calculated). Or type the code manually to auto-fill.","Enter lot number, expiry, and quantity; choose the supplier (from approved suppliers), the receiving lab, and the inspection result (Accepted/Rejected).","Rejected lots are excluded and cannot be dispensed. Tick “Requires QC” if the lot needs quality release before use — it is quarantined and cannot be dispensed until released.","Save the receipt (you can print the barcode)."]}},
@@ -2392,9 +2349,6 @@ const GUIDE=[
  {ic:svgIcon("trace",22),cls:"g-pink",
   ar:{t:"التتبّع والاستدعاء والإتلاف",s:["«تتبع التشغيلة»: ابحث برقم التشغيلة (Lot) لعرض سجلها الكامل — إجمالي المستلم/المصروف/المُتلَف/المتبقي، وأين ومتى صُرفت — للاستدعاء وسلامة المريض.","الاستدعاء 🚩 (من جدول التشغيلات): يحجز المتبقي تلقائياً، ويأخذ السبب ومرجع NCMDR، ويعرض أثر الاستدعاء.","الإتلاف 🚮: لإخراج المنتهي/المرفوض مع توثيق السبب والمسؤول والتاريخ. تقريرا الإتلاف والاستدعاء متاحان في «التقارير»."]},
   en:{t:"Trace, recall & disposal",s:["“Lot trace”: search by lot number for the full record — total received/dispensed/disposed/remaining, and where & when dispensed — for recalls and patient safety.","Recall 🚩 (from the lots table): auto-quarantines the remaining stock, takes the reason and NCMDR reference, and shows the recall impact.","Disposal 🚮: remove expired/rejected stock documenting reason, responsible person, and date. Disposal & recall reports are in “Reports”."]}},
- {ic:svgIcon("temp",22),cls:"g-blue",
-  ar:{t:"سجل درجات الحرارة (سلسلة التبريد)",s:["افتح «سجل الحرارة» وعرّف وحدات التخزين (ثلاجة/فريزر) مع المدى المسموح (أدنى/أعلى °م).","سجّل القراءة اليومية لكل وحدة؛ يُكتشف أي تجاوز للمدى تلقائياً ويظهر تنبيه «تجاوز!».","يبقى السجل كاملاً للمراجعة ويمكن تصديره Excel — متطلب التوزيع الجيد (GDP) والاعتماد."]},
-  en:{t:"Temperature log (cold chain)",s:["Open “Temperature log” and define storage units (fridge/freezer) with the allowed range (min/max °C).","Log the daily reading per unit; any out-of-range value is auto-flagged with an “Excursion!” alert.","The full log is kept for review and can be exported to Excel — a GDP / accreditation requirement."]}},
  {ic:svgIcon("barcode",22),cls:"g-cyan",
   ar:{t:"الباركود: طباعة ومسح",s:["اطبع الملصقات: «طباعة الباركود» ← اختر صنفاً أو أدخل الكود، عدّل الاسم/التشغيلة/الانتهاء (Code 39) وعدد النسخ. يعمل دون اتصال.","للمسح السريع: اضغط زر «📷 مسح» بالأعلى — امسح بماسح USB/بلوتوث أو بالكاميرا (حيث تُدعم) أو أدخل الكود يدوياً ثم Enter.","بعد المسح ينتقل مباشرة للصنف مع أزرار سريعة: عرض في المخزون، استقبال، أو صرف."]},
   en:{t:"Barcode: print & scan",s:["Print labels: “Barcode printing” ← pick an item or enter the code, adjust name/lot/expiry (Code 39) and copies. Works offline.","Quick scan: press the “📷 Scan” button at the top — scan with a USB/Bluetooth reader or the camera (where supported), or type the code and press Enter.","After scanning it jumps straight to the item with quick actions: view in inventory, receive, or dispense."]}},
@@ -2423,7 +2377,7 @@ return {init,login,logout,go,toggleSide,toggleLang,closeModal,
   renderBarcode,bcFromItem,pickBarcode,printBarcode,scan,scanGo,
   toggleLots,editItem,delItem,addLot,adjustLot,delLot,disposeLot,releaseQC,recallLot,
   exportCSV,setRepRange,setRepEmp,repPreset,saveSettings,addLab,delLab,backup,restore,reseed,wipe,zeroStock,toggleOrder,doTrace,
-  addTempUnit,delTempUnit,logTemp,addSupplier,delSupplier,
+  addSupplier,delSupplier,
   addUser,setRole,editPerms,resetUserPass,renameUser,delUser,
   addProduct,addCatItem,delCatItem,importTemplate,importFile,importRows,toggleCollapse,
   connectSync,disconnectSync,unlockSync,openGuide,guideToggle};
