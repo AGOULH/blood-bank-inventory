@@ -39,6 +39,7 @@
 - للمعاينة محلياً: انسخ donate/index.html إلى /tmp/donate_preview وشغّل سيرفر "donate" من launch.json
 
 ## آخر ميزة
+- واجهة v3 (التطبيق الرئيسي): شريط «يحتاج إجراء الآن» أعلى اللوحة، بطاقات KPI بشبكة 4×2 قابلة للضغط (uxGo → فلاتر مخزون جديدة near/expired/low/rejected مع شريحة إلغاء)، شارات عدد في القائمة (uxBadges)، بحث شامل Ctrl/⌘+K (openSearch)، مؤشر مزامنة في أسفل القائمة (uxSyncPaint/uxMarkSynced)، رأس يصغر عند التمرير (body.ux-compact)، خط انتهاء الصلاحية 13 أسبوع (uxExpiryChart)، حالات فارغة بزر (uxEmpty)، أيقونات SVG بدل الإيموجي، شريط سفلي للجوال (uxBnav) — كل الدوال تبدأ بـ ux
 - شعار رابع للحملة + «حفظ صورة» بقائمة مقاسات: كما هي / ستوري 9:16 / منشور 4:5 / مربع 1:1 (SHOT_FMTS, shotCompose) (donate/)
 - مدير عام (superadmin) + صلاحيات صفحات لكل حساب (التطبيق الرئيسي) — منشور ويعمل
 - Lot-to-Lot tracking (التطبيق الرئيسي)
