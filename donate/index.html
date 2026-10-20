@@ -537,31 +537,41 @@
   .screen.has-font .scr-title p,.screen.has-font .bag-side .of{font-weight:700;opacity:1}
   /* عداد كل مربع فصيلة يتبع لون التلوين الحالي بدل الذهبي الثابت في «ذهبي فاخر» — يتماشى مع الصورة والتلوين الأزرق الافتراضي هنا */
   .screen.skin-goldglass.skin-national .type-tile .tc{color:var(--sk-font,var(--sk-tint-raw,#1565c0))}
-  /* ===== الهوية الخامسة «قطرات الدم»: نفس ميكانيكا «ذهبي فاخر» (صنف skin-goldglass يُضاف في JS) بألوان «نعم الجود»
-     الوردية الافتراضية، لكن مربع كل فصيلة بطاقة زجاجية بقطرة دم: الموجب قطرة عنابية والسالب قطرة ذهبية برونزية
-     (طبق تدرّج المرجع)، والعدد بجانب القطرة. القطرات ثابتة اللون لا تتأثر بمنتقي «لون» (كالكيس الأحمر) ===== */
+  /* ===== الهوية الخامسة «قطرات الدم»: نفس ميكانيكا «ذهبي فاخر» بالكامل (صنف skin-goldglass يُضاف في JS للساعة والأيام
+     والنسبة...) بألوان «نعم الجود» الوردية الافتراضية؛ الفرق: الفصيلة مكتوبة داخل قطرة دم تدرّجها موحّد لكل الفصائل
+     ومشتق من لون التلوين فيتبع منتقي «لون» ===== */
+  /* كل مربع فصيلة = قطرة دم كبيرة (أطول من الصف قليلاً) (بلا بطاقة ولا شارة ثمانية) وبداخلها الفصيلة والعدد و«متبرعاً».
+     القطرة بمظهر مربعات الأيام: إطار بتدرّج --sk-chip (يتبع منتقي «لون») وتعبئة داخلية فاتحة كـ.day-in بخط داكن.
+     المقاسات بوحدات الحاوية (cqh/cqw) نسبةً للمربع نفسه فتبقى متناسقة على أي شاشة وبعد أي تكبير/تصغير للعناصر */
+  .screen.skin-goldglass.skin-drops .scr-types{--dg:calc(1.4*var(--vw,1vw));--dd:calc(1.8*var(--vw,1vw));column-gap:var(--dg);row-gap:calc(.8*var(--vh,1vh))}
   .screen.skin-goldglass.skin-drops .type-tile{
-    border-radius:14px;background:rgba(255,250,251,.72);border:1px solid rgba(122,31,53,.18);border-top:3px solid #8a2a42;
-    box-shadow:0 8px 22px rgba(90,30,50,.12);backdrop-filter:blur(8px)
+    background:none;border:none;box-shadow:none;backdrop-filter:none;container-type:size;--k:0;
+    filter:drop-shadow(0 5px 10px rgba(80,30,45,.22))
   }
-  .screen.skin-goldglass.skin-drops .type-tile.neg{background:rgba(252,245,230,.82);border-color:rgba(176,136,64,.35);border-top-color:#b08840}
+  /* تقريب القطرات من بعضها: كل عمود يُزاح نحو مركز الشبكة بحيث تصير المسافة بين القطرات --dd بدل عرض العمود كاملاً
+     (الإزاحة = ترتيب العمود من المركز × (عرض القطرة + --dd − عرض العمود − فجوة الأعمدة)) */
+  .screen.skin-goldglass.skin-drops .type-tile:nth-child(4n+1){--k:1.5}
+  .screen.skin-goldglass.skin-drops .type-tile:nth-child(4n+2){--k:.5}
+  .screen.skin-goldglass.skin-drops .type-tile:nth-child(4n+3){--k:-.5}
+  .screen.skin-goldglass.skin-drops .type-tile:nth-child(4n){--k:-1.5}
+  /* القطرة أطول من الصف بـ20%: الصف الأول يمتد للأعلى والثاني للأسفل نحو الفراغ المحيط، فلا تتداخل القطرات بين الصفين */
+  .screen.skin-goldglass.skin-drops .type-tile:nth-child(-n+4) .tile-in{top:-20cqh}
   .screen.skin-goldglass.skin-drops .tile-in{
-    inset:0;top:0;left:0;transform:none;height:100%;width:100%;aspect-ratio:auto;clip-path:none;background:none;padding:6% 7%;
-    display:grid;grid-template-columns:auto 1fr;grid-template-rows:1fr auto auto 1fr;column-gap:8%;align-items:center
+    --dh:120cqh;top:0;height:var(--dh);width:calc(var(--dh)*.82);aspect-ratio:auto;transform:none;clip-path:none;padding:calc(var(--dh)*.3) 0 0;box-sizing:border-box;
+    left:calc(50% - var(--dh)*.41 + var(--k)*(var(--dh)*.82 + var(--dd) - 100cqw - var(--dg)));
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+    background:var(--sk-chip,linear-gradient(140deg,#f0f0ee,#c8cdd4 30%,#f5d67d 65%,#b8902e));
+    -webkit-mask:var(--drop) center/100% 100% no-repeat;mask:var(--drop) center/100% 100% no-repeat;
+    --drop:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 82 100' preserveAspectRatio='none'%3E%3Cpath d='M41 0C41 0 2 40 2 61a39 39 0 0 0 78 0C80 40 41 0 41 0Z'/%3E%3C/svg%3E")
   }
-  .screen.skin-goldglass.skin-drops .tile-in::before{content:none}
-  .screen.skin-goldglass.skin-drops .type-tile .tl{
-    grid-column:1;grid-row:1/5;align-self:center;height:min(88%,calc(14*var(--vh,1vh)));aspect-ratio:.78;
-    display:flex;align-items:center;justify-content:center;padding-top:22%;box-sizing:border-box;
-    color:#fff!important;font-size:clamp(14px,calc(3*var(--vh,1vh)),34px);text-shadow:0 1px 2px rgba(0,0,0,.25);
-    background:radial-gradient(40% 30% at 34% 58%,rgba(255,255,255,.3),transparent 70%),linear-gradient(160deg,#b8566c 0%,#8a2a42 50%,#621629 100%);
-    -webkit-mask:var(--drop) center/contain no-repeat;mask:var(--drop) center/contain no-repeat;
-    --drop:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 78 100'%3E%3Cpath d='M39 0C39 0 4 42 4 63a35 35 0 0 0 70 0C74 42 39 0 39 0Z'/%3E%3C/svg%3E")
+  .screen.skin-goldglass.skin-drops .tile-in::before{
+    inset:4cqh 4cqh 3cqh;clip-path:none;
+    background:linear-gradient(140deg,rgba(255,255,255,.92) 0%,rgba(255,252,250,.78) 50%,rgba(250,244,244,.8) 100%);
+    -webkit-mask:var(--drop) center/100% 100% no-repeat;mask:var(--drop) center/100% 100% no-repeat
   }
-  .screen.skin-goldglass.skin-drops .type-tile.neg .tl{background:radial-gradient(40% 30% at 34% 58%,rgba(255,255,255,.3),transparent 70%),linear-gradient(160deg,#dcb878 0%,#b08840 50%,#80601f 100%)}
-  .screen.skin-goldglass.skin-drops .type-tile .tc{grid-column:2;grid-row:2;text-align:start;color:#7a1f35;text-shadow:none;font-size:clamp(20px,calc(4.4*var(--vh,1vh)),50px)}
-  .screen.skin-goldglass.skin-drops .type-tile.neg .tc{color:#a27a2e}
-  .screen.skin-goldglass.skin-drops .type-tile .ts{grid-column:2;grid-row:3;text-align:start;opacity:.85}
+  .screen.skin-goldglass.skin-drops .type-tile .tl{font-size:29cqh;font-weight:800;line-height:1;opacity:1;letter-spacing:-.05em;text-shadow:none}
+  .screen.skin-goldglass.skin-drops .type-tile .tc{margin:1cqh 0 2cqh;font-size:29cqh;line-height:1;font-variant-numeric:tabular-nums;text-shadow:none}
+  .screen.skin-goldglass.skin-drops .type-tile .ts{font-size:11.5cqh;line-height:1;font-weight:700;opacity:.9}
 
   @media(max-width:760px){.screen.skin-bloodbags .scr-flow{display:none}}
   @media(max-width:760px){
@@ -2223,7 +2233,7 @@ function drawScreen(id,c){
         </div>
       </div>
       <div class="scr-flow"></div>
-      <div class="scr-types" data-lg="types">${BT.map(b=>`<div class="type-tile${/neg$/.test(b.k)?" neg":""}"><div class="tile-in"><div class="tl">${b.l}</div><div class="bc"></div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div></div>`).join("")}</div>
+      <div class="scr-types" data-lg="types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="bc"></div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div></div>`).join("")}</div>
     </div>
     <div class="scr-foot">
       <div class="phrase-box" id="phrase" data-p="" data-lg="phrase">${esc(phraseFor(c,scrLang))}</div>
