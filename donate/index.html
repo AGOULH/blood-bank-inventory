@@ -537,6 +537,31 @@
   .screen.has-font .scr-title p,.screen.has-font .bag-side .of{font-weight:700;opacity:1}
   /* عداد كل مربع فصيلة يتبع لون التلوين الحالي بدل الذهبي الثابت في «ذهبي فاخر» — يتماشى مع الصورة والتلوين الأزرق الافتراضي هنا */
   .screen.skin-goldglass.skin-national .type-tile .tc{color:var(--sk-font,var(--sk-tint-raw,#1565c0))}
+  /* ===== الهوية الخامسة «قطرات الدم»: نفس ميكانيكا «ذهبي فاخر» (صنف skin-goldglass يُضاف في JS) بألوان «نعم الجود»
+     الوردية الافتراضية، لكن مربع كل فصيلة بطاقة زجاجية بقطرة دم: الموجب قطرة عنابية والسالب قطرة ذهبية برونزية
+     (طبق تدرّج المرجع)، والعدد بجانب القطرة. القطرات ثابتة اللون لا تتأثر بمنتقي «لون» (كالكيس الأحمر) ===== */
+  .screen.skin-goldglass.skin-drops .type-tile{
+    border-radius:14px;background:rgba(255,250,251,.72);border:1px solid rgba(122,31,53,.18);border-top:3px solid #8a2a42;
+    box-shadow:0 8px 22px rgba(90,30,50,.12);backdrop-filter:blur(8px)
+  }
+  .screen.skin-goldglass.skin-drops .type-tile.neg{background:rgba(252,245,230,.82);border-color:rgba(176,136,64,.35);border-top-color:#b08840}
+  .screen.skin-goldglass.skin-drops .tile-in{
+    inset:0;top:0;left:0;transform:none;height:100%;width:100%;aspect-ratio:auto;clip-path:none;background:none;padding:6% 7%;
+    display:grid;grid-template-columns:auto 1fr;grid-template-rows:1fr auto auto 1fr;column-gap:8%;align-items:center
+  }
+  .screen.skin-goldglass.skin-drops .tile-in::before{content:none}
+  .screen.skin-goldglass.skin-drops .type-tile .tl{
+    grid-column:1;grid-row:1/5;align-self:center;height:min(88%,calc(14*var(--vh,1vh)));aspect-ratio:.78;
+    display:flex;align-items:center;justify-content:center;padding-top:22%;box-sizing:border-box;
+    color:#fff!important;font-size:clamp(14px,calc(3*var(--vh,1vh)),34px);text-shadow:0 1px 2px rgba(0,0,0,.25);
+    background:radial-gradient(40% 30% at 34% 58%,rgba(255,255,255,.3),transparent 70%),linear-gradient(160deg,#b8566c 0%,#8a2a42 50%,#621629 100%);
+    -webkit-mask:var(--drop) center/contain no-repeat;mask:var(--drop) center/contain no-repeat;
+    --drop:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 78 100'%3E%3Cpath d='M39 0C39 0 4 42 4 63a35 35 0 0 0 70 0C74 42 39 0 39 0Z'/%3E%3C/svg%3E")
+  }
+  .screen.skin-goldglass.skin-drops .type-tile.neg .tl{background:radial-gradient(40% 30% at 34% 58%,rgba(255,255,255,.3),transparent 70%),linear-gradient(160deg,#dcb878 0%,#b08840 50%,#80601f 100%)}
+  .screen.skin-goldglass.skin-drops .type-tile .tc{grid-column:2;grid-row:2;text-align:start;color:#7a1f35;text-shadow:none;font-size:clamp(20px,calc(4.4*var(--vh,1vh)),50px)}
+  .screen.skin-goldglass.skin-drops .type-tile.neg .tc{color:#a27a2e}
+  .screen.skin-goldglass.skin-drops .type-tile .ts{grid-column:2;grid-row:3;text-align:start;opacity:.85}
 
   @media(max-width:760px){.screen.skin-bloodbags .scr-flow{display:none}}
   @media(max-width:760px){
@@ -1494,7 +1519,7 @@ async function renderDonor(id){
 }
 let selBT=null,curCamp=null,curCampId=null;
 /* لون افتراضي بلا تخصيص يدوي، لكل هوية شاشة عرض — نفس ألوان setTheme() */
-const SKIN_TINT_DEFAULT={"neon-blue":"#1f97c2","gold-glass":"#c9a23a","blood-bags":"#c1121f","national":"#1565c0"};
+const SKIN_TINT_DEFAULT={"neon-blue":"#1f97c2","gold-glass":"#c9a23a","blood-bags":"#c1121f","national":"#1565c0","drops":"#cfaab3"};
 /* تطبيق نفس هوية شاشة العرض المختارة للحملة (scrCfg) على صفحة تسجيل المتبرع — بلا هذا تبقى الصفحة
    بلون أحمر ثابت لا علاقة له بالهوية المختارة، رغم أنها نقطة التواصل الفعلية مع المتبرع. حملة بلا
    scrCfg محفوظ (لم تُخصَّص هويتها بعد) تبقى باللون الأحمر الافتراضي القديم دون أي تغيير */
@@ -1622,7 +1647,7 @@ const SCR_T={
 const timeEn=t=>String(t||"").replace("صباحاً","AM").replace("ظهراً","PM").replace("مساءً","PM");
 /* هويات ألوان شاشة العرض — الكيس والدم يبقيان بالأحمر، تتغير الخلفية فقط */
 /* الهويتان المعتمدتان فقط (سداسيات مضيئة + زجاج ذهبي) — الهويات اللونية القديمة أُلغيت */
-const SKINS=[["neon-blue","أزرق مضيء","linear-gradient(135deg,#eafdff 0%,#4fc7e8 45%,#0a3247 100%)"],["gold-glass","ذهبي فاخر","linear-gradient(135deg,#fff6dd 0%,#e8c05a 45%,#8a6d1d 100%)"],["blood-bags","أكياس الدم","linear-gradient(135deg,#fff6f6 0%,#e5484d 55%,#6b0f16 100%)"],["national","الحملة الوطنية","linear-gradient(135deg,#d6ecfb 0%,#3f8fd9 45%,#0a2540 100%)"]];
+const SKINS=[["neon-blue","أزرق مضيء","linear-gradient(135deg,#eafdff 0%,#4fc7e8 45%,#0a3247 100%)"],["gold-glass","ذهبي فاخر","linear-gradient(135deg,#fff6dd 0%,#e8c05a 45%,#8a6d1d 100%)"],["blood-bags","أكياس الدم","linear-gradient(135deg,#fff6f6 0%,#e5484d 55%,#6b0f16 100%)"],["national","الحملة الوطنية","linear-gradient(135deg,#d6ecfb 0%,#3f8fd9 45%,#0a2540 100%)"],["drops","قطرات الدم","linear-gradient(135deg,#f6e9ed 0%,#cfaab3 45%,#8a2a42 100%)"]];
 /* الهوية/التلوين/لون الخط حالة عرض حيّة فقط (معاينة) — لا تُحفظ على الجهاز، بل داخل الحملة نفسها عبر saveScrCfg().
    هذا يمنع تسرّب آخر هوية عُوينت لحملة إلى حملة أخرى لم تُحفَظ لها هوية بعد (كل حملة جديدة تبدأ بالافتراضي دائماً) */
 let scrTheme="neon-blue";
@@ -1799,13 +1824,14 @@ function mixC(h,t,toWhite,alpha){
 }
 function applyTheme(){
   const scr=$("#scr");if(!scr)return;
-  scr.classList.remove("skin-neonblue","skin-goldglass","skin-bloodbags","skin-national","has-font");
+  scr.classList.remove("skin-neonblue","skin-goldglass","skin-bloodbags","skin-national","skin-drops","has-font");
   scr.classList.toggle("hide-qr",scrHideQr);
   scr.classList.toggle("has-overlay",scrOverlay);
   const ov=$("#ended-ovl");
-  if(scrTheme==="neon-blue"||scrTheme==="gold-glass"||scrTheme==="blood-bags"||scrTheme==="national"){
+  if(scrTheme==="neon-blue"||scrTheme==="gold-glass"||scrTheme==="blood-bags"||scrTheme==="national"||scrTheme==="drops"){
     scr.classList.add(scrTheme==="neon-blue"?"skin-neonblue":scrTheme==="blood-bags"?"skin-bloodbags":"skin-goldglass");
     if(scrTheme==="national")scr.classList.add("skin-national");
+    if(scrTheme==="drops")scr.classList.add("skin-drops");
     scr.style.background="";scr.style.removeProperty("--scr-deep");
     const SK_VARS=["--sk-bg","--sk-tile","--sk-tile-in","--sk-tile-bg","--sk-chip","--sk-chip-in","--sk-chip-now",
                    "--sk-border","--sk-border-soft","--sk-accent","--sk-deep","--sk-deep2","--sk-bar","--sk-track","--sk-ring","--sk-hole","--sk-tint-raw"];
@@ -1847,10 +1873,10 @@ function applyTheme(){
 }
 function setTheme(c){
   scrTheme=c;
-  scrTint=c==="national"?"#1565c0":""; // اختيار الهوية يعيد ألوانها الأصلية؛ الوطنية استثناء: تبدأ زرقاء بدل ذهبي «ذهبي فاخر» الذي تُبنى عليه
-  scrFont="";
-  const ti=$("#sw-tint");if(ti)ti.value=c==="gold-glass"?"#c9a23a":c==="blood-bags"?"#c1121f":c==="national"?"#1565c0":"#1f97c2";
-  const fo=$("#sw-font");if(fo)fo.value="#ffffff";
+  scrTint=c==="national"?"#1565c0":c==="drops"?"#cfaab3":""; // اختيار الهوية يعيد ألوانها الأصلية؛ الوطنية وقطرات الدم استثناء: تبدآن بلونهما بدل ذهبي «ذهبي فاخر» الذي تُبنيان عليه
+  scrFont=c==="drops"?"#555353":""; // قطرات الدم = ألوان «نعم الجود» نفسها (تلوين وردي + خط رمادي داكن)
+  const ti=$("#sw-tint");if(ti)ti.value=c==="gold-glass"?"#c9a23a":c==="blood-bags"?"#c1121f":c==="national"?"#1565c0":c==="drops"?"#cfaab3":"#1f97c2";
+  const fo=$("#sw-font");if(fo)fo.value=scrFont||"#ffffff";
   applyTheme();
   const p=$("#sw-row");if(p)[...p.querySelectorAll(".sw")].forEach(el=>el.classList.toggle("sel",el.dataset.c===c));
 }
@@ -1979,7 +2005,7 @@ async function renderScreen(id,edit){
       // شكل الشاشة يُقرأ دائماً من الحملة نفسها لا من الجهاز: الشكل المحفوظ معها (إن وُجد) وإلا الافتراضي —
       // بلا هذا، معاينة هوية في حملة دون حفظها كانت تتسرّب لتظهر كأنها "الأصلية" في حملة أخرى لم تُحفظ لها هوية بعد
       if(c.scrCfg){
-        scrTheme=(c.scrCfg.skin==="neon-blue"||c.scrCfg.skin==="gold-glass"||c.scrCfg.skin==="blood-bags"||c.scrCfg.skin==="national")?c.scrCfg.skin:"neon-blue";
+        scrTheme=(c.scrCfg.skin==="neon-blue"||c.scrCfg.skin==="gold-glass"||c.scrCfg.skin==="blood-bags"||c.scrCfg.skin==="national"||c.scrCfg.skin==="drops")?c.scrCfg.skin:"neon-blue";
         scrTint=HEXOK(c.scrCfg.tint)?c.scrCfg.tint:"";
         scrFont=HEXOK(c.scrCfg.font)?c.scrCfg.font:"";
         scrHideQr=c.scrCfg.hideQr===true;
@@ -2139,7 +2165,7 @@ function renderScrTools(id){
       <div class="tool-grp" id="sw-row">
         <div class="tg-lbl">الهوية</div>
         <div class="scr-theme">${SKINS.map(s=>`<button class="sw sw-skin ${scrTheme===s[0]?"sel":""}" data-c="${s[0]}" style="background:${s[2]}" title="${s[1]}" onclick="setTheme('${s[0]}')"></button>`).join("")}</div>
-        <div class="tool-row"><span>لون</span><input type="color" class="sw-custom" id="sw-tint" value="${scrTint||(scrTheme==="gold-glass"?"#c9a23a":scrTheme==="blood-bags"?"#c1121f":scrTheme==="national"?"#1565c0":"#1f97c2")}" title="لون الهوية" oninput="setTint(this.value)"></div>
+        <div class="tool-row"><span>لون</span><input type="color" class="sw-custom" id="sw-tint" value="${scrTint||(scrTheme==="gold-glass"?"#c9a23a":scrTheme==="blood-bags"?"#c1121f":scrTheme==="national"?"#1565c0":scrTheme==="drops"?"#cfaab3":"#1f97c2")}" title="لون الهوية" oninput="setTint(this.value)"></div>
         <div class="tool-row"><span>خط</span><input type="color" class="sw-custom" id="sw-font" value="${scrFont||"#ffffff"}" title="لون الخط" oninput="setFont(this.value)"></div>
         <label class="tool-row" style="cursor:pointer"><input type="checkbox" ${scrHideQr?"checked":""} onchange="setHideQr(this.checked)"><span>إخفاء الباركود</span></label>
         <label class="tool-row" style="cursor:pointer"><input type="checkbox" ${scrOverlay?"checked":""} onchange="setOverlay(this.checked)"><span>طبقة زخرفية</span></label>
@@ -2197,7 +2223,7 @@ function drawScreen(id,c){
         </div>
       </div>
       <div class="scr-flow"></div>
-      <div class="scr-types" data-lg="types">${BT.map(b=>`<div class="type-tile"><div class="tile-in"><div class="tl">${b.l}</div><div class="bc"></div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div></div>`).join("")}</div>
+      <div class="scr-types" data-lg="types">${BT.map(b=>`<div class="type-tile${/neg$/.test(b.k)?" neg":""}"><div class="tile-in"><div class="tl">${b.l}</div><div class="bc"></div><div class="tc" id="tc-${b.k}">0</div><div class="ts">${L.donors}</div></div></div>`).join("")}</div>
     </div>
     <div class="scr-foot">
       <div class="phrase-box" id="phrase" data-p="" data-lg="phrase">${esc(phraseFor(c,scrLang))}</div>
